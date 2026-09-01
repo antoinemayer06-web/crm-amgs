@@ -121,7 +121,7 @@ export default function ProjectsPage() {
               onStatusChange={handleStatusChange}
             />
           )}
-          {view === 'planning' && <PlanningView projects={projects} />}
+          {view === 'planning' && <PlanningView projects={projects} allSteps={allSteps ?? []} />}
           {view === 'list' && (
             <ListView
               projects={projects}

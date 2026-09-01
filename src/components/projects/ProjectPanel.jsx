@@ -8,6 +8,7 @@ import Avatar from '../ui/Avatar'
 import Badge from '../ui/Badge'
 import SidePanel from '../ui/SidePanel'
 import ProjectStepsChecklist from './ProjectStepsChecklist'
+import ProjectWorkLog from './ProjectWorkLog'
 
 export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }) {
   const { data: project, isLoading } = useProject(projectId)
@@ -117,6 +118,68 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="block text-xs font-medium uppercase text-neutral-500">
+                Date de fin réelle
+              </label>
+              <input
+                type="date"
+                value={project.date_fin_reelle ?? ''}
+                onChange={(event) => saveField('date_fin_reelle', event.target.value || null)}
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-xs font-medium uppercase text-neutral-500">
+                Durée estimée (h)
+              </label>
+              <input
+                type="number"
+                step="0.5"
+                min="0"
+                value={project.duree_estimee_heures ?? ''}
+                onChange={(event) =>
+                  saveField('duree_estimee_heures', event.target.value === '' ? null : Number(event.target.value))
+                }
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="block text-xs font-medium uppercase text-neutral-500">
+                Montant facturé (€)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={project.montant_facture ?? ''}
+                onChange={(event) =>
+                  saveField('montant_facture', event.target.value === '' ? null : Number(event.target.value))
+                }
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-xs font-medium uppercase text-neutral-500">
+                Cash encaissé (€)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={project.montant_encaisse ?? ''}
+                onChange={(event) =>
+                  saveField('montant_encaisse', event.target.value === '' ? null : Number(event.target.value))
+                }
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              />
+            </div>
+          </div>
+
           <div className="space-y-1">
             <label className="block text-xs font-medium uppercase text-neutral-500">
               Description
@@ -141,6 +204,13 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               projectId={projectId}
               steps={getStepsForProject(allSteps, projectId)}
             />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-medium uppercase text-neutral-500">
+              Travail effectué
+            </label>
+            <ProjectWorkLog projectId={projectId} />
           </div>
 
           <div className="space-y-2">

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_TONES } from '../../lib/constants'
+import { getStepsForProject } from '../../lib/projectUtils'
 import Avatar from '../ui/Avatar'
 
 const DAY = 1000 * 60 * 60 * 24
@@ -18,14 +19,18 @@ function groupByClient(projects) {
   return Array.from(groups.values())
 }
 
-export default function PlanningView({ projects }) {
+export default function PlanningView({ projects, allSteps = [] }) {
   const [hovered, setHovered] = useState(null)
 
   const { rangeStart, rangeEnd, months } = useMemo(() => {
-    const dates = projects.flatMap((project) => [
-      project.date_debut ? new Date(project.date_debut) : null,
-      project.date_livraison_prevue ? new Date(project.date_livraison_prevue) : null,
-    ].filter(Boolean))
+    const dates = projects
+      .flatMap((project) => [
+        project.date_debut,
+        project.date_livraison_prevue,
+        ...getStepsForProject(allSteps, project.id).flatMap((s) => [s.date_debut, s.date_fin]),
+      ])
+      .filter(Boolean)
+      .map((d) => new Date(d))
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -45,7 +50,7 @@ export default function PlanningView({ projects }) {
     }
 
     return { rangeStart: start, rangeEnd: end, months: monthMarkers }
-  }, [projects])
+  }, [projects, allSteps])
 
   const totalSpan = rangeEnd - rangeStart || 1
   const toPercent = (date) => ((date - rangeStart) / totalSpan) * 100
@@ -88,7 +93,7 @@ export default function PlanningView({ projects }) {
                   {group.client?.name ?? '—'}
                 </span>
               </div>
-              <div className="relative flex-1 space-y-2 py-3 pr-4">
+              <div className="relative flex-1 space-y-1 py-3 pr-4">
                 {months.map((month) => (
                   <div
                     key={month.toISOString()}
@@ -104,43 +109,75 @@ export default function PlanningView({ projects }) {
                   const left = toPercent(start)
                   const width = Math.max(toPercent(end) - left, 1.5)
                   const isHovered = hovered === project.id
+                  const steps = getStepsForProject(allSteps, project.id).filter(
+                    (s) => s.date_debut || s.date_fin,
+                  )
 
                   return (
-                    <div key={project.id} className="relative h-6">
-                      <div
-                        onMouseEnter={() => setHovered(project.id)}
-                        onMouseLeave={() => setHovered(null)}
-                        className={`absolute h-6 rounded-md transition-shadow duration-150 ${
-                          PROJECT_STATUT_TONES[project.statut] === 'green'
-                            ? 'bg-green-200'
-                            : PROJECT_STATUT_TONES[project.statut] === 'amber'
-                              ? 'bg-amber-200'
-                              : PROJECT_STATUT_TONES[project.statut] === 'blue'
-                                ? 'bg-blue-200'
-                                : 'bg-neutral-200'
-                        } ${isHovered ? 'shadow-md ring-2 ring-neutral-300' : ''}`}
-                        style={{ left: `${left}%`, width: `${width}%` }}
-                      >
-                        <span className="block truncate px-2 py-1 text-xs font-medium text-neutral-700">
-                          {project.nom}
-                        </span>
+                    <div key={project.id} className="relative">
+                      <div className="relative h-6">
+                        <div
+                          onMouseEnter={() => setHovered(project.id)}
+                          onMouseLeave={() => setHovered(null)}
+                          className={`absolute h-6 rounded-md transition-shadow duration-150 ${
+                            PROJECT_STATUT_TONES[project.statut] === 'green'
+                              ? 'bg-green-200'
+                              : PROJECT_STATUT_TONES[project.statut] === 'amber'
+                                ? 'bg-amber-200'
+                                : PROJECT_STATUT_TONES[project.statut] === 'blue'
+                                  ? 'bg-blue-200'
+                                  : 'bg-neutral-200'
+                          } ${isHovered ? 'shadow-md ring-2 ring-neutral-300' : ''}`}
+                          style={{ left: `${left}%`, width: `${width}%` }}
+                        >
+                          <span className="block truncate px-2 py-1 text-xs font-medium text-neutral-700">
+                            {project.nom}
+                          </span>
+                        </div>
+
+                        {isHovered && (
+                          <div
+                            className="absolute top-7 z-10 w-56 rounded-lg border border-neutral-200 bg-white p-3 shadow-lg"
+                            style={{ left: `${left}%` }}
+                          >
+                            <p className="text-sm font-medium text-neutral-900">{project.nom}</p>
+                            <p className="mt-1 text-xs text-neutral-500">{project.company?.name}</p>
+                            <p className="mt-1 text-xs text-neutral-500">
+                              {formatDate(project.date_debut)} → {formatDate(project.date_livraison_prevue)}
+                            </p>
+                            <p className="mt-1 text-xs font-medium text-neutral-700">
+                              {PROJECT_STATUT_LABELS[project.statut]}
+                            </p>
+                          </div>
+                        )}
                       </div>
 
-                      {isHovered && (
-                        <div
-                          className="absolute top-7 z-10 w-56 rounded-lg border border-neutral-200 bg-white p-3 shadow-lg"
-                          style={{ left: `${left}%` }}
-                        >
-                          <p className="text-sm font-medium text-neutral-900">{project.nom}</p>
-                          <p className="mt-1 text-xs text-neutral-500">{project.company?.name}</p>
-                          <p className="mt-1 text-xs text-neutral-500">
-                            {formatDate(project.date_debut)} → {formatDate(project.date_livraison_prevue)}
-                          </p>
-                          <p className="mt-1 text-xs font-medium text-neutral-700">
-                            {PROJECT_STATUT_LABELS[project.statut]}
-                          </p>
-                        </div>
-                      )}
+                      {steps.map((step) => {
+                        const stepStart = step.date_debut ? new Date(step.date_debut) : new Date(step.date_fin)
+                        const stepEnd = step.date_fin ? new Date(step.date_fin) : new Date(step.date_debut)
+                        const stepLeft = toPercent(stepStart)
+                        const stepWidth = Math.max(toPercent(stepEnd) - stepLeft, 1)
+                        const done = step.statut === 'fait'
+
+                        return (
+                          <div key={step.id} className="relative h-4">
+                            <div
+                              className={`absolute h-4 rounded ${
+                                done ? 'bg-neutral-100' : 'bg-neutral-200'
+                              }`}
+                              style={{ left: `${stepLeft}%`, width: `${stepWidth}%` }}
+                            >
+                              <span
+                                className={`block truncate px-1.5 text-[10px] leading-4 ${
+                                  done ? 'text-neutral-400 line-through' : 'text-neutral-600'
+                                }`}
+                              >
+                                {step.titre}
+                              </span>
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   )
                 })}

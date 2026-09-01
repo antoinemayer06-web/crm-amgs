@@ -23,6 +23,7 @@ function DraggableCard({ project, stepsCount, onClick }) {
       <ProjectCard
         project={project}
         stepsCount={stepsCount}
+        showHealth
         onClick={onClick}
         dragHandleProps={{ ...attributes, ...listeners }}
       />
@@ -34,7 +35,7 @@ function Column({ statut, projects, allSteps, onProjectClick }) {
   const { setNodeRef, isOver } = useDroppable({ id: statut })
 
   return (
-    <div className="flex w-72 shrink-0 flex-col">
+    <div className="flex min-w-0 flex-col">
       <div className="mb-3 flex items-center justify-between px-1">
         <h3 className="text-sm font-medium text-neutral-700">{PROJECT_STATUT_LABELS[statut]}</h3>
         <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
@@ -89,7 +90,7 @@ export default function KanbanView({ projects, allSteps, onProjectClick, onStatu
 
   return (
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {PROJECT_STATUT_OPTIONS.map((statut) => (
           <Column
             key={statut}
@@ -106,6 +107,7 @@ export default function KanbanView({ projects, allSteps, onProjectClick, onStatu
             <ProjectCard
               project={activeProject}
               stepsCount={getStepsCount(allSteps, activeProject.id)}
+              showHealth
               isDragging
             />
           </div>
