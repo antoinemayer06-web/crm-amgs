@@ -10,7 +10,7 @@ import Badge from '../components/ui/Badge'
 import Modal from '../components/ui/Modal'
 import { useCompany, useDeleteCompany, useUpdateCompany } from '../hooks/useCompanies'
 import { useProjectsByCompany } from '../hooks/useProjects'
-import { COMPANY_STATUS_TONES } from '../lib/constants'
+import { COMPANY_STATUS_TONES, formatEnumLabel } from '../lib/constants'
 
 const TABS = [
   { key: 'infos', label: 'Infos générales' },
@@ -59,9 +59,9 @@ export default function CompanyDetailPage() {
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-xl font-semibold text-neutral-900">{company.name}</h2>
-          <Badge tone={COMPANY_STATUS_TONES[company.status]}>{company.status}</Badge>
+          <Badge tone={COMPANY_STATUS_TONES[company.status]}>{formatEnumLabel(company.status)}</Badge>
           {company.status === 'client' && (
-            <Badge tone={actif ? 'green' : 'neutral'}>{actif ? 'actif' : 'inactif'}</Badge>
+            <Badge tone={actif ? 'green' : 'neutral'}>{actif ? 'Actif' : 'Inactif'}</Badge>
           )}
         </div>
         <div className="flex gap-2">

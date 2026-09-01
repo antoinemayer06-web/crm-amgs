@@ -2,27 +2,21 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCompanies, useCreateCompany, useDeleteCompany, useUpdateCompany } from '../../hooks/useCompanies'
 import { useClientActivityMap } from '../../hooks/useProjects'
-import {
-  STATUT_LIVRAISON_OPTIONS,
-  STATUT_LIVRAISON_TONES,
-  TEMPERATURE_OPTIONS,
-  TEMPERATURE_TONES,
-  isEcheanceUrgente,
-} from '../../lib/constants'
+import { TEMPERATURE_OPTIONS, TEMPERATURE_TONES, formatEnumLabel } from '../../lib/constants'
 import Badge from '../ui/Badge'
+import InlineSelect from '../ui/InlineSelect'
 import Modal from '../ui/Modal'
 import CompanyForm from './CompanyForm'
 
-const emptyFilters = { search: '', sector: '', statutLivraison: '', temperature: '' }
+const emptyFilters = { search: '', sector: '', temperature: '' }
 
 export default function ClientsList() {
   const [filters, setFilters] = useState(emptyFilters)
-  const [modalMode, setModalMode] = useState(null) // null | 'create' | company object
+  const [creating, setCreating] = useState(false)
 
   const { data: companies, isLoading, isError, error } = useCompanies({
     search: filters.search,
     sector: filters.sector,
-    statutLivraison: filters.statutLivraison,
     temperature: filters.temperature,
     statuses: ['client'],
   })
@@ -45,8 +39,11 @@ export default function ClientsList() {
     await deleteCompany.mutateAsync(company.id)
   }
 
-  const hasActiveFilters =
-    filters.search || filters.sector || filters.statutLivraison || filters.temperature
+  async function handleTemperatureChange(company, newValue) {
+    await updateCompany.mutateAsync({ id: company.id, values: { temperature: newValue } })
+  }
+
+  const hasActiveFilters = filters.search || filters.sector || filters.temperature
 
   return (
     <div className="space-y-6">
@@ -54,7 +51,7 @@ export default function ClientsList() {
         <h2 className="text-xl font-semibold text-neutral-900">Clients</h2>
         <button
           type="button"
-          onClick={() => setModalMode('create')}
+          onClick={() => setCreating(true)}
           className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800"
         >
           + Nouveau client
@@ -69,18 +66,6 @@ export default function ClientsList() {
           className="min-w-48 flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
         />
         <select
-          value={filters.statutLivraison}
-          onChange={(event) => updateFilter('statutLivraison', event.target.value)}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-        >
-          <option value="">Tous les statuts de livraison</option>
-          {STATUT_LIVRAISON_OPTIONS.map((statut) => (
-            <option key={statut} value={statut}>
-              {statut}
-            </option>
-          ))}
-        </select>
-        <select
           value={filters.temperature}
           onChange={(event) => updateFilter('temperature', event.target.value)}
           className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
@@ -88,7 +73,7 @@ export default function ClientsList() {
           <option value="">Toutes les températures</option>
           {TEMPERATURE_OPTIONS.map((temp) => (
             <option key={temp} value={temp}>
-              {temp}
+              {formatEnumLabel(temp)}
             </option>
           ))}
         </select>
@@ -109,6 +94,11 @@ export default function ClientsList() {
         )}
       </div>
 
+      <p className="text-xs text-neutral-400">
+        Cliquez sur la température d'une ligne pour la modifier directement. Le statut de
+        livraison/facturation se gère par projet, depuis la fiche client.
+      </p>
+
       <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
         {isLoading && <p className="p-6 text-sm text-neutral-500">Chargement…</p>}
         {isError && (
@@ -122,7 +112,6 @@ export default function ClientsList() {
             <thead className="border-b border-neutral-200 text-xs uppercase text-neutral-500">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>
-                <th className="px-4 py-3 font-medium">Livraison</th>
                 <th className="px-4 py-3 font-medium">Activité</th>
                 <th className="px-4 py-3 font-medium">Température</th>
                 <th className="px-4 py-3 font-medium">Secteur</th>
@@ -131,9 +120,6 @@ export default function ClientsList() {
             </thead>
             <tbody className="divide-y divide-neutral-100">
               {companies.map((company) => {
-                const urgent =
-                  company.statut_livraison === 'en_cours_livraison' &&
-                  isEcheanceUrgente(company.date_echeance)
                 const actif = activityMap?.[company.id] ?? false
 
                 return (
@@ -147,54 +133,27 @@ export default function ClientsList() {
                       </Link>
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        {company.statut_livraison ? (
-                          <Badge tone={STATUT_LIVRAISON_TONES[company.statut_livraison]}>
-                            {company.statut_livraison}
-                          </Badge>
-                        ) : (
-                          '—'
-                        )}
-                        {urgent && (
-                          <span
-                            title="Échéance dépassée ou proche"
-                            className="h-2 w-2 shrink-0 rounded-full bg-red-500"
-                          />
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
                       <Badge tone={actif ? 'green' : 'neutral'}>
-                        {actif ? 'actif' : 'inactif'}
+                        {actif ? 'Actif' : 'Inactif'}
                       </Badge>
                     </td>
                     <td className="px-4 py-3">
-                      {company.temperature ? (
-                        <Badge tone={TEMPERATURE_TONES[company.temperature]}>
-                          {company.temperature}
-                        </Badge>
-                      ) : (
-                        '—'
-                      )}
+                      <InlineSelect
+                        value={company.temperature}
+                        options={TEMPERATURE_OPTIONS}
+                        toneMap={TEMPERATURE_TONES}
+                        onChange={(value) => handleTemperatureChange(company, value)}
+                      />
                     </td>
                     <td className="px-4 py-3 text-neutral-600">{company.sector || '—'}</td>
                     <td className="px-4 py-3 text-right">
-                      <div className="flex justify-end gap-3">
-                        <button
-                          type="button"
-                          onClick={() => setModalMode(company)}
-                          className="text-neutral-500 hover:text-neutral-900"
-                        >
-                          Modifier
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(company)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          Supprimer
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(company)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Supprimer
+                      </button>
                     </td>
                   </tr>
                 )
@@ -204,29 +163,15 @@ export default function ClientsList() {
         )}
       </div>
 
-      {modalMode === 'create' && (
-        <Modal title="Nouveau client" onClose={() => setModalMode(null)}>
+      {creating && (
+        <Modal title="Nouveau client" onClose={() => setCreating(false)}>
           <CompanyForm
             defaultStatus="client"
             submitting={createCompany.isPending}
-            onCancel={() => setModalMode(null)}
+            onCancel={() => setCreating(false)}
             onSubmit={async (values) => {
               await createCompany.mutateAsync(values)
-              setModalMode(null)
-            }}
-          />
-        </Modal>
-      )}
-
-      {modalMode && modalMode !== 'create' && (
-        <Modal title={`Modifier « ${modalMode.name} »`} onClose={() => setModalMode(null)}>
-          <CompanyForm
-            initialValues={modalMode}
-            submitting={updateCompany.isPending}
-            onCancel={() => setModalMode(null)}
-            onSubmit={async (values) => {
-              await updateCompany.mutateAsync({ id: modalMode.id, values })
-              setModalMode(null)
+              setCreating(false)
             }}
           />
         </Modal>

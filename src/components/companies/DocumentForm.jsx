@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DOCUMENT_STATUSES, DOCUMENT_TYPES } from '../../lib/constants'
+import { DOCUMENT_STATUSES, DOCUMENT_TYPES, formatEnumLabel } from '../../lib/constants'
 
 const emptyValues = { nom: '', type: 'autre', montant: '', statut: '' }
 
@@ -87,7 +87,7 @@ export default function DocumentForm({
           >
             {DOCUMENT_TYPES.map((type) => (
               <option key={type} value={type}>
-                {type}
+                {formatEnumLabel(type)}
               </option>
             ))}
           </select>
@@ -105,7 +105,7 @@ export default function DocumentForm({
             <option value="">—</option>
             {DOCUMENT_STATUSES.map((statut) => (
               <option key={statut} value={statut}>
-                {statut}
+                {formatEnumLabel(statut)}
               </option>
             ))}
           </select>

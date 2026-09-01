@@ -6,8 +6,9 @@ import {
   STATUT_PROSPECT_TONES,
   TEMPERATURE_OPTIONS,
   TEMPERATURE_TONES,
+  formatEnumLabel,
 } from '../../lib/constants'
-import Badge from '../ui/Badge'
+import InlineSelect from '../ui/InlineSelect'
 import Modal from '../ui/Modal'
 import CompanyForm from './CompanyForm'
 
@@ -15,7 +16,7 @@ const emptyFilters = { search: '', sector: '', statutProspect: '', temperature: 
 
 export default function ProspectsList() {
   const [filters, setFilters] = useState(emptyFilters)
-  const [modalMode, setModalMode] = useState(null) // null | 'create' | company object
+  const [creating, setCreating] = useState(false)
 
   const { data: companies, isLoading, isError, error } = useCompanies({
     search: filters.search,
@@ -40,6 +41,22 @@ export default function ProspectsList() {
     await deleteCompany.mutateAsync(company.id)
   }
 
+  async function handleStatutProspectChange(company, newValue) {
+    if (newValue === 'devis_signé') {
+      // Conversion automatique en client, sans action supplémentaire.
+      await updateCompany.mutateAsync({
+        id: company.id,
+        values: { status: 'client', statut_prospect: null, temperature: 'chaud' },
+      })
+      return
+    }
+    await updateCompany.mutateAsync({ id: company.id, values: { statut_prospect: newValue } })
+  }
+
+  async function handleTemperatureChange(company, newValue) {
+    await updateCompany.mutateAsync({ id: company.id, values: { temperature: newValue } })
+  }
+
   const hasActiveFilters =
     filters.search || filters.sector || filters.statutProspect || filters.temperature
 
@@ -49,7 +66,7 @@ export default function ProspectsList() {
         <h2 className="text-xl font-semibold text-neutral-900">Prospects</h2>
         <button
           type="button"
-          onClick={() => setModalMode('create')}
+          onClick={() => setCreating(true)}
           className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800"
         >
           + Nouveau prospect
@@ -71,7 +88,7 @@ export default function ProspectsList() {
           <option value="">Toutes les étapes</option>
           {STATUT_PROSPECT_OPTIONS.map((statut) => (
             <option key={statut} value={statut}>
-              {statut}
+              {formatEnumLabel(statut)}
             </option>
           ))}
         </select>
@@ -83,7 +100,7 @@ export default function ProspectsList() {
           <option value="">Toutes les températures</option>
           {TEMPERATURE_OPTIONS.map((temp) => (
             <option key={temp} value={temp}>
-              {temp}
+              {formatEnumLabel(temp)}
             </option>
           ))}
         </select>
@@ -103,6 +120,10 @@ export default function ProspectsList() {
           </button>
         )}
       </div>
+
+      <p className="text-xs text-neutral-400">
+        Cliquez sur l'étape ou la température d'une ligne pour la modifier directement.
+      </p>
 
       <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
         {isLoading && <p className="p-6 text-sm text-neutral-500">Chargement…</p>}
@@ -135,41 +156,30 @@ export default function ProspectsList() {
                     </Link>
                   </td>
                   <td className="px-4 py-3">
-                    {company.statut_prospect ? (
-                      <Badge tone={STATUT_PROSPECT_TONES[company.statut_prospect]}>
-                        {company.statut_prospect}
-                      </Badge>
-                    ) : (
-                      '—'
-                    )}
+                    <InlineSelect
+                      value={company.statut_prospect}
+                      options={STATUT_PROSPECT_OPTIONS}
+                      toneMap={STATUT_PROSPECT_TONES}
+                      onChange={(value) => handleStatutProspectChange(company, value)}
+                    />
                   </td>
                   <td className="px-4 py-3">
-                    {company.temperature ? (
-                      <Badge tone={TEMPERATURE_TONES[company.temperature]}>
-                        {company.temperature}
-                      </Badge>
-                    ) : (
-                      '—'
-                    )}
+                    <InlineSelect
+                      value={company.temperature}
+                      options={TEMPERATURE_OPTIONS}
+                      toneMap={TEMPERATURE_TONES}
+                      onChange={(value) => handleTemperatureChange(company, value)}
+                    />
                   </td>
                   <td className="px-4 py-3 text-neutral-600">{company.sector || '—'}</td>
                   <td className="px-4 py-3 text-right">
-                    <div className="flex justify-end gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setModalMode(company)}
-                        className="text-neutral-500 hover:text-neutral-900"
-                      >
-                        Modifier
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(company)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Supprimer
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(company)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      Supprimer
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -178,29 +188,15 @@ export default function ProspectsList() {
         )}
       </div>
 
-      {modalMode === 'create' && (
-        <Modal title="Nouveau prospect" onClose={() => setModalMode(null)}>
+      {creating && (
+        <Modal title="Nouveau prospect" onClose={() => setCreating(false)}>
           <CompanyForm
             defaultStatus="prospect"
             submitting={createCompany.isPending}
-            onCancel={() => setModalMode(null)}
+            onCancel={() => setCreating(false)}
             onSubmit={async (values) => {
               await createCompany.mutateAsync(values)
-              setModalMode(null)
-            }}
-          />
-        </Modal>
-      )}
-
-      {modalMode && modalMode !== 'create' && (
-        <Modal title={`Modifier « ${modalMode.name} »`} onClose={() => setModalMode(null)}>
-          <CompanyForm
-            initialValues={modalMode}
-            submitting={updateCompany.isPending}
-            onCancel={() => setModalMode(null)}
-            onSubmit={async (values) => {
-              await updateCompany.mutateAsync({ id: modalMode.id, values })
-              setModalMode(null)
+              setCreating(false)
             }}
           />
         </Modal>

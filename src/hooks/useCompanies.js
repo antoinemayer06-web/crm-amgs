@@ -24,9 +24,6 @@ export function useCompanies(filters) {
       if (filters.statutProspect) {
         query = query.eq('statut_prospect', filters.statutProspect)
       }
-      if (filters.statutLivraison) {
-        query = query.eq('statut_livraison', filters.statutLivraison)
-      }
       if (filters.temperature) {
         query = query.eq('temperature', filters.temperature)
       }

@@ -7,7 +7,7 @@ import {
   useUpdateDocument,
 } from '../../hooks/useDocuments'
 import { useAuth } from '../../lib/AuthContext'
-import { DOCUMENT_STATUS_TONES } from '../../lib/constants'
+import { DOCUMENT_STATUS_TONES, formatEnumLabel } from '../../lib/constants'
 import Badge from '../ui/Badge'
 import Modal from '../ui/Modal'
 import DocumentForm from './DocumentForm'
@@ -85,11 +85,13 @@ export default function DocumentsTab({ companyId }) {
                       {document.nom}
                     </button>
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">{document.type}</td>
+                  <td className="px-4 py-3 text-neutral-600">{formatEnumLabel(document.type)}</td>
                   <td className="px-4 py-3 text-neutral-600">{formatMontant(document.montant)}</td>
                   <td className="px-4 py-3">
                     {document.statut ? (
-                      <Badge tone={DOCUMENT_STATUS_TONES[document.statut]}>{document.statut}</Badge>
+                      <Badge tone={DOCUMENT_STATUS_TONES[document.statut]}>
+                        {formatEnumLabel(document.statut)}
+                      </Badge>
                     ) : (
                       '—'
                     )}

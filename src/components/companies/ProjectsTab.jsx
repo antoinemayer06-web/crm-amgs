@@ -1,4 +1,5 @@
 import { useProjectsByCompany } from '../../hooks/useProjects'
+import { formatEnumLabel } from '../../lib/constants'
 import Badge from '../ui/Badge'
 
 const STATUT_TONES = {
@@ -38,7 +39,7 @@ export default function ProjectsTab({ companyId }) {
               <tr key={project.id}>
                 <td className="px-4 py-3 font-medium text-neutral-900">{project.nom}</td>
                 <td className="px-4 py-3">
-                  <Badge tone={STATUT_TONES[project.statut]}>{project.statut}</Badge>
+                  <Badge tone={STATUT_TONES[project.statut]}>{formatEnumLabel(project.statut)}</Badge>
                 </td>
                 <td className="px-4 py-3 text-neutral-600">{formatDate(project.date_debut)}</td>
                 <td className="px-4 py-3 text-neutral-600">

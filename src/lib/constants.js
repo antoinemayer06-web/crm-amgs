@@ -35,22 +35,6 @@ export const STATUT_PROSPECT_TONES = {
   devis_signé: 'green',
 }
 
-export const STATUT_LIVRAISON_OPTIONS = [
-  'en_cours_livraison',
-  'livré',
-  'à_facturer',
-  'facture_transmise',
-  'payé',
-]
-
-export const STATUT_LIVRAISON_TONES = {
-  en_cours_livraison: 'blue',
-  livré: 'neutral',
-  à_facturer: 'amber',
-  facture_transmise: 'blue',
-  payé: 'green',
-}
-
 export const TEMPERATURE_OPTIONS = ['chaud', 'froid']
 
 export const TEMPERATURE_TONES = {
@@ -77,13 +61,11 @@ export const DOCUMENT_STATUS_TONES = {
   en_retard: 'red',
 }
 
-// Une échéance de livraison est "urgente" si elle est dépassée ou dans
-// les 3 prochains jours.
-export function isEcheanceUrgente(dateEcheance) {
-  if (!dateEcheance) return false
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const echeance = new Date(dateEcheance)
-  const diffDays = (echeance - today) / (1000 * 60 * 60 * 24)
-  return diffDays <= 3
+// Affichage propre d'une valeur d'enum stockée avec des underscores
+// (ex: "à_contacter" -> "À contacter", "bouche_à_oreille" -> "Bouche à oreille").
+export function formatEnumLabel(value) {
+  if (!value) return ''
+  const [first, ...rest] = value.split('_')
+  const capitalized = first.charAt(0).toUpperCase() + first.slice(1)
+  return rest.length ? `${capitalized} ${rest.join(' ')}` : capitalized
 }

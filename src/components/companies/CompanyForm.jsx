@@ -2,9 +2,9 @@ import { useState } from 'react'
 import {
   COMPANY_SOURCES,
   COMPANY_STATUS_OPTIONS,
-  STATUT_LIVRAISON_OPTIONS,
   STATUT_PROSPECT_OPTIONS,
   TEMPERATURE_OPTIONS,
+  formatEnumLabel,
 } from '../../lib/constants'
 
 const emptyValues = {
@@ -15,10 +15,8 @@ const emptyValues = {
   source: '',
   contact: '',
   statut_prospect: '',
-  statut_livraison: '',
   temperature: '',
   date_contact: '',
-  date_echeance: '',
   notes_generales: '',
 }
 
@@ -69,12 +67,6 @@ export default function CompanyForm({
     const finalStatus = isConverting ? 'client' : values.status
     const finalStatutProspect =
       finalStatus === 'prospect' ? values.statut_prospect || 'à_contacter' : null
-    const finalStatutLivraison =
-      finalStatus === 'client'
-        ? isConverting
-          ? 'en_cours_livraison'
-          : values.statut_livraison || 'en_cours_livraison'
-        : null
 
     const payload = {
       name: values.name.trim(),
@@ -84,10 +76,8 @@ export default function CompanyForm({
       source: values.source || null,
       contact: values.contact.trim() || null,
       statut_prospect: finalStatutProspect,
-      statut_livraison: finalStatutLivraison,
       temperature: isConverting ? 'chaud' : values.temperature || null,
       date_contact: finalStatutProspect ? values.date_contact || null : null,
-      date_echeance: finalStatutLivraison === 'en_cours_livraison' ? values.date_echeance || null : null,
       notes_generales: values.notes_generales.trim() || null,
     }
 
@@ -125,7 +115,7 @@ export default function CompanyForm({
           >
             {COMPANY_STATUS_OPTIONS.map((status) => (
               <option key={status} value={status}>
-                {status}
+                {formatEnumLabel(status)}
               </option>
             ))}
           </select>
@@ -144,7 +134,7 @@ export default function CompanyForm({
             <option value="">—</option>
             {TEMPERATURE_OPTIONS.map((temp) => (
               <option key={temp} value={temp}>
-                {temp}
+                {formatEnumLabel(temp)}
               </option>
             ))}
           </select>
@@ -165,7 +155,7 @@ export default function CompanyForm({
             >
               {STATUT_PROSPECT_OPTIONS.map((statut) => (
                 <option key={statut} value={statut}>
-                  {statut}
+                  {formatEnumLabel(statut)}
                 </option>
               ))}
             </select>
@@ -188,42 +178,10 @@ export default function CompanyForm({
       )}
 
       {values.status === 'client' && (
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label
-              htmlFor="statut_livraison"
-              className="block text-sm font-medium text-neutral-700"
-            >
-              Statut livraison
-            </label>
-            <select
-              id="statut_livraison"
-              value={values.statut_livraison}
-              onChange={(event) => update('statut_livraison', event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-            >
-              {STATUT_LIVRAISON_OPTIONS.map((statut) => (
-                <option key={statut} value={statut}>
-                  {statut}
-                </option>
-              ))}
-            </select>
-          </div>
-          {values.statut_livraison === 'en_cours_livraison' && (
-            <div className="space-y-1">
-              <label htmlFor="date_echeance" className="block text-sm font-medium text-neutral-700">
-                Date d'échéance
-              </label>
-              <input
-                id="date_echeance"
-                type="date"
-                value={values.date_echeance}
-                onChange={(event) => update('date_echeance', event.target.value)}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-              />
-            </div>
-          )}
-        </div>
+        <p className="rounded-md bg-neutral-50 px-3 py-2 text-sm text-neutral-500">
+          Le statut de livraison/facturation se gère désormais par projet, depuis
+          l'onglet « Projets liés ».
+        </p>
       )}
 
       <div className="grid grid-cols-2 gap-4">
@@ -266,7 +224,7 @@ export default function CompanyForm({
             <option value="">—</option>
             {COMPANY_SOURCES.map((source) => (
               <option key={source} value={source}>
-                {source}
+                {formatEnumLabel(source)}
               </option>
             ))}
           </select>
