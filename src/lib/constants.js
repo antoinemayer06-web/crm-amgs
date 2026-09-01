@@ -114,6 +114,40 @@ export function getInitials(name) {
   return words.map((word) => word.charAt(0).toUpperCase()).join('')
 }
 
+export const MARKETING_ACTION_TYPES = [
+  'post_linkedin',
+  'email',
+  'contenu_blog',
+  'campagne_pub',
+  'autre',
+]
+
+export const MARKETING_ACTION_TYPE_TONES = {
+  post_linkedin: 'blue',
+  email: 'green',
+  contenu_blog: 'amber',
+  campagne_pub: 'red',
+  autre: 'neutral',
+}
+
+export const MARKETING_ACTION_STATUSES = ['planifié', 'en_cours', 'publié', 'annulé']
+
+export const MARKETING_ACTION_STATUS_TONES = {
+  planifié: 'neutral',
+  en_cours: 'blue',
+  publié: 'green',
+  annulé: 'neutral',
+}
+
+export const CAMPAIGN_STATUSES = ['en_préparation', 'en_cours', 'terminée', 'annulée']
+
+export const CAMPAIGN_STATUS_TONES = {
+  en_préparation: 'neutral',
+  en_cours: 'blue',
+  terminée: 'green',
+  annulée: 'red',
+}
+
 // Couleur d'avatar stable dérivée du nom (même entreprise = même couleur).
 const AVATAR_PALETTE = [
   'bg-blue-500', 'bg-violet-500', 'bg-emerald-500', 'bg-amber-500',
