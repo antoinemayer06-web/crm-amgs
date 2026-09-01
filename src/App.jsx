@@ -4,6 +4,7 @@ import { useAuth } from './lib/AuthContext'
 import CompanyDetailPage from './pages/CompanyDetailPage'
 import CompaniesListPage from './pages/CompaniesListPage'
 import Login from './pages/Login'
+import ProjectsPage from './pages/ProjectsPage'
 
 function App() {
   const { user, loading } = useAuth()
@@ -26,6 +27,7 @@ function App() {
         <Route index element={<Navigate to="/companies" replace />} />
         <Route path="companies" element={<CompaniesListPage />} />
         <Route path="companies/:id" element={<CompanyDetailPage />} />
+        <Route path="projects" element={<ProjectsPage />} />
         <Route path="*" element={<Navigate to="/companies" replace />} />
       </Route>
     </Routes>

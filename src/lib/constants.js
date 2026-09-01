@@ -69,3 +69,68 @@ export function formatEnumLabel(value) {
   const capitalized = first.charAt(0).toUpperCase() + first.slice(1)
   return rest.length ? `${capitalized} ${rest.join(' ')}` : capitalized
 }
+
+export const PROJECT_STATUT_OPTIONS = [
+  'en_cours_livraison',
+  'livré',
+  'à_facturer',
+  'facture_transmise',
+  'payé',
+]
+
+export const PROJECT_STATUT_TONES = {
+  en_cours_livraison: 'blue',
+  livré: 'neutral',
+  à_facturer: 'amber',
+  facture_transmise: 'blue',
+  payé: 'green',
+}
+
+export const PROJECT_STATUT_LABELS = {
+  en_cours_livraison: 'En cours',
+  livré: 'Livré',
+  à_facturer: 'À facturer',
+  facture_transmise: 'Facture transmise',
+  payé: 'Payé',
+}
+
+export const PROJECT_STEP_STATUSES = ['à_faire', 'en_cours', 'fait']
+
+// Une échéance est "urgente" si elle est dépassée ou dans les 3 jours.
+export function isDateUrgente(date) {
+  if (!date) return false
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const target = new Date(date)
+  const diffDays = (target - today) / (1000 * 60 * 60 * 24)
+  return diffDays <= 3
+}
+
+export function isDatePassee(date) {
+  if (!date) return false
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  return new Date(date) < today
+}
+
+export function getInitials(name) {
+  if (!name) return '?'
+  const words = name.trim().split(/\s+/).slice(0, 2)
+  return words.map((word) => word.charAt(0).toUpperCase()).join('')
+}
+
+// Couleur d'avatar stable dérivée du nom (même entreprise = même couleur).
+const AVATAR_PALETTE = [
+  'bg-blue-500', 'bg-violet-500', 'bg-emerald-500', 'bg-amber-500',
+  'bg-rose-500', 'bg-cyan-500', 'bg-fuchsia-500', 'bg-lime-600',
+]
+
+export function getAvatarColor(name) {
+  if (!name) return AVATAR_PALETTE[0]
+  let hash = 0
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash << 5) - hash + name.charCodeAt(i)
+    hash |= 0
+  }
+  return AVATAR_PALETTE[Math.abs(hash) % AVATAR_PALETTE.length]
+}
