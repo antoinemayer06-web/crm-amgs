@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../lib/supabaseClient'
+import { buildRecurrenceOccurrences } from '../lib/marketingUtils'
 
 export function useMarketingActions(filters = {}) {
   return useQuery({
@@ -7,7 +8,7 @@ export function useMarketingActions(filters = {}) {
     queryFn: async () => {
       let query = supabase
         .from('marketing_actions')
-        .select('*, campaign:campaigns(id, nom)')
+        .select('*, campaign:campaigns(id, nom), company:companies(id, name)')
         .order('date_prevue', { ascending: true })
 
       if (filters.type) {
@@ -39,7 +40,7 @@ export function useMarketingAction(id) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('marketing_actions')
-        .select('*, campaign:campaigns(id, nom)')
+        .select('*, campaign:campaigns(id, nom), company:companies(id, name)')
         .eq('id', id)
         .single()
       if (error) throw error
@@ -49,15 +50,14 @@ export function useMarketingAction(id) {
   })
 }
 
+// Une action avec récurrence est éclatée en plusieurs lignes (une par
+// occurrence) dès la création — voir buildRecurrenceOccurrences.
 export function useCreateMarketingAction() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (values) => {
-      const { data, error } = await supabase
-        .from('marketing_actions')
-        .insert(values)
-        .select()
-        .single()
+      const occurrences = buildRecurrenceOccurrences(values)
+      const { data, error } = await supabase.from('marketing_actions').insert(occurrences).select()
       if (error) throw error
       return data
     },

@@ -5,10 +5,12 @@ import {
   useUpdateMarketingAction,
 } from '../../hooks/useMarketingActions'
 import { useCampaigns } from '../../hooks/useCampaigns'
+import { useCompanies } from '../../hooks/useCompanies'
 import {
   MARKETING_ACTION_STATUSES,
   MARKETING_ACTION_STATUS_TONES,
   MARKETING_ACTION_TYPE_TONES,
+  RECURRENCE_FREQUENCE_LABELS,
   formatEnumLabel,
 } from '../../lib/constants'
 import Badge from '../ui/Badge'
@@ -22,6 +24,7 @@ const formatDate = (value) => (value ? new Date(value).toLocaleDateString('fr-FR
 export default function ActionPanel({ actionId, onClose, onDeleted }) {
   const { data: action, isLoading } = useMarketingAction(actionId)
   const { data: campaigns } = useCampaigns()
+  const { data: companies } = useCompanies({ statuses: ['prospect'] })
   const updateAction = useUpdateMarketingAction()
   const deleteAction = useDeleteMarketingAction()
   const [editing, setEditing] = useState(false)
@@ -56,6 +59,12 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
             <Badge tone={MARKETING_ACTION_TYPE_TONES[action.type]}>
               {formatEnumLabel(action.type)}
             </Badge>
+            {action.recurrence_frequence && (
+              <Badge tone="neutral">
+                Récurrent — tous les {action.recurrence_intervalle}{' '}
+                {RECURRENCE_FREQUENCE_LABELS[action.recurrence_frequence]}
+              </Badge>
+            )}
             <InlineSelect
               value={action.statut}
               options={MARKETING_ACTION_STATUSES}
@@ -87,6 +96,12 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
               <dt className="text-neutral-400">Campagne</dt>
               <dd className="mt-0.5 font-medium text-neutral-900">
                 {action.campaign?.nom ?? '—'}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-neutral-400">Prospect lié</dt>
+              <dd className="mt-0.5 font-medium text-neutral-900">
+                {action.company?.name ?? '—'}
               </dd>
             </div>
           </dl>
@@ -127,6 +142,7 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
               <ActionForm
                 initialValues={action}
                 campaigns={campaigns}
+                companies={companies}
                 submitting={updateAction.isPending}
                 onCancel={() => setEditing(false)}
                 onSubmit={async (values) => {

@@ -2,6 +2,8 @@ import { useState } from 'react'
 import {
   MARKETING_ACTION_STATUSES,
   MARKETING_ACTION_TYPES,
+  RECURRENCE_FREQUENCES,
+  RECURRENCE_FREQUENCE_LABELS,
   formatEnumLabel,
 } from '../../lib/constants'
 
@@ -11,6 +13,7 @@ const emptyValues = {
   statut: 'planifié',
   date_prevue: '',
   campaign_id: '',
+  company_id: '',
   description: '',
 }
 
@@ -30,20 +33,27 @@ export default function ActionForm({
   defaultDate,
   defaultCampaignId,
   campaigns,
+  companies,
   onSubmit,
   onCancel,
   submitting,
 }) {
+  const isCreating = !initialValues
   const [values, setValues] = useState({
     ...emptyValues,
     date_prevue: defaultDate ?? emptyValues.date_prevue,
     campaign_id: defaultCampaignId ?? emptyValues.campaign_id,
     ...toFormValues(initialValues),
   })
+  const [recurrence, setRecurrence] = useState({ frequence: '', intervalle: '1', fin: '' })
   const [error, setError] = useState(null)
 
   function update(field, value) {
     setValues((prev) => ({ ...prev, [field]: value }))
+  }
+
+  function updateRecurrence(field, value) {
+    setRecurrence((prev) => ({ ...prev, [field]: value }))
   }
 
   async function handleSubmit(event) {
@@ -61,7 +71,22 @@ export default function ActionForm({
       statut: values.statut,
       date_prevue: values.date_prevue || null,
       campaign_id: values.campaign_id || null,
+      company_id: values.company_id || null,
       description: values.description.trim() || null,
+    }
+
+    if (isCreating && recurrence.frequence) {
+      if (!values.date_prevue) {
+        setError('La date prévue est obligatoire pour créer une récurrence.')
+        return
+      }
+      if (!recurrence.fin) {
+        setError('La date de fin de récurrence est obligatoire.')
+        return
+      }
+      payload.recurrence_frequence = recurrence.frequence
+      payload.recurrence_intervalle = Number(recurrence.intervalle) || 1
+      payload.recurrence_fin = recurrence.fin
     }
 
     try {
@@ -158,6 +183,25 @@ export default function ActionForm({
       </div>
 
       <div className="space-y-1">
+        <label htmlFor="company_id" className="block text-sm font-medium text-neutral-700">
+          Prospect lié
+        </label>
+        <select
+          id="company_id"
+          value={values.company_id}
+          onChange={(event) => update('company_id', event.target.value)}
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        >
+          <option value="">Aucun</option>
+          {companies?.map((company) => (
+            <option key={company.id} value={company.id}>
+              {company.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="space-y-1">
         <label htmlFor="description" className="block text-sm font-medium text-neutral-700">
           Description
         </label>
@@ -169,6 +213,59 @@ export default function ActionForm({
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
         />
       </div>
+
+      {isCreating && (
+        <div className="space-y-2 rounded-md border border-neutral-200 p-3">
+          <p className="text-sm font-medium text-neutral-700">Récurrence (optionnel)</p>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="space-y-1">
+              <label htmlFor="recurrence_intervalle" className="block text-xs text-neutral-500">
+                Tous les
+              </label>
+              <input
+                id="recurrence_intervalle"
+                type="number"
+                min="1"
+                value={recurrence.intervalle}
+                onChange={(event) => updateRecurrence('intervalle', event.target.value)}
+                disabled={!recurrence.frequence}
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 disabled:opacity-50"
+              />
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="recurrence_frequence" className="block text-xs text-neutral-500">
+                Fréquence
+              </label>
+              <select
+                id="recurrence_frequence"
+                value={recurrence.frequence}
+                onChange={(event) => updateRecurrence('frequence', event.target.value)}
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              >
+                <option value="">Pas de récurrence</option>
+                {RECURRENCE_FREQUENCES.map((frequence) => (
+                  <option key={frequence} value={frequence}>
+                    {RECURRENCE_FREQUENCE_LABELS[frequence]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="recurrence_fin" className="block text-xs text-neutral-500">
+                Jusqu'au
+              </label>
+              <input
+                id="recurrence_fin"
+                type="date"
+                value={recurrence.fin}
+                onChange={(event) => updateRecurrence('fin', event.target.value)}
+                disabled={!recurrence.frequence}
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 disabled:opacity-50"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {error && (
         <p className="text-sm text-red-600" role="alert">

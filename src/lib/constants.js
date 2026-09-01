@@ -130,13 +130,20 @@ export const MARKETING_ACTION_TYPE_TONES = {
   autre: 'neutral',
 }
 
-export const MARKETING_ACTION_STATUSES = ['planifié', 'en_cours', 'publié', 'annulé']
+export const MARKETING_ACTION_STATUSES = ['planifié', 'publié', 'annulé']
 
 export const MARKETING_ACTION_STATUS_TONES = {
   planifié: 'neutral',
-  en_cours: 'blue',
   publié: 'green',
   annulé: 'neutral',
+}
+
+export const RECURRENCE_FREQUENCES = ['jour', 'semaine', 'mois']
+
+export const RECURRENCE_FREQUENCE_LABELS = {
+  jour: 'jour(s)',
+  semaine: 'semaine(s)',
+  mois: 'mois',
 }
 
 export const CAMPAIGN_STATUSES = ['en_préparation', 'en_cours', 'terminée', 'annulée']

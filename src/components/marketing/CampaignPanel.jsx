@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useCampaign, useDeleteCampaign, useUpdateCampaign } from '../../hooks/useCampaigns'
+import { useCompanies } from '../../hooks/useCompanies'
 import { useCreateMarketingAction, useMarketingActions } from '../../hooks/useMarketingActions'
 import {
   CAMPAIGN_STATUS_TONES,
@@ -20,6 +21,7 @@ const formatMontant = (value) =>
 export default function CampaignPanel({ campaignId, onClose, onDeleted, onActionClick }) {
   const { data: campaign, isLoading } = useCampaign(campaignId)
   const { data: actions } = useMarketingActions({ campaignId })
+  const { data: companies } = useCompanies({ statuses: ['prospect'] })
   const updateCampaign = useUpdateCampaign()
   const deleteCampaign = useDeleteCampaign()
   const createAction = useCreateMarketingAction()
@@ -147,6 +149,7 @@ export default function CampaignPanel({ campaignId, onClose, onDeleted, onAction
               <ActionForm
                 defaultCampaignId={campaignId}
                 campaigns={[campaign]}
+                companies={companies}
                 submitting={createAction.isPending}
                 onCancel={() => setCreatingAction(false)}
                 onSubmit={async (values) => {

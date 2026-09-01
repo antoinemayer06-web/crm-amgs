@@ -8,6 +8,7 @@ import CampaignsListSection from '../components/marketing/CampaignsListSection'
 import ListView from '../components/marketing/ListView'
 import MarketingFilters from '../components/marketing/MarketingFilters'
 import { useCampaigns, useCreateCampaign } from '../hooks/useCampaigns'
+import { useCompanies } from '../hooks/useCompanies'
 import { useCreateMarketingAction, useMarketingActions } from '../hooks/useMarketingActions'
 import Modal from '../components/ui/Modal'
 
@@ -39,6 +40,7 @@ export default function MarketingPage() {
   const { data: filteredActions, isLoading: loadingList, isError: errorList } =
     useMarketingActions(filters)
   const { data: campaigns } = useCampaigns()
+  const { data: companies } = useCompanies({ statuses: ['prospect'] })
   const createAction = useCreateMarketingAction()
   const createCampaign = useCreateCampaign()
 
@@ -149,6 +151,7 @@ export default function MarketingPage() {
           <ActionForm
             defaultDate={quickCreateDate}
             campaigns={campaigns}
+            companies={companies}
             submitting={createAction.isPending}
             onCancel={() => {
               setCreatingAction(false)
