@@ -14,7 +14,7 @@ import {
   useUpdateProjectStep,
 } from '../../hooks/useProjects'
 
-function StepRow({ step, onToggle, onDateChange, onDelete }) {
+function StepRow({ step, actualHours, onToggle, onDateChange, onEstimateChange, onDelete }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: step.id,
   })
@@ -73,11 +73,26 @@ function StepRow({ step, onToggle, onDateChange, onDelete }) {
           className="rounded border border-neutral-200 px-1 py-0.5 text-xs text-neutral-500 focus:border-neutral-400 focus:outline-none"
         />
       </div>
+      <div className="ml-12 mt-1 flex items-center gap-2 text-xs text-neutral-400">
+        <span>Est.</span>
+        <input
+          type="number"
+          step="0.5"
+          min="0"
+          value={step.duree_estimee_heures ?? ''}
+          onChange={(event) =>
+            onEstimateChange(step, event.target.value === '' ? null : Number(event.target.value))
+          }
+          placeholder="h"
+          className="w-16 rounded border border-neutral-200 px-1 py-0.5 text-xs text-neutral-500 focus:border-neutral-400 focus:outline-none"
+        />
+        <span>h · Réel : {actualHours ? `${actualHours} h` : '—'}</span>
+      </div>
     </div>
   )
 }
 
-export default function ProjectStepsChecklist({ projectId, steps }) {
+export default function ProjectStepsChecklist({ projectId, steps, actualHoursByStep = {} }) {
   const [newTitle, setNewTitle] = useState('')
   const createStep = useCreateProjectStep()
   const updateStep = useUpdateProjectStep()
@@ -90,6 +105,10 @@ export default function ProjectStepsChecklist({ projectId, steps }) {
 
   function handleDateChange(step, field, value) {
     updateStep.mutate({ id: step.id, values: { [field]: value } })
+  }
+
+  function handleEstimateChange(step, value) {
+    updateStep.mutate({ id: step.id, values: { duree_estimee_heures: value } })
   }
 
   function handleDelete(step) {
@@ -124,8 +143,10 @@ export default function ProjectStepsChecklist({ projectId, steps }) {
             <StepRow
               key={step.id}
               step={step}
+              actualHours={actualHoursByStep[step.id]}
               onToggle={handleToggle}
               onDateChange={handleDateChange}
+              onEstimateChange={handleEstimateChange}
               onDelete={handleDelete}
             />
           ))}

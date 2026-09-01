@@ -1,14 +1,31 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import DocumentsSection from '../documents/DocumentsSection'
+import { useWorkLogsForSteps } from '../../hooks/useProjectWorkLogs'
 import { useDeleteProject, useProject, useUpdateProject } from '../../hooks/useProjects'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_OPTIONS } from '../../lib/constants'
-import { getStepsForProject } from '../../lib/projectUtils'
+import {
+  getActualHoursByStep,
+  getProjectTimeSummary,
+  getStepsForProject,
+} from '../../lib/projectUtils'
 import Avatar from '../ui/Avatar'
 import Badge from '../ui/Badge'
 import SidePanel from '../ui/SidePanel'
 import ProjectStepsChecklist from './ProjectStepsChecklist'
 import ProjectWorkLog from './ProjectWorkLog'
+
+const formatHours = (value) => (value == null ? '—' : `${value} h`)
+const formatMontant = (value) => (value == null ? '—' : `${Number(value).toLocaleString('fr-FR')} €`)
+
+function StatTile({ label, value }) {
+  return (
+    <div className="rounded-md bg-neutral-50 px-3 py-2">
+      <p className="text-[10px] font-medium uppercase text-neutral-400">{label}</p>
+      <p className="mt-0.5 text-sm font-semibold text-neutral-900">{value}</p>
+    </div>
+  )
+}
 
 export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }) {
   const { data: project, isLoading } = useProject(projectId)
@@ -17,6 +34,12 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
   const [nom, setNom] = useState('')
   const [description, setDescription] = useState('')
+
+  const steps = getStepsForProject(allSteps, projectId)
+  const stepIds = steps.map((s) => s.id)
+  const { data: workLogs } = useWorkLogsForSteps(stepIds)
+  const actualHoursByStep = getActualHoursByStep(workLogs)
+  const { tempsPrevu, tempsRealise } = getProjectTimeSummary(steps, workLogs)
 
   useEffect(() => {
     if (project) {
@@ -49,6 +72,13 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           {project.archived && (
             <Badge tone="neutral">Archivé</Badge>
           )}
+
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <StatTile label="Temps prévu" value={formatHours(tempsPrevu)} />
+            <StatTile label="Temps réalisé" value={formatHours(tempsRealise || null)} />
+            <StatTile label="Facturé" value={formatMontant(project.montant_facture)} />
+            <StatTile label="Reçu" value={formatMontant(project.montant_encaisse)} />
+          </div>
 
           <div className="space-y-1">
             <label className="block text-xs font-medium uppercase text-neutral-500">Nom</label>
@@ -130,21 +160,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                 className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
               />
             </div>
-            <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-neutral-500">
-                Durée estimée (h)
-              </label>
-              <input
-                type="number"
-                step="0.5"
-                min="0"
-                value={project.duree_estimee_heures ?? ''}
-                onChange={(event) =>
-                  saveField('duree_estimee_heures', event.target.value === '' ? null : Number(event.target.value))
-                }
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-              />
-            </div>
+            <div />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -202,7 +218,8 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             </label>
             <ProjectStepsChecklist
               projectId={projectId}
-              steps={getStepsForProject(allSteps, projectId)}
+              steps={steps}
+              actualHoursByStep={actualHoursByStep}
             />
           </div>
 
@@ -210,7 +227,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             <label className="block text-xs font-medium uppercase text-neutral-500">
               Travail effectué
             </label>
-            <ProjectWorkLog projectId={projectId} />
+            <ProjectWorkLog steps={steps} />
           </div>
 
           <div className="space-y-2">

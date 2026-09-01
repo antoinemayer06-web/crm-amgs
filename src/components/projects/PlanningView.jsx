@@ -152,6 +152,46 @@ export default function PlanningView({ projects, allSteps = [] }) {
                         )}
                       </div>
 
+                      {/* Connecteurs reliant la barre du projet à chacune de ses tâches */}
+                      {steps.length > 0 && (
+                        <div className="pointer-events-none absolute inset-0">
+                          {steps.map((step, index) => {
+                            const stepStart = step.date_debut
+                              ? new Date(step.date_debut)
+                              : new Date(step.date_fin)
+                            const stepLeft = toPercent(stepStart)
+                            const rowCenter = 24 + index * 16 + 8
+                            const connLeft = Math.min(left, stepLeft)
+                            const connWidth = Math.max(Math.abs(stepLeft - left), 0.3)
+                            const pointsRight = stepLeft >= left
+
+                            return (
+                              <div key={step.id}>
+                                <div
+                                  className="absolute w-px bg-neutral-300"
+                                  style={{ left: `${left}%`, top: '24px', height: `${rowCenter - 24}px` }}
+                                />
+                                <div
+                                  className="absolute h-px bg-neutral-300"
+                                  style={{ left: `${connLeft}%`, width: `${connWidth}%`, top: `${rowCenter}px` }}
+                                />
+                                <div
+                                  className="absolute h-0 w-0"
+                                  style={{
+                                    top: `${rowCenter - 3}px`,
+                                    left: pointsRight ? `calc(${stepLeft}% - 4px)` : `calc(${stepLeft}% + 4px)`,
+                                    borderTop: '3px solid transparent',
+                                    borderBottom: '3px solid transparent',
+                                    borderLeft: pointsRight ? '4px solid #d4d4d4' : undefined,
+                                    borderRight: pointsRight ? undefined : '4px solid #d4d4d4',
+                                  }}
+                                />
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+
                       {steps.map((step) => {
                         const stepStart = step.date_debut ? new Date(step.date_debut) : new Date(step.date_fin)
                         const stepEnd = step.date_fin ? new Date(step.date_fin) : new Date(step.date_debut)

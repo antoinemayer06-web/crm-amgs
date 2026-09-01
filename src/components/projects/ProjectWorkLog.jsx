@@ -2,25 +2,32 @@ import { useState } from 'react'
 import {
   useCreateProjectWorkLog,
   useDeleteProjectWorkLog,
-  useProjectWorkLogs,
+  useWorkLogsForSteps,
 } from '../../hooks/useProjectWorkLogs'
 
 const today = () => new Date().toISOString().slice(0, 10)
 const formatDate = (value) => new Date(value).toLocaleDateString('fr-FR')
 
-export default function ProjectWorkLog({ projectId }) {
+// Les entrées de temps se font uniquement sur une tâche du projet.
+export default function ProjectWorkLog({ steps }) {
+  const stepIds = steps.map((s) => s.id)
+  const [stepId, setStepId] = useState(steps[0]?.id ?? '')
   const [date, setDate] = useState(today())
   const [description, setDescription] = useState('')
   const [duree, setDuree] = useState('')
-  const { data: logs, isLoading, isError, error } = useProjectWorkLogs(projectId)
+  const { data: logs, isLoading, isError, error } = useWorkLogsForSteps(stepIds)
   const createLog = useCreateProjectWorkLog()
   const deleteLog = useDeleteProjectWorkLog()
 
+  function stepTitle(id) {
+    return steps.find((s) => s.id === id)?.titre ?? '—'
+  }
+
   async function handleAdd(event) {
     event.preventDefault()
-    if (!description.trim()) return
+    if (!stepId || !description.trim()) return
     await createLog.mutateAsync({
-      project_id: projectId,
+      step_id: stepId,
       date,
       description: description.trim(),
       duree_heures: duree === '' ? null : Number(duree),
@@ -31,7 +38,15 @@ export default function ProjectWorkLog({ projectId }) {
 
   async function handleDelete(log) {
     if (!window.confirm('Supprimer cette entrée ?')) return
-    await deleteLog.mutateAsync({ id: log.id, projectId })
+    await deleteLog.mutateAsync(log.id)
+  }
+
+  if (steps.length === 0) {
+    return (
+      <p className="text-sm text-neutral-400">
+        Ajoutez d'abord une étape pour pouvoir y rattacher du temps.
+      </p>
+    )
   }
 
   return (
@@ -47,6 +62,7 @@ export default function ProjectWorkLog({ projectId }) {
           <li key={log.id} className="group rounded-md border border-neutral-200 p-2.5">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
+                <p className="text-xs font-medium text-neutral-500">{stepTitle(log.step_id)}</p>
                 <p className="text-sm text-neutral-800">{log.description}</p>
                 <p className="mt-1 text-xs text-neutral-400">
                   {formatDate(log.date)}
@@ -66,6 +82,17 @@ export default function ProjectWorkLog({ projectId }) {
       </ul>
 
       <form onSubmit={handleAdd} className="space-y-2 rounded-md border border-neutral-200 p-2.5">
+        <select
+          value={stepId}
+          onChange={(event) => setStepId(event.target.value)}
+          className="w-full rounded-md border border-neutral-300 px-2 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        >
+          {steps.map((step) => (
+            <option key={step.id} value={step.id}>
+              {step.titre}
+            </option>
+          ))}
+        </select>
         <textarea
           value={description}
           onChange={(event) => setDescription(event.target.value)}
