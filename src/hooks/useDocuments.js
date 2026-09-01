@@ -3,19 +3,22 @@ import { supabase } from '../lib/supabaseClient'
 
 const BUCKET = 'documents'
 
-export function useDocuments(companyId) {
+// projectId présent -> documents rattachés à ce projet précis.
+// projectId absent -> documents au niveau de la company (project_id nul).
+export function useDocuments({ companyId, projectId }) {
   return useQuery({
-    queryKey: ['documents', companyId],
+    queryKey: ['documents', { companyId, projectId }],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('documents')
-        .select('*')
-        .eq('company_id', companyId)
-        .order('created_at', { ascending: false })
+      let query = supabase.from('documents').select('*').order('created_at', { ascending: false })
+      query = projectId
+        ? query.eq('project_id', projectId)
+        : query.eq('company_id', companyId).is('project_id', null)
+
+      const { data, error } = await query
       if (error) throw error
       return data
     },
-    enabled: Boolean(companyId),
+    enabled: Boolean(projectId || companyId),
   })
 }
 
@@ -30,8 +33,9 @@ export async function getDocumentSignedUrl(path) {
 export function useCreateDocument() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ companyId, ownerId, file, nom, type, montant, statut }) => {
-      const path = `${ownerId}/${companyId}/${Date.now()}-${file.name}`
+    mutationFn: async ({ companyId, projectId, ownerId, file, nom, type, montant, statut }) => {
+      const folder = projectId ? `${companyId}/projects/${projectId}` : companyId
+      const path = `${ownerId}/${folder}/${Date.now()}-${file.name}`
       const { error: uploadError } = await supabase.storage
         .from(BUCKET)
         .upload(path, file)
@@ -41,6 +45,7 @@ export function useCreateDocument() {
         .from('documents')
         .insert({
           company_id: companyId,
+          project_id: projectId ?? null,
           nom,
           type,
           url: path,
@@ -56,8 +61,8 @@ export function useCreateDocument() {
       }
       return data
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['documents', data.company_id] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] })
     },
   })
 }
@@ -75,8 +80,8 @@ export function useUpdateDocument() {
       if (error) throw error
       return data
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['documents', data.company_id] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] })
     },
   })
 }
@@ -84,14 +89,13 @@ export function useUpdateDocument() {
 export function useDeleteDocument() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ id, companyId, path }) => {
+    mutationFn: async ({ id, path }) => {
       await supabase.storage.from(BUCKET).remove([path])
       const { error } = await supabase.from('documents').delete().eq('id', id)
       if (error) throw error
-      return { companyId }
     },
-    onSuccess: ({ companyId }) => {
-      queryClient.invalidateQueries({ queryKey: ['documents', companyId] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents'] })
     },
   })
 }

@@ -72,29 +72,24 @@ export function formatEnumLabel(value) {
 
 export const PROJECT_STATUT_OPTIONS = [
   'en_cours_livraison',
-  'livré',
-  'à_facturer',
+  'livré_à_facturer',
   'facture_transmise',
   'payé',
 ]
 
 export const PROJECT_STATUT_TONES = {
   en_cours_livraison: 'blue',
-  livré: 'neutral',
-  à_facturer: 'amber',
+  livré_à_facturer: 'amber',
   facture_transmise: 'blue',
   payé: 'green',
 }
 
 export const PROJECT_STATUT_LABELS = {
   en_cours_livraison: 'En cours',
-  livré: 'Livré',
-  à_facturer: 'À facturer',
+  livré_à_facturer: 'Livré / à facturer',
   facture_transmise: 'Facture transmise',
   payé: 'Payé',
 }
-
-export const PROJECT_STEP_STATUSES = ['à_faire', 'en_cours', 'fait']
 
 // Une échéance est "urgente" si elle est dépassée ou dans les 3 jours.
 export function isDateUrgente(date) {

@@ -45,10 +45,11 @@ export default function ListView({ projects, allSteps, onProjectClick, showClien
               <ProgressBar done={stepsCount.done} total={stepsCount.total} />
             </div>
 
-            <div className="w-36 shrink-0">
+            <div className="flex w-44 shrink-0 items-center gap-1.5">
               <Badge tone={PROJECT_STATUT_TONES[project.statut]}>
                 {PROJECT_STATUT_LABELS[project.statut]}
               </Badge>
+              {project.archived && <Badge tone="neutral">Archivé</Badge>}
             </div>
 
             <div

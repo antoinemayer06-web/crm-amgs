@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import DocumentsSection from '../documents/DocumentsSection'
 import { useDeleteProject, useProject, useUpdateProject } from '../../hooks/useProjects'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_OPTIONS } from '../../lib/constants'
 import { getStepsForProject } from '../../lib/projectUtils'
 import Avatar from '../ui/Avatar'
+import Badge from '../ui/Badge'
 import SidePanel from '../ui/SidePanel'
 import ProjectStepsChecklist from './ProjectStepsChecklist'
 
@@ -33,12 +35,20 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
     onClose()
   }
 
+  function handleArchiveToggle() {
+    saveField('archived', !project.archived)
+  }
+
   return (
     <SidePanel title={isLoading ? 'Chargement…' : project?.nom} onClose={onClose}>
       {isLoading || !project ? (
         <p className="text-sm text-neutral-500">Chargement…</p>
       ) : (
         <div className="space-y-6">
+          {project.archived && (
+            <Badge tone="neutral">Archivé</Badge>
+          )}
+
           <div className="space-y-1">
             <label className="block text-xs font-medium uppercase text-neutral-500">Nom</label>
             <input
@@ -133,7 +143,21 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             />
           </div>
 
-          <div className="border-t border-neutral-100 pt-4">
+          <div className="space-y-2">
+            <label className="block text-xs font-medium uppercase text-neutral-500">
+              Documents
+            </label>
+            <DocumentsSection companyId={project.company_id} projectId={projectId} />
+          </div>
+
+          <div className="flex items-center justify-between border-t border-neutral-100 pt-4">
+            <button
+              type="button"
+              onClick={handleArchiveToggle}
+              className="text-sm text-neutral-500 hover:text-neutral-900"
+            >
+              {project.archived ? 'Désarchiver ce projet' : 'Archiver ce projet'}
+            </button>
             <button
               type="button"
               onClick={handleDelete}

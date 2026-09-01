@@ -1,4 +1,12 @@
-import { DndContext, DragOverlay, useDraggable, useDroppable } from '@dnd-kit/core'
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useDraggable,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
 import { useState } from 'react'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_OPTIONS } from '../../lib/constants'
 import { getStepsCount } from '../../lib/projectUtils'
@@ -57,6 +65,11 @@ function Column({ statut, projects, allSteps, onProjectClick }) {
 
 export default function KanbanView({ projects, allSteps, onProjectClick, onStatusChange }) {
   const [activeProject, setActiveProject] = useState(null)
+  // Sans distance d'activation, dnd-kit démarre un drag au moindre pixel
+  // de mouvement et avale le clic : la carte ne s'ouvre plus jamais.
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+  )
 
   function handleDragStart(event) {
     const project = projects.find((p) => p.id === event.active.id)
@@ -75,7 +88,7 @@ export default function KanbanView({ projects, allSteps, onProjectClick, onStatu
   }
 
   return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div className="flex gap-4 overflow-x-auto pb-4">
         {PROJECT_STATUT_OPTIONS.map((statut) => (
           <Column

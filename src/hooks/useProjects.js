@@ -18,6 +18,9 @@ export function useProjects(filters = {}) {
       if (filters.companyId) {
         query = query.eq('company_id', filters.companyId)
       }
+      if (filters.archived !== undefined) {
+        query = query.eq('archived', filters.archived)
+      }
 
       const { data, error } = await query
       if (error) throw error
@@ -108,8 +111,8 @@ export function useDeleteProject() {
   })
 }
 
-// Un client est "actif" s'il a au moins un projet dont le statut n'est
-// pas "livré", "inactif" sinon (y compris s'il n'a aucun projet).
+// Un client est "actif" s'il a au moins un projet non archivé encore en
+// cours de livraison, "inactif" sinon (y compris s'il n'a aucun projet).
 export function useClientActivityMap(companyIds) {
   return useQuery({
     queryKey: ['projects', 'activity-map', companyIds],
@@ -119,12 +122,14 @@ export function useClientActivityMap(companyIds) {
 
       const { data, error } = await supabase
         .from('projects')
-        .select('company_id, statut')
+        .select('company_id, statut, archived')
         .in('company_id', companyIds)
       if (error) throw error
 
       for (const project of data) {
-        if (project.statut !== 'livré') map[project.company_id] = true
+        if (!project.archived && project.statut === 'en_cours_livraison') {
+          map[project.company_id] = true
+        }
       }
       return map
     },

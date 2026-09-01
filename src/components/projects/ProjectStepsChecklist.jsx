@@ -14,63 +14,65 @@ import {
   useUpdateProjectStep,
 } from '../../hooks/useProjects'
 
-const NEXT_STATUS = { à_faire: 'en_cours', en_cours: 'fait', fait: 'à_faire' }
-
-function StepStatusIcon({ statut }) {
-  if (statut === 'fait') {
-    return (
-      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-[10px] text-white">
-        ✓
-      </span>
-    )
-  }
-  if (statut === 'en_cours') {
-    return (
-      <span className="relative flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 border-blue-500">
-        <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-      </span>
-    )
-  }
-  return <span className="h-4 w-4 shrink-0 rounded-full border-2 border-neutral-300" />
-}
-
-function StepRow({ step, onToggle, onDelete }) {
+function StepRow({ step, onToggle, onDateChange, onDelete }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: step.id,
   })
+  const done = step.statut === 'fait'
 
   return (
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`group flex items-center gap-2 rounded-md px-1 py-1.5 ${
+      className={`group rounded-md px-1 py-1.5 ${
         isDragging ? 'bg-neutral-100 shadow-sm' : 'hover:bg-neutral-50'
       }`}
     >
-      <span
-        {...attributes}
-        {...listeners}
-        className="cursor-grab text-neutral-300 hover:text-neutral-500 active:cursor-grabbing"
-      >
-        ⠿
-      </span>
-      <button type="button" onClick={() => onToggle(step)}>
-        <StepStatusIcon statut={step.statut} />
-      </button>
-      <span
-        className={`flex-1 text-sm ${
-          step.statut === 'fait' ? 'text-neutral-400 line-through' : 'text-neutral-800'
-        }`}
-      >
-        {step.titre}
-      </span>
-      <button
-        type="button"
-        onClick={() => onDelete(step)}
-        className="text-neutral-300 opacity-0 hover:text-red-500 group-hover:opacity-100"
-      >
-        ✕
-      </button>
+      <div className="flex items-center gap-2">
+        <span
+          {...attributes}
+          {...listeners}
+          className="cursor-grab text-neutral-300 hover:text-neutral-500 active:cursor-grabbing"
+        >
+          ⠿
+        </span>
+        <input
+          type="checkbox"
+          checked={done}
+          onChange={() => onToggle(step)}
+          className="h-4 w-4 shrink-0 rounded border-neutral-300"
+        />
+        <span
+          className={`flex-1 text-sm ${
+            done ? 'text-neutral-400 line-through' : 'text-neutral-800'
+          }`}
+        >
+          {step.titre}
+        </span>
+        <button
+          type="button"
+          onClick={() => onDelete(step)}
+          className="text-neutral-300 opacity-0 hover:text-red-500 group-hover:opacity-100"
+        >
+          ✕
+        </button>
+      </div>
+      <div className="ml-12 mt-1 flex items-center gap-2 text-xs text-neutral-400">
+        <span>Du</span>
+        <input
+          type="date"
+          value={step.date_debut ?? ''}
+          onChange={(event) => onDateChange(step, 'date_debut', event.target.value || null)}
+          className="rounded border border-neutral-200 px-1 py-0.5 text-xs text-neutral-500 focus:border-neutral-400 focus:outline-none"
+        />
+        <span>au</span>
+        <input
+          type="date"
+          value={step.date_fin ?? ''}
+          onChange={(event) => onDateChange(step, 'date_fin', event.target.value || null)}
+          className="rounded border border-neutral-200 px-1 py-0.5 text-xs text-neutral-500 focus:border-neutral-400 focus:outline-none"
+        />
+      </div>
     </div>
   )
 }
@@ -83,7 +85,11 @@ export default function ProjectStepsChecklist({ projectId, steps }) {
   const reorderSteps = useReorderProjectSteps()
 
   function handleToggle(step) {
-    updateStep.mutate({ id: step.id, values: { statut: NEXT_STATUS[step.statut] } })
+    updateStep.mutate({ id: step.id, values: { statut: step.statut === 'fait' ? 'à_faire' : 'fait' } })
+  }
+
+  function handleDateChange(step, field, value) {
+    updateStep.mutate({ id: step.id, values: { [field]: value } })
   }
 
   function handleDelete(step) {
@@ -115,7 +121,13 @@ export default function ProjectStepsChecklist({ projectId, steps }) {
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={steps.map((s) => s.id)} strategy={verticalListSortingStrategy}>
           {steps.map((step) => (
-            <StepRow key={step.id} step={step} onToggle={handleToggle} onDelete={handleDelete} />
+            <StepRow
+              key={step.id}
+              step={step}
+              onToggle={handleToggle}
+              onDateChange={handleDateChange}
+              onDelete={handleDelete}
+            />
           ))}
         </SortableContext>
       </DndContext>

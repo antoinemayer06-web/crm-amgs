@@ -38,7 +38,9 @@ export default function CompanyDetailPage() {
     return <p className="text-sm text-red-600">Erreur : {error.message}</p>
   }
 
-  const actif = (projects ?? []).some((project) => project.statut !== 'livré')
+  const actif = (projects ?? []).some(
+    (project) => !project.archived && project.statut === 'en_cours_livraison',
+  )
 
   async function handleDelete() {
     if (!window.confirm(`Supprimer « ${company.name} » et toutes ses données liées ?`)) {

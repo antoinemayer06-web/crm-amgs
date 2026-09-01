@@ -22,10 +22,16 @@ export default function ProjectsPage() {
   const [filters, setFilters] = useState(emptyFilters)
   const [selectedProjectId, setSelectedProjectId] = useState(null)
   const [creating, setCreating] = useState(false)
+  const [showArchived, setShowArchived] = useState(false)
+
+  // Un projet archivé disparaît toujours du Kanban et du Planning ; seule
+  // la vue Liste peut basculer pour les consulter.
+  const archived = view === 'list' && showArchived
 
   const { data: allProjects, isLoading, isError, error } = useProjects({
     statut: filters.statut,
     companyId: filters.companyId,
+    archived,
   })
   const { data: allSteps } = useAllProjectSteps()
   const updateProject = useUpdateProject()
@@ -59,21 +65,46 @@ export default function ProjectsPage() {
       <div className="flex items-center justify-between gap-4">
         <ProjectFilters filters={filters} onChange={setFilters} />
 
-        <div className="flex shrink-0 rounded-lg border border-neutral-200 bg-white p-1">
-          {VIEWS.map((v) => (
-            <button
-              key={v.key}
-              type="button"
-              onClick={() => setView(v.key)}
-              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-                view === v.key
-                  ? 'bg-neutral-900 text-white'
-                  : 'text-neutral-500 hover:text-neutral-900'
-              }`}
-            >
-              {v.label}
-            </button>
-          ))}
+        <div className="flex shrink-0 items-center gap-3">
+          {view === 'list' && (
+            <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
+              <button
+                type="button"
+                onClick={() => setShowArchived(false)}
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
+                  !showArchived ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:text-neutral-900'
+                }`}
+              >
+                Actifs
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowArchived(true)}
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
+                  showArchived ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:text-neutral-900'
+                }`}
+              >
+                Archivés
+              </button>
+            </div>
+          )}
+
+          <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
+            {VIEWS.map((v) => (
+              <button
+                key={v.key}
+                type="button"
+                onClick={() => setView(v.key)}
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
+                  view === v.key
+                    ? 'bg-neutral-900 text-white'
+                    : 'text-neutral-500 hover:text-neutral-900'
+                }`}
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
