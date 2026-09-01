@@ -1,5 +1,9 @@
+import {
+  STATUT_LIVRAISON_TONES,
+  STATUT_PROSPECT_TONES,
+  TEMPERATURE_TONES,
+} from '../../lib/constants'
 import Badge from '../ui/Badge'
-import { HEALTH_SCORE_TONES } from '../../lib/constants'
 
 function Field({ label, children }) {
   return (
@@ -17,13 +21,33 @@ export default function InfosTab({ company }) {
         <Field label="Secteur">{company.sector}</Field>
         <Field label="Taille">{company.size}</Field>
         <Field label="Source">{company.source}</Field>
-        <Field label="Health score">
-          {company.health_score ? (
-            <Badge tone={HEALTH_SCORE_TONES[company.health_score]}>
-              {company.health_score}
-            </Badge>
-          ) : null}
-        </Field>
+        {company.status === 'prospect' && (
+          <Field label="Étape prospect">
+            {company.statut_prospect ? (
+              <Badge tone={STATUT_PROSPECT_TONES[company.statut_prospect]}>
+                {company.statut_prospect}
+              </Badge>
+            ) : null}
+          </Field>
+        )}
+        {company.status === 'client' && (
+          <>
+            <Field label="Statut livraison">
+              {company.statut_livraison ? (
+                <Badge tone={STATUT_LIVRAISON_TONES[company.statut_livraison]}>
+                  {company.statut_livraison}
+                </Badge>
+              ) : null}
+            </Field>
+            <Field label="Température">
+              {company.temperature ? (
+                <Badge tone={TEMPERATURE_TONES[company.temperature]}>
+                  {company.temperature}
+                </Badge>
+              ) : null}
+            </Field>
+          </>
+        )}
         <Field label="Site web">
           {company.website ? (
             <a

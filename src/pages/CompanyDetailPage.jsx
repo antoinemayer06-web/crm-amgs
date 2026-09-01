@@ -8,7 +8,12 @@ import NotesTab from '../components/companies/NotesTab'
 import ProjectsTab from '../components/companies/ProjectsTab'
 import Badge from '../components/ui/Badge'
 import Modal from '../components/ui/Modal'
-import { useCompany, useDeleteCompany, useUpdateCompany } from '../hooks/useCompanies'
+import {
+  useCompany,
+  useConvertToClient,
+  useDeleteCompany,
+  useUpdateCompany,
+} from '../hooks/useCompanies'
 import { COMPANY_STATUS_TONES } from '../lib/constants'
 
 const TABS = [
@@ -27,6 +32,7 @@ export default function CompanyDetailPage() {
   const { data: company, isLoading, isError, error } = useCompany(id)
   const updateCompany = useUpdateCompany()
   const deleteCompany = useDeleteCompany()
+  const convertToClient = useConvertToClient()
 
   if (isLoading) {
     return <p className="text-sm text-neutral-500">Chargement…</p>
@@ -44,6 +50,11 @@ export default function CompanyDetailPage() {
     navigate('/companies')
   }
 
+  async function handleConvert() {
+    if (!window.confirm(`Convertir « ${company.name} » en client ?`)) return
+    await convertToClient.mutateAsync(company.id)
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -58,6 +69,15 @@ export default function CompanyDetailPage() {
           <Badge tone={COMPANY_STATUS_TONES[company.status]}>{company.status}</Badge>
         </div>
         <div className="flex gap-2">
+          {company.statut_prospect === 'devis_signé' && (
+            <button
+              type="button"
+              onClick={handleConvert}
+              className="rounded-md border border-green-300 px-3 py-1.5 text-sm font-medium text-green-700 hover:bg-green-50"
+            >
+              Convertir en client
+            </button>
+          )}
           <button
             type="button"
             onClick={() => setEditing(true)}

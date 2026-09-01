@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import {
   COMPANY_SOURCES,
-  COMPANY_STATUSES,
-  HEALTH_SCORES,
+  COMPANY_STATUS_OPTIONS,
+  STATUT_LIVRAISON_OPTIONS,
+  STATUT_PROSPECT_OPTIONS,
+  TEMPERATURE_OPTIONS,
 } from '../../lib/constants'
 
 const emptyValues = {
@@ -11,15 +13,24 @@ const emptyValues = {
   sector: '',
   size: '',
   source: '',
-  health_score: '',
+  statut_prospect: '',
+  statut_livraison: '',
+  temperature: '',
   tags: '',
   website: '',
   notes_generales: '',
 }
 
-export default function CompanyForm({ initialValues, onSubmit, onCancel, submitting }) {
+export default function CompanyForm({
+  initialValues,
+  defaultStatus,
+  onSubmit,
+  onCancel,
+  submitting,
+}) {
   const [values, setValues] = useState({
     ...emptyValues,
+    status: defaultStatus ?? emptyValues.status,
     ...initialValues,
     tags: (initialValues?.tags ?? []).join(', '),
   })
@@ -44,7 +55,11 @@ export default function CompanyForm({ initialValues, onSubmit, onCancel, submitt
       sector: values.sector.trim() || null,
       size: values.size.trim() || null,
       source: values.source || null,
-      health_score: values.status === 'client' ? values.health_score || null : null,
+      statut_prospect:
+        values.status === 'prospect' ? values.statut_prospect || 'à_contacter' : null,
+      statut_livraison:
+        values.status === 'client' ? values.statut_livraison || 'en_cours' : null,
+      temperature: values.status === 'client' ? values.temperature || 'chaud' : null,
       tags: values.tags
         .split(',')
         .map((tag) => tag.trim())
@@ -74,45 +89,85 @@ export default function CompanyForm({ initialValues, onSubmit, onCancel, submitt
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="space-y-1">
+        <label htmlFor="status" className="block text-sm font-medium text-neutral-700">
+          Statut
+        </label>
+        <select
+          id="status"
+          value={values.status}
+          onChange={(event) => update('status', event.target.value)}
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        >
+          {COMPANY_STATUS_OPTIONS.map((status) => (
+            <option key={status} value={status}>
+              {status}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {values.status === 'prospect' && (
         <div className="space-y-1">
-          <label htmlFor="status" className="block text-sm font-medium text-neutral-700">
-            Statut
+          <label htmlFor="statut_prospect" className="block text-sm font-medium text-neutral-700">
+            Étape prospect
           </label>
           <select
-            id="status"
-            value={values.status}
-            onChange={(event) => update('status', event.target.value)}
+            id="statut_prospect"
+            value={values.statut_prospect}
+            onChange={(event) => update('statut_prospect', event.target.value)}
             className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
           >
-            {COMPANY_STATUSES.map((status) => (
-              <option key={status} value={status}>
-                {status}
+            {STATUT_PROSPECT_OPTIONS.map((statut) => (
+              <option key={statut} value={statut}>
+                {statut}
               </option>
             ))}
           </select>
         </div>
+      )}
 
-        <div className="space-y-1">
-          <label htmlFor="health_score" className="block text-sm font-medium text-neutral-700">
-            Health score
-          </label>
-          <select
-            id="health_score"
-            value={values.health_score}
-            disabled={values.status !== 'client'}
-            onChange={(event) => update('health_score', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 disabled:bg-neutral-100 disabled:text-neutral-400"
-          >
-            <option value="">—</option>
-            {HEALTH_SCORES.map((score) => (
-              <option key={score} value={score}>
-                {score}
-              </option>
-            ))}
-          </select>
+      {values.status === 'client' && (
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label
+              htmlFor="statut_livraison"
+              className="block text-sm font-medium text-neutral-700"
+            >
+              Statut livraison
+            </label>
+            <select
+              id="statut_livraison"
+              value={values.statut_livraison}
+              onChange={(event) => update('statut_livraison', event.target.value)}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            >
+              {STATUT_LIVRAISON_OPTIONS.map((statut) => (
+                <option key={statut} value={statut}>
+                  {statut}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="temperature" className="block text-sm font-medium text-neutral-700">
+              Température
+            </label>
+            <select
+              id="temperature"
+              value={values.temperature}
+              onChange={(event) => update('temperature', event.target.value)}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            >
+              {TEMPERATURE_OPTIONS.map((temp) => (
+                <option key={temp} value={temp}>
+                  {temp}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">

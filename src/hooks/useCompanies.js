@@ -13,14 +13,22 @@ export function useCompanies(filters) {
       if (filters.search) {
         query = query.ilike('name', `%${filters.search}%`)
       }
-      if (filters.status) {
+      if (filters.statuses?.length) {
+        query = query.in('status', filters.statuses)
+      } else if (filters.status) {
         query = query.eq('status', filters.status)
       }
       if (filters.sector) {
         query = query.ilike('sector', `%${filters.sector}%`)
       }
-      if (filters.healthScore) {
-        query = query.eq('health_score', filters.healthScore)
+      if (filters.statutProspect) {
+        query = query.eq('statut_prospect', filters.statutProspect)
+      }
+      if (filters.statutLivraison) {
+        query = query.eq('statut_livraison', filters.statutLivraison)
+      }
+      if (filters.temperature) {
+        query = query.eq('temperature', filters.temperature)
       }
       if (filters.tag) {
         query = query.contains('tags', [filters.tag])
@@ -74,6 +82,31 @@ export function useUpdateCompany() {
       const { data, error } = await supabase
         .from('companies')
         .update(values)
+        .eq('id', id)
+        .select()
+        .single()
+      if (error) throw error
+      return data
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['companies'] })
+      queryClient.invalidateQueries({ queryKey: ['companies', data.id] })
+    },
+  })
+}
+
+export function useConvertToClient() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (id) => {
+      const { data, error } = await supabase
+        .from('companies')
+        .update({
+          status: 'client',
+          statut_prospect: null,
+          statut_livraison: 'en_cours',
+          temperature: 'chaud',
+        })
         .eq('id', id)
         .select()
         .single()
