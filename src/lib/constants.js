@@ -155,6 +155,22 @@ export const CAMPAIGN_STATUS_TONES = {
   annulée: 'red',
 }
 
+export const KNOWLEDGE_CATEGORIES = ['script_appel', 'template_proposition', 'sop', 'autre']
+
+export const KNOWLEDGE_CATEGORY_LABELS = {
+  script_appel: "Script d'appel",
+  template_proposition: 'Template de proposition',
+  sop: 'SOP',
+  autre: 'Autre',
+}
+
+export const KNOWLEDGE_CATEGORY_TONES = {
+  script_appel: 'blue',
+  template_proposition: 'amber',
+  sop: 'green',
+  autre: 'neutral',
+}
+
 // Couleur d'avatar stable dérivée du nom (même entreprise = même couleur).
 const AVATAR_PALETTE = [
   'bg-blue-500', 'bg-violet-500', 'bg-emerald-500', 'bg-amber-500',

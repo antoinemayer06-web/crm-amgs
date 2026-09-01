@@ -6,6 +6,7 @@ const navItems = [
   { to: '/pipeline', label: 'Pipeline' },
   { to: '/projects', label: 'Projets' },
   { to: '/marketing', label: 'Marketing' },
+  { to: '/knowledge', label: 'Base de connaissance' },
 ]
 
 export default function Layout() {

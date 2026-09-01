@@ -3,6 +3,8 @@ import Layout from './components/Layout'
 import { useAuth } from './lib/AuthContext'
 import CompanyDetailPage from './pages/CompanyDetailPage'
 import CompaniesListPage from './pages/CompaniesListPage'
+import KnowledgeBasePage from './pages/KnowledgeBasePage'
+import KnowledgeDetailPage from './pages/KnowledgeDetailPage'
 import Login from './pages/Login'
 import MarketingPage from './pages/MarketingPage'
 import PipelinePage from './pages/PipelinePage'
@@ -32,6 +34,8 @@ function App() {
         <Route path="pipeline" element={<PipelinePage />} />
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="marketing" element={<MarketingPage />} />
+        <Route path="knowledge" element={<KnowledgeBasePage />} />
+        <Route path="knowledge/:id" element={<KnowledgeDetailPage />} />
         <Route path="*" element={<Navigate to="/companies" replace />} />
       </Route>
     </Routes>
