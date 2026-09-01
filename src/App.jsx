@@ -1,35 +1,44 @@
-import { useEffect, useState } from 'react'
-import { supabase } from './lib/supabaseClient'
+import { useAuth } from './lib/AuthContext'
+import Login from './pages/Login'
 
 function App() {
-  const [status, setStatus] = useState('checking')
+  const { user, loading, signOut } = useAuth()
 
-  useEffect(() => {
-    let cancelled = false
+  if (loading) {
+    return (
+      <div className="min-h-svh flex items-center justify-center bg-neutral-50">
+        <p className="text-neutral-500">Chargement…</p>
+      </div>
+    )
+  }
 
-    async function checkConnection() {
-      const { error } = await supabase
-        .from('pipeline_stages')
-        .select('id', { head: true, count: 'exact' })
-
-      if (cancelled) return
-      setStatus(error ? `erreur: ${error.message}` : 'connecté')
-    }
-
-    checkConnection()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  if (!user) {
+    return <Login />
+  }
 
   return (
-    <div className="min-h-svh flex items-center justify-center bg-neutral-50">
-      <div className="text-center space-y-2">
-        <h1 className="text-2xl font-semibold text-neutral-900">
+    <div className="min-h-svh bg-neutral-50">
+      <header className="flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4">
+        <h1 className="text-lg font-semibold text-neutral-900">
           AM Growth Solutions — CRM
         </h1>
-        <p className="text-neutral-500">Supabase : {status}</p>
-      </div>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-neutral-500">{user.email}</span>
+          <button
+            type="button"
+            onClick={signOut}
+            className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100"
+          >
+            Déconnexion
+          </button>
+        </div>
+      </header>
+
+      <main className="p-6">
+        <p className="text-neutral-500">
+          Connecté. Les pages du CRM arriveront ici prochainement.
+        </p>
+      </main>
     </div>
   )
 }
