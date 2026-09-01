@@ -1,40 +1,33 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useCompanies, useCreateCompany, useDeleteCompany, useUpdateCompany } from '../../hooks/useCompanies'
 import {
-  useCompanies,
-  useConvertToClient,
-  useCreateCompany,
-  useDeleteCompany,
-  useUpdateCompany,
-} from '../../hooks/useCompanies'
-import {
-  COMPANY_STATUS_TONES,
   STATUT_PROSPECT_OPTIONS,
   STATUT_PROSPECT_TONES,
+  TEMPERATURE_OPTIONS,
+  TEMPERATURE_TONES,
 } from '../../lib/constants'
 import Badge from '../ui/Badge'
 import Modal from '../ui/Modal'
 import CompanyForm from './CompanyForm'
 
-const emptyFilters = { search: '', statusScope: '', sector: '', statutProspect: '', tag: '' }
+const emptyFilters = { search: '', sector: '', statutProspect: '', temperature: '' }
 
 export default function ProspectsList() {
   const [filters, setFilters] = useState(emptyFilters)
   const [modalMode, setModalMode] = useState(null) // null | 'create' | company object
 
-  const statuses = filters.statusScope ? [filters.statusScope] : ['prospect', 'dormant']
   const { data: companies, isLoading, isError, error } = useCompanies({
     search: filters.search,
     sector: filters.sector,
     statutProspect: filters.statutProspect,
-    tag: filters.tag,
-    statuses,
+    temperature: filters.temperature,
+    statuses: ['prospect'],
   })
 
   const createCompany = useCreateCompany()
   const updateCompany = useUpdateCompany()
   const deleteCompany = useDeleteCompany()
-  const convertToClient = useConvertToClient()
 
   function updateFilter(field, value) {
     setFilters((prev) => ({ ...prev, [field]: value }))
@@ -47,13 +40,8 @@ export default function ProspectsList() {
     await deleteCompany.mutateAsync(company.id)
   }
 
-  async function handleConvert(company) {
-    if (!window.confirm(`Convertir « ${company.name} » en client ?`)) return
-    await convertToClient.mutateAsync(company.id)
-  }
-
   const hasActiveFilters =
-    filters.search || filters.statusScope || filters.sector || filters.statutProspect || filters.tag
+    filters.search || filters.sector || filters.statutProspect || filters.temperature
 
   return (
     <div className="space-y-6">
@@ -76,15 +64,6 @@ export default function ProspectsList() {
           className="min-w-48 flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
         />
         <select
-          value={filters.statusScope}
-          onChange={(event) => updateFilter('statusScope', event.target.value)}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-        >
-          <option value="">Actifs + dormants</option>
-          <option value="prospect">Actifs</option>
-          <option value="dormant">Dormants (à relancer)</option>
-        </select>
-        <select
           value={filters.statutProspect}
           onChange={(event) => updateFilter('statutProspect', event.target.value)}
           className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
@@ -96,17 +75,23 @@ export default function ProspectsList() {
             </option>
           ))}
         </select>
+        <select
+          value={filters.temperature}
+          onChange={(event) => updateFilter('temperature', event.target.value)}
+          className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        >
+          <option value="">Toutes les températures</option>
+          {TEMPERATURE_OPTIONS.map((temp) => (
+            <option key={temp} value={temp}>
+              {temp}
+            </option>
+          ))}
+        </select>
         <input
           value={filters.sector}
           onChange={(event) => updateFilter('sector', event.target.value)}
           placeholder="Secteur…"
           className="w-40 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-        />
-        <input
-          value={filters.tag}
-          onChange={(event) => updateFilter('tag', event.target.value)}
-          placeholder="Tag…"
-          className="w-32 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
         />
         {hasActiveFilters && (
           <button
@@ -132,10 +117,9 @@ export default function ProspectsList() {
             <thead className="border-b border-neutral-200 text-xs uppercase text-neutral-500">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>
-                <th className="px-4 py-3 font-medium">Statut</th>
                 <th className="px-4 py-3 font-medium">Étape</th>
+                <th className="px-4 py-3 font-medium">Température</th>
                 <th className="px-4 py-3 font-medium">Secteur</th>
-                <th className="px-4 py-3 font-medium">Tags</th>
                 <th className="px-4 py-3 font-medium" />
               </tr>
             </thead>
@@ -151,9 +135,6 @@ export default function ProspectsList() {
                     </Link>
                   </td>
                   <td className="px-4 py-3">
-                    <Badge tone={COMPANY_STATUS_TONES[company.status]}>{company.status}</Badge>
-                  </td>
-                  <td className="px-4 py-3">
                     {company.statut_prospect ? (
                       <Badge tone={STATUT_PROSPECT_TONES[company.statut_prospect]}>
                         {company.statut_prospect}
@@ -162,25 +143,18 @@ export default function ProspectsList() {
                       '—'
                     )}
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">{company.sector || '—'}</td>
                   <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
-                      {company.tags?.map((tag) => (
-                        <Badge key={tag}>{tag}</Badge>
-                      ))}
-                    </div>
+                    {company.temperature ? (
+                      <Badge tone={TEMPERATURE_TONES[company.temperature]}>
+                        {company.temperature}
+                      </Badge>
+                    ) : (
+                      '—'
+                    )}
                   </td>
+                  <td className="px-4 py-3 text-neutral-600">{company.sector || '—'}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-3">
-                      {company.statut_prospect === 'devis_signé' && (
-                        <button
-                          type="button"
-                          onClick={() => handleConvert(company)}
-                          className="font-medium text-green-600 hover:text-green-800"
-                        >
-                          Convertir en client
-                        </button>
-                      )}
                       <button
                         type="button"
                         onClick={() => setModalMode(company)}

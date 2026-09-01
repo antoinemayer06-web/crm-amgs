@@ -30,9 +30,6 @@ export function useCompanies(filters) {
       if (filters.temperature) {
         query = query.eq('temperature', filters.temperature)
       }
-      if (filters.tag) {
-        query = query.contains('tags', [filters.tag])
-      }
 
       const { data, error } = await query
       if (error) throw error
@@ -82,31 +79,6 @@ export function useUpdateCompany() {
       const { data, error } = await supabase
         .from('companies')
         .update(values)
-        .eq('id', id)
-        .select()
-        .single()
-      if (error) throw error
-      return data
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['companies'] })
-      queryClient.invalidateQueries({ queryKey: ['companies', data.id] })
-    },
-  })
-}
-
-export function useConvertToClient() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async (id) => {
-      const { data, error } = await supabase
-        .from('companies')
-        .update({
-          status: 'client',
-          statut_prospect: null,
-          statut_livraison: 'en_cours',
-          temperature: 'chaud',
-        })
         .eq('id', id)
         .select()
         .single()

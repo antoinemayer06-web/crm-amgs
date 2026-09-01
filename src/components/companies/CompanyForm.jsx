@@ -13,12 +13,27 @@ const emptyValues = {
   sector: '',
   size: '',
   source: '',
+  contact: '',
   statut_prospect: '',
   statut_livraison: '',
   temperature: '',
-  tags: '',
-  website: '',
+  date_contact: '',
+  date_echeance: '',
   notes_generales: '',
+}
+
+// Les colonnes nullable arrivent en `null` depuis Supabase : on les
+// normalise en chaîne vide pour que les <input>/<select> restent
+// contrôlés et que `.trim()` ne plante jamais sur une valeur d'édition.
+function toFormValues(initialValues) {
+  if (!initialValues) return {}
+  const values = {}
+  for (const key of Object.keys(emptyValues)) {
+    if (key in initialValues) {
+      values[key] = initialValues[key] ?? ''
+    }
+  }
+  return values
 }
 
 export default function CompanyForm({
@@ -31,8 +46,7 @@ export default function CompanyForm({
   const [values, setValues] = useState({
     ...emptyValues,
     status: defaultStatus ?? emptyValues.status,
-    ...initialValues,
-    tags: (initialValues?.tags ?? []).join(', '),
+    ...toFormValues(initialValues),
   })
   const [error, setError] = useState(null)
 
@@ -49,22 +63,31 @@ export default function CompanyForm({
       return
     }
 
+    // Une fois le devis signé, l'entreprise devient automatiquement
+    // cliente — aucune action manuelle supplémentaire n'est nécessaire.
+    const isConverting = values.status === 'prospect' && values.statut_prospect === 'devis_signé'
+    const finalStatus = isConverting ? 'client' : values.status
+    const finalStatutProspect =
+      finalStatus === 'prospect' ? values.statut_prospect || 'à_contacter' : null
+    const finalStatutLivraison =
+      finalStatus === 'client'
+        ? isConverting
+          ? 'en_cours_livraison'
+          : values.statut_livraison || 'en_cours_livraison'
+        : null
+
     const payload = {
       name: values.name.trim(),
-      status: values.status,
+      status: finalStatus,
       sector: values.sector.trim() || null,
       size: values.size.trim() || null,
       source: values.source || null,
-      statut_prospect:
-        values.status === 'prospect' ? values.statut_prospect || 'à_contacter' : null,
-      statut_livraison:
-        values.status === 'client' ? values.statut_livraison || 'en_cours' : null,
-      temperature: values.status === 'client' ? values.temperature || 'chaud' : null,
-      tags: values.tags
-        .split(',')
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-      website: values.website.trim() || null,
+      contact: values.contact.trim() || null,
+      statut_prospect: finalStatutProspect,
+      statut_livraison: finalStatutLivraison,
+      temperature: isConverting ? 'chaud' : values.temperature || null,
+      date_contact: finalStatutProspect ? values.date_contact || null : null,
+      date_echeance: finalStatutLivraison === 'en_cours_livraison' ? values.date_echeance || null : null,
       notes_generales: values.notes_generales.trim() || null,
     }
 
@@ -89,41 +112,78 @@ export default function CompanyForm({
         />
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="status" className="block text-sm font-medium text-neutral-700">
-          Statut
-        </label>
-        <select
-          id="status"
-          value={values.status}
-          onChange={(event) => update('status', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-        >
-          {COMPANY_STATUS_OPTIONS.map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {values.status === 'prospect' && (
+      <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="statut_prospect" className="block text-sm font-medium text-neutral-700">
-            Étape prospect
+          <label htmlFor="status" className="block text-sm font-medium text-neutral-700">
+            Statut
           </label>
           <select
-            id="statut_prospect"
-            value={values.statut_prospect}
-            onChange={(event) => update('statut_prospect', event.target.value)}
+            id="status"
+            value={values.status}
+            onChange={(event) => update('status', event.target.value)}
             className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
           >
-            {STATUT_PROSPECT_OPTIONS.map((statut) => (
-              <option key={statut} value={statut}>
-                {statut}
+            {COMPANY_STATUS_OPTIONS.map((status) => (
+              <option key={status} value={status}>
+                {status}
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor="temperature" className="block text-sm font-medium text-neutral-700">
+            Température
+          </label>
+          <select
+            id="temperature"
+            value={values.temperature}
+            onChange={(event) => update('temperature', event.target.value)}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          >
+            <option value="">—</option>
+            {TEMPERATURE_OPTIONS.map((temp) => (
+              <option key={temp} value={temp}>
+                {temp}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {values.status === 'prospect' && (
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label htmlFor="statut_prospect" className="block text-sm font-medium text-neutral-700">
+              Étape prospect
+            </label>
+            <select
+              id="statut_prospect"
+              value={values.statut_prospect}
+              onChange={(event) => update('statut_prospect', event.target.value)}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            >
+              {STATUT_PROSPECT_OPTIONS.map((statut) => (
+                <option key={statut} value={statut}>
+                  {statut}
+                </option>
+              ))}
+            </select>
+          </div>
+          {values.statut_prospect === 'contacté' && (
+            <div className="space-y-1">
+              <label htmlFor="date_contact" className="block text-sm font-medium text-neutral-700">
+                Date de contact
+              </label>
+              <input
+                id="date_contact"
+                type="date"
+                value={values.date_contact}
+                onChange={(event) => update('date_contact', event.target.value)}
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -149,23 +209,20 @@ export default function CompanyForm({
               ))}
             </select>
           </div>
-          <div className="space-y-1">
-            <label htmlFor="temperature" className="block text-sm font-medium text-neutral-700">
-              Température
-            </label>
-            <select
-              id="temperature"
-              value={values.temperature}
-              onChange={(event) => update('temperature', event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-            >
-              {TEMPERATURE_OPTIONS.map((temp) => (
-                <option key={temp} value={temp}>
-                  {temp}
-                </option>
-              ))}
-            </select>
-          </div>
+          {values.statut_livraison === 'en_cours_livraison' && (
+            <div className="space-y-1">
+              <label htmlFor="date_echeance" className="block text-sm font-medium text-neutral-700">
+                Date d'échéance
+              </label>
+              <input
+                id="date_echeance"
+                type="date"
+                value={values.date_echeance}
+                onChange={(event) => update('date_echeance', event.target.value)}
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -195,48 +252,38 @@ export default function CompanyForm({
         </div>
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="source" className="block text-sm font-medium text-neutral-700">
-          Source
-        </label>
-        <select
-          id="source"
-          value={values.source}
-          onChange={(event) => update('source', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-        >
-          <option value="">—</option>
-          {COMPANY_SOURCES.map((source) => (
-            <option key={source} value={source}>
-              {source}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <label htmlFor="source" className="block text-sm font-medium text-neutral-700">
+            Source
+          </label>
+          <select
+            id="source"
+            value={values.source}
+            onChange={(event) => update('source', event.target.value)}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          >
+            <option value="">—</option>
+            {COMPANY_SOURCES.map((source) => (
+              <option key={source} value={source}>
+                {source}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="space-y-1">
-        <label htmlFor="tags" className="block text-sm font-medium text-neutral-700">
-          Tags (séparés par des virgules)
-        </label>
-        <input
-          id="tags"
-          value={values.tags}
-          onChange={(event) => update('tags', event.target.value)}
-          placeholder="ex: agence, saas, prioritaire"
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-        />
-      </div>
-
-      <div className="space-y-1">
-        <label htmlFor="website" className="block text-sm font-medium text-neutral-700">
-          Site web
-        </label>
-        <input
-          id="website"
-          value={values.website}
-          onChange={(event) => update('website', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-        />
+        <div className="space-y-1">
+          <label htmlFor="contact" className="block text-sm font-medium text-neutral-700">
+            Contact
+          </label>
+          <input
+            id="contact"
+            value={values.contact}
+            onChange={(event) => update('contact', event.target.value)}
+            placeholder="téléphone, email…"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          />
+        </div>
       </div>
 
       <div className="space-y-1">

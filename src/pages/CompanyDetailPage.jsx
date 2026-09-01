@@ -8,12 +8,8 @@ import NotesTab from '../components/companies/NotesTab'
 import ProjectsTab from '../components/companies/ProjectsTab'
 import Badge from '../components/ui/Badge'
 import Modal from '../components/ui/Modal'
-import {
-  useCompany,
-  useConvertToClient,
-  useDeleteCompany,
-  useUpdateCompany,
-} from '../hooks/useCompanies'
+import { useCompany, useDeleteCompany, useUpdateCompany } from '../hooks/useCompanies'
+import { useProjectsByCompany } from '../hooks/useProjects'
 import { COMPANY_STATUS_TONES } from '../lib/constants'
 
 const TABS = [
@@ -30,9 +26,9 @@ export default function CompanyDetailPage() {
   const [activeTab, setActiveTab] = useState('infos')
   const [editing, setEditing] = useState(false)
   const { data: company, isLoading, isError, error } = useCompany(id)
+  const { data: projects } = useProjectsByCompany(id)
   const updateCompany = useUpdateCompany()
   const deleteCompany = useDeleteCompany()
-  const convertToClient = useConvertToClient()
 
   if (isLoading) {
     return <p className="text-sm text-neutral-500">Chargement…</p>
@@ -42,17 +38,14 @@ export default function CompanyDetailPage() {
     return <p className="text-sm text-red-600">Erreur : {error.message}</p>
   }
 
+  const actif = (projects ?? []).some((project) => project.statut !== 'livré')
+
   async function handleDelete() {
     if (!window.confirm(`Supprimer « ${company.name} » et toutes ses données liées ?`)) {
       return
     }
     await deleteCompany.mutateAsync(company.id)
     navigate('/companies')
-  }
-
-  async function handleConvert() {
-    if (!window.confirm(`Convertir « ${company.name} » en client ?`)) return
-    await convertToClient.mutateAsync(company.id)
   }
 
   return (
@@ -67,17 +60,11 @@ export default function CompanyDetailPage() {
         <div className="flex items-center gap-3">
           <h2 className="text-xl font-semibold text-neutral-900">{company.name}</h2>
           <Badge tone={COMPANY_STATUS_TONES[company.status]}>{company.status}</Badge>
+          {company.status === 'client' && (
+            <Badge tone={actif ? 'green' : 'neutral'}>{actif ? 'actif' : 'inactif'}</Badge>
+          )}
         </div>
         <div className="flex gap-2">
-          {company.statut_prospect === 'devis_signé' && (
-            <button
-              type="button"
-              onClick={handleConvert}
-              className="rounded-md border border-green-300 px-3 py-1.5 text-sm font-medium text-green-700 hover:bg-green-50"
-            >
-              Convertir en client
-            </button>
-          )}
           <button
             type="button"
             onClick={() => setEditing(true)}
@@ -115,7 +102,7 @@ export default function CompanyDetailPage() {
       </div>
 
       <div>
-        {activeTab === 'infos' && <InfosTab company={company} />}
+        {activeTab === 'infos' && <InfosTab company={company} actif={actif} />}
         {activeTab === 'contacts' && <ContactsTab companyId={company.id} />}
         {activeTab === 'notes' && <NotesTab companyId={company.id} />}
         {activeTab === 'documents' && <DocumentsTab companyId={company.id} />}

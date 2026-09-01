@@ -1,30 +1,26 @@
-// Statuts sélectionnables à la création/édition (« perdu » n'est plus géré
-// comme un statut : un prospect perdu est supprimé de la base).
-export const COMPANY_STATUS_OPTIONS = ['prospect', 'client', 'dormant']
+export const COMPANY_STATUS_OPTIONS = ['prospect', 'client']
 
 export const COMPANY_STATUS_TONES = {
   prospect: 'blue',
   client: 'green',
-  perdu: 'red',
-  dormant: 'amber',
 }
 
 export const COMPANY_SOURCES = [
   'linkedin',
-  'référence',
-  'site web',
-  'salon',
-  'autre',
+  'email',
+  'bouche_à_oreille',
+  'campagne_publicitaire',
+  'appel',
 ]
 
 export const STATUT_PROSPECT_OPTIONS = [
   'à_contacter',
   'contacté',
   'sans_réponse',
-  'réunion_de_cadrage',
+  'refus',
+  'en_discussion',
   'devis_à_transmettre',
   'devis_transmis',
-  'en_attente',
   'devis_signé',
 ]
 
@@ -32,19 +28,26 @@ export const STATUT_PROSPECT_TONES = {
   à_contacter: 'neutral',
   contacté: 'blue',
   sans_réponse: 'amber',
-  réunion_de_cadrage: 'blue',
+  refus: 'red',
+  en_discussion: 'blue',
   devis_à_transmettre: 'amber',
   devis_transmis: 'blue',
-  en_attente: 'neutral',
   devis_signé: 'green',
 }
 
-export const STATUT_LIVRAISON_OPTIONS = ['en_cours', 'échéance', 'facturé', 'payé']
+export const STATUT_LIVRAISON_OPTIONS = [
+  'en_cours_livraison',
+  'livré',
+  'à_facturer',
+  'facture_transmise',
+  'payé',
+]
 
 export const STATUT_LIVRAISON_TONES = {
-  en_cours: 'blue',
-  échéance: 'amber',
-  facturé: 'neutral',
+  en_cours_livraison: 'blue',
+  livré: 'neutral',
+  à_facturer: 'amber',
+  facture_transmise: 'blue',
   payé: 'green',
 }
 
@@ -72,4 +75,15 @@ export const DOCUMENT_STATUS_TONES = {
   envoyé: 'blue',
   payé: 'green',
   en_retard: 'red',
+}
+
+// Une échéance de livraison est "urgente" si elle est dépassée ou dans
+// les 3 prochains jours.
+export function isEcheanceUrgente(dateEcheance) {
+  if (!dateEcheance) return false
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const echeance = new Date(dateEcheance)
+  const diffDays = (echeance - today) / (1000 * 60 * 60 * 24)
+  return diffDays <= 3
 }

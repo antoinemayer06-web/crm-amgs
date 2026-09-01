@@ -1,22 +1,19 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  useCompanies,
-  useCreateCompany,
-  useDeleteCompany,
-  useUpdateCompany,
-} from '../../hooks/useCompanies'
+import { useCompanies, useCreateCompany, useDeleteCompany, useUpdateCompany } from '../../hooks/useCompanies'
+import { useClientActivityMap } from '../../hooks/useProjects'
 import {
   STATUT_LIVRAISON_OPTIONS,
   STATUT_LIVRAISON_TONES,
   TEMPERATURE_OPTIONS,
   TEMPERATURE_TONES,
+  isEcheanceUrgente,
 } from '../../lib/constants'
 import Badge from '../ui/Badge'
 import Modal from '../ui/Modal'
 import CompanyForm from './CompanyForm'
 
-const emptyFilters = { search: '', sector: '', statutLivraison: '', temperature: '', tag: '' }
+const emptyFilters = { search: '', sector: '', statutLivraison: '', temperature: '' }
 
 export default function ClientsList() {
   const [filters, setFilters] = useState(emptyFilters)
@@ -27,9 +24,11 @@ export default function ClientsList() {
     sector: filters.sector,
     statutLivraison: filters.statutLivraison,
     temperature: filters.temperature,
-    tag: filters.tag,
     statuses: ['client'],
   })
+
+  const companyIds = companies?.map((company) => company.id) ?? []
+  const { data: activityMap } = useClientActivityMap(companyIds)
 
   const createCompany = useCreateCompany()
   const updateCompany = useUpdateCompany()
@@ -47,7 +46,7 @@ export default function ClientsList() {
   }
 
   const hasActiveFilters =
-    filters.search || filters.sector || filters.statutLivraison || filters.temperature || filters.tag
+    filters.search || filters.sector || filters.statutLivraison || filters.temperature
 
   return (
     <div className="space-y-6">
@@ -99,12 +98,6 @@ export default function ClientsList() {
           placeholder="Secteur…"
           className="w-40 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
         />
-        <input
-          value={filters.tag}
-          onChange={(event) => updateFilter('tag', event.target.value)}
-          placeholder="Tag…"
-          className="w-32 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-        />
         {hasActiveFilters && (
           <button
             type="button"
@@ -130,69 +123,82 @@ export default function ClientsList() {
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>
                 <th className="px-4 py-3 font-medium">Livraison</th>
+                <th className="px-4 py-3 font-medium">Activité</th>
                 <th className="px-4 py-3 font-medium">Température</th>
                 <th className="px-4 py-3 font-medium">Secteur</th>
-                <th className="px-4 py-3 font-medium">Tags</th>
                 <th className="px-4 py-3 font-medium" />
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-100">
-              {companies.map((company) => (
-                <tr key={company.id} className="hover:bg-neutral-50">
-                  <td className="px-4 py-3">
-                    <Link
-                      to={`/companies/${company.id}`}
-                      className="font-medium text-neutral-900 hover:underline"
-                    >
-                      {company.name}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3">
-                    {company.statut_livraison ? (
-                      <Badge tone={STATUT_LIVRAISON_TONES[company.statut_livraison]}>
-                        {company.statut_livraison}
-                      </Badge>
-                    ) : (
-                      '—'
-                    )}
-                  </td>
-                  <td className="px-4 py-3">
-                    {company.temperature ? (
-                      <Badge tone={TEMPERATURE_TONES[company.temperature]}>
-                        {company.temperature}
-                      </Badge>
-                    ) : (
-                      '—'
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-neutral-600">{company.sector || '—'}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
-                      {company.tags?.map((tag) => (
-                        <Badge key={tag}>{tag}</Badge>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex justify-end gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setModalMode(company)}
-                        className="text-neutral-500 hover:text-neutral-900"
+              {companies.map((company) => {
+                const urgent =
+                  company.statut_livraison === 'en_cours_livraison' &&
+                  isEcheanceUrgente(company.date_echeance)
+                const actif = activityMap?.[company.id] ?? false
+
+                return (
+                  <tr key={company.id} className="hover:bg-neutral-50">
+                    <td className="px-4 py-3">
+                      <Link
+                        to={`/companies/${company.id}`}
+                        className="font-medium text-neutral-900 hover:underline"
                       >
-                        Modifier
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(company)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Supprimer
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        {company.name}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        {company.statut_livraison ? (
+                          <Badge tone={STATUT_LIVRAISON_TONES[company.statut_livraison]}>
+                            {company.statut_livraison}
+                          </Badge>
+                        ) : (
+                          '—'
+                        )}
+                        {urgent && (
+                          <span
+                            title="Échéance dépassée ou proche"
+                            className="h-2 w-2 shrink-0 rounded-full bg-red-500"
+                          />
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge tone={actif ? 'green' : 'neutral'}>
+                        {actif ? 'actif' : 'inactif'}
+                      </Badge>
+                    </td>
+                    <td className="px-4 py-3">
+                      {company.temperature ? (
+                        <Badge tone={TEMPERATURE_TONES[company.temperature]}>
+                          {company.temperature}
+                        </Badge>
+                      ) : (
+                        '—'
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-neutral-600">{company.sector || '—'}</td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex justify-end gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setModalMode(company)}
+                          className="text-neutral-500 hover:text-neutral-900"
+                        >
+                          Modifier
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(company)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          Supprimer
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         )}
