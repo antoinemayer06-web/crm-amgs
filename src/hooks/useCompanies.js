@@ -27,6 +27,9 @@ export function useCompanies(filters) {
       if (filters.temperature) {
         query = query.eq('temperature', filters.temperature)
       }
+      if (filters.source) {
+        query = query.eq('source', filters.source)
+      }
 
       const { data, error } = await query
       if (error) throw error

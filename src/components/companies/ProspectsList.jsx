@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCompanies, useCreateCompany, useDeleteCompany, useUpdateCompany } from '../../hooks/useCompanies'
+import { buildStatutProspectUpdate } from '../../lib/companyUtils'
 import {
   STATUT_PROSPECT_OPTIONS,
   STATUT_PROSPECT_TONES,
@@ -42,15 +43,10 @@ export default function ProspectsList() {
   }
 
   async function handleStatutProspectChange(company, newValue) {
-    if (newValue === 'devis_signé') {
-      // Conversion automatique en client, sans action supplémentaire.
-      await updateCompany.mutateAsync({
-        id: company.id,
-        values: { status: 'client', statut_prospect: null, temperature: 'chaud' },
-      })
-      return
-    }
-    await updateCompany.mutateAsync({ id: company.id, values: { statut_prospect: newValue } })
+    await updateCompany.mutateAsync({
+      id: company.id,
+      values: buildStatutProspectUpdate(newValue),
+    })
   }
 
   async function handleTemperatureChange(company, newValue) {

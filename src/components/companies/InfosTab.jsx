@@ -11,6 +11,8 @@ function Field({ label, children }) {
 }
 
 const formatDate = (value) => (value ? new Date(value).toLocaleDateString('fr-FR') : null)
+const formatMontant = (value) =>
+  value == null ? null : `${Number(value).toLocaleString('fr-FR')} €`
 
 export default function InfosTab({ company, actif }) {
   return (
@@ -38,6 +40,11 @@ export default function InfosTab({ company, actif }) {
               ) : null}
             </Field>
             <Field label="Date de contact">{formatDate(company.date_contact)}</Field>
+            <Field label="Valeur estimée">{formatMontant(company.valeur_estimee)}</Field>
+            <Field label="Prochaine action">{company.prochaine_action}</Field>
+            <Field label="Date prochaine action">
+              {formatDate(company.date_prochaine_action)}
+            </Field>
           </>
         )}
 

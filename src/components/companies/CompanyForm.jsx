@@ -17,6 +17,9 @@ const emptyValues = {
   statut_prospect: '',
   temperature: '',
   date_contact: '',
+  valeur_estimee: '',
+  prochaine_action: '',
+  date_prochaine_action: '',
   notes_generales: '',
 }
 
@@ -78,6 +81,10 @@ export default function CompanyForm({
       statut_prospect: finalStatutProspect,
       temperature: isConverting ? 'chaud' : values.temperature || null,
       date_contact: finalStatutProspect ? values.date_contact || null : null,
+      valeur_estimee:
+        finalStatutProspect && values.valeur_estimee !== '' ? Number(values.valeur_estimee) : null,
+      prochaine_action: finalStatutProspect ? values.prochaine_action.trim() || null : null,
+      date_prochaine_action: finalStatutProspect ? values.date_prochaine_action || null : null,
       notes_generales: values.notes_generales.trim() || null,
     }
 
@@ -174,6 +181,46 @@ export default function CompanyForm({
               />
             </div>
           )}
+          <div className="space-y-1">
+            <label htmlFor="valeur_estimee" className="block text-sm font-medium text-neutral-700">
+              Valeur estimée (€)
+            </label>
+            <input
+              id="valeur_estimee"
+              type="number"
+              step="0.01"
+              min="0"
+              value={values.valeur_estimee}
+              onChange={(event) => update('valeur_estimee', event.target.value)}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            />
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="prochaine_action" className="block text-sm font-medium text-neutral-700">
+              Prochaine action
+            </label>
+            <input
+              id="prochaine_action"
+              value={values.prochaine_action}
+              onChange={(event) => update('prochaine_action', event.target.value)}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            />
+          </div>
+          <div className="space-y-1">
+            <label
+              htmlFor="date_prochaine_action"
+              className="block text-sm font-medium text-neutral-700"
+            >
+              Date de la prochaine action
+            </label>
+            <input
+              id="date_prochaine_action"
+              type="date"
+              value={values.date_prochaine_action}
+              onChange={(event) => update('date_prochaine_action', event.target.value)}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            />
+          </div>
         </div>
       )}
 
