@@ -1,0 +1,144 @@
+import { useState } from 'react'
+
+const emptyValues = {
+  first_name: '',
+  last_name: '',
+  role: '',
+  email: '',
+  phone: '',
+  is_primary: false,
+}
+
+export default function ContactForm({ initialValues, onSubmit, onCancel, submitting }) {
+  const [values, setValues] = useState({ ...emptyValues, ...initialValues })
+  const [error, setError] = useState(null)
+
+  function update(field, value) {
+    setValues((prev) => ({ ...prev, [field]: value }))
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+    setError(null)
+
+    if (!values.first_name.trim() || !values.last_name.trim()) {
+      setError('Le prénom et le nom sont obligatoires.')
+      return
+    }
+
+    const payload = {
+      first_name: values.first_name.trim(),
+      last_name: values.last_name.trim(),
+      role: values.role.trim() || null,
+      email: values.email.trim() || null,
+      phone: values.phone.trim() || null,
+      is_primary: values.is_primary,
+    }
+
+    try {
+      await onSubmit(payload)
+    } catch (submitError) {
+      setError(submitError.message)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <label htmlFor="first_name" className="block text-sm font-medium text-neutral-700">
+            Prénom *
+          </label>
+          <input
+            id="first_name"
+            value={values.first_name}
+            onChange={(event) => update('first_name', event.target.value)}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          />
+        </div>
+        <div className="space-y-1">
+          <label htmlFor="last_name" className="block text-sm font-medium text-neutral-700">
+            Nom *
+          </label>
+          <input
+            id="last_name"
+            value={values.last_name}
+            onChange={(event) => update('last_name', event.target.value)}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <label htmlFor="role" className="block text-sm font-medium text-neutral-700">
+          Fonction
+        </label>
+        <input
+          id="role"
+          value={values.role}
+          onChange={(event) => update('role', event.target.value)}
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={values.email}
+            onChange={(event) => update('email', event.target.value)}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          />
+        </div>
+        <div className="space-y-1">
+          <label htmlFor="phone" className="block text-sm font-medium text-neutral-700">
+            Téléphone
+          </label>
+          <input
+            id="phone"
+            value={values.phone}
+            onChange={(event) => update('phone', event.target.value)}
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          />
+        </div>
+      </div>
+
+      <label className="flex items-center gap-2 text-sm text-neutral-700">
+        <input
+          type="checkbox"
+          checked={values.is_primary}
+          onChange={(event) => update('is_primary', event.target.checked)}
+          className="rounded border-neutral-300"
+        />
+        Contact principal
+      </label>
+
+      {error && (
+        <p className="text-sm text-red-600" role="alert">
+          {error}
+        </p>
+      )}
+
+      <div className="flex justify-end gap-2 pt-2">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+        >
+          Annuler
+        </button>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
+        >
+          {submitting ? 'Enregistrement…' : 'Enregistrer'}
+        </button>
+      </div>
+    </form>
+  )
+}
