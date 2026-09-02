@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import ActivityFeed from '../components/dashboard/ActivityFeed'
 import CashKpiCard from '../components/dashboard/CashKpiCard'
+import ExpensesModule from '../components/dashboard/ExpensesModule'
 import HoursComparisonChart from '../components/dashboard/HoursComparisonChart'
 import KpiCard from '../components/dashboard/KpiCard'
 import MarketingRecapCard from '../components/dashboard/MarketingRecapCard'
@@ -12,11 +13,13 @@ import {
   getCAThisMonth,
   getCashSummary,
   getConversionRate,
+  getExpensesThisMonth,
   getHoursComparison,
   getLateProjectsCount,
   getMarketingWeekCount,
   getPipelineFunnel,
   getRecentActivity,
+  getResult,
   getTotalHoursWorked,
   getUrgentItems,
 } from '../lib/dashboardUtils'
@@ -41,13 +44,17 @@ export default function DashboardPage() {
 
   const kpis = useMemo(() => {
     if (!data) return null
+    const ca = getCAThisMonth(data.documents)
+    const expensesThisMonth = getExpensesThisMonth(data.expenses)
     return {
-      ca: getCAThisMonth(data.documents),
-      cash: getCashSummary(data.documents),
+      ca,
+      cash: getCashSummary(data.projects),
       totalHoursWorked: getTotalHoursWorked(data.workLogs),
       conversionRate: getConversionRate(data.companies),
       activeProjects: getActiveProjectsCount(data.projects),
       lateProjects: getLateProjectsCount(data.projects),
+      expensesThisMonth,
+      result: getResult(ca, expensesThisMonth),
     }
   }, [data])
 
@@ -102,6 +109,12 @@ export default function DashboardPage() {
               tone={kpis.lateProjects > 0 ? 'critical' : 'good'}
             />
           </div>
+
+          <ExpensesModule
+            expenses={data.expenses}
+            expensesThisMonth={kpis.expensesThisMonth}
+            result={kpis.result}
+          />
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
             <Section title="Heures : prévu vs réel (projets actifs)">

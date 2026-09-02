@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import AiChatButton from './ai/AiChatButton'
 import AiChatPanel from './ai/AiChatPanel'
 import { useAuth } from '../lib/AuthContext'
@@ -11,10 +11,13 @@ const navItems = [
   { to: '/projects', label: 'Projets' },
   { to: '/marketing', label: 'Marketing' },
   { to: '/knowledge', label: 'Base de connaissance' },
+  { to: '/assistant', label: 'Assistant IA' },
 ]
 
 export default function Layout() {
   const { user, signOut } = useAuth()
+  const location = useLocation()
+  const isAssistantPage = location.pathname === '/assistant'
 
   return (
     <AiChatProvider>
@@ -58,8 +61,12 @@ export default function Layout() {
           <Outlet />
         </main>
 
-        <AiChatButton />
-        <AiChatPanel />
+        {!isAssistantPage && (
+          <>
+            <AiChatButton />
+            <AiChatPanel />
+          </>
+        )}
       </div>
     </AiChatProvider>
   )

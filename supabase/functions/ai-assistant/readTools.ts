@@ -265,4 +265,56 @@ export const READ_TOOLS = [
       return { repartition_par_etape: repartition, valeur_pipeline, taux_conversion_pct: taux_conversion }
     },
   },
+  {
+    name: 'obtenir_stats_financieres',
+    description:
+      "Chiffres financiers du mois en cours : CA facturé, total facturé/encaissé sur les projets, dépenses (URSSAF, abonnements, marketing, etc.), résultat net, et total des heures travaillées. Utilise ce tool pour toute question sur la santé financière, la rentabilité ou le pilotage de l'agence.",
+    input_schema: { type: 'object', properties: {} },
+    async execute(supabase: any) {
+      const [documentsRes, projectsRes, expensesRes, workLogsRes] = await Promise.all([
+        supabase.from('documents').select('type, montant, created_at'),
+        supabase.from('projects').select('montant_facture, montant_encaisse'),
+        supabase.from('expenses').select('libelle, categorie, montant, date_depense'),
+        supabase.from('project_work_logs').select('duree_heures'),
+      ])
+      for (const res of [documentsRes, projectsRes, expensesRes, workLogsRes]) {
+        if (res.error) throw res.error
+      }
+
+      const caThisMonth = (documentsRes.data ?? [])
+        .filter((doc: any) => doc.type === 'facture' && isInCurrentMonth(doc.created_at))
+        .reduce((sum: number, doc: any) => sum + Number(doc.montant ?? 0), 0)
+
+      const totalFacture = (projectsRes.data ?? []).reduce(
+        (sum: number, p: any) => sum + Number(p.montant_facture ?? 0),
+        0,
+      )
+      const totalEncaisse = (projectsRes.data ?? []).reduce(
+        (sum: number, p: any) => sum + Number(p.montant_encaisse ?? 0),
+        0,
+      )
+
+      const expensesThisMonth = (expensesRes.data ?? []).filter((e: any) => isInCurrentMonth(e.date_depense))
+      const totalDepensesThisMonth = expensesThisMonth.reduce(
+        (sum: number, e: any) => sum + Number(e.montant ?? 0),
+        0,
+      )
+
+      const totalHeuresTravaillees = (workLogsRes.data ?? []).reduce(
+        (sum: number, log: any) => sum + Number(log.duree_heures ?? 0),
+        0,
+      )
+
+      return {
+        ca_du_mois: caThisMonth,
+        total_facture_tous_projets: totalFacture,
+        total_encaisse_tous_projets: totalEncaisse,
+        reste_a_encaisser: totalFacture - totalEncaisse,
+        depenses_du_mois: totalDepensesThisMonth,
+        depenses_du_mois_detail: expensesThisMonth,
+        resultat_net_du_mois: caThisMonth - totalDepensesThisMonth,
+        total_heures_travaillees: totalHeuresTravaillees,
+      }
+    },
+  },
 ]

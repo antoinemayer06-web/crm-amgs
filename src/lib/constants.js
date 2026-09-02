@@ -171,6 +171,24 @@ export const KNOWLEDGE_CATEGORY_TONES = {
   autre: 'neutral',
 }
 
+export const EXPENSE_CATEGORIES = ['urssaf', 'abonnement', 'marketing', 'salaire', 'autre']
+
+export const EXPENSE_CATEGORY_LABELS = {
+  urssaf: 'URSSAF',
+  abonnement: 'Abonnement',
+  marketing: 'Marketing',
+  salaire: 'Salaire',
+  autre: 'Autre',
+}
+
+export const EXPENSE_CATEGORY_TONES = {
+  urssaf: 'red',
+  abonnement: 'blue',
+  marketing: 'amber',
+  salaire: 'neutral',
+  autre: 'neutral',
+}
+
 // Couleur d'avatar stable dérivée du nom (même entreprise = même couleur).
 const AVATAR_PALETTE = [
   'bg-blue-500', 'bg-violet-500', 'bg-emerald-500', 'bg-amber-500',

@@ -21,14 +21,25 @@ export function getCAThisMonth(documents) {
     .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
 }
 
-// Total facturé (tous statuts) vs total encaissé (statut payé), tous
-// documents de type facture confondus.
-export function getCashSummary(documents) {
-  const factures = documents.filter((doc) => doc.type === 'facture')
-  const facture = factures.reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
-  const encaisse = factures
-    .filter((doc) => doc.statut === 'payé')
-    .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
+// Dépenses du mois en cours (URSSAF, abonnements, marketing, etc.).
+export function getExpensesThisMonth(expenses) {
+  return expenses
+    .filter((expense) => isInCurrentMonth(expense.date_depense))
+    .reduce((sum, expense) => sum + Number(expense.montant ?? 0), 0)
+}
+
+// Résultat net du mois : CA facturé du mois moins les dépenses du mois.
+export function getResult(caThisMonth, expensesThisMonth) {
+  return caThisMonth - expensesThisMonth
+}
+
+// Total facturé vs total encaissé, remontés directement des champs de
+// facturation de chaque projet (montant_facture / montant_encaisse),
+// tous projets confondus (y compris archivés : l'argent déjà facturé ne
+// disparaît pas quand un projet est archivé).
+export function getCashSummary(projects) {
+  const facture = projects.reduce((sum, project) => sum + Number(project.montant_facture ?? 0), 0)
+  const encaisse = projects.reduce((sum, project) => sum + Number(project.montant_encaisse ?? 0), 0)
   return { facture, encaisse, restant: facture - encaisse }
 }
 
@@ -50,12 +61,13 @@ export function getConversionRate(companies) {
 }
 
 export function getActiveProjectsCount(projects) {
-  return projects.filter((project) => project.statut !== 'payé').length
+  return projects.filter((project) => !project.archived && project.statut !== 'payé').length
 }
 
 export function getLateProjectsCount(projects) {
   return projects.filter(
-    (project) => project.statut !== 'payé' && isDatePassee(project.date_livraison_prevue),
+    (project) =>
+      !project.archived && project.statut !== 'payé' && isDatePassee(project.date_livraison_prevue),
   ).length
 }
 
@@ -64,7 +76,7 @@ export function getLateProjectsCount(projects) {
 export function getHoursComparison(projects, steps, workLogs) {
   const actualByProject = getActualHoursByProject(steps, workLogs)
   return projects
-    .filter((project) => project.statut !== 'payé')
+    .filter((project) => !project.archived && project.statut !== 'payé')
     .map((project) => ({
       id: project.id,
       nom: project.nom,
@@ -110,6 +122,7 @@ export function getUrgentItems(companies, projects, tasks) {
   const urgentProjects = projects
     .filter(
       (project) =>
+        !project.archived &&
         project.statut !== 'payé' &&
         project.date_livraison_prevue &&
         new Date(project.date_livraison_prevue) <= in3Days,

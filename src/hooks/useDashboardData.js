@@ -17,10 +17,14 @@ export function useDashboardData() {
         notesRes,
         tasksRes,
         marketingActionsRes,
+        expensesRes,
       ] = await Promise.all([
         supabase.from('documents').select('*, company:companies(id, name)'),
         supabase.from('companies').select('*'),
-        supabase.from('projects').select('*, company:companies(id, name)').eq('archived', false),
+        // Pas de filtre archived ici : le CA/heures déjà facturés ou
+        // travaillés sur un projet archivé restent comptés. Les KPIs
+        // "actifs" appliquent leur propre filtre dans dashboardUtils.
+        supabase.from('projects').select('*, company:companies(id, name)'),
         supabase.from('project_steps').select('*'),
         supabase.from('project_work_logs').select('*'),
         supabase
@@ -30,6 +34,7 @@ export function useDashboardData() {
           .limit(15),
         supabase.from('tasks').select('*, company:companies(id, name)'),
         supabase.from('marketing_actions').select('id, statut, date_prevue'),
+        supabase.from('expenses').select('*'),
       ])
 
       for (const res of [
@@ -41,6 +46,7 @@ export function useDashboardData() {
         notesRes,
         tasksRes,
         marketingActionsRes,
+        expensesRes,
       ]) {
         if (res.error) throw res.error
       }
@@ -54,6 +60,7 @@ export function useDashboardData() {
         notes: notesRes.data,
         tasks: tasksRes.data,
         marketingActions: marketingActionsRes.data,
+        expenses: expensesRes.data,
       }
     },
   })

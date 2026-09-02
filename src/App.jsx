@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import { useAuth } from './lib/AuthContext'
+import AiAssistantPage from './pages/AiAssistantPage'
 import CompanyDetailPage from './pages/CompanyDetailPage'
 import CompaniesListPage from './pages/CompaniesListPage'
 import DashboardPage from './pages/DashboardPage'
@@ -38,6 +39,7 @@ function App() {
         <Route path="marketing" element={<MarketingPage />} />
         <Route path="knowledge" element={<KnowledgeBasePage />} />
         <Route path="knowledge/:id" element={<KnowledgeDetailPage />} />
+        <Route path="assistant" element={<AiAssistantPage />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Routes>
