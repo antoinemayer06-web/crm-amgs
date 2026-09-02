@@ -12,7 +12,7 @@ export default function MarketingRecapCard({ count }) {
           action{count > 1 ? 's' : ''} planifiée{count > 1 ? 's' : ''}
         </p>
       </div>
-      <Link to="/marketing" className="mt-3 text-sm font-medium text-chrome-light hover:text-ink">
+      <Link to="/marketing" className="mt-3 text-sm font-medium text-blue-400 hover:text-blue-300">
         Voir le calendrier →
       </Link>
     </div>

@@ -15,9 +15,12 @@ function isInCurrentMonth(dateStr) {
 }
 
 // CA du mois en cours : documents de type facture, montant, sur le mois.
+// Basé sur date_document (date réelle du document), pas created_at (date
+// d'ajout dans le CRM) — sinon un document saisi en retard ne remonte
+// pas dans le bon mois.
 export function getCAThisMonth(documents) {
   return documents
-    .filter((doc) => doc.type === 'facture' && isInCurrentMonth(doc.created_at))
+    .filter((doc) => doc.type === 'facture' && isInCurrentMonth(doc.date_document))
     .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
 }
 
@@ -40,10 +43,11 @@ function isInMonth(dateStr, monthKey) {
   return monthKeyOf(dateStr) === monthKey
 }
 
-// CA facturé sur le mois sélectionné (documents de type facture).
+// CA facturé sur le mois sélectionné (documents de type facture), basé
+// sur date_document (date réelle), pas created_at.
 export function getCAForMonth(documents, monthKey) {
   return documents
-    .filter((doc) => doc.type === 'facture' && isInMonth(doc.created_at, monthKey))
+    .filter((doc) => doc.type === 'facture' && isInMonth(doc.date_document, monthKey))
     .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
 }
 

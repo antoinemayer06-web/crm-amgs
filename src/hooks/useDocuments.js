@@ -33,7 +33,17 @@ export async function getDocumentSignedUrl(path) {
 export function useCreateDocument() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ companyId, projectId, ownerId, file, nom, type, montant, statut }) => {
+    mutationFn: async ({
+      companyId,
+      projectId,
+      ownerId,
+      file,
+      nom,
+      type,
+      montant,
+      statut,
+      date_document,
+    }) => {
       const folder = projectId ? `${companyId}/projects/${projectId}` : companyId
       const path = `${ownerId}/${folder}/${Date.now()}-${file.name}`
       const { error: uploadError } = await supabase.storage
@@ -51,6 +61,7 @@ export function useCreateDocument() {
           url: path,
           montant,
           statut,
+          date_document,
         })
         .select()
         .single()

@@ -29,7 +29,7 @@ export default function UrgentActionsWidget({ items }) {
               <p className="truncate text-xs text-ink-secondary">{item.sub}</p>
             </div>
             <span
-              className={`shrink-0 text-xs font-medium ${late ? 'text-ink pulse-chrome' : 'text-ink-secondary'}`}
+              className={`shrink-0 text-xs font-medium ${late ? 'text-red-400' : 'text-ink-secondary'}`}
             >
               {formatDate(item.date)}
             </span>

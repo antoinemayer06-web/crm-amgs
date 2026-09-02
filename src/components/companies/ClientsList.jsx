@@ -102,7 +102,7 @@ export default function ClientsList() {
       <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
         {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
         {isError && (
-          <p className="p-6 text-sm font-medium text-ink">Erreur de chargement : {error.message}</p>
+          <p className="p-6 text-sm font-medium text-red-400">Erreur de chargement : {error.message}</p>
         )}
         {!isLoading && !isError && companies.length === 0 && (
           <p className="p-6 text-sm text-ink-secondary">Aucun client trouvé.</p>
@@ -150,7 +150,7 @@ export default function ClientsList() {
                       <button
                         type="button"
                         onClick={() => handleDelete(company)}
-                        className="text-ink-tertiary hover:text-ink"
+                        className="text-red-500 hover:text-red-400"
                       >
                         Supprimer
                       </button>

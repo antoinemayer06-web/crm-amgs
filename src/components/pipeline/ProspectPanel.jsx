@@ -74,7 +74,7 @@ export default function ProspectPanel({ companyId, onClose, onDeleted }) {
             <button
               type="button"
               onClick={handleDelete}
-              className="rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover hover:text-ink"
+              className="rounded-md border border-red-500/40 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10"
             >
               Supprimer
             </button>

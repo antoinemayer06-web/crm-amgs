@@ -1,8 +1,8 @@
 import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-const COLOR_PREVU = '#8e9196'
-const COLOR_REEL = '#d8dbde'
-const COLOR_REEL_OVER = '#f2f2f3'
+const COLOR_PREVU = '#2a78d6'
+const COLOR_REEL = '#eb6834'
+const COLOR_REEL_OVER = '#d03b3b'
 
 const SERIES_LABELS = { prevu: 'Prévu', reel: 'Réel' }
 

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { DOCUMENT_STATUSES, DOCUMENT_TYPES, formatEnumLabel } from '../../lib/constants'
 
-const emptyValues = { nom: '', type: 'autre', montant: '', statut: '' }
+const today = () => new Date().toISOString().slice(0, 10)
+
+const emptyValues = { nom: '', type: 'autre', montant: '', statut: '', date_document: today() }
 
 export default function DocumentForm({
   initialValues,
@@ -36,6 +38,7 @@ export default function DocumentForm({
       type: values.type,
       montant: values.montant === '' ? null : Number(values.montant),
       statut: values.statut || null,
+      date_document: values.date_document || today(),
       ...(requireFile ? { file } : {}),
     }
 
@@ -112,39 +115,45 @@ export default function DocumentForm({
         </div>
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="montant" className="block text-sm font-medium text-ink-secondary">
-          Montant (€)
-        </label>
-        <input
-          id="montant"
-          type="number"
-          step="0.01"
-          value={values.montant}
-          onChange={(event) => update('montant', event.target.value)}
-          className="w-full input-chrome"
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <label htmlFor="montant" className="block text-sm font-medium text-ink-secondary">
+            Montant (€)
+          </label>
+          <input
+            id="montant"
+            type="number"
+            step="0.01"
+            value={values.montant}
+            onChange={(event) => update('montant', event.target.value)}
+            className="w-full input-chrome"
+          />
+        </div>
+        <div className="space-y-1">
+          <label htmlFor="date_document" className="block text-sm font-medium text-ink-secondary">
+            Date du document
+          </label>
+          <input
+            id="date_document"
+            type="date"
+            value={values.date_document}
+            onChange={(event) => update('date_document', event.target.value)}
+            className="w-full input-chrome"
+          />
+        </div>
       </div>
 
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm font-medium text-red-400" role="alert">
           {error}
         </p>
       )}
 
       <div className="flex justify-end gap-2 pt-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
-        >
+        <button type="button" onClick={onCancel} className="btn-secondary">
           Annuler
         </button>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
-        >
+        <button type="submit" disabled={submitting} className="btn-primary">
           {submitting ? 'Enregistrement…' : 'Enregistrer'}
         </button>
       </div>

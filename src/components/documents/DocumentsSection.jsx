@@ -51,7 +51,7 @@ export default function DocumentsSection({ companyId, projectId }) {
         <button
           type="button"
           onClick={() => setModalMode('create')}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+          className="btn-primary"
         >
           + Ajouter un document
         </button>
@@ -59,7 +59,7 @@ export default function DocumentsSection({ companyId, projectId }) {
 
       <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
         {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
-        {isError && <p className="p-6 text-sm text-red-600">Erreur : {error.message}</p>}
+        {isError && <p className="p-6 text-sm font-medium text-red-400">Erreur : {error.message}</p>}
         {!isLoading && !isError && documents.length === 0 && (
           <p className="p-6 text-sm text-ink-secondary">Aucun document pour l'instant.</p>
         )}
@@ -99,7 +99,7 @@ export default function DocumentsSection({ companyId, projectId }) {
                       '—'
                     )}
                   </td>
-                  <td className="px-4 py-3 text-ink-secondary">{formatDate(document.created_at)}</td>
+                  <td className="px-4 py-3 text-ink-secondary">{formatDate(document.date_document)}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-3">
                       <button
@@ -112,7 +112,7 @@ export default function DocumentsSection({ companyId, projectId }) {
                       <button
                         type="button"
                         onClick={() => handleDelete(document)}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-500 hover:text-red-400"
                       >
                         Supprimer
                       </button>

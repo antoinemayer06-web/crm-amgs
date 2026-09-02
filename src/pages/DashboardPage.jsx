@@ -75,7 +75,7 @@ export default function DashboardPage() {
       <h2 className="text-xl font-semibold text-ink">Dashboard</h2>
 
       {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
-      {isError && <p className="text-sm font-medium text-ink">Erreur : {error.message}</p>}
+      {isError && <p className="text-sm font-medium text-red-400">Erreur : {error.message}</p>}
 
       {kpis && (
         <>

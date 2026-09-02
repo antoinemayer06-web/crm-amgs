@@ -49,10 +49,10 @@ export default function ProspectCard({
           {company.date_prochaine_action && (
             <span
               className={`mt-1 inline-flex items-center gap-1 text-xs font-medium ${
-                late ? 'text-ink pulse-chrome' : 'text-ink-tertiary'
+                late ? 'text-red-400' : 'text-ink-tertiary'
               }`}
             >
-              {late && <span className="h-1.5 w-1.5 rounded-full bg-chrome-light pulse-chrome" />}
+              {late && <span className="h-1.5 w-1.5 rounded-full bg-red-500" />}
               {formatDate(company.date_prochaine_action)}
             </span>
           )}

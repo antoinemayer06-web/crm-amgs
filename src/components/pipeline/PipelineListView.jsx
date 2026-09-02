@@ -98,7 +98,7 @@ export default function PipelineListView({ companies, onCompanyClick }) {
 
                 <div
                   className={`w-24 shrink-0 text-right text-xs font-medium ${
-                    late ? 'text-ink pulse-chrome' : 'text-ink-secondary'
+                    late ? 'text-red-400' : 'text-ink-secondary'
                   }`}
                 >
                   {formatDate(company.date_prochaine_action)}

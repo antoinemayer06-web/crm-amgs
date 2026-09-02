@@ -1,6 +1,6 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-const COLOR = '#8e9196'
+const COLOR = '#2a78d6'
 
 export default function PipelineFunnelChart({ data }) {
   const total = data.reduce((sum, row) => sum + row.count, 0)

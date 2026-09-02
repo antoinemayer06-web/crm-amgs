@@ -23,38 +23,30 @@ export default function Layout() {
 
   return (
     <AiChatProvider>
-      <div className="min-h-svh bg-canvas">
-        <header className="border-b border-chrome-dark bg-surface">
-          <div className="flex items-center justify-between px-6 py-4">
-            <div className="flex items-center gap-3">
-              <span className="chrome-droplet chrome-droplet-circle flex h-8 w-8 items-center justify-center text-xs font-bold text-[#1a1b1d]">
-                AM
-              </span>
-              <h1 className="text-lg font-semibold tracking-tight text-ink">
+      <div className="flex min-h-svh bg-canvas">
+        <aside className="flex w-60 shrink-0 flex-col border-r border-chrome-dark bg-surface">
+          <div className="flex items-center gap-3 border-b border-chrome-dark px-5 py-5">
+            <span className="chrome-droplet chrome-droplet-circle flex h-9 w-9 shrink-0 items-center justify-center text-xs font-bold text-[#1a1b1d]">
+              AM
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold tracking-tight text-ink">
                 AM Growth Solutions
-              </h1>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-ink-secondary">{user.email}</span>
-              <button
-                type="button"
-                onClick={signOut}
-                className="rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover"
-              >
-                Déconnexion
-              </button>
+              </p>
+              <p className="truncate text-xs text-ink-tertiary">CRM</p>
             </div>
           </div>
-          <nav className="flex gap-1 px-6">
+
+          <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `border-b-2 px-3 py-2 text-sm font-medium ${
+                  `block rounded-md border-l-2 px-3 py-2 text-sm font-medium transition-colors duration-150 ${
                     isActive
-                      ? 'border-chrome-light text-ink'
-                      : 'border-transparent text-ink-secondary hover:text-ink'
+                      ? 'border-chrome-light bg-surface-hover text-ink'
+                      : 'border-transparent text-ink-secondary hover:bg-surface-hover hover:text-ink'
                   }`
                 }
               >
@@ -62,9 +54,16 @@ export default function Layout() {
               </NavLink>
             ))}
           </nav>
-        </header>
 
-        <main className="p-6">
+          <div className="border-t border-chrome-dark px-4 py-4">
+            <p className="truncate text-xs text-ink-secondary">{user.email}</p>
+            <button type="button" onClick={signOut} className="btn-secondary mt-2 w-full text-xs">
+              Déconnexion
+            </button>
+          </div>
+        </aside>
+
+        <main className="min-w-0 flex-1 p-6">
           <Outlet />
         </main>
 

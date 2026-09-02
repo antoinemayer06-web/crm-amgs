@@ -65,7 +65,7 @@ export default function PipelinePage() {
       </div>
 
       {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
-      {isError && <p className="text-sm font-medium text-ink">Erreur : {error.message}</p>}
+      {isError && <p className="text-sm font-medium text-red-400">Erreur : {error.message}</p>}
 
       {!isLoading && !isError && (
         <div className="animate-[fadein_150ms_ease-out]" key={view}>

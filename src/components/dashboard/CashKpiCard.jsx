@@ -11,7 +11,7 @@ export default function CashKpiCard({ facture, encaisse, restant }) {
         <span className="text-xs text-ink-tertiary">facturé</span>
       </div>
       <div className="flex items-baseline gap-2">
-        <span className="text-lg font-semibold text-ink">{formatMontant(encaisse)}</span>
+        <span className="text-lg font-semibold text-emerald-400">{formatMontant(encaisse)}</span>
         <span className="text-xs text-ink-tertiary">encaissé</span>
       </div>
       <p className="mt-1 text-xs text-ink-secondary">

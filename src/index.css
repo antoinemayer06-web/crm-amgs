@@ -37,16 +37,6 @@
   }
 }
 
-@keyframes pulse-chrome {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.45;
-  }
-}
-
 body {
   background: var(--bg-primary);
   color: var(--text-primary);

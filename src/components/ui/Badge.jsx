@@ -1,15 +1,12 @@
-// Palette monochrome : les tons historiques (neutral/blue/green/amber/red)
-// sont conservés comme clés d'API (tous les call sites existants les
-// utilisent déjà pour distinguer les statuts), mais chacun ne rend plus
-// qu'une intensité de chrome différente — jamais de teinte. Les tons
-// "critiques" utilisent un léger effet de pulsation plutôt qu'une couleur
-// vive pour signaler l'urgence.
+// Badges colorés (bleu/vert/ambre/rouge), adaptés au fond sombre : fond
+// teinté translucide + texte de la même teinte en clair, plutôt que les
+// à-plats clairs d'origine (pensés pour un fond blanc).
 export const tones = {
-  neutral: 'bg-chrome-dark/40 text-ink-tertiary',
-  blue: 'bg-chrome-mid/25 text-chrome-light',
-  green: 'bg-chrome-light/20 text-ink border border-chrome-light/30',
-  amber: 'bg-chrome-mid/30 text-ink pulse-chrome',
-  red: 'bg-chrome-light/25 text-ink border border-chrome-light/40 pulse-chrome',
+  neutral: 'bg-chrome-dark/50 text-ink-secondary',
+  blue: 'bg-blue-500/15 text-blue-300',
+  green: 'bg-emerald-500/15 text-emerald-300',
+  amber: 'bg-amber-500/15 text-amber-300',
+  red: 'bg-red-500/15 text-red-300',
 }
 
 export default function Badge({ children, tone = 'neutral' }) {

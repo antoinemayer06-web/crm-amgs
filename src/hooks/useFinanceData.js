@@ -8,7 +8,7 @@ export function useFinanceData() {
     queryKey: ['finance'],
     queryFn: async () => {
       const [documentsRes, cashCollectionsRes, expensesRes, financeGoalRes] = await Promise.all([
-        supabase.from('documents').select('id, type, montant, created_at'),
+        supabase.from('documents').select('id, type, montant, date_document'),
         supabase.from('cash_collections').select('*, project:projects(id, nom)'),
         supabase.from('expenses').select('*'),
         supabase.from('finance_goals').select('*').maybeSingle(),

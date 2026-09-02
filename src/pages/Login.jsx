@@ -70,7 +70,7 @@ export default function Login() {
           </div>
 
           {error && (
-            <p className="text-sm font-medium text-ink" role="alert">
+            <p className="text-sm font-medium text-red-400" role="alert">
               {error}
             </p>
           )}

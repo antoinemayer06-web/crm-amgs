@@ -57,7 +57,7 @@ export default function NotesTab({ companyId }) {
                 <button
                   type="button"
                   onClick={() => handleDelete(note)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-400"
                 >
                   Supprimer
                 </button>

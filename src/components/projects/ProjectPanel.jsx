@@ -39,6 +39,8 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
   const [nom, setNom] = useState('')
   const [description, setDescription] = useState('')
+  const [heuresPrevues, setHeuresPrevues] = useState('')
+  const [montantFacture, setMontantFacture] = useState('')
   const [addingCash, setAddingCash] = useState(false)
   const [cashAmount, setCashAmount] = useState('')
   const [cashDate, setCashDate] = useState(() => new Date().toISOString().slice(0, 10))
@@ -53,6 +55,8 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
     if (project) {
       setNom(project.nom)
       setDescription(project.description ?? '')
+      setHeuresPrevues(project.heures_prevues ?? '')
+      setMontantFacture(project.montant_facture ?? '')
     }
   }, [project])
 
@@ -196,10 +200,12 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                 type="number"
                 step="0.5"
                 min="0"
-                value={project.heures_prevues ?? ''}
-                onChange={(event) =>
-                  saveField('heures_prevues', event.target.value === '' ? null : Number(event.target.value))
-                }
+                value={heuresPrevues}
+                onChange={(event) => setHeuresPrevues(event.target.value)}
+                onBlur={() => {
+                  const value = heuresPrevues === '' ? null : Number(heuresPrevues)
+                  if (value !== (project.heures_prevues ?? null)) saveField('heures_prevues', value)
+                }}
                 className="w-full input-chrome"
               />
             </div>
@@ -213,10 +219,12 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               type="number"
               step="0.01"
               min="0"
-              value={project.montant_facture ?? ''}
-              onChange={(event) =>
-                saveField('montant_facture', event.target.value === '' ? null : Number(event.target.value))
-              }
+              value={montantFacture}
+              onChange={(event) => setMontantFacture(event.target.value)}
+              onBlur={() => {
+                const value = montantFacture === '' ? null : Number(montantFacture)
+                if (value !== (project.montant_facture ?? null)) saveField('montant_facture', value)
+              }}
               className="w-full input-chrome"
             />
           </div>
@@ -255,7 +263,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                 <button
                   type="submit"
                   disabled={createCashCollection.isPending}
-                  className="col-span-1 rounded-md bg-neutral-900 px-2 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
+                  className="btn-primary col-span-1 px-2 py-1.5 text-xs"
                 >
                   Ajouter
                 </button>
@@ -326,7 +334,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             <button
               type="button"
               onClick={handleDelete}
-              className="text-sm text-red-500 hover:text-red-700"
+              className="text-sm text-red-500 hover:text-red-400"
             >
               Supprimer ce projet
             </button>

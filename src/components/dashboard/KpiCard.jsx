@@ -1,7 +1,7 @@
 const TONE_TEXT = {
   neutral: 'text-ink',
-  good: 'text-ink',
-  critical: 'text-ink pulse-chrome',
+  good: 'text-emerald-400',
+  critical: 'text-red-400',
 }
 
 export default function KpiCard({ label, value, sublabel, tone = 'neutral' }) {
