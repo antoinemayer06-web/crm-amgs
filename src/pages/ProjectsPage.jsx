@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import KanbanView from '../components/projects/KanbanView'
 import ListView from '../components/projects/ListView'
 import PlanningView from '../components/projects/PlanningView'
@@ -18,11 +19,19 @@ const VIEWS = [
 const emptyFilters = { statut: '', companyId: '', lateOnly: false }
 
 export default function ProjectsPage() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [view, setView] = useState('kanban')
   const [filters, setFilters] = useState(emptyFilters)
   const [selectedProjectId, setSelectedProjectId] = useState(null)
   const [creating, setCreating] = useState(false)
   const [showArchived, setShowArchived] = useState(false)
+
+  // Permet de deep-linker vers un projet précis (ex: depuis le dashboard)
+  // via /projects?open=<id>.
+  useEffect(() => {
+    const openId = searchParams.get('open')
+    if (openId) setSelectedProjectId(openId)
+  }, [searchParams])
 
   // Un projet archivé disparaît toujours du Kanban et du Planning ; seule
   // la vue Liste peut basculer pour les consulter.
@@ -136,7 +145,13 @@ export default function ProjectsPage() {
         <ProjectPanel
           projectId={selectedProjectId}
           allSteps={allSteps ?? []}
-          onClose={() => setSelectedProjectId(null)}
+          onClose={() => {
+            setSelectedProjectId(null)
+            if (searchParams.get('open')) {
+              searchParams.delete('open')
+              setSearchParams(searchParams, { replace: true })
+            }
+          }}
           onDeleted={() => setSelectedProjectId(null)}
         />
       )}

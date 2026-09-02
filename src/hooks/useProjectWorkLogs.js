@@ -20,6 +20,18 @@ export function useWorkLogsForSteps(stepIds) {
   })
 }
 
+// Chargé globalement pour le dashboard (temps réel agrégé par projet).
+export function useAllProjectWorkLogs() {
+  return useQuery({
+    queryKey: ['project_work_logs', 'all'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('project_work_logs').select('*')
+      if (error) throw error
+      return data
+    },
+  })
+}
+
 export function useCreateProjectWorkLog() {
   const queryClient = useQueryClient()
   return useMutation({

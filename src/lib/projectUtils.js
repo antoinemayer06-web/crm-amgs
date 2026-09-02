@@ -19,6 +19,20 @@ export function getActualHoursByStep(workLogs) {
   return map
 }
 
+// Heures réellement loggées, regroupées par projet (project_id -> total) —
+// utilisé pour le dashboard, en s'appuyant sur getActualHoursByStep sans
+// dupliquer la logique d'agrégation existante.
+export function getActualHoursByProject(allSteps, workLogs) {
+  const hoursByStep = getActualHoursByStep(workLogs)
+  const map = {}
+  for (const step of allSteps ?? []) {
+    const hours = hoursByStep[step.id]
+    if (!hours) continue
+    map[step.project_id] = (map[step.project_id] ?? 0) + hours
+  }
+  return map
+}
+
 // Récapitulatif projet : temps prévu (somme des estimations d'étapes),
 // temps réalisé (somme du journal de travail).
 export function getProjectTimeSummary(steps, workLogs) {

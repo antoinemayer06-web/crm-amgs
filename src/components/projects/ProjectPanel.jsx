@@ -160,7 +160,21 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                 className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
               />
             </div>
-            <div />
+            <div className="space-y-1">
+              <label className="block text-xs font-medium uppercase text-neutral-500">
+                Heures prévues (projet)
+              </label>
+              <input
+                type="number"
+                step="0.5"
+                min="0"
+                value={project.heures_prevues ?? ''}
+                onChange={(event) =>
+                  saveField('heures_prevues', event.target.value === '' ? null : Number(event.target.value))
+                }
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

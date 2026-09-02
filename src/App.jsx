@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import { useAuth } from './lib/AuthContext'
 import CompanyDetailPage from './pages/CompanyDetailPage'
 import CompaniesListPage from './pages/CompaniesListPage'
+import DashboardPage from './pages/DashboardPage'
 import KnowledgeBasePage from './pages/KnowledgeBasePage'
 import KnowledgeDetailPage from './pages/KnowledgeDetailPage'
 import Login from './pages/Login'
@@ -28,7 +29,8 @@ function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<Navigate to="/companies" replace />} />
+        <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route path="dashboard" element={<DashboardPage />} />
         <Route path="companies" element={<CompaniesListPage />} />
         <Route path="companies/:id" element={<CompanyDetailPage />} />
         <Route path="pipeline" element={<PipelinePage />} />
@@ -36,7 +38,7 @@ function App() {
         <Route path="marketing" element={<MarketingPage />} />
         <Route path="knowledge" element={<KnowledgeBasePage />} />
         <Route path="knowledge/:id" element={<KnowledgeDetailPage />} />
-        <Route path="*" element={<Navigate to="/companies" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Routes>
   )
