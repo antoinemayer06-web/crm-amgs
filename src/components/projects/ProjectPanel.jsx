@@ -41,6 +41,9 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const [description, setDescription] = useState('')
   const [heuresPrevues, setHeuresPrevues] = useState('')
   const [montantFacture, setMontantFacture] = useState('')
+  const [dateDebut, setDateDebut] = useState('')
+  const [dateLivraisonPrevue, setDateLivraisonPrevue] = useState('')
+  const [dateFinReelle, setDateFinReelle] = useState('')
   const [addingCash, setAddingCash] = useState(false)
   const [cashAmount, setCashAmount] = useState('')
   const [cashDate, setCashDate] = useState(() => new Date().toISOString().slice(0, 10))
@@ -57,6 +60,9 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
       setDescription(project.description ?? '')
       setHeuresPrevues(project.heures_prevues ?? '')
       setMontantFacture(project.montant_facture ?? '')
+      setDateDebut(project.date_debut ?? '')
+      setDateLivraisonPrevue(project.date_livraison_prevue ?? '')
+      setDateFinReelle(project.date_fin_reelle ?? '')
     }
   }, [project])
 
@@ -160,8 +166,12 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               </label>
               <input
                 type="date"
-                value={project.date_debut ?? ''}
-                onChange={(event) => saveField('date_debut', event.target.value || null)}
+                value={dateDebut}
+                onChange={(event) => setDateDebut(event.target.value)}
+                onBlur={() => {
+                  const value = dateDebut || null
+                  if (value !== (project.date_debut ?? null)) saveField('date_debut', value)
+                }}
                 className="w-full input-chrome"
               />
             </div>
@@ -171,10 +181,14 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               </label>
               <input
                 type="date"
-                value={project.date_livraison_prevue ?? ''}
-                onChange={(event) =>
-                  saveField('date_livraison_prevue', event.target.value || null)
-                }
+                value={dateLivraisonPrevue}
+                onChange={(event) => setDateLivraisonPrevue(event.target.value)}
+                onBlur={() => {
+                  const value = dateLivraisonPrevue || null
+                  if (value !== (project.date_livraison_prevue ?? null)) {
+                    saveField('date_livraison_prevue', value)
+                  }
+                }}
                 className="w-full input-chrome"
               />
             </div>
@@ -187,8 +201,12 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               </label>
               <input
                 type="date"
-                value={project.date_fin_reelle ?? ''}
-                onChange={(event) => saveField('date_fin_reelle', event.target.value || null)}
+                value={dateFinReelle}
+                onChange={(event) => setDateFinReelle(event.target.value)}
+                onBlur={() => {
+                  const value = dateFinReelle || null
+                  if (value !== (project.date_fin_reelle ?? null)) saveField('date_fin_reelle', value)
+                }}
                 className="w-full input-chrome"
               />
             </div>

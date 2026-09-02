@@ -227,7 +227,7 @@ function VisionCanvas() {
   return (
     <div
       ref={wrapperRef}
-      className="relative h-[calc(100vh-140px)] w-full overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50"
+      className="relative h-[calc(100vh-140px)] w-full overflow-hidden rounded-xl border border-neutral-700 bg-neutral-600"
       onDoubleClick={handleDoubleClick}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -249,7 +249,7 @@ function VisionCanvas() {
         defaultViewport={{ x: 0, y: 0, zoom: 1 }}
         proOptions={{ hideAttribution: true }}
       >
-        <Background variant={BackgroundVariant.Dots} gap={28} size={1.4} color="#d4d4d4" />
+        <Background variant={BackgroundVariant.Dots} gap={28} size={1.4} color="#9a9a9a" />
         <Controls showInteractive={false} position="bottom-left" />
         <Panel position="top-right" className="flex gap-2">
           <button

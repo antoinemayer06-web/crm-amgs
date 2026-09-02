@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Logo from '../components/ui/Logo'
 import { supabase } from '../lib/supabaseClient'
 
 export default function Login() {
@@ -27,9 +28,7 @@ export default function Login() {
     <div className="min-h-svh flex items-center justify-center bg-canvas px-4">
       <div className="w-full max-w-sm space-y-6">
         <div className="flex flex-col items-center gap-3 text-center">
-          <span className="chrome-droplet chrome-droplet-circle flex h-14 w-14 items-center justify-center text-base font-bold text-[#1a1b1d]">
-            AM
-          </span>
+          <Logo size={64} className="drop-shadow-[0_4px_10px_rgba(0,0,0,0.55)]" />
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-ink">
               AM Growth Solutions

@@ -12,6 +12,7 @@ import Login from './pages/Login'
 import MarketingPage from './pages/MarketingPage'
 import PipelinePage from './pages/PipelinePage'
 import ProjectsPage from './pages/ProjectsPage'
+import SettingsPage from './pages/SettingsPage'
 import VisionPage from './pages/VisionPage'
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Route path="knowledge/:id" element={<KnowledgeDetailPage />} />
         <Route path="assistant" element={<AiAssistantPage />} />
         <Route path="vision" element={<VisionPage />} />
+        <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Routes>
