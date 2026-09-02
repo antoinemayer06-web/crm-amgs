@@ -46,7 +46,7 @@ export default function ImageNode({ id, data }) {
           <img
             src={data.imageUrl}
             alt=""
-            className="h-full w-full flex-1 select-none object-cover"
+            className="h-full w-full flex-1 select-none object-contain"
             draggable={false}
           />
         ) : (

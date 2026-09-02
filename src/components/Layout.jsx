@@ -6,6 +6,7 @@ import { AiChatProvider } from '../lib/AiChatContext'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard' },
+  { to: '/finance', label: 'Finance' },
   { to: '/companies', label: 'Entreprises' },
   { to: '/pipeline', label: 'Pipeline' },
   { to: '/projects', label: 'Projets' },

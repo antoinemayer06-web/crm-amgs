@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import DocumentsSection from '../documents/DocumentsSection'
+import { useCashCollectionsForProject, useCreateCashCollection } from '../../hooks/useCashCollections'
 import { useWorkLogsForSteps } from '../../hooks/useProjectWorkLogs'
 import { useDeleteProject, useProject, useUpdateProject } from '../../hooks/useProjects'
 import { useAiChat } from '../../lib/AiChatContext'
@@ -32,10 +33,15 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const { data: project, isLoading } = useProject(projectId)
   const updateProject = useUpdateProject()
   const deleteProject = useDeleteProject()
+  const { data: cashCollections } = useCashCollectionsForProject(projectId)
+  const createCashCollection = useCreateCashCollection()
   const { setEntityContext } = useAiChat()
 
   const [nom, setNom] = useState('')
   const [description, setDescription] = useState('')
+  const [addingCash, setAddingCash] = useState(false)
+  const [cashAmount, setCashAmount] = useState('')
+  const [cashDate, setCashDate] = useState(() => new Date().toISOString().slice(0, 10))
 
   const steps = getStepsForProject(allSteps, projectId)
   const stepIds = steps.map((s) => s.id)
@@ -69,6 +75,20 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
   function handleArchiveToggle() {
     saveField('archived', !project.archived)
+  }
+
+  async function handleAddCashCollection(event) {
+    event.preventDefault()
+    const montant = Number(cashAmount)
+    if (!montant || montant <= 0) return
+    await createCashCollection.mutateAsync({
+      projectId,
+      montant,
+      dateEncaissement: cashDate,
+      currentMontantEncaisse: project.montant_encaisse,
+    })
+    setCashAmount('')
+    setAddingCash(false)
   }
 
   return (
@@ -185,37 +205,73 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
+          <div className="space-y-1">
+            <label className="block text-xs font-medium uppercase text-neutral-500">
+              Montant facturé (€)
+            </label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={project.montant_facture ?? ''}
+              onChange={(event) =>
+                saveField('montant_facture', event.target.value === '' ? null : Number(event.target.value))
+              }
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            />
+          </div>
+
+          <div className="space-y-2 rounded-md border border-neutral-200 p-3">
+            <div className="flex items-center justify-between">
               <label className="block text-xs font-medium uppercase text-neutral-500">
-                Montant facturé (€)
+                Cash encaissé — {formatMontant(project.montant_encaisse)}
               </label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                value={project.montant_facture ?? ''}
-                onChange={(event) =>
-                  saveField('montant_facture', event.target.value === '' ? null : Number(event.target.value))
-                }
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-              />
+              <button
+                type="button"
+                onClick={() => setAddingCash((prev) => !prev)}
+                className="rounded-md border border-neutral-300 px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-neutral-100"
+              >
+                + Encaissement
+              </button>
             </div>
-            <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-neutral-500">
-                Cash encaissé (€)
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                value={project.montant_encaisse ?? ''}
-                onChange={(event) =>
-                  saveField('montant_encaisse', event.target.value === '' ? null : Number(event.target.value))
-                }
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
-              />
-            </div>
+
+            {addingCash && (
+              <form onSubmit={handleAddCashCollection} className="grid grid-cols-3 gap-2">
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="Montant (€)"
+                  value={cashAmount}
+                  onChange={(event) => setCashAmount(event.target.value)}
+                  className="col-span-1 rounded-md border border-neutral-300 px-2 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                />
+                <input
+                  type="date"
+                  value={cashDate}
+                  onChange={(event) => setCashDate(event.target.value)}
+                  className="col-span-1 rounded-md border border-neutral-300 px-2 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                />
+                <button
+                  type="submit"
+                  disabled={createCashCollection.isPending}
+                  className="col-span-1 rounded-md bg-neutral-900 px-2 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
+                >
+                  Ajouter
+                </button>
+              </form>
+            )}
+
+            {cashCollections?.length > 0 && (
+              <ul className="space-y-1 pt-1">
+                {cashCollections.map((collection) => (
+                  <li key={collection.id} className="flex justify-between text-xs text-neutral-500">
+                    <span>{new Date(collection.date_encaissement).toLocaleDateString('fr-FR')}</span>
+                    <span className="font-medium text-neutral-700">{formatMontant(collection.montant)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="space-y-1">

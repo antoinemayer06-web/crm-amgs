@@ -5,6 +5,7 @@ import AiAssistantPage from './pages/AiAssistantPage'
 import CompanyDetailPage from './pages/CompanyDetailPage'
 import CompaniesListPage from './pages/CompaniesListPage'
 import DashboardPage from './pages/DashboardPage'
+import FinancePage from './pages/FinancePage'
 import KnowledgeBasePage from './pages/KnowledgeBasePage'
 import KnowledgeDetailPage from './pages/KnowledgeDetailPage'
 import Login from './pages/Login'
@@ -33,6 +34,7 @@ function App() {
       <Route element={<Layout />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="finance" element={<FinancePage />} />
         <Route path="companies" element={<CompaniesListPage />} />
         <Route path="companies/:id" element={<CompanyDetailPage />} />
         <Route path="pipeline" element={<PipelinePage />} />

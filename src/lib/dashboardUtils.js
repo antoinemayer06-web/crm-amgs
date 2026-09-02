@@ -21,33 +21,60 @@ export function getCAThisMonth(documents) {
     .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
 }
 
-// Encaissé du mois en cours : documents de type facture ET payés, sur le
-// mois (même méthode/table que getCAThisMonth, pour rester sur la même
-// base temporelle — contrairement à getCashSummary qui est un cumul
-// "toute la vie" issu des projets).
-export function getEncaisseThisMonth(documents) {
+// -----------------------------------------------------------------
+// Page Finance : tout est paramétré par un "monthKey" (ex: "2026-09")
+// pour permettre le tri mensuel (mois sélectionné, pas juste le mois en
+// cours).
+// -----------------------------------------------------------------
+function monthKeyOf(dateStr) {
+  const date = new Date(dateStr)
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+}
+
+export function currentMonthKey() {
+  return monthKeyOf(new Date())
+}
+
+function isInMonth(dateStr, monthKey) {
+  if (!dateStr) return false
+  return monthKeyOf(dateStr) === monthKey
+}
+
+// CA facturé sur le mois sélectionné (documents de type facture).
+export function getCAForMonth(documents, monthKey) {
   return documents
-    .filter((doc) => doc.type === 'facture' && doc.statut === 'payé' && isInCurrentMonth(doc.created_at))
+    .filter((doc) => doc.type === 'facture' && isInMonth(doc.created_at, monthKey))
     .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
 }
 
-// Dépenses du mois en cours (URSSAF, abonnements, marketing, etc.).
-export function getExpensesThisMonth(expenses) {
+// Cash réellement encaissé sur le mois sélectionné : somme des
+// encaissements enregistrés projet par projet (table cash_collections).
+// C'est la seule source qui reflète l'argent réellement reçu avec une
+// date précise (contrairement à projects.montant_encaisse, qui est un
+// total cumulé sans historique).
+export function getEncaisseForMonth(cashCollections, monthKey) {
+  return cashCollections
+    .filter((collection) => isInMonth(collection.date_encaissement, monthKey))
+    .reduce((sum, collection) => sum + Number(collection.montant ?? 0), 0)
+}
+
+// Dépenses sur le mois sélectionné (URSSAF, abonnements, marketing, etc.).
+export function getExpensesForMonth(expenses, monthKey) {
   return expenses
-    .filter((expense) => isInCurrentMonth(expense.date_depense))
+    .filter((expense) => isInMonth(expense.date_depense, monthKey))
     .reduce((sum, expense) => sum + Number(expense.montant ?? 0), 0)
 }
 
 // Résultat prévu du mois (accrual) : CA facturé du mois moins les
 // dépenses du mois.
-export function getResultatPrevu(caThisMonth, expensesThisMonth) {
-  return caThisMonth - expensesThisMonth
+export function getResultatPrevu(caForMonth, expensesForMonth) {
+  return caForMonth - expensesForMonth
 }
 
 // Résultat réalisé du mois (cash) : encaissé du mois moins les dépenses
 // du mois.
-export function getResultatRealise(encaisseThisMonth, expensesThisMonth) {
-  return encaisseThisMonth - expensesThisMonth
+export function getResultatRealise(encaisseForMonth, expensesForMonth) {
+  return encaisseForMonth - expensesForMonth
 }
 
 // Total facturé vs total encaissé, remontés directement des champs de

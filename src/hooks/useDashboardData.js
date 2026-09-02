@@ -17,7 +17,6 @@ export function useDashboardData() {
         notesRes,
         tasksRes,
         marketingActionsRes,
-        expensesRes,
       ] = await Promise.all([
         supabase.from('documents').select('*, company:companies(id, name)'),
         supabase.from('companies').select('*'),
@@ -34,7 +33,6 @@ export function useDashboardData() {
           .limit(15),
         supabase.from('tasks').select('*, company:companies(id, name)'),
         supabase.from('marketing_actions').select('id, statut, date_prevue'),
-        supabase.from('expenses').select('*'),
       ])
 
       for (const res of [
@@ -46,7 +44,6 @@ export function useDashboardData() {
         notesRes,
         tasksRes,
         marketingActionsRes,
-        expensesRes,
       ]) {
         if (res.error) throw res.error
       }
@@ -60,7 +57,6 @@ export function useDashboardData() {
         notes: notesRes.data,
         tasks: tasksRes.data,
         marketingActions: marketingActionsRes.data,
-        expenses: expensesRes.data,
       }
     },
   })

@@ -1,20 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../lib/supabaseClient'
 import { buildRecurrenceOccurrences } from '../lib/recurrenceUtils'
-
-export function useExpenses() {
-  return useQuery({
-    queryKey: ['expenses'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('expenses')
-        .select('*')
-        .order('date_depense', { ascending: false })
-      if (error) throw error
-      return data
-    },
-  })
-}
 
 // Une dépense avec récurrence est éclatée en plusieurs lignes (une par
 // occurrence) dès la création — voir buildRecurrenceOccurrences.
@@ -28,8 +14,7 @@ export function useCreateExpense() {
       return data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['expenses'] })
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['finance'] })
     },
   })
 }
@@ -42,24 +27,12 @@ export function useDeleteExpense() {
       if (error) throw error
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['expenses'] })
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['finance'] })
     },
   })
 }
 
 // Objectif de résultat mensuel : une seule ligne par owner (upsert).
-export function useFinanceGoal() {
-  return useQuery({
-    queryKey: ['finance_goal'],
-    queryFn: async () => {
-      const { data, error } = await supabase.from('finance_goals').select('*').maybeSingle()
-      if (error) throw error
-      return data
-    },
-  })
-}
-
 export function useUpdateFinanceGoal() {
   const queryClient = useQueryClient()
   return useMutation({
@@ -76,7 +49,7 @@ export function useUpdateFinanceGoal() {
       return data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['finance_goal'] })
+      queryClient.invalidateQueries({ queryKey: ['finance'] })
     },
   })
 }

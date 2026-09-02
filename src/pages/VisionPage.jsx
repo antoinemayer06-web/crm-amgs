@@ -24,6 +24,7 @@ import {
 
 const NODE_TYPES = { postIt: PostItNode, image: ImageNode }
 const IMAGE_SIGNED_URL_TTL = 60 * 60
+const IMAGE_MAX_DIMENSION = 320
 
 function randomRotation() {
   return Math.random() * 6 - 3
@@ -31,6 +32,31 @@ function randomRotation() {
 
 function randomColor() {
   return VISION_NOTE_COLORS[Math.floor(Math.random() * VISION_NOTE_COLORS.length)]
+}
+
+// Dimensions initiales du noeud image : on garde le ratio naturel de
+// l'image (bornée à IMAGE_MAX_DIMENSION sur le plus grand côté) pour
+// qu'elle s'affiche en entier dès la pose, sans recadrage — ensuite
+// librement redimensionnable via NodeResizer (ratio conservé).
+function getImageNaturalSize(file) {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file)
+    const img = new Image()
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve({ width: img.naturalWidth || IMAGE_MAX_DIMENSION, height: img.naturalHeight || IMAGE_MAX_DIMENSION })
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      resolve({ width: IMAGE_MAX_DIMENSION, height: IMAGE_MAX_DIMENSION })
+    }
+    img.src = url
+  })
+}
+
+function scaleToMaxDimension(width, height) {
+  const scale = Math.min(IMAGE_MAX_DIMENSION / Math.max(width, height), 1)
+  return { width: Math.round(width * scale), height: Math.round(height * scale) }
 }
 
 function noteToNode(note) {
@@ -126,15 +152,20 @@ function VisionCanvas() {
   }
 
   async function createImageAt(file, position) {
+    const naturalSize = await getImageNaturalSize(file)
+    const { width, height } = scaleToMaxDimension(naturalSize.width, naturalSize.height)
     const path = await uploadImage.mutateAsync({ file, ownerId: user.id })
     const values = {
       owner_id: user.id,
       type: 'image',
       image_url: path,
-      position_x: position.x,
-      position_y: position.y,
-      largeur: 240,
-      hauteur: 280,
+      // Centrée sur le point sélectionné (clic/dépôt), pas ancrée par son
+      // coin haut-gauche — sinon l'image apparaît décalée par rapport à
+      // l'endroit choisi.
+      position_x: position.x - width / 2,
+      position_y: position.y - height / 2,
+      largeur: width,
+      hauteur: height,
       rotation: randomRotation(),
       z_index: nextZIndex(),
     }
