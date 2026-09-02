@@ -24,18 +24,23 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-svh flex items-center justify-center bg-neutral-50 px-4">
+    <div className="min-h-svh flex items-center justify-center bg-canvas px-4">
       <div className="w-full max-w-sm space-y-6">
-        <div className="text-center">
-          <h1 className="text-xl font-semibold text-neutral-900">
-            AM Growth Solutions
-          </h1>
-          <p className="text-sm text-neutral-500">Connexion au CRM</p>
+        <div className="flex flex-col items-center gap-3 text-center">
+          <span className="chrome-droplet chrome-droplet-circle flex h-14 w-14 items-center justify-center text-base font-bold text-[#1a1b1d]">
+            AM
+          </span>
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-ink">
+              AM Growth Solutions
+            </h1>
+            <p className="text-sm text-ink-secondary">Connexion au CRM</p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
+            <label htmlFor="email" className="block text-sm font-medium text-ink-secondary">
               Email
             </label>
             <input
@@ -45,12 +50,12 @@ export default function Login() {
               required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
             />
           </div>
 
           <div className="space-y-1">
-            <label htmlFor="password" className="block text-sm font-medium text-neutral-700">
+            <label htmlFor="password" className="block text-sm font-medium text-ink-secondary">
               Mot de passe
             </label>
             <input
@@ -60,21 +65,17 @@ export default function Login() {
               required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-600" role="alert">
+            <p className="text-sm font-medium text-ink" role="alert">
               {error}
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
-          >
+          <button type="submit" disabled={loading} className="btn-primary w-full">
             {loading ? 'Connexion…' : 'Se connecter'}
           </button>
         </form>

@@ -5,7 +5,7 @@ const TYPE_ICON = { note: '📝', document: '📄', project: '📁', company: '�
 
 export default function ActivityFeed({ events }) {
   if (events.length === 0) {
-    return <p className="py-8 text-center text-sm text-neutral-400">Aucune activité récente.</p>
+    return <p className="py-8 text-center text-sm text-ink-tertiary">Aucune activité récente.</p>
   }
 
   return (
@@ -15,8 +15,8 @@ export default function ActivityFeed({ events }) {
           <div className="flex items-start gap-3">
             <span className="mt-0.5 text-base">{TYPE_ICON[event.type]}</span>
             <div className="min-w-0 flex-1">
-              <p className="text-sm text-neutral-700">{event.label}</p>
-              <p className="text-xs text-neutral-400">{formatRelativeTime(event.timestamp)}</p>
+              <p className="text-sm text-ink-secondary">{event.label}</p>
+              <p className="text-xs text-ink-tertiary">{formatRelativeTime(event.timestamp)}</p>
             </div>
           </div>
         )
@@ -26,7 +26,7 @@ export default function ActivityFeed({ events }) {
             {event.link ? (
               <Link
                 to={event.link}
-                className="-mx-2 block rounded-md px-2 py-1.5 transition-colors duration-150 hover:bg-neutral-50"
+                className="-mx-2 block rounded-md px-2 py-1.5 transition-colors duration-150 hover:bg-surface-hover"
               >
                 {row}
               </Link>

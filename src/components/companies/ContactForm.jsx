@@ -46,44 +46,44 @@ export default function ContactForm({ initialValues, onSubmit, onCancel, submitt
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="first_name" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="first_name" className="block text-sm font-medium text-ink-secondary">
             Prénom *
           </label>
           <input
             id="first_name"
             value={values.first_name}
             onChange={(event) => update('first_name', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
         <div className="space-y-1">
-          <label htmlFor="last_name" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="last_name" className="block text-sm font-medium text-ink-secondary">
             Nom *
           </label>
           <input
             id="last_name"
             value={values.last_name}
             onChange={(event) => update('last_name', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="role" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="role" className="block text-sm font-medium text-ink-secondary">
           Fonction
         </label>
         <input
           id="role"
           value={values.role}
           onChange={(event) => update('role', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="email" className="block text-sm font-medium text-ink-secondary">
             Email
           </label>
           <input
@@ -91,28 +91,28 @@ export default function ContactForm({ initialValues, onSubmit, onCancel, submitt
             type="email"
             value={values.email}
             onChange={(event) => update('email', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
         <div className="space-y-1">
-          <label htmlFor="phone" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="phone" className="block text-sm font-medium text-ink-secondary">
             Téléphone
           </label>
           <input
             id="phone"
             value={values.phone}
             onChange={(event) => update('phone', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-neutral-700">
+      <label className="flex items-center gap-2 text-sm text-ink-secondary">
         <input
           type="checkbox"
           checked={values.is_primary}
           onChange={(event) => update('is_primary', event.target.checked)}
-          className="rounded border-neutral-300"
+          className="rounded border-chrome-dark"
         />
         Contact principal
       </label>
@@ -127,7 +127,7 @@ export default function ContactForm({ initialValues, onSubmit, onCancel, submitt
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
         >
           Annuler
         </button>

@@ -11,14 +11,14 @@ export default function MarkdownEditor({ value, onChange }) {
 
   return (
     <div className="space-y-2">
-      <div className="flex w-fit gap-1 rounded-md border border-neutral-200 bg-neutral-50 p-1">
+      <div className="flex w-fit gap-1 rounded-md border border-chrome-dark bg-surface-hover p-1">
         {TABS.map((tab) => (
           <button
             key={tab.key}
             type="button"
             onClick={() => setMode(tab.key)}
             className={`rounded px-3 py-1 text-xs font-medium transition-colors duration-150 ${
-              mode === tab.key ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-900'
+              mode === tab.key ? 'bg-surface text-ink shadow-sm' : 'text-ink-secondary hover:text-ink'
             }`}
           >
             {tab.label}
@@ -32,10 +32,10 @@ export default function MarkdownEditor({ value, onChange }) {
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder="Support markdown : **gras**, listes, # titres, [liens](url)…"
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 font-mono text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full rounded-md border border-chrome-dark px-3 py-2 font-mono text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
         />
       ) : (
-        <div className="min-h-[18rem] rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2">
+        <div className="min-h-[18rem] rounded-md border border-chrome-dark bg-surface-hover px-3 py-2">
           <MarkdownContent content={value} />
         </div>
       )}

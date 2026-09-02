@@ -42,22 +42,20 @@ export default function PipelinePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-neutral-900">Pipeline</h2>
+        <h2 className="text-xl font-semibold text-ink">Pipeline</h2>
       </div>
 
       <div className="flex items-center justify-between gap-4">
         <PipelineFilters filters={filters} onChange={setFilters} />
 
-        <div className="flex shrink-0 rounded-lg border border-neutral-200 bg-white p-1">
+        <div className="flex shrink-0 rounded-lg border border-chrome-dark bg-surface p-1">
           {VIEWS.map((v) => (
             <button
               key={v.key}
               type="button"
               onClick={() => setView(v.key)}
-              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-                view === v.key
-                  ? 'bg-neutral-900 text-white'
-                  : 'text-neutral-500 hover:text-neutral-900'
+              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
+                view === v.key ? 'chrome-droplet text-[#1a1b1d]' : 'text-ink-secondary hover:text-ink'
               }`}
             >
               {v.label}
@@ -66,8 +64,8 @@ export default function PipelinePage() {
         </div>
       </div>
 
-      {isLoading && <p className="text-sm text-neutral-500">Chargement…</p>}
-      {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
+      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
+      {isError && <p className="text-sm font-medium text-ink">Erreur : {error.message}</p>}
 
       {!isLoading && !isError && (
         <div className="animate-[fadein_150ms_ease-out]" key={view}>

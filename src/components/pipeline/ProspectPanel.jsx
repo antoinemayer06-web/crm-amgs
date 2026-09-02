@@ -48,7 +48,7 @@ export default function ProspectPanel({ companyId, onClose, onDeleted }) {
   return (
     <SidePanel title={isLoading ? 'Chargement…' : company?.name} onClose={onClose}>
       {isLoading || !company ? (
-        <p className="text-sm text-neutral-500">Chargement…</p>
+        <p className="text-sm text-ink-secondary">Chargement…</p>
       ) : (
         <div className="space-y-5">
           <div className="flex flex-wrap items-center gap-2">
@@ -67,20 +67,20 @@ export default function ProspectPanel({ companyId, onClose, onDeleted }) {
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="ml-auto rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100"
+              className="ml-auto rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover"
             >
               Modifier
             </button>
             <button
               type="button"
               onClick={handleDelete}
-              className="rounded-md border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
+              className="rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover hover:text-ink"
             >
               Supprimer
             </button>
           </div>
 
-          <div className="border-b border-neutral-200">
+          <div className="border-b border-chrome-dark">
             <nav className="flex gap-1">
               {TABS.map((tab) => (
                 <button
@@ -89,8 +89,8 @@ export default function ProspectPanel({ companyId, onClose, onDeleted }) {
                   onClick={() => setActiveTab(tab.key)}
                   className={`border-b-2 px-3 py-2 text-sm font-medium ${
                     activeTab === tab.key
-                      ? 'border-neutral-900 text-neutral-900'
-                      : 'border-transparent text-neutral-500 hover:text-neutral-900'
+                      ? 'border-chrome-light text-ink'
+                      : 'border-transparent text-ink-secondary hover:text-ink'
                   }`}
                 >
                   {tab.label}

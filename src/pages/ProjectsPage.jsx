@@ -61,7 +61,7 @@ export default function ProjectsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-neutral-900">Projets / Livraison</h2>
+        <h2 className="text-xl font-semibold text-ink">Projets / Livraison</h2>
         <button
           type="button"
           onClick={() => setCreating(true)}
@@ -76,12 +76,12 @@ export default function ProjectsPage() {
 
         <div className="flex shrink-0 items-center gap-3">
           {view === 'list' && (
-            <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
+            <div className="flex rounded-lg border border-chrome-dark bg-surface p-1">
               <button
                 type="button"
                 onClick={() => setShowArchived(false)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-                  !showArchived ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:text-neutral-900'
+                  !showArchived ? 'bg-neutral-900 text-white' : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 Actifs
@@ -90,7 +90,7 @@ export default function ProjectsPage() {
                 type="button"
                 onClick={() => setShowArchived(true)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-                  showArchived ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:text-neutral-900'
+                  showArchived ? 'bg-neutral-900 text-white' : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 Archivés
@@ -98,7 +98,7 @@ export default function ProjectsPage() {
             </div>
           )}
 
-          <div className="flex rounded-lg border border-neutral-200 bg-white p-1">
+          <div className="flex rounded-lg border border-chrome-dark bg-surface p-1">
             {VIEWS.map((v) => (
               <button
                 key={v.key}
@@ -107,7 +107,7 @@ export default function ProjectsPage() {
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
                   view === v.key
                     ? 'bg-neutral-900 text-white'
-                    : 'text-neutral-500 hover:text-neutral-900'
+                    : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 {v.label}
@@ -117,7 +117,7 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {isLoading && <p className="text-sm text-neutral-500">Chargement…</p>}
+      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
       {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
 
       {!isLoading && !isError && (

@@ -37,19 +37,19 @@ function Column({ statut, projects, allSteps, onProjectClick }) {
   return (
     <div className="flex min-w-0 flex-col">
       <div className="mb-3 flex items-center justify-between px-1">
-        <h3 className="text-sm font-medium text-neutral-700">{PROJECT_STATUT_LABELS[statut]}</h3>
-        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
+        <h3 className="text-sm font-medium text-ink-secondary">{PROJECT_STATUT_LABELS[statut]}</h3>
+        <span className="rounded-full bg-surface-hover px-2 py-0.5 text-xs font-medium text-ink-secondary">
           {projects.length}
         </span>
       </div>
       <div
         ref={setNodeRef}
         className={`flex min-h-24 flex-1 flex-col gap-2 rounded-xl p-2 transition-colors duration-150 ${
-          isOver ? 'bg-neutral-100' : 'bg-neutral-50'
+          isOver ? 'bg-surface-hover' : 'bg-surface-hover'
         }`}
       >
         {projects.length === 0 && (
-          <p className="px-2 py-6 text-center text-xs text-neutral-400">Aucun projet</p>
+          <p className="px-2 py-6 text-center text-xs text-ink-tertiary">Aucun projet</p>
         )}
         {projects.map((project) => (
           <DraggableCard

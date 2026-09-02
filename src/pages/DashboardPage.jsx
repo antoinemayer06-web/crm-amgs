@@ -26,9 +26,9 @@ const formatHours = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} h`
 
 function Section({ title, action, children }) {
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+    <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-neutral-900">{title}</h3>
+        <h3 className="text-sm font-semibold text-ink">{title}</h3>
         {action}
       </div>
       {children}
@@ -72,10 +72,10 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-neutral-900">Dashboard</h2>
+      <h2 className="text-xl font-semibold text-ink">Dashboard</h2>
 
-      {isLoading && <p className="text-sm text-neutral-500">Chargement…</p>}
-      {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
+      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
+      {isError && <p className="text-sm font-medium text-ink">Erreur : {error.message}</p>}
 
       {kpis && (
         <>

@@ -1,5 +1,31 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: var(--bg-primary);
+  --color-surface: var(--bg-surface);
+  --color-surface-hover: var(--bg-surface-hover);
+  --color-chrome-light: var(--chrome-light);
+  --color-chrome-mid: var(--chrome-mid);
+  --color-chrome-dark: var(--chrome-dark);
+  --color-ink: var(--text-primary);
+  --color-ink-secondary: var(--text-secondary);
+  --color-ink-tertiary: var(--text-tertiary);
+}
+
+:root {
+  --bg-primary: #0a0a0b;
+  --bg-surface: #141416;
+  --bg-surface-hover: #1c1c1f;
+  --chrome-light: #d8dbde;
+  --chrome-mid: #8e9196;
+  --chrome-dark: #3a3c40;
+  --text-primary: #f2f2f3;
+  --text-secondary: #8a8d91;
+  --text-tertiary: #5a5d61;
+}
+
 @keyframes fadein {
   from {
     opacity: 0;
@@ -8,5 +34,97 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse-chrome {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.015em;
+}
+
+.pulse-chrome {
+  animation: pulse-chrome 1.8s ease-in-out infinite;
+}
+
+/* Métal liquide bombé : point de lumière excentré en haut-gauche,
+   assombrissement progressif vers les bords, ombre interne claire en
+   haut + sombre en bas pour simuler le bombé, ombre portée pour
+   détacher du fond. À utiliser avec parcimonie (logo, boutons
+   principaux, avatars, indicateurs de statut importants). */
+.chrome-droplet {
+  background-image: radial-gradient(circle at 30% 25%, #e8eaec 0%, #b8bbc0 25%, #6a6d72 55%, #2a2c30 100%);
+  background-size: 160% 160%;
+  background-position: 30% 25%;
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    0 1px 2px rgba(255, 255, 255, 0.1);
+  transition: background-position 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.chrome-droplet:hover {
+  background-position: 42% 12%;
+}
+
+.chrome-droplet-circle {
+  border-radius: 9999px;
+}
+
+@layer components {
+  .input-chrome {
+    @apply w-full rounded-md border border-chrome-dark bg-surface px-3 py-2 text-sm text-ink placeholder-ink-tertiary transition-colors duration-200 focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid;
+  }
+
+  .btn-primary {
+    @apply rounded-md px-3 py-2 text-sm font-semibold text-[#141416] transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50;
+    background-image: radial-gradient(circle at 30% 25%, #eef0f1 0%, #c7cacf 30%, #8e9196 70%, #5a5d61 100%);
+    background-size: 160% 160%;
+    background-position: 30% 25%;
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.55),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+      0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-position: 42% 12%;
+  }
+
+  .btn-secondary {
+    @apply rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary transition-colors duration-200 hover:border-chrome-mid hover:bg-surface-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .card-chrome {
+    @apply rounded-lg border border-chrome-dark bg-surface transition-colors duration-200;
+  }
+
+  .card-chrome-lit {
+    position: relative;
+  }
+
+  .card-chrome-lit::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(90deg, transparent, rgba(216, 219, 222, 0.35), transparent);
   }
 }

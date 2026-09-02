@@ -50,7 +50,7 @@ export default function DocumentForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       {requireFile && (
         <div className="space-y-1">
-          <label htmlFor="file" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="file" className="block text-sm font-medium text-ink-secondary">
             Fichier *
           </label>
           <input
@@ -63,27 +63,27 @@ export default function DocumentForm({
       )}
 
       <div className="space-y-1">
-        <label htmlFor="nom" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="nom" className="block text-sm font-medium text-ink-secondary">
           Nom *
         </label>
         <input
           id="nom"
           value={values.nom}
           onChange={(event) => update('nom', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="type" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="type" className="block text-sm font-medium text-ink-secondary">
             Type
           </label>
           <select
             id="type"
             value={values.type}
             onChange={(event) => update('type', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             {DOCUMENT_TYPES.map((type) => (
               <option key={type} value={type}>
@@ -93,14 +93,14 @@ export default function DocumentForm({
           </select>
         </div>
         <div className="space-y-1">
-          <label htmlFor="statut" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="statut" className="block text-sm font-medium text-ink-secondary">
             Statut
           </label>
           <select
             id="statut"
             value={values.statut}
             onChange={(event) => update('statut', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             <option value="">—</option>
             {DOCUMENT_STATUSES.map((statut) => (
@@ -113,7 +113,7 @@ export default function DocumentForm({
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="montant" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="montant" className="block text-sm font-medium text-ink-secondary">
           Montant (€)
         </label>
         <input
@@ -122,7 +122,7 @@ export default function DocumentForm({
           step="0.01"
           value={values.montant}
           onChange={(event) => update('montant', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
@@ -136,7 +136,7 @@ export default function DocumentForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
         >
           Annuler
         </button>

@@ -12,29 +12,29 @@ export default function AiChatPanel() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex justify-end">
-      <div className="pointer-events-auto flex h-full w-full max-w-sm flex-col border-l border-neutral-200 bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
+      <div className="pointer-events-auto flex h-full w-full max-w-sm flex-col border-l border-chrome-dark bg-surface shadow-2xl">
+        <div className="flex items-center justify-between border-b border-chrome-dark px-4 py-3">
           <div className="min-w-0">
-            <h2 className="text-sm font-semibold text-neutral-900">Assistant IA</h2>
+            <h2 className="text-sm font-semibold text-ink">Assistant IA</h2>
             {entityContext?.label && (
-              <p className="truncate text-xs text-neutral-500">Contexte : {entityContext.label}</p>
+              <p className="truncate text-xs text-ink-secondary">Contexte : {entityContext.label}</p>
             )}
           </div>
           <div className="flex shrink-0 items-center gap-3">
-            <Link to="/assistant" className="text-xs font-medium text-neutral-500 hover:text-neutral-900">
+            <Link to="/assistant" className="text-xs font-medium text-ink-secondary hover:text-ink">
               Plein écran
             </Link>
             <button
               type="button"
               onClick={() => setShowHistory((prev) => !prev)}
-              className="text-xs font-medium text-neutral-500 hover:text-neutral-900"
+              className="text-xs font-medium text-ink-secondary hover:text-ink"
             >
               {showHistory ? 'Chat' : 'Historique'}
             </button>
             <button
               type="button"
               onClick={closeChat}
-              className="text-neutral-400 hover:text-neutral-600"
+              className="text-ink-tertiary hover:text-ink-secondary"
               aria-label="Fermer"
             >
               ✕

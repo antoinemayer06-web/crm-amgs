@@ -57,19 +57,19 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <label htmlFor="nom" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="nom" className="block text-sm font-medium text-ink-secondary">
           Nom *
         </label>
         <input
           id="nom"
           value={values.nom}
           onChange={(event) => update('nom', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="objectif" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="objectif" className="block text-sm font-medium text-ink-secondary">
           Objectif
         </label>
         <textarea
@@ -77,13 +77,13 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
           rows={2}
           value={values.objectif}
           onChange={(event) => update('objectif', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="date_debut" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="date_debut" className="block text-sm font-medium text-ink-secondary">
             Date de début
           </label>
           <input
@@ -91,11 +91,11 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
             type="date"
             value={values.date_debut}
             onChange={(event) => update('date_debut', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
         <div className="space-y-1">
-          <label htmlFor="date_fin" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="date_fin" className="block text-sm font-medium text-ink-secondary">
             Date de fin
           </label>
           <input
@@ -103,14 +103,14 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
             type="date"
             value={values.date_fin}
             onChange={(event) => update('date_fin', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="budget" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="budget" className="block text-sm font-medium text-ink-secondary">
             Budget (€)
           </label>
           <input
@@ -120,18 +120,18 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
             min="0"
             value={values.budget}
             onChange={(event) => update('budget', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
         <div className="space-y-1">
-          <label htmlFor="statut" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="statut" className="block text-sm font-medium text-ink-secondary">
             Statut
           </label>
           <select
             id="statut"
             value={values.statut}
             onChange={(event) => update('statut', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             {CAMPAIGN_STATUSES.map((statut) => (
               <option key={statut} value={statut}>
@@ -152,7 +152,7 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
         >
           Annuler
         </button>

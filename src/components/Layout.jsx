@@ -23,18 +23,23 @@ export default function Layout() {
 
   return (
     <AiChatProvider>
-      <div className="min-h-svh bg-neutral-50">
-        <header className="border-b border-neutral-200 bg-white">
+      <div className="min-h-svh bg-canvas">
+        <header className="border-b border-chrome-dark bg-surface">
           <div className="flex items-center justify-between px-6 py-4">
-            <h1 className="text-lg font-semibold text-neutral-900">
-              AM Growth Solutions — CRM
-            </h1>
+            <div className="flex items-center gap-3">
+              <span className="chrome-droplet chrome-droplet-circle flex h-8 w-8 items-center justify-center text-xs font-bold text-[#1a1b1d]">
+                AM
+              </span>
+              <h1 className="text-lg font-semibold tracking-tight text-ink">
+                AM Growth Solutions
+              </h1>
+            </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-neutral-500">{user.email}</span>
+              <span className="text-sm text-ink-secondary">{user.email}</span>
               <button
                 type="button"
                 onClick={signOut}
-                className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100"
+                className="rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover"
               >
                 Déconnexion
               </button>
@@ -48,8 +53,8 @@ export default function Layout() {
                 className={({ isActive }) =>
                   `border-b-2 px-3 py-2 text-sm font-medium ${
                     isActive
-                      ? 'border-neutral-900 text-neutral-900'
-                      : 'border-transparent text-neutral-500 hover:text-neutral-900'
+                      ? 'border-chrome-light text-ink'
+                      : 'border-transparent text-ink-secondary hover:text-ink'
                   }`
                 }
               >

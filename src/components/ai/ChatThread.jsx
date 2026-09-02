@@ -3,7 +3,7 @@ import { useAiChat } from '../../lib/AiChatContext'
 import MarkdownContent from '../knowledge/MarkdownContent'
 import ActionCard from './ActionCard'
 
-export default function ChatThread({ emptyStateClassName = 'text-sm text-neutral-400' }) {
+export default function ChatThread({ emptyStateClassName = 'text-sm text-ink-tertiary' }) {
   const { displayMessages, pendingActions, isLoading, error, sendMessage, resolveActions } = useAiChat()
   const [input, setInput] = useState('')
   const [file, setFile] = useState(null)
@@ -43,11 +43,11 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-neutral
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
               className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
-                msg.role === 'user' ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-800'
+                msg.role === 'user' ? 'bg-neutral-900 text-white' : 'bg-surface-hover text-ink-secondary'
               }`}
             >
               {msg.attachmentName && (
-                <p className={`mb-1 text-xs ${msg.role === 'user' ? 'text-neutral-300' : 'text-neutral-500'}`}>
+                <p className={`mb-1 text-xs ${msg.role === 'user' ? 'text-ink-tertiary' : 'text-ink-secondary'}`}>
                   📎 {msg.attachmentName}
                 </p>
               )}
@@ -58,13 +58,13 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-neutral
         {pendingActions.length > 0 && (
           <ActionCard actions={pendingActions} onResolve={resolveActions} submitting={isLoading} />
         )}
-        {isLoading && <p className="text-xs text-neutral-400">L'assistant réfléchit…</p>}
+        {isLoading && <p className="text-xs text-ink-tertiary">L'assistant réfléchit…</p>}
         {error && <p className="text-xs text-red-600">Erreur : {error}</p>}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-2 border-t border-neutral-200 p-3">
+      <form onSubmit={handleSubmit} className="space-y-2 border-t border-chrome-dark p-3">
         {file && (
-          <div className="flex items-center justify-between rounded-md bg-neutral-100 px-2.5 py-1.5 text-xs text-neutral-600">
+          <div className="flex items-center justify-between rounded-md bg-surface-hover px-2.5 py-1.5 text-xs text-ink-secondary">
             <span className="truncate">📎 {file.name}</span>
             <button
               type="button"
@@ -72,7 +72,7 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-neutral
                 setFile(null)
                 if (fileInputRef.current) fileInputRef.current.value = ''
               }}
-              className="shrink-0 text-neutral-400 hover:text-red-600"
+              className="shrink-0 text-ink-tertiary hover:text-red-600"
             >
               ✕
             </button>
@@ -89,7 +89,7 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-neutral
           />
           <label
             htmlFor={fileInputId}
-            className="flex shrink-0 cursor-pointer items-center justify-center rounded-md border border-neutral-300 px-2.5 py-2 text-sm text-neutral-500 hover:bg-neutral-100"
+            className="flex shrink-0 cursor-pointer items-center justify-center rounded-md border border-chrome-dark px-2.5 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
             title="Joindre un fichier (image ou PDF)"
           >
             📎
@@ -98,7 +98,7 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-neutral
             value={input}
             onChange={(event) => setInput(event.target.value)}
             placeholder="Écris un message…"
-            className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="flex-1 input-chrome"
           />
           <button
             type="submit"

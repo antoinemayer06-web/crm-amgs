@@ -63,7 +63,7 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <label htmlFor="libelle" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="libelle" className="block text-sm font-medium text-ink-secondary">
           Libellé *
         </label>
         <input
@@ -71,20 +71,20 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
           value={values.libelle}
           onChange={(event) => update('libelle', event.target.value)}
           placeholder="ex : URSSAF T3, abonnement HubSpot…"
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="categorie" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="categorie" className="block text-sm font-medium text-ink-secondary">
             Catégorie
           </label>
           <select
             id="categorie"
             value={values.categorie}
             onChange={(event) => update('categorie', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             {EXPENSE_CATEGORIES.map((categorie) => (
               <option key={categorie} value={categorie}>
@@ -94,7 +94,7 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
           </select>
         </div>
         <div className="space-y-1">
-          <label htmlFor="montant" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="montant" className="block text-sm font-medium text-ink-secondary">
             Montant (€) *
           </label>
           <input
@@ -104,13 +104,13 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
             min="0"
             value={values.montant}
             onChange={(event) => update('montant', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="date_depense" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="date_depense" className="block text-sm font-medium text-ink-secondary">
           Date
         </label>
         <input
@@ -118,15 +118,15 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
           type="date"
           value={values.date_depense}
           onChange={(event) => update('date_depense', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
-      <div className="space-y-2 rounded-md border border-neutral-200 p-3">
-        <p className="text-sm font-medium text-neutral-700">Récurrence (optionnel)</p>
+      <div className="space-y-2 rounded-md border border-chrome-dark p-3">
+        <p className="text-sm font-medium text-ink-secondary">Récurrence (optionnel)</p>
         <div className="grid grid-cols-3 gap-3">
           <div className="space-y-1">
-            <label htmlFor="recurrence_intervalle" className="block text-xs text-neutral-500">
+            <label htmlFor="recurrence_intervalle" className="block text-xs text-ink-secondary">
               Tous les
             </label>
             <input
@@ -136,18 +136,18 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
               value={recurrence.intervalle}
               onChange={(event) => updateRecurrence('intervalle', event.target.value)}
               disabled={!recurrence.frequence}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 disabled:opacity-50"
+              className="w-full input-chrome disabled:opacity-50"
             />
           </div>
           <div className="space-y-1">
-            <label htmlFor="recurrence_frequence" className="block text-xs text-neutral-500">
+            <label htmlFor="recurrence_frequence" className="block text-xs text-ink-secondary">
               Fréquence
             </label>
             <select
               id="recurrence_frequence"
               value={recurrence.frequence}
               onChange={(event) => updateRecurrence('frequence', event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full input-chrome"
             >
               <option value="">Pas de récurrence</option>
               {RECURRENCE_FREQUENCES.map((frequence) => (
@@ -158,7 +158,7 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
             </select>
           </div>
           <div className="space-y-1">
-            <label htmlFor="recurrence_fin" className="block text-xs text-neutral-500">
+            <label htmlFor="recurrence_fin" className="block text-xs text-ink-secondary">
               Jusqu'au
             </label>
             <input
@@ -167,7 +167,7 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
               value={recurrence.fin}
               onChange={(event) => updateRecurrence('fin', event.target.value)}
               disabled={!recurrence.frequence}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 disabled:opacity-50"
+              className="w-full input-chrome disabled:opacity-50"
             />
           </div>
         </div>
@@ -183,7 +183,7 @@ export default function ExpenseForm({ onSubmit, onCancel, submitting }) {
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
         >
           Annuler
         </button>

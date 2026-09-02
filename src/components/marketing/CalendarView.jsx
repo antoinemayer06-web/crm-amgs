@@ -48,16 +48,16 @@ export default function CalendarView({ currentMonth, actions, onPrevMonth, onNex
   const currentMonthIndex = currentMonth.getMonth()
 
   return (
-    <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
-      <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
-        <h3 className="text-sm font-semibold capitalize text-neutral-900">
+    <div className="overflow-hidden rounded-xl border border-chrome-dark bg-surface">
+      <div className="flex items-center justify-between border-b border-chrome-dark px-4 py-3">
+        <h3 className="text-sm font-semibold capitalize text-ink">
           {monthFormatter.format(currentMonth)}
         </h3>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={onToday}
-            className="rounded-md border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-100"
+            className="rounded-md border border-chrome-dark px-3 py-1.5 text-xs font-medium text-ink-secondary hover:bg-surface-hover"
           >
             Aujourd'hui
           </button>
@@ -65,7 +65,7 @@ export default function CalendarView({ currentMonth, actions, onPrevMonth, onNex
             type="button"
             onClick={onPrevMonth}
             aria-label="Mois précédent"
-            className="rounded-md px-2 py-1.5 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
+            className="rounded-md px-2 py-1.5 text-ink-secondary hover:bg-surface-hover hover:text-ink"
           >
             ←
           </button>
@@ -73,16 +73,16 @@ export default function CalendarView({ currentMonth, actions, onPrevMonth, onNex
             type="button"
             onClick={onNextMonth}
             aria-label="Mois suivant"
-            className="rounded-md px-2 py-1.5 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
+            className="rounded-md px-2 py-1.5 text-ink-secondary hover:bg-surface-hover hover:text-ink"
           >
             →
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 border-b border-neutral-200 bg-neutral-50">
+      <div className="grid grid-cols-7 border-b border-chrome-dark bg-surface-hover">
         {WEEKDAYS.map((day) => (
-          <div key={day} className="px-2 py-2 text-center text-xs font-medium text-neutral-500">
+          <div key={day} className="px-2 py-2 text-center text-xs font-medium text-ink-secondary">
             {day}
           </div>
         ))}
@@ -100,8 +100,8 @@ export default function CalendarView({ currentMonth, actions, onPrevMonth, onNex
               key={key}
               type="button"
               onClick={() => onDayClick(key)}
-              className={`flex min-h-24 flex-col items-stretch gap-1 border-b border-r border-neutral-100 p-1.5 text-left transition-colors duration-150 last:border-r-0 hover:bg-neutral-50 ${
-                isCurrentMonth ? 'bg-white' : 'bg-neutral-50/50'
+              className={`flex min-h-24 flex-col items-stretch gap-1 border-b border-r border-chrome-dark p-1.5 text-left transition-colors duration-150 last:border-r-0 hover:bg-surface-hover ${
+                isCurrentMonth ? 'bg-surface' : 'bg-surface-hover/50'
               }`}
             >
               <span
@@ -109,8 +109,8 @@ export default function CalendarView({ currentMonth, actions, onPrevMonth, onNex
                   isToday
                     ? 'bg-neutral-900 text-white'
                     : isCurrentMonth
-                      ? 'text-neutral-700'
-                      : 'text-neutral-300'
+                      ? 'text-ink-secondary'
+                      : 'text-ink-tertiary'
                 }`}
               >
                 {date.getDate()}

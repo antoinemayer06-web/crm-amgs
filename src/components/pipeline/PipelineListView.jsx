@@ -34,11 +34,11 @@ export default function PipelineListView({ companies, onCompanyClick }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-end gap-2">
-        <label className="text-sm text-neutral-500">Trier par</label>
+        <label className="text-sm text-ink-secondary">Trier par</label>
         <select
           value={sortBy}
           onChange={(event) => setSortBy(event.target.value)}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="input-chrome"
         >
           {SORT_OPTIONS.map((option) => (
             <option key={option.key} value={option.key}>
@@ -49,11 +49,11 @@ export default function PipelineListView({ companies, onCompanyClick }) {
       </div>
 
       {sorted.length === 0 ? (
-        <div className="rounded-xl border border-neutral-200 bg-white py-16 text-center">
-          <p className="text-sm text-neutral-400">Aucun prospect ne correspond à ces filtres.</p>
+        <div className="rounded-xl border border-chrome-dark bg-surface py-16 text-center">
+          <p className="text-sm text-ink-tertiary">Aucun prospect ne correspond à ces filtres.</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-xl border border-chrome-dark bg-surface">
           {sorted.map((company, index) => {
             const late = isDatePassee(company.date_prochaine_action)
             const dimmed = company.statut_prospect === 'refus'
@@ -63,13 +63,13 @@ export default function PipelineListView({ companies, onCompanyClick }) {
                 key={company.id}
                 type="button"
                 onClick={() => onCompanyClick(company)}
-                className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors duration-150 hover:bg-neutral-50 ${
-                  index > 0 ? 'border-t border-neutral-100' : ''
+                className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors duration-150 hover:bg-surface-hover ${
+                  index > 0 ? 'border-t border-chrome-dark' : ''
                 } ${dimmed ? 'opacity-50' : ''}`}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-neutral-900">{company.name}</p>
-                  <p className="mt-0.5 truncate text-xs text-neutral-500">
+                  <p className="truncate text-sm font-medium text-ink">{company.name}</p>
+                  <p className="mt-0.5 truncate text-xs text-ink-secondary">
                     {company.sector || '—'}
                   </p>
                 </div>
@@ -88,17 +88,17 @@ export default function PipelineListView({ companies, onCompanyClick }) {
                   )}
                 </div>
 
-                <div className="w-28 shrink-0 text-right text-sm font-medium text-neutral-700">
+                <div className="w-28 shrink-0 text-right text-sm font-medium text-ink-secondary">
                   {formatMontant(company.valeur_estimee)}
                 </div>
 
-                <div className="w-48 shrink-0 truncate text-sm text-neutral-600">
+                <div className="w-48 shrink-0 truncate text-sm text-ink-secondary">
                   {company.prochaine_action || '—'}
                 </div>
 
                 <div
                   className={`w-24 shrink-0 text-right text-xs font-medium ${
-                    late ? 'text-red-600' : 'text-neutral-500'
+                    late ? 'text-ink pulse-chrome' : 'text-ink-secondary'
                   }`}
                 >
                   {formatDate(company.date_prochaine_action)}

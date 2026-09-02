@@ -10,7 +10,7 @@ export default function MarketingFilters({ filters, onChange, campaigns }) {
       <select
         value={filters.type}
         onChange={(event) => update('type', event.target.value)}
-        className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        className="input-chrome"
       >
         <option value="">Tous les types</option>
         {MARKETING_ACTION_TYPES.map((type) => (
@@ -23,7 +23,7 @@ export default function MarketingFilters({ filters, onChange, campaigns }) {
       <select
         value={filters.statut}
         onChange={(event) => update('statut', event.target.value)}
-        className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        className="input-chrome"
       >
         <option value="">Tous les statuts</option>
         {MARKETING_ACTION_STATUSES.map((statut) => (
@@ -36,7 +36,7 @@ export default function MarketingFilters({ filters, onChange, campaigns }) {
       <select
         value={filters.campaignId}
         onChange={(event) => update('campaignId', event.target.value)}
-        className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+        className="input-chrome"
       >
         <option value="">Toutes les campagnes</option>
         {campaigns?.map((campaign) => (

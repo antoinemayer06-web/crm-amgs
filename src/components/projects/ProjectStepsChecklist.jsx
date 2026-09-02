@@ -25,14 +25,14 @@ function StepRow({ step, actualHours, onToggle, onDateChange, onEstimateChange, 
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={`group rounded-md px-1 py-1.5 ${
-        isDragging ? 'bg-neutral-100 shadow-sm' : 'hover:bg-neutral-50'
+        isDragging ? 'bg-surface-hover shadow-sm' : 'hover:bg-surface-hover'
       }`}
     >
       <div className="flex items-center gap-2">
         <span
           {...attributes}
           {...listeners}
-          className="cursor-grab text-neutral-300 hover:text-neutral-500 active:cursor-grabbing"
+          className="cursor-grab text-ink-tertiary hover:text-ink-secondary active:cursor-grabbing"
         >
           ⠿
         </span>
@@ -40,11 +40,11 @@ function StepRow({ step, actualHours, onToggle, onDateChange, onEstimateChange, 
           type="checkbox"
           checked={done}
           onChange={() => onToggle(step)}
-          className="h-4 w-4 shrink-0 rounded border-neutral-300"
+          className="h-4 w-4 shrink-0 rounded border-chrome-dark"
         />
         <span
           className={`flex-1 text-sm ${
-            done ? 'text-neutral-400 line-through' : 'text-neutral-800'
+            done ? 'text-ink-tertiary line-through' : 'text-ink-secondary'
           }`}
         >
           {step.titre}
@@ -52,28 +52,28 @@ function StepRow({ step, actualHours, onToggle, onDateChange, onEstimateChange, 
         <button
           type="button"
           onClick={() => onDelete(step)}
-          className="text-neutral-300 opacity-0 hover:text-red-500 group-hover:opacity-100"
+          className="text-ink-tertiary opacity-0 hover:text-red-500 group-hover:opacity-100"
         >
           ✕
         </button>
       </div>
-      <div className="ml-12 mt-1 flex items-center gap-2 text-xs text-neutral-400">
+      <div className="ml-12 mt-1 flex items-center gap-2 text-xs text-ink-tertiary">
         <span>Du</span>
         <input
           type="date"
           value={step.date_debut ?? ''}
           onChange={(event) => onDateChange(step, 'date_debut', event.target.value || null)}
-          className="rounded border border-neutral-200 px-1 py-0.5 text-xs text-neutral-500 focus:border-neutral-400 focus:outline-none"
+          className="rounded border border-chrome-dark px-1 py-0.5 text-xs text-ink-secondary focus:border-chrome-mid focus:outline-none"
         />
         <span>au</span>
         <input
           type="date"
           value={step.date_fin ?? ''}
           onChange={(event) => onDateChange(step, 'date_fin', event.target.value || null)}
-          className="rounded border border-neutral-200 px-1 py-0.5 text-xs text-neutral-500 focus:border-neutral-400 focus:outline-none"
+          className="rounded border border-chrome-dark px-1 py-0.5 text-xs text-ink-secondary focus:border-chrome-mid focus:outline-none"
         />
       </div>
-      <div className="ml-12 mt-1 flex items-center gap-2 text-xs text-neutral-400">
+      <div className="ml-12 mt-1 flex items-center gap-2 text-xs text-ink-tertiary">
         <span>Est.</span>
         <input
           type="number"
@@ -84,7 +84,7 @@ function StepRow({ step, actualHours, onToggle, onDateChange, onEstimateChange, 
             onEstimateChange(step, event.target.value === '' ? null : Number(event.target.value))
           }
           placeholder="h"
-          className="w-16 rounded border border-neutral-200 px-1 py-0.5 text-xs text-neutral-500 focus:border-neutral-400 focus:outline-none"
+          className="w-16 rounded border border-chrome-dark px-1 py-0.5 text-xs text-ink-secondary focus:border-chrome-mid focus:outline-none"
         />
         <span>h · Réel : {actualHours ? `${actualHours} h` : '—'}</span>
       </div>
@@ -154,7 +154,7 @@ export default function ProjectStepsChecklist({ projectId, steps, actualHoursByS
       </DndContext>
 
       {steps.length === 0 && (
-        <p className="py-2 text-sm text-neutral-400">Aucune étape pour l'instant.</p>
+        <p className="py-2 text-sm text-ink-tertiary">Aucune étape pour l'instant.</p>
       )}
 
       <form onSubmit={handleAdd} className="flex gap-2 pt-2">
@@ -162,12 +162,12 @@ export default function ProjectStepsChecklist({ projectId, steps, actualHoursByS
           value={newTitle}
           onChange={(event) => setNewTitle(event.target.value)}
           placeholder="Ajouter une étape…"
-          className="flex-1 rounded-md border border-neutral-300 px-3 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="flex-1 rounded-md border border-chrome-dark px-3 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
         />
         <button
           type="submit"
           disabled={createStep.isPending}
-          className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 disabled:opacity-50"
+          className="rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover disabled:opacity-50"
         >
           Ajouter
         </button>

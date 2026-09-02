@@ -31,26 +31,26 @@ export default function NotesTab({ companyId }) {
         </button>
       </div>
 
-      {isLoading && <p className="text-sm text-neutral-500">Chargement…</p>}
+      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
       {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
       {!isLoading && !isError && notes.length === 0 && (
-        <p className="text-sm text-neutral-500">Aucune note pour cette entreprise.</p>
+        <p className="text-sm text-ink-secondary">Aucune note pour cette entreprise.</p>
       )}
 
       <ul className="space-y-3">
         {notes?.map((note) => (
-          <li key={note.id} className="rounded-lg border border-neutral-200 bg-white p-4">
+          <li key={note.id} className="rounded-lg border border-chrome-dark bg-surface p-4">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
                 <Badge>{note.type}</Badge>
-                <span className="text-sm font-medium text-neutral-900">{note.auteur}</span>
-                <span className="text-xs text-neutral-400">{formatDate(note.created_at)}</span>
+                <span className="text-sm font-medium text-ink">{note.auteur}</span>
+                <span className="text-xs text-ink-tertiary">{formatDate(note.created_at)}</span>
               </div>
               <div className="flex gap-3 text-sm">
                 <button
                   type="button"
                   onClick={() => setModalMode(note)}
-                  className="text-neutral-500 hover:text-neutral-900"
+                  className="text-ink-secondary hover:text-ink"
                 >
                   Modifier
                 </button>
@@ -63,7 +63,7 @@ export default function NotesTab({ companyId }) {
                 </button>
               </div>
             </div>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-700">{note.contenu}</p>
+            <p className="mt-2 whitespace-pre-wrap text-sm text-ink-secondary">{note.contenu}</p>
           </li>
         ))}
       </ul>

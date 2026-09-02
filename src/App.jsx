@@ -19,8 +19,8 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-svh flex items-center justify-center bg-neutral-50">
-        <p className="text-neutral-500">Chargement…</p>
+      <div className="min-h-svh flex items-center justify-center bg-canvas">
+        <p className="text-ink-secondary">Chargement…</p>
       </div>
     )
   }

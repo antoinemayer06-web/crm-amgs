@@ -4,8 +4,8 @@ import KnowledgeCard from './KnowledgeCard'
 
 function EmptyState({ label }) {
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white py-12 text-center">
-      <p className="text-sm text-neutral-400">{label}</p>
+    <div className="rounded-xl border border-chrome-dark bg-surface py-12 text-center">
+      <p className="text-sm text-ink-tertiary">{label}</p>
     </div>
   )
 }
@@ -30,16 +30,16 @@ function CategorySection({ categorie, entries, onEntryClick }) {
         onClick={() => setOpen((prev) => !prev)}
         className="mb-3 flex items-center gap-2 text-left"
       >
-        <span className={`text-neutral-400 transition-transform duration-150 ${open ? 'rotate-90' : ''}`}>
+        <span className={`text-ink-tertiary transition-transform duration-150 ${open ? 'rotate-90' : ''}`}>
           ›
         </span>
-        <h3 className="text-sm font-semibold text-neutral-900">{KNOWLEDGE_CATEGORY_LABELS[categorie]}</h3>
-        <span className="text-xs text-neutral-400">({entries.length})</span>
+        <h3 className="text-sm font-semibold text-ink">{KNOWLEDGE_CATEGORY_LABELS[categorie]}</h3>
+        <span className="text-xs text-ink-tertiary">({entries.length})</span>
       </button>
 
       {open &&
         (entries.length === 0 ? (
-          <p className="pl-5 text-sm text-neutral-400">Aucune fiche pour l'instant, crée la première.</p>
+          <p className="pl-5 text-sm text-ink-tertiary">Aucune fiche pour l'instant, crée la première.</p>
         ) : (
           <CardGrid entries={entries} onEntryClick={onEntryClick} />
         ))}

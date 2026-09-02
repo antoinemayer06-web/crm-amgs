@@ -35,25 +35,25 @@ export default function NoteForm({ initialValues, onSubmit, onCancel, submitting
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="auteur" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="auteur" className="block text-sm font-medium text-ink-secondary">
             Auteur *
           </label>
           <input
             id="auteur"
             value={values.auteur}
             onChange={(event) => update('auteur', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
         <div className="space-y-1">
-          <label htmlFor="type" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="type" className="block text-sm font-medium text-ink-secondary">
             Type
           </label>
           <select
             id="type"
             value={values.type}
             onChange={(event) => update('type', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             {NOTE_TYPES.map((type) => (
               <option key={type} value={type}>
@@ -65,7 +65,7 @@ export default function NoteForm({ initialValues, onSubmit, onCancel, submitting
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="contenu" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="contenu" className="block text-sm font-medium text-ink-secondary">
           Contenu *
         </label>
         <textarea
@@ -73,7 +73,7 @@ export default function NoteForm({ initialValues, onSubmit, onCancel, submitting
           rows={4}
           value={values.contenu}
           onChange={(event) => update('contenu', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
@@ -87,7 +87,7 @@ export default function NoteForm({ initialValues, onSubmit, onCancel, submitting
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
         >
           Annuler
         </button>

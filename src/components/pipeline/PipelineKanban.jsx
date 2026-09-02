@@ -35,19 +35,19 @@ function Column({ statut, companies, onCompanyClick }) {
   return (
     <div className="flex min-w-64 flex-1 flex-col">
       <div className="mb-3 flex items-center justify-between px-1">
-        <h3 className="text-sm font-medium text-neutral-700">{formatEnumLabel(statut)}</h3>
-        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
+        <h3 className="text-sm font-medium text-ink-secondary">{formatEnumLabel(statut)}</h3>
+        <span className="rounded-full bg-surface-hover px-2 py-0.5 text-xs font-medium text-ink-secondary">
           {companies.length}
         </span>
       </div>
       <div
         ref={setNodeRef}
-        className={`flex min-h-24 flex-1 flex-col gap-2 rounded-xl p-2 transition-colors duration-150 ${
-          isOver ? 'bg-neutral-100' : 'bg-neutral-50'
+        className={`flex min-h-24 flex-1 flex-col gap-2 rounded-xl border p-2 transition-colors duration-150 ${
+          isOver ? 'border-chrome-mid bg-canvas' : 'border-chrome-dark/40 bg-canvas'
         }`}
       >
         {companies.length === 0 && (
-          <p className="px-2 py-6 text-center text-xs text-neutral-400">Aucun prospect</p>
+          <p className="px-2 py-6 text-center text-xs text-ink-tertiary">Aucun prospect</p>
         )}
         {companies.map((company) => (
           <DraggableCard key={company.id} company={company} onClick={() => onCompanyClick(company)} />

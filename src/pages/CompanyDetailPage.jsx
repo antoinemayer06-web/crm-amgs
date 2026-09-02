@@ -39,7 +39,7 @@ export default function CompanyDetailPage() {
   }, [company, setEntityContext])
 
   if (isLoading) {
-    return <p className="text-sm text-neutral-500">Chargement…</p>
+    return <p className="text-sm text-ink-secondary">Chargement…</p>
   }
 
   if (isError) {
@@ -61,14 +61,14 @@ export default function CompanyDetailPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link to="/companies" className="text-sm text-neutral-500 hover:text-neutral-900">
+        <Link to="/companies" className="text-sm text-ink-secondary hover:text-ink">
           ← Entreprises
         </Link>
       </div>
 
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-semibold text-neutral-900">{company.name}</h2>
+          <h2 className="text-xl font-semibold text-ink">{company.name}</h2>
           <Badge tone={COMPANY_STATUS_TONES[company.status]}>{formatEnumLabel(company.status)}</Badge>
           {company.status === 'client' && (
             <Badge tone={actif ? 'green' : 'neutral'}>{actif ? 'Actif' : 'Inactif'}</Badge>
@@ -78,7 +78,7 @@ export default function CompanyDetailPage() {
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100"
+            className="rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover"
           >
             Modifier
           </button>
@@ -92,7 +92,7 @@ export default function CompanyDetailPage() {
         </div>
       </div>
 
-      <div className="border-b border-neutral-200">
+      <div className="border-b border-chrome-dark">
         <nav className="flex gap-1">
           {TABS.map((tab) => (
             <button
@@ -101,8 +101,8 @@ export default function CompanyDetailPage() {
               onClick={() => setActiveTab(tab.key)}
               className={`border-b-2 px-3 py-2 text-sm font-medium ${
                 activeTab === tab.key
-                  ? 'border-neutral-900 text-neutral-900'
-                  : 'border-transparent text-neutral-500 hover:text-neutral-900'
+                  ? 'border-chrome-light text-ink'
+                  : 'border-transparent text-ink-secondary hover:text-ink'
               }`}
             >
               {tab.label}

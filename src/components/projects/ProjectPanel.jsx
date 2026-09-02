@@ -22,9 +22,9 @@ const formatMontant = (value) => (value == null ? '—' : `${Number(value).toLoc
 
 function StatTile({ label, value }) {
   return (
-    <div className="rounded-md bg-neutral-50 px-3 py-2">
-      <p className="text-[10px] font-medium uppercase text-neutral-400">{label}</p>
-      <p className="mt-0.5 text-sm font-semibold text-neutral-900">{value}</p>
+    <div className="rounded-md bg-surface-hover px-3 py-2">
+      <p className="text-[10px] font-medium uppercase text-ink-tertiary">{label}</p>
+      <p className="mt-0.5 text-sm font-semibold text-ink">{value}</p>
     </div>
   )
 }
@@ -94,7 +94,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   return (
     <SidePanel title={isLoading ? 'Chargement…' : project?.nom} onClose={onClose}>
       {isLoading || !project ? (
-        <p className="text-sm text-neutral-500">Chargement…</p>
+        <p className="text-sm text-ink-secondary">Chargement…</p>
       ) : (
         <div className="space-y-6">
           {project.archived && (
@@ -109,21 +109,21 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium uppercase text-neutral-500">Nom</label>
+            <label className="block text-xs font-medium uppercase text-ink-secondary">Nom</label>
             <input
               value={nom}
               onChange={(event) => setNom(event.target.value)}
               onBlur={() => nom.trim() && nom !== project.nom && saveField('nom', nom.trim())}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm font-medium focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full rounded-md border border-chrome-dark px-3 py-2 text-sm font-medium focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
             />
           </div>
 
           {project.company && (
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-neutral-500">Client</label>
+              <label className="block text-xs font-medium uppercase text-ink-secondary">Client</label>
               <Link
                 to={`/companies/${project.company.id}`}
-                className="flex items-center gap-2 rounded-md border border-neutral-200 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                className="flex items-center gap-2 rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
               >
                 <Avatar name={project.company.name} />
                 {project.company.name}
@@ -133,11 +133,11 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-neutral-500">Statut</label>
+              <label className="block text-xs font-medium uppercase text-ink-secondary">Statut</label>
               <select
                 value={project.statut}
                 onChange={(event) => saveField('statut', event.target.value)}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                className="w-full input-chrome"
               >
                 {PROJECT_STATUT_OPTIONS.map((statut) => (
                   <option key={statut} value={statut}>
@@ -151,18 +151,18 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-neutral-500">
+              <label className="block text-xs font-medium uppercase text-ink-secondary">
                 Date de début
               </label>
               <input
                 type="date"
                 value={project.date_debut ?? ''}
                 onChange={(event) => saveField('date_debut', event.target.value || null)}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                className="w-full input-chrome"
               />
             </div>
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-neutral-500">
+              <label className="block text-xs font-medium uppercase text-ink-secondary">
                 Échéance
               </label>
               <input
@@ -171,25 +171,25 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                 onChange={(event) =>
                   saveField('date_livraison_prevue', event.target.value || null)
                 }
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                className="w-full input-chrome"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-neutral-500">
+              <label className="block text-xs font-medium uppercase text-ink-secondary">
                 Date de fin réelle
               </label>
               <input
                 type="date"
                 value={project.date_fin_reelle ?? ''}
                 onChange={(event) => saveField('date_fin_reelle', event.target.value || null)}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                className="w-full input-chrome"
               />
             </div>
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-neutral-500">
+              <label className="block text-xs font-medium uppercase text-ink-secondary">
                 Heures prévues (projet)
               </label>
               <input
@@ -200,13 +200,13 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                 onChange={(event) =>
                   saveField('heures_prevues', event.target.value === '' ? null : Number(event.target.value))
                 }
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                className="w-full input-chrome"
               />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium uppercase text-neutral-500">
+            <label className="block text-xs font-medium uppercase text-ink-secondary">
               Montant facturé (€)
             </label>
             <input
@@ -217,19 +217,19 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               onChange={(event) =>
                 saveField('montant_facture', event.target.value === '' ? null : Number(event.target.value))
               }
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full input-chrome"
             />
           </div>
 
-          <div className="space-y-2 rounded-md border border-neutral-200 p-3">
+          <div className="space-y-2 rounded-md border border-chrome-dark p-3">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-medium uppercase text-neutral-500">
+              <label className="block text-xs font-medium uppercase text-ink-secondary">
                 Cash encaissé — {formatMontant(project.montant_encaisse)}
               </label>
               <button
                 type="button"
                 onClick={() => setAddingCash((prev) => !prev)}
-                className="rounded-md border border-neutral-300 px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-neutral-100"
+                className="rounded-md border border-chrome-dark px-2 py-1 text-xs font-medium text-ink-secondary hover:bg-surface-hover"
               >
                 + Encaissement
               </button>
@@ -244,13 +244,13 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                   placeholder="Montant (€)"
                   value={cashAmount}
                   onChange={(event) => setCashAmount(event.target.value)}
-                  className="col-span-1 rounded-md border border-neutral-300 px-2 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                  className="col-span-1 rounded-md border border-chrome-dark px-2 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
                 />
                 <input
                   type="date"
                   value={cashDate}
                   onChange={(event) => setCashDate(event.target.value)}
-                  className="col-span-1 rounded-md border border-neutral-300 px-2 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                  className="col-span-1 rounded-md border border-chrome-dark px-2 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
                 />
                 <button
                   type="submit"
@@ -265,9 +265,9 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             {cashCollections?.length > 0 && (
               <ul className="space-y-1 pt-1">
                 {cashCollections.map((collection) => (
-                  <li key={collection.id} className="flex justify-between text-xs text-neutral-500">
+                  <li key={collection.id} className="flex justify-between text-xs text-ink-secondary">
                     <span>{new Date(collection.date_encaissement).toLocaleDateString('fr-FR')}</span>
-                    <span className="font-medium text-neutral-700">{formatMontant(collection.montant)}</span>
+                    <span className="font-medium text-ink-secondary">{formatMontant(collection.montant)}</span>
                   </li>
                 ))}
               </ul>
@@ -275,7 +275,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium uppercase text-neutral-500">
+            <label className="block text-xs font-medium uppercase text-ink-secondary">
               Description
             </label>
             <textarea
@@ -286,12 +286,12 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                 description !== (project.description ?? '') &&
                 saveField('description', description.trim() || null)
               }
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full input-chrome"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-medium uppercase text-neutral-500">
+            <label className="block text-xs font-medium uppercase text-ink-secondary">
               Étapes
             </label>
             <ProjectStepsChecklist
@@ -302,24 +302,24 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-medium uppercase text-neutral-500">
+            <label className="block text-xs font-medium uppercase text-ink-secondary">
               Travail effectué
             </label>
             <ProjectWorkLog steps={steps} />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-medium uppercase text-neutral-500">
+            <label className="block text-xs font-medium uppercase text-ink-secondary">
               Documents
             </label>
             <DocumentsSection companyId={project.company_id} projectId={projectId} />
           </div>
 
-          <div className="flex items-center justify-between border-t border-neutral-100 pt-4">
+          <div className="flex items-center justify-between border-t border-chrome-dark pt-4">
             <button
               type="button"
               onClick={handleArchiveToggle}
-              className="text-sm text-neutral-500 hover:text-neutral-900"
+              className="text-sm text-ink-secondary hover:text-ink"
             >
               {project.archived ? 'Désarchiver ce projet' : 'Archiver ce projet'}
             </button>

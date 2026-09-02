@@ -47,26 +47,26 @@ export default function ProjectForm({ onSubmit, onCancel, submitting }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <label htmlFor="name" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="name" className="block text-sm font-medium text-ink-secondary">
           Nom du projet *
         </label>
         <input
           id="name"
           value={values.name}
           onChange={(event) => update('name', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="company_id" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="company_id" className="block text-sm font-medium text-ink-secondary">
           Client *
         </label>
         <select
           id="company_id"
           value={values.company_id}
           onChange={(event) => update('company_id', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         >
           <option value="">Sélectionner un client…</option>
           {clients?.map((client) => (
@@ -79,7 +79,7 @@ export default function ProjectForm({ onSubmit, onCancel, submitting }) {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="date_debut" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="date_debut" className="block text-sm font-medium text-ink-secondary">
             Date de début
           </label>
           <input
@@ -87,11 +87,11 @@ export default function ProjectForm({ onSubmit, onCancel, submitting }) {
             type="date"
             value={values.date_debut}
             onChange={(event) => update('date_debut', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
         <div className="space-y-1">
-          <label htmlFor="date_livraison_prevue" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="date_livraison_prevue" className="block text-sm font-medium text-ink-secondary">
             Échéance
           </label>
           <input
@@ -99,13 +99,13 @@ export default function ProjectForm({ onSubmit, onCancel, submitting }) {
             type="date"
             value={values.date_livraison_prevue}
             onChange={(event) => update('date_livraison_prevue', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="description" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="description" className="block text-sm font-medium text-ink-secondary">
           Description
         </label>
         <textarea
@@ -113,7 +113,7 @@ export default function ProjectForm({ onSubmit, onCancel, submitting }) {
           rows={3}
           value={values.description}
           onChange={(event) => update('description', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
@@ -127,7 +127,7 @@ export default function ProjectForm({ onSubmit, onCancel, submitting }) {
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
         >
           Annuler
         </button>

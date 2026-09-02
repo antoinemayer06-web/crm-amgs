@@ -29,39 +29,39 @@ export default function ExpensesPanel({ expenses, monthKey }) {
   }
 
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+    <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-neutral-900">Dépenses du mois</h3>
+        <h3 className="text-sm font-semibold text-ink">Dépenses du mois</h3>
         <button
           type="button"
           onClick={() => setCreating(true)}
-          className="rounded-md border border-neutral-300 px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-2.5 py-1 text-xs font-medium text-ink-secondary hover:bg-surface-hover"
         >
           + Ajouter une dépense
         </button>
       </div>
 
       {monthExpenses.length === 0 ? (
-        <p className="text-sm text-neutral-400">Aucune dépense enregistrée sur ce mois.</p>
+        <p className="text-sm text-ink-tertiary">Aucune dépense enregistrée sur ce mois.</p>
       ) : (
-        <ul className="divide-y divide-neutral-100">
+        <ul className="divide-y divide-chrome-dark">
           {monthExpenses.map((expense) => (
             <li key={expense.id} className="flex items-center gap-3 py-2 text-sm">
               <Badge tone={EXPENSE_CATEGORY_TONES[expense.categorie]}>
                 {EXPENSE_CATEGORY_LABELS[expense.categorie]}
               </Badge>
-              <span className="min-w-0 flex-1 truncate text-neutral-700">{expense.libelle}</span>
+              <span className="min-w-0 flex-1 truncate text-ink-secondary">{expense.libelle}</span>
               {expense.recurrence_frequence && (
-                <span className="shrink-0 text-xs text-neutral-400" title="Dépense récurrente">
+                <span className="shrink-0 text-xs text-ink-tertiary" title="Dépense récurrente">
                   ↻
                 </span>
               )}
-              <span className="shrink-0 text-xs text-neutral-400">{formatDate(expense.date_depense)}</span>
-              <span className="shrink-0 font-medium text-neutral-900">{formatMontant(expense.montant)}</span>
+              <span className="shrink-0 text-xs text-ink-tertiary">{formatDate(expense.date_depense)}</span>
+              <span className="shrink-0 font-medium text-ink">{formatMontant(expense.montant)}</span>
               <button
                 type="button"
                 onClick={() => handleDelete(expense.id, expense.libelle)}
-                className="shrink-0 text-neutral-300 hover:text-red-600"
+                className="shrink-0 text-ink-tertiary hover:text-red-600"
                 aria-label="Supprimer"
               >
                 ✕

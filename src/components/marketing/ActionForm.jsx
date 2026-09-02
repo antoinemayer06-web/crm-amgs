@@ -99,27 +99,27 @@ export default function ActionForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <label htmlFor="titre" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="titre" className="block text-sm font-medium text-ink-secondary">
           Titre *
         </label>
         <input
           id="titre"
           value={values.titre}
           onChange={(event) => update('titre', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="type" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="type" className="block text-sm font-medium text-ink-secondary">
             Type
           </label>
           <select
             id="type"
             value={values.type}
             onChange={(event) => update('type', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             {MARKETING_ACTION_TYPES.map((type) => (
               <option key={type} value={type}>
@@ -130,14 +130,14 @@ export default function ActionForm({
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="statut" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="statut" className="block text-sm font-medium text-ink-secondary">
             Statut
           </label>
           <select
             id="statut"
             value={values.statut}
             onChange={(event) => update('statut', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             {MARKETING_ACTION_STATUSES.map((statut) => (
               <option key={statut} value={statut}>
@@ -150,7 +150,7 @@ export default function ActionForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="date_prevue" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="date_prevue" className="block text-sm font-medium text-ink-secondary">
             Date prévue
           </label>
           <input
@@ -158,19 +158,19 @@ export default function ActionForm({
             type="date"
             value={values.date_prevue}
             onChange={(event) => update('date_prevue', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="campaign_id" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="campaign_id" className="block text-sm font-medium text-ink-secondary">
             Campagne
           </label>
           <select
             id="campaign_id"
             value={values.campaign_id}
             onChange={(event) => update('campaign_id', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             <option value="">Aucune</option>
             {campaigns?.map((campaign) => (
@@ -183,14 +183,14 @@ export default function ActionForm({
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="company_id" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="company_id" className="block text-sm font-medium text-ink-secondary">
           Prospect lié
         </label>
         <select
           id="company_id"
           value={values.company_id}
           onChange={(event) => update('company_id', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         >
           <option value="">Aucun</option>
           {companies?.map((company) => (
@@ -202,7 +202,7 @@ export default function ActionForm({
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="description" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="description" className="block text-sm font-medium text-ink-secondary">
           Description
         </label>
         <textarea
@@ -210,16 +210,16 @@ export default function ActionForm({
           rows={3}
           value={values.description}
           onChange={(event) => update('description', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       {isCreating && (
-        <div className="space-y-2 rounded-md border border-neutral-200 p-3">
-          <p className="text-sm font-medium text-neutral-700">Récurrence (optionnel)</p>
+        <div className="space-y-2 rounded-md border border-chrome-dark p-3">
+          <p className="text-sm font-medium text-ink-secondary">Récurrence (optionnel)</p>
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1">
-              <label htmlFor="recurrence_intervalle" className="block text-xs text-neutral-500">
+              <label htmlFor="recurrence_intervalle" className="block text-xs text-ink-secondary">
                 Tous les
               </label>
               <input
@@ -229,18 +229,18 @@ export default function ActionForm({
                 value={recurrence.intervalle}
                 onChange={(event) => updateRecurrence('intervalle', event.target.value)}
                 disabled={!recurrence.frequence}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 disabled:opacity-50"
+                className="w-full input-chrome disabled:opacity-50"
               />
             </div>
             <div className="space-y-1">
-              <label htmlFor="recurrence_frequence" className="block text-xs text-neutral-500">
+              <label htmlFor="recurrence_frequence" className="block text-xs text-ink-secondary">
                 Fréquence
               </label>
               <select
                 id="recurrence_frequence"
                 value={recurrence.frequence}
                 onChange={(event) => updateRecurrence('frequence', event.target.value)}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                className="w-full input-chrome"
               >
                 <option value="">Pas de récurrence</option>
                 {RECURRENCE_FREQUENCES.map((frequence) => (
@@ -251,7 +251,7 @@ export default function ActionForm({
               </select>
             </div>
             <div className="space-y-1">
-              <label htmlFor="recurrence_fin" className="block text-xs text-neutral-500">
+              <label htmlFor="recurrence_fin" className="block text-xs text-ink-secondary">
                 Jusqu'au
               </label>
               <input
@@ -260,7 +260,7 @@ export default function ActionForm({
                 value={recurrence.fin}
                 onChange={(event) => updateRecurrence('fin', event.target.value)}
                 disabled={!recurrence.frequence}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 disabled:opacity-50"
+                className="w-full input-chrome disabled:opacity-50"
               />
             </div>
           </div>
@@ -277,7 +277,7 @@ export default function ActionForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
         >
           Annuler
         </button>

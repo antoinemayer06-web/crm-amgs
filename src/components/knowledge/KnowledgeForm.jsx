@@ -64,26 +64,26 @@ export default function KnowledgeForm({ initialValues, defaultCategorie, onSubmi
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="titre" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="titre" className="block text-sm font-medium text-ink-secondary">
             Titre *
           </label>
           <input
             id="titre"
             value={values.titre}
             onChange={(event) => update('titre', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="categorie" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="categorie" className="block text-sm font-medium text-ink-secondary">
             Catégorie
           </label>
           <select
             id="categorie"
             value={values.categorie}
             onChange={(event) => update('categorie', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             {KNOWLEDGE_CATEGORIES.map((categorie) => (
               <option key={categorie} value={categorie}>
@@ -95,12 +95,12 @@ export default function KnowledgeForm({ initialValues, defaultCategorie, onSubmi
       </div>
 
       <div className="space-y-1">
-        <label className="block text-sm font-medium text-neutral-700">Contenu</label>
+        <label className="block text-sm font-medium text-ink-secondary">Contenu</label>
         <MarkdownEditor value={values.contenu} onChange={(value) => update('contenu', value)} />
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="tags" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="tags" className="block text-sm font-medium text-ink-secondary">
           Tags
         </label>
         <input
@@ -108,9 +108,9 @@ export default function KnowledgeForm({ initialValues, defaultCategorie, onSubmi
           value={values.tagsText}
           onChange={(event) => update('tagsText', event.target.value)}
           placeholder="ex : prospection, b2b, appel à froid"
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
-        <p className="text-xs text-neutral-400">Séparez les tags par des virgules.</p>
+        <p className="text-xs text-ink-tertiary">Séparez les tags par des virgules.</p>
       </div>
 
       {error && (
@@ -123,7 +123,7 @@ export default function KnowledgeForm({ initialValues, defaultCategorie, onSubmi
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
+          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
         >
           Annuler
         </button>

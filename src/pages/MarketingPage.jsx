@@ -50,7 +50,7 @@ export default function MarketingPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-neutral-900">Marketing</h2>
+        <h2 className="text-xl font-semibold text-ink">Marketing</h2>
         <button
           type="button"
           onClick={() => setCreatingAction(true)}
@@ -67,7 +67,7 @@ export default function MarketingPage() {
           <div />
         )}
 
-        <div className="flex shrink-0 rounded-lg border border-neutral-200 bg-white p-1">
+        <div className="flex shrink-0 rounded-lg border border-chrome-dark bg-surface p-1">
           {VIEWS.map((v) => (
             <button
               key={v.key}
@@ -76,7 +76,7 @@ export default function MarketingPage() {
               className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
                 view === v.key
                   ? 'bg-neutral-900 text-white'
-                  : 'text-neutral-500 hover:text-neutral-900'
+                  : 'text-ink-secondary hover:text-ink'
               }`}
             >
               {v.label}
@@ -85,7 +85,7 @@ export default function MarketingPage() {
         </div>
       </div>
 
-      {view !== 'campaigns' && isLoading && <p className="text-sm text-neutral-500">Chargement…</p>}
+      {view !== 'campaigns' && isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
       {view !== 'campaigns' && isError && (
         <p className="text-sm text-red-600">Erreur lors du chargement des actions.</p>
       )}

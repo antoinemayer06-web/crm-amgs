@@ -10,14 +10,14 @@ const formatDate = (value) =>
 export default function ListView({ projects, allSteps, onProjectClick, showClient = true }) {
   if (projects.length === 0) {
     return (
-      <div className="rounded-xl border border-neutral-200 bg-white py-16 text-center">
-        <p className="text-sm text-neutral-400">Aucun projet ne correspond à ces filtres.</p>
+      <div className="rounded-xl border border-chrome-dark bg-surface py-16 text-center">
+        <p className="text-sm text-ink-tertiary">Aucun projet ne correspond à ces filtres.</p>
       </div>
     )
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+    <div className="overflow-hidden rounded-xl border border-chrome-dark bg-surface">
       {projects.map((project, index) => {
         const urgent = isDateUrgente(project.date_livraison_prevue)
         const stepsCount = getStepsCount(allSteps, project.id)
@@ -27,16 +27,16 @@ export default function ListView({ projects, allSteps, onProjectClick, showClien
             key={project.id}
             type="button"
             onClick={() => onProjectClick(project)}
-            className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors duration-150 hover:bg-neutral-50 ${
-              index > 0 ? 'border-t border-neutral-100' : ''
+            className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors duration-150 hover:bg-surface-hover ${
+              index > 0 ? 'border-t border-chrome-dark' : ''
             }`}
           >
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-neutral-900">{project.nom}</p>
+              <p className="truncate text-sm font-medium text-ink">{project.nom}</p>
               {showClient && project.company && (
                 <div className="mt-1 flex items-center gap-1.5">
                   <Avatar name={project.company.name} />
-                  <span className="truncate text-xs text-neutral-500">{project.company.name}</span>
+                  <span className="truncate text-xs text-ink-secondary">{project.company.name}</span>
                 </div>
               )}
             </div>
@@ -54,7 +54,7 @@ export default function ListView({ projects, allSteps, onProjectClick, showClien
 
             <div
               className={`w-24 shrink-0 text-right text-xs font-medium ${
-                urgent ? 'text-red-600' : 'text-neutral-500'
+                urgent ? 'text-red-600' : 'text-ink-secondary'
               }`}
             >
               {formatDate(project.date_livraison_prevue)}

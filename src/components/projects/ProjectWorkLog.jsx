@@ -43,7 +43,7 @@ export default function ProjectWorkLog({ steps }) {
 
   if (steps.length === 0) {
     return (
-      <p className="text-sm text-neutral-400">
+      <p className="text-sm text-ink-tertiary">
         Ajoutez d'abord une étape pour pouvoir y rattacher du temps.
       </p>
     )
@@ -51,20 +51,20 @@ export default function ProjectWorkLog({ steps }) {
 
   return (
     <div className="space-y-3">
-      {isLoading && <p className="text-sm text-neutral-500">Chargement…</p>}
+      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
       {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
       {!isLoading && !isError && logs.length === 0 && (
-        <p className="text-sm text-neutral-400">Aucune entrée pour l'instant.</p>
+        <p className="text-sm text-ink-tertiary">Aucune entrée pour l'instant.</p>
       )}
 
       <ul className="space-y-2">
         {logs?.map((log) => (
-          <li key={log.id} className="group rounded-md border border-neutral-200 p-2.5">
+          <li key={log.id} className="group rounded-md border border-chrome-dark p-2.5">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <p className="text-xs font-medium text-neutral-500">{stepTitle(log.step_id)}</p>
-                <p className="text-sm text-neutral-800">{log.description}</p>
-                <p className="mt-1 text-xs text-neutral-400">
+                <p className="text-xs font-medium text-ink-secondary">{stepTitle(log.step_id)}</p>
+                <p className="text-sm text-ink-secondary">{log.description}</p>
+                <p className="mt-1 text-xs text-ink-tertiary">
                   {formatDate(log.date)}
                   {log.duree_heures != null && ` · ${log.duree_heures} h`}
                 </p>
@@ -72,7 +72,7 @@ export default function ProjectWorkLog({ steps }) {
               <button
                 type="button"
                 onClick={() => handleDelete(log)}
-                className="shrink-0 text-neutral-300 opacity-0 hover:text-red-500 group-hover:opacity-100"
+                className="shrink-0 text-ink-tertiary opacity-0 hover:text-red-500 group-hover:opacity-100"
               >
                 ✕
               </button>
@@ -81,11 +81,11 @@ export default function ProjectWorkLog({ steps }) {
         ))}
       </ul>
 
-      <form onSubmit={handleAdd} className="space-y-2 rounded-md border border-neutral-200 p-2.5">
+      <form onSubmit={handleAdd} className="space-y-2 rounded-md border border-chrome-dark p-2.5">
         <select
           value={stepId}
           onChange={(event) => setStepId(event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-2 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full rounded-md border border-chrome-dark px-2 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
         >
           {steps.map((step) => (
             <option key={step.id} value={step.id}>
@@ -98,14 +98,14 @@ export default function ProjectWorkLog({ steps }) {
           onChange={(event) => setDescription(event.target.value)}
           placeholder="Travail effectué…"
           rows={2}
-          className="w-full rounded-md border border-neutral-300 px-2 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full rounded-md border border-chrome-dark px-2 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
         />
         <div className="flex items-center gap-2">
           <input
             type="date"
             value={date}
             onChange={(event) => setDate(event.target.value)}
-            className="rounded-md border border-neutral-300 px-2 py-1 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="rounded-md border border-chrome-dark px-2 py-1 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
           />
           <input
             type="number"
@@ -114,12 +114,12 @@ export default function ProjectWorkLog({ steps }) {
             value={duree}
             onChange={(event) => setDuree(event.target.value)}
             placeholder="Heures"
-            className="w-24 rounded-md border border-neutral-300 px-2 py-1 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-24 rounded-md border border-chrome-dark px-2 py-1 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
           />
           <button
             type="submit"
             disabled={createLog.isPending}
-            className="ml-auto rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 disabled:opacity-50"
+            className="ml-auto rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover disabled:opacity-50"
           >
             Ajouter
           </button>

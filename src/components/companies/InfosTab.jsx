@@ -4,8 +4,8 @@ import Badge from '../ui/Badge'
 function Field({ label, children }) {
   return (
     <div>
-      <dt className="text-xs font-medium uppercase text-neutral-500">{label}</dt>
-      <dd className="mt-1 text-sm text-neutral-900">{children ?? '—'}</dd>
+      <dt className="text-xs font-medium uppercase text-ink-secondary">{label}</dt>
+      <dd className="mt-1 text-sm text-ink">{children ?? '—'}</dd>
     </div>
   )
 }
@@ -16,7 +16,7 @@ const formatMontant = (value) =>
 
 export default function InfosTab({ company, actif }) {
   return (
-    <div className="space-y-6 rounded-lg border border-neutral-200 bg-white p-6">
+    <div className="space-y-6 rounded-lg border border-chrome-dark bg-surface p-6">
       <dl className="grid grid-cols-2 gap-6 sm:grid-cols-3">
         <Field label="Secteur">{company.sector}</Field>
         <Field label="Taille">{company.size}</Field>
@@ -56,15 +56,15 @@ export default function InfosTab({ company, actif }) {
       </dl>
 
       {company.status === 'client' && (
-        <p className="rounded-md bg-neutral-50 px-3 py-2 text-sm text-neutral-500">
+        <p className="rounded-md bg-surface-hover px-3 py-2 text-sm text-ink-secondary">
           Le statut de livraison/facturation se gère par projet, depuis l'onglet
           « Projets liés ».
         </p>
       )}
 
       <div>
-        <dt className="text-xs font-medium uppercase text-neutral-500">Notes générales</dt>
-        <dd className="mt-1 whitespace-pre-wrap text-sm text-neutral-900">
+        <dt className="text-xs font-medium uppercase text-ink-secondary">Notes générales</dt>
+        <dd className="mt-1 whitespace-pre-wrap text-sm text-ink">
           {company.notes_generales || '—'}
         </dd>
       </div>

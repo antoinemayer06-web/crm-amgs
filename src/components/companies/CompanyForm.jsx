@@ -98,27 +98,27 @@ export default function CompanyForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <label htmlFor="name" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="name" className="block text-sm font-medium text-ink-secondary">
           Nom *
         </label>
         <input
           id="name"
           value={values.name}
           onChange={(event) => update('name', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="status" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="status" className="block text-sm font-medium text-ink-secondary">
             Statut
           </label>
           <select
             id="status"
             value={values.status}
             onChange={(event) => update('status', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             {COMPANY_STATUS_OPTIONS.map((status) => (
               <option key={status} value={status}>
@@ -129,14 +129,14 @@ export default function CompanyForm({
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="temperature" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="temperature" className="block text-sm font-medium text-ink-secondary">
             Température
           </label>
           <select
             id="temperature"
             value={values.temperature}
             onChange={(event) => update('temperature', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             <option value="">—</option>
             {TEMPERATURE_OPTIONS.map((temp) => (
@@ -151,14 +151,14 @@ export default function CompanyForm({
       {values.status === 'prospect' && (
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label htmlFor="statut_prospect" className="block text-sm font-medium text-neutral-700">
+            <label htmlFor="statut_prospect" className="block text-sm font-medium text-ink-secondary">
               Étape prospect
             </label>
             <select
               id="statut_prospect"
               value={values.statut_prospect}
               onChange={(event) => update('statut_prospect', event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full input-chrome"
             >
               {STATUT_PROSPECT_OPTIONS.map((statut) => (
                 <option key={statut} value={statut}>
@@ -169,7 +169,7 @@ export default function CompanyForm({
           </div>
           {values.statut_prospect === 'contacté' && (
             <div className="space-y-1">
-              <label htmlFor="date_contact" className="block text-sm font-medium text-neutral-700">
+              <label htmlFor="date_contact" className="block text-sm font-medium text-ink-secondary">
                 Date de contact
               </label>
               <input
@@ -177,12 +177,12 @@ export default function CompanyForm({
                 type="date"
                 value={values.date_contact}
                 onChange={(event) => update('date_contact', event.target.value)}
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                className="w-full input-chrome"
               />
             </div>
           )}
           <div className="space-y-1">
-            <label htmlFor="valeur_estimee" className="block text-sm font-medium text-neutral-700">
+            <label htmlFor="valeur_estimee" className="block text-sm font-medium text-ink-secondary">
               Valeur estimée (€)
             </label>
             <input
@@ -192,24 +192,24 @@ export default function CompanyForm({
               min="0"
               value={values.valeur_estimee}
               onChange={(event) => update('valeur_estimee', event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full input-chrome"
             />
           </div>
           <div className="space-y-1">
-            <label htmlFor="prochaine_action" className="block text-sm font-medium text-neutral-700">
+            <label htmlFor="prochaine_action" className="block text-sm font-medium text-ink-secondary">
               Prochaine action
             </label>
             <input
               id="prochaine_action"
               value={values.prochaine_action}
               onChange={(event) => update('prochaine_action', event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full input-chrome"
             />
           </div>
           <div className="space-y-1">
             <label
               htmlFor="date_prochaine_action"
-              className="block text-sm font-medium text-neutral-700"
+              className="block text-sm font-medium text-ink-secondary"
             >
               Date de la prochaine action
             </label>
@@ -218,14 +218,14 @@ export default function CompanyForm({
               type="date"
               value={values.date_prochaine_action}
               onChange={(event) => update('date_prochaine_action', event.target.value)}
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full input-chrome"
             />
           </div>
         </div>
       )}
 
       {values.status === 'client' && (
-        <p className="rounded-md bg-neutral-50 px-3 py-2 text-sm text-neutral-500">
+        <p className="rounded-md bg-surface-hover px-3 py-2 text-sm text-ink-secondary">
           Le statut de livraison/facturation se gère désormais par projet, depuis
           l'onglet « Projets liés ».
         </p>
@@ -233,40 +233,40 @@ export default function CompanyForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="sector" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="sector" className="block text-sm font-medium text-ink-secondary">
             Secteur
           </label>
           <input
             id="sector"
             value={values.sector}
             onChange={(event) => update('sector', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="size" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="size" className="block text-sm font-medium text-ink-secondary">
             Taille
           </label>
           <input
             id="size"
             value={values.size}
             onChange={(event) => update('size', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="source" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="source" className="block text-sm font-medium text-ink-secondary">
             Source
           </label>
           <select
             id="source"
             value={values.source}
             onChange={(event) => update('source', event.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           >
             <option value="">—</option>
             {COMPANY_SOURCES.map((source) => (
@@ -278,7 +278,7 @@ export default function CompanyForm({
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="contact" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="contact" className="block text-sm font-medium text-ink-secondary">
             Contact
           </label>
           <input
@@ -286,13 +286,13 @@ export default function CompanyForm({
             value={values.contact}
             onChange={(event) => update('contact', event.target.value)}
             placeholder="téléphone, email…"
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+            className="w-full input-chrome"
           />
         </div>
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="notes_generales" className="block text-sm font-medium text-neutral-700">
+        <label htmlFor="notes_generales" className="block text-sm font-medium text-ink-secondary">
           Notes générales
         </label>
         <textarea
@@ -300,29 +300,21 @@ export default function CompanyForm({
           rows={3}
           value={values.notes_generales}
           onChange={(event) => update('notes_generales', event.target.value)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-full input-chrome"
         />
       </div>
 
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm font-medium text-ink" role="alert">
           {error}
         </p>
       )}
 
       <div className="flex justify-end gap-2 pt-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
-        >
+        <button type="button" onClick={onCancel} className="btn-secondary">
           Annuler
         </button>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
-        >
+        <button type="submit" disabled={submitting} className="btn-primary">
           {submitting ? 'Enregistrement…' : 'Enregistrer'}
         </button>
       </div>

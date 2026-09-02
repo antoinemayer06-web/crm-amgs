@@ -59,22 +59,22 @@ export default function PlanningView({ projects, allSteps = [] }) {
 
   if (projects.length === 0) {
     return (
-      <div className="rounded-xl border border-neutral-200 bg-white py-16 text-center">
-        <p className="text-sm text-neutral-400">Aucun projet ne correspond à ces filtres.</p>
+      <div className="rounded-xl border border-chrome-dark bg-surface py-16 text-center">
+        <p className="text-sm text-ink-tertiary">Aucun projet ne correspond à ces filtres.</p>
       </div>
     )
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-neutral-200 bg-white">
+    <div className="overflow-x-auto rounded-xl border border-chrome-dark bg-surface">
       <div className="min-w-[900px]">
         {/* Axe temporel */}
-        <div className="relative flex border-b border-neutral-200 pl-48">
+        <div className="relative flex border-b border-chrome-dark pl-48">
           <div className="relative h-8 flex-1">
             {months.map((month) => (
               <div
                 key={month.toISOString()}
-                className="absolute top-0 h-full border-l border-neutral-100 pl-2 text-xs text-neutral-400"
+                className="absolute top-0 h-full border-l border-chrome-dark pl-2 text-xs text-ink-tertiary"
                 style={{ left: `${toPercent(month)}%` }}
               >
                 {month.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' })}
@@ -84,12 +84,12 @@ export default function PlanningView({ projects, allSteps = [] }) {
         </div>
 
         {/* Lignes par client */}
-        <div className="divide-y divide-neutral-100">
+        <div className="divide-y divide-chrome-dark">
           {groups.map((group) => (
             <div key={group.client?.id ?? 'sans-client'} className="flex">
               <div className="flex w-48 shrink-0 items-center gap-2 px-3 py-3">
                 <Avatar name={group.client?.name} />
-                <span className="truncate text-sm text-neutral-700">
+                <span className="truncate text-sm text-ink-secondary">
                   {group.client?.name ?? '—'}
                 </span>
               </div>
@@ -97,7 +97,7 @@ export default function PlanningView({ projects, allSteps = [] }) {
                 {months.map((month) => (
                   <div
                     key={month.toISOString()}
-                    className="absolute top-0 h-full border-l border-neutral-50"
+                    className="absolute top-0 h-full border-l border-chrome-dark"
                     style={{ left: `${toPercent(month)}%` }}
                   />
                 ))}
@@ -126,26 +126,26 @@ export default function PlanningView({ projects, allSteps = [] }) {
                                 ? 'bg-amber-200'
                                 : PROJECT_STATUT_TONES[project.statut] === 'blue'
                                   ? 'bg-blue-200'
-                                  : 'bg-neutral-200'
-                          } ${isHovered ? 'shadow-md ring-2 ring-neutral-300' : ''}`}
+                                  : 'bg-surface-hover'
+                          } ${isHovered ? 'shadow-md ring-2 ring-chrome-mid' : ''}`}
                           style={{ left: `${left}%`, width: `${width}%` }}
                         >
-                          <span className="block truncate px-2 py-1 text-xs font-medium text-neutral-700">
+                          <span className="block truncate px-2 py-1 text-xs font-medium text-ink-secondary">
                             {project.nom}
                           </span>
                         </div>
 
                         {isHovered && (
                           <div
-                            className="absolute top-7 z-10 w-56 rounded-lg border border-neutral-200 bg-white p-3 shadow-lg"
+                            className="absolute top-7 z-10 w-56 rounded-lg border border-chrome-dark bg-surface p-3 shadow-lg"
                             style={{ left: `${left}%` }}
                           >
-                            <p className="text-sm font-medium text-neutral-900">{project.nom}</p>
-                            <p className="mt-1 text-xs text-neutral-500">{project.company?.name}</p>
-                            <p className="mt-1 text-xs text-neutral-500">
+                            <p className="text-sm font-medium text-ink">{project.nom}</p>
+                            <p className="mt-1 text-xs text-ink-secondary">{project.company?.name}</p>
+                            <p className="mt-1 text-xs text-ink-secondary">
                               {formatDate(project.date_debut)} → {formatDate(project.date_livraison_prevue)}
                             </p>
-                            <p className="mt-1 text-xs font-medium text-neutral-700">
+                            <p className="mt-1 text-xs font-medium text-ink-secondary">
                               {PROJECT_STATUT_LABELS[project.statut]}
                             </p>
                           </div>
@@ -168,11 +168,11 @@ export default function PlanningView({ projects, allSteps = [] }) {
                             return (
                               <div key={step.id}>
                                 <div
-                                  className="absolute w-px bg-neutral-300"
+                                  className="absolute w-px bg-surface-hover"
                                   style={{ left: `${left}%`, top: '24px', height: `${rowCenter - 24}px` }}
                                 />
                                 <div
-                                  className="absolute h-px bg-neutral-300"
+                                  className="absolute h-px bg-surface-hover"
                                   style={{ left: `${connLeft}%`, width: `${connWidth}%`, top: `${rowCenter}px` }}
                                 />
                                 <div
@@ -203,13 +203,13 @@ export default function PlanningView({ projects, allSteps = [] }) {
                           <div key={step.id} className="relative h-4">
                             <div
                               className={`absolute h-4 rounded ${
-                                done ? 'bg-neutral-100' : 'bg-neutral-200'
+                                done ? 'bg-surface-hover' : 'bg-surface-hover'
                               }`}
                               style={{ left: `${stepLeft}%`, width: `${stepWidth}%` }}
                             >
                               <span
                                 className={`block truncate px-1.5 text-[10px] leading-4 ${
-                                  done ? 'text-neutral-400 line-through' : 'text-neutral-600'
+                                  done ? 'text-ink-tertiary line-through' : 'text-ink-secondary'
                                 }`}
                               >
                                 {step.titre}

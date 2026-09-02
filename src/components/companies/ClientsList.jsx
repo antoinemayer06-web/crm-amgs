@@ -48,27 +48,27 @@ export default function ClientsList() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-neutral-900">Clients</h2>
+        <h2 className="text-xl font-semibold text-ink">Clients</h2>
         <button
           type="button"
           onClick={() => setCreating(true)}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+          className="btn-primary"
         >
           + Nouveau client
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-3 rounded-lg border border-neutral-200 bg-white p-4">
+      <div className="flex flex-wrap gap-3 rounded-lg border border-chrome-dark bg-surface p-4">
         <input
           value={filters.search}
           onChange={(event) => updateFilter('search', event.target.value)}
           placeholder="Rechercher par nom…"
-          className="min-w-48 flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="min-w-48 flex-1 input-chrome"
         />
         <select
           value={filters.temperature}
           onChange={(event) => updateFilter('temperature', event.target.value)}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="input-chrome"
         >
           <option value="">Toutes les températures</option>
           {TEMPERATURE_OPTIONS.map((temp) => (
@@ -81,35 +81,35 @@ export default function ClientsList() {
           value={filters.sector}
           onChange={(event) => updateFilter('sector', event.target.value)}
           placeholder="Secteur…"
-          className="w-40 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+          className="w-40 input-chrome"
         />
         {hasActiveFilters && (
           <button
             type="button"
             onClick={() => setFilters(emptyFilters)}
-            className="text-sm text-neutral-500 hover:text-neutral-900"
+            className="text-sm text-ink-secondary hover:text-ink"
           >
             Réinitialiser
           </button>
         )}
       </div>
 
-      <p className="text-xs text-neutral-400">
+      <p className="text-xs text-ink-tertiary">
         Cliquez sur la température d'une ligne pour la modifier directement. Le statut de
         livraison/facturation se gère par projet, depuis la fiche client.
       </p>
 
-      <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
-        {isLoading && <p className="p-6 text-sm text-neutral-500">Chargement…</p>}
+      <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
+        {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
         {isError && (
-          <p className="p-6 text-sm text-red-600">Erreur de chargement : {error.message}</p>
+          <p className="p-6 text-sm font-medium text-ink">Erreur de chargement : {error.message}</p>
         )}
         {!isLoading && !isError && companies.length === 0 && (
-          <p className="p-6 text-sm text-neutral-500">Aucun client trouvé.</p>
+          <p className="p-6 text-sm text-ink-secondary">Aucun client trouvé.</p>
         )}
         {!isLoading && !isError && companies.length > 0 && (
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-neutral-200 text-xs uppercase text-neutral-500">
+            <thead className="border-b border-chrome-dark text-xs uppercase text-ink-secondary">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>
                 <th className="px-4 py-3 font-medium">Activité</th>
@@ -118,16 +118,16 @@ export default function ClientsList() {
                 <th className="px-4 py-3 font-medium" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-100">
+            <tbody className="divide-y divide-chrome-dark">
               {companies.map((company) => {
                 const actif = activityMap?.[company.id] ?? false
 
                 return (
-                  <tr key={company.id} className="hover:bg-neutral-50">
+                  <tr key={company.id} className="hover:bg-surface-hover">
                     <td className="px-4 py-3">
                       <Link
                         to={`/companies/${company.id}`}
-                        className="font-medium text-neutral-900 hover:underline"
+                        className="font-medium text-ink hover:underline"
                       >
                         {company.name}
                       </Link>
@@ -145,12 +145,12 @@ export default function ClientsList() {
                         onChange={(value) => handleTemperatureChange(company, value)}
                       />
                     </td>
-                    <td className="px-4 py-3 text-neutral-600">{company.sector || '—'}</td>
+                    <td className="px-4 py-3 text-ink-secondary">{company.sector || '—'}</td>
                     <td className="px-4 py-3 text-right">
                       <button
                         type="button"
                         onClick={() => handleDelete(company)}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-ink-tertiary hover:text-ink"
                       >
                         Supprimer
                       </button>

@@ -18,7 +18,7 @@ function HealthIndicator({ project }) {
 
   if (health.type === 'clock') {
     return (
-      <span title={health.label} className="text-sm leading-none text-neutral-400">
+      <span title={health.label} className="text-sm leading-none text-ink-tertiary">
         🕐
       </span>
     )
@@ -51,12 +51,12 @@ export default function ProjectCard({
       onClick={onClick}
       style={style}
       {...dragHandleProps}
-      className={`w-full rounded-lg border border-neutral-200 bg-white p-3 text-left shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-neutral-300 ${
+      className={`w-full rounded-lg border border-chrome-dark bg-surface p-3 text-left shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-chrome-mid ${
         isDragging ? 'rotate-2 opacity-90 shadow-lg' : ''
       }`}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-sm font-medium text-neutral-900">{project.nom}</p>
+        <p className="text-sm font-medium text-ink">{project.nom}</p>
         <div className="flex shrink-0 items-center gap-1.5">
           {showStatus && (
             <Badge tone={PROJECT_STATUT_TONES[project.statut]}>
@@ -70,7 +70,7 @@ export default function ProjectCard({
       {showClient && project.company && (
         <div className="mt-2 flex items-center gap-1.5">
           <Avatar name={project.company.name} />
-          <span className="truncate text-xs text-neutral-500">{project.company.name}</span>
+          <span className="truncate text-xs text-ink-secondary">{project.company.name}</span>
         </div>
       )}
 
@@ -82,7 +82,7 @@ export default function ProjectCard({
         <div className="mt-2">
           <span
             className={`inline-flex items-center gap-1 text-xs font-medium ${
-              urgent ? 'text-red-600' : 'text-neutral-400'
+              urgent ? 'text-red-600' : 'text-ink-tertiary'
             }`}
           >
             {urgent && <span className="h-1.5 w-1.5 rounded-full bg-red-500" />}

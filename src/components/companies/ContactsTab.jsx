@@ -35,15 +35,15 @@ export default function ContactsTab({ companyId }) {
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
-        {isLoading && <p className="p-6 text-sm text-neutral-500">Chargement…</p>}
+      <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
+        {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
         {isError && <p className="p-6 text-sm text-red-600">Erreur : {error.message}</p>}
         {!isLoading && !isError && contacts.length === 0 && (
-          <p className="p-6 text-sm text-neutral-500">Aucun contact pour cette entreprise.</p>
+          <p className="p-6 text-sm text-ink-secondary">Aucun contact pour cette entreprise.</p>
         )}
         {!isLoading && !isError && contacts.length > 0 && (
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-neutral-200 text-xs uppercase text-neutral-500">
+            <thead className="border-b border-chrome-dark text-xs uppercase text-ink-secondary">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>
                 <th className="px-4 py-3 font-medium">Fonction</th>
@@ -52,24 +52,24 @@ export default function ContactsTab({ companyId }) {
                 <th className="px-4 py-3 font-medium" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-100">
+            <tbody className="divide-y divide-chrome-dark">
               {contacts.map((contact) => (
-                <tr key={contact.id} className="hover:bg-neutral-50">
-                  <td className="px-4 py-3 font-medium text-neutral-900">
+                <tr key={contact.id} className="hover:bg-surface-hover">
+                  <td className="px-4 py-3 font-medium text-ink">
                     <div className="flex items-center gap-2">
                       {contact.first_name} {contact.last_name}
                       {contact.is_primary && <Badge tone="blue">Principal</Badge>}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">{contact.role || '—'}</td>
-                  <td className="px-4 py-3 text-neutral-600">{contact.email || '—'}</td>
-                  <td className="px-4 py-3 text-neutral-600">{contact.phone || '—'}</td>
+                  <td className="px-4 py-3 text-ink-secondary">{contact.role || '—'}</td>
+                  <td className="px-4 py-3 text-ink-secondary">{contact.email || '—'}</td>
+                  <td className="px-4 py-3 text-ink-secondary">{contact.phone || '—'}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-3">
                       <button
                         type="button"
                         onClick={() => setModalMode(contact)}
-                        className="text-neutral-500 hover:text-neutral-900"
+                        className="text-ink-secondary hover:text-ink"
                       >
                         Modifier
                       </button>

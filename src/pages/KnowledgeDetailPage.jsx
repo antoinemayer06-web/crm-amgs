@@ -20,7 +20,7 @@ export default function KnowledgeDetailPage() {
   const deleteEntry = useDeleteKnowledgeEntry()
 
   if (isLoading) {
-    return <p className="text-sm text-neutral-500">Chargement…</p>
+    return <p className="text-sm text-ink-secondary">Chargement…</p>
   }
 
   if (isError) {
@@ -36,14 +36,14 @@ export default function KnowledgeDetailPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link to="/knowledge" className="text-sm text-neutral-500 hover:text-neutral-900">
+        <Link to="/knowledge" className="text-sm text-ink-secondary hover:text-ink">
           ← Base de connaissance
         </Link>
       </div>
 
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-semibold text-neutral-900">{entry.titre}</h2>
+          <h2 className="text-xl font-semibold text-ink">{entry.titre}</h2>
           <Badge tone={KNOWLEDGE_CATEGORY_TONES[entry.categorie]}>
             {KNOWLEDGE_CATEGORY_LABELS[entry.categorie]}
           </Badge>
@@ -52,7 +52,7 @@ export default function KnowledgeDetailPage() {
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100"
+            className="rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover"
           >
             Modifier
           </button>
@@ -69,14 +69,14 @@ export default function KnowledgeDetailPage() {
       {entry.tags?.length > 0 && (
         <div className="flex flex-wrap gap-1">
           {entry.tags.map((tag) => (
-            <span key={tag} className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500">
+            <span key={tag} className="rounded-full bg-surface-hover px-2 py-0.5 text-xs text-ink-secondary">
               {tag}
             </span>
           ))}
         </div>
       )}
 
-      <div className="rounded-xl border border-neutral-200 bg-white p-6">
+      <div className="rounded-xl border border-chrome-dark bg-surface p-6">
         <MarkdownContent content={entry.contenu} />
       </div>
 

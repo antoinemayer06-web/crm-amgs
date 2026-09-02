@@ -192,18 +192,3 @@ export const EXPENSE_CATEGORY_TONES = {
 // Palette pastel pour les post-it du mur Vision.
 export const VISION_NOTE_COLORS = ['#fef08a', '#fbcfe8', '#bfdbfe', '#bbf7d0', '#fed7aa', '#e9d5ff']
 
-// Couleur d'avatar stable dérivée du nom (même entreprise = même couleur).
-const AVATAR_PALETTE = [
-  'bg-blue-500', 'bg-violet-500', 'bg-emerald-500', 'bg-amber-500',
-  'bg-rose-500', 'bg-cyan-500', 'bg-fuchsia-500', 'bg-lime-600',
-]
-
-export function getAvatarColor(name) {
-  if (!name) return AVATAR_PALETTE[0]
-  let hash = 0
-  for (let i = 0; i < name.length; i++) {
-    hash = (hash << 5) - hash + name.charCodeAt(i)
-    hash |= 0
-  }
-  return AVATAR_PALETTE[Math.abs(hash) % AVATAR_PALETTE.length]
-}

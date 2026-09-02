@@ -61,23 +61,23 @@ export default function FinancePage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-xl font-semibold text-neutral-900">Finance</h2>
+        <h2 className="text-xl font-semibold text-ink">Finance</h2>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => setMonthKey((current) => shiftMonthKey(current, -1))}
-            className="rounded-md border border-neutral-300 px-2.5 py-1.5 text-sm text-neutral-600 hover:bg-neutral-100"
+            className="rounded-md border border-chrome-dark px-2.5 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover"
             aria-label="Mois précédent"
           >
             ←
           </button>
-          <span className="min-w-32 text-center text-sm font-medium capitalize text-neutral-900">
+          <span className="min-w-32 text-center text-sm font-medium capitalize text-ink">
             {formatMonthLabel(monthKey)}
           </span>
           <button
             type="button"
             onClick={() => setMonthKey((current) => shiftMonthKey(current, 1))}
-            className="rounded-md border border-neutral-300 px-2.5 py-1.5 text-sm text-neutral-600 hover:bg-neutral-100"
+            className="rounded-md border border-chrome-dark px-2.5 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover"
             aria-label="Mois suivant"
           >
             →
@@ -86,7 +86,7 @@ export default function FinancePage() {
             <button
               type="button"
               onClick={() => setMonthKey(currentMonthKey())}
-              className="rounded-md border border-neutral-300 px-2.5 py-1.5 text-xs text-neutral-500 hover:bg-neutral-100"
+              className="rounded-md border border-chrome-dark px-2.5 py-1.5 text-xs text-ink-secondary hover:bg-surface-hover"
             >
               Mois en cours
             </button>
@@ -94,14 +94,14 @@ export default function FinancePage() {
         </div>
       </div>
 
-      {isLoading && <p className="text-sm text-neutral-500">Chargement…</p>}
+      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
       {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
 
       {kpis && (
         <>
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-            <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm xl:col-span-2">
-              <h3 className="mb-3 text-sm font-semibold text-neutral-900">Vue d'ensemble du mois</h3>
+            <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm xl:col-span-2">
+              <h3 className="mb-3 text-sm font-semibold text-ink">Vue d'ensemble du mois</h3>
               <FinanceChart
                 caThisMonth={kpis.ca}
                 encaisseThisMonth={kpis.encaisse}
@@ -110,9 +110,9 @@ export default function FinancePage() {
                 resultatRealise={kpis.resultatRealise}
               />
 
-              <div className="mt-4 grid grid-cols-2 gap-4 border-t border-neutral-100 pt-4">
+              <div className="mt-4 grid grid-cols-2 gap-4 border-t border-chrome-dark pt-4">
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">Résultat prévu</p>
+                  <p className="text-xs font-medium uppercase tracking-wide text-ink-tertiary">Résultat prévu</p>
                   <p
                     className={`mt-1 text-xl font-semibold ${
                       kpis.resultatPrevu >= 0 ? 'text-emerald-600' : 'text-red-600'
@@ -120,10 +120,10 @@ export default function FinancePage() {
                   >
                     {formatMontant(kpis.resultatPrevu)}
                   </p>
-                  <p className="mt-0.5 text-xs text-neutral-400">CA facturé − dépenses</p>
+                  <p className="mt-0.5 text-xs text-ink-tertiary">CA facturé − dépenses</p>
                 </div>
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">Résultat réalisé</p>
+                  <p className="text-xs font-medium uppercase tracking-wide text-ink-tertiary">Résultat réalisé</p>
                   <p
                     className={`mt-1 text-xl font-semibold ${
                       kpis.resultatRealise >= 0 ? 'text-emerald-600' : 'text-red-600'
@@ -131,18 +131,18 @@ export default function FinancePage() {
                   >
                     {formatMontant(kpis.resultatRealise)}
                   </p>
-                  <p className="mt-0.5 text-xs text-neutral-400">Encaissé (réel) − dépenses</p>
+                  <p className="mt-0.5 text-xs text-ink-tertiary">Encaissé (réel) − dépenses</p>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-              <h3 className="mb-3 text-center text-sm font-semibold text-neutral-900">
+            <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
+              <h3 className="mb-3 text-center text-sm font-semibold text-ink">
                 Objectif de résultat mensuel
               </h3>
               <FinanceGoalJar objectif={Number(objectif) || 0} realise={kpis.resultatRealise} />
               <div className="mt-4 space-y-1">
-                <label htmlFor="objectif_resultat" className="block text-xs text-neutral-500">
+                <label htmlFor="objectif_resultat" className="block text-xs text-ink-secondary">
                   Objectif mensuel (€)
                 </label>
                 <input
@@ -152,7 +152,7 @@ export default function FinancePage() {
                   value={objectif}
                   onChange={(event) => setObjectif(event.target.value)}
                   onBlur={handleObjectifBlur}
-                  className="w-full rounded-md border border-neutral-300 px-3 py-1.5 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+                  className="w-full rounded-md border border-chrome-dark px-3 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
                 />
               </div>
             </div>

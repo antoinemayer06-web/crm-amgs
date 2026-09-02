@@ -22,16 +22,16 @@ export default function SidePanel({ title, onClose, children }) {
         }`}
       />
       <div
-        className={`relative flex h-full w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-200 ease-out ${
+        className={`relative flex h-full w-full max-w-md flex-col bg-surface shadow-2xl transition-transform duration-200 ease-out ${
           visible ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
-          <h2 className="text-base font-semibold text-neutral-900">{title}</h2>
+        <div className="flex items-center justify-between border-b border-chrome-dark px-5 py-4">
+          <h2 className="text-base font-semibold text-ink">{title}</h2>
           <button
             type="button"
             onClick={handleClose}
-            className="text-neutral-400 hover:text-neutral-600"
+            className="text-ink-tertiary hover:text-ink-secondary"
             aria-label="Fermer"
           >
             ✕

@@ -57,15 +57,15 @@ export default function DocumentsSection({ companyId, projectId }) {
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
-        {isLoading && <p className="p-6 text-sm text-neutral-500">Chargement…</p>}
+      <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
+        {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
         {isError && <p className="p-6 text-sm text-red-600">Erreur : {error.message}</p>}
         {!isLoading && !isError && documents.length === 0 && (
-          <p className="p-6 text-sm text-neutral-500">Aucun document pour l'instant.</p>
+          <p className="p-6 text-sm text-ink-secondary">Aucun document pour l'instant.</p>
         )}
         {!isLoading && !isError && documents.length > 0 && (
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-neutral-200 text-xs uppercase text-neutral-500">
+            <thead className="border-b border-chrome-dark text-xs uppercase text-ink-secondary">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>
                 <th className="px-4 py-3 font-medium">Type</th>
@@ -75,21 +75,21 @@ export default function DocumentsSection({ companyId, projectId }) {
                 <th className="px-4 py-3 font-medium" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-100">
+            <tbody className="divide-y divide-chrome-dark">
               {documents.map((document) => (
-                <tr key={document.id} className="hover:bg-neutral-50">
+                <tr key={document.id} className="hover:bg-surface-hover">
                   <td className="px-4 py-3">
                     <button
                       type="button"
                       onClick={() => handleOpen(document)}
                       disabled={openingId === document.id}
-                      className="font-medium text-neutral-900 hover:underline disabled:opacity-50"
+                      className="font-medium text-ink hover:underline disabled:opacity-50"
                     >
                       {document.nom}
                     </button>
                   </td>
-                  <td className="px-4 py-3 text-neutral-600">{formatEnumLabel(document.type)}</td>
-                  <td className="px-4 py-3 text-neutral-600">{formatMontant(document.montant)}</td>
+                  <td className="px-4 py-3 text-ink-secondary">{formatEnumLabel(document.type)}</td>
+                  <td className="px-4 py-3 text-ink-secondary">{formatMontant(document.montant)}</td>
                   <td className="px-4 py-3">
                     {document.statut ? (
                       <Badge tone={DOCUMENT_STATUS_TONES[document.statut]}>
@@ -99,13 +99,13 @@ export default function DocumentsSection({ companyId, projectId }) {
                       '—'
                     )}
                   </td>
-                  <td className="px-4 py-3 text-neutral-500">{formatDate(document.created_at)}</td>
+                  <td className="px-4 py-3 text-ink-secondary">{formatDate(document.created_at)}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-3">
                       <button
                         type="button"
                         onClick={() => setModalMode(document)}
-                        className="text-neutral-500 hover:text-neutral-900"
+                        className="text-ink-secondary hover:text-ink"
                       >
                         Modifier
                       </button>

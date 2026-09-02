@@ -18,7 +18,7 @@ export default function KnowledgeBasePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-neutral-900">Base de connaissance</h2>
+        <h2 className="text-xl font-semibold text-ink">Base de connaissance</h2>
         <button
           type="button"
           onClick={() => setCreating(true)}
@@ -35,7 +35,7 @@ export default function KnowledgeBasePage() {
         onCategorieChange={setCategorie}
       />
 
-      {isLoading && <p className="text-sm text-neutral-500">Chargement…</p>}
+      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
       {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
 
       {!isLoading && !isError && (

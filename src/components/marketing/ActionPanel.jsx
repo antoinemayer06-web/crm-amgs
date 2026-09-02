@@ -52,7 +52,7 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
   return (
     <SidePanel title={isLoading ? 'Chargement…' : action?.titre} onClose={onClose}>
       {isLoading || !action ? (
-        <p className="text-sm text-neutral-500">Chargement…</p>
+        <p className="text-sm text-ink-secondary">Chargement…</p>
       ) : (
         <div className="space-y-5">
           <div className="flex flex-wrap items-center gap-2">
@@ -74,7 +74,7 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="ml-auto rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100"
+              className="ml-auto rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover"
             >
               Modifier
             </button>
@@ -89,18 +89,18 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
 
           <dl className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <dt className="text-neutral-400">Date prévue</dt>
-              <dd className="mt-0.5 font-medium text-neutral-900">{formatDate(action.date_prevue)}</dd>
+              <dt className="text-ink-tertiary">Date prévue</dt>
+              <dd className="mt-0.5 font-medium text-ink">{formatDate(action.date_prevue)}</dd>
             </div>
             <div>
-              <dt className="text-neutral-400">Campagne</dt>
-              <dd className="mt-0.5 font-medium text-neutral-900">
+              <dt className="text-ink-tertiary">Campagne</dt>
+              <dd className="mt-0.5 font-medium text-ink">
                 {action.campaign?.nom ?? '—'}
               </dd>
             </div>
             <div>
-              <dt className="text-neutral-400">Prospect lié</dt>
-              <dd className="mt-0.5 font-medium text-neutral-900">
+              <dt className="text-ink-tertiary">Prospect lié</dt>
+              <dd className="mt-0.5 font-medium text-ink">
                 {action.company?.name ?? '—'}
               </dd>
             </div>
@@ -108,13 +108,13 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
 
           {action.description && (
             <div>
-              <p className="mb-1 text-sm font-medium text-neutral-700">Description</p>
-              <p className="whitespace-pre-wrap text-sm text-neutral-600">{action.description}</p>
+              <p className="mb-1 text-sm font-medium text-ink-secondary">Description</p>
+              <p className="whitespace-pre-wrap text-sm text-ink-secondary">{action.description}</p>
             </div>
           )}
 
-          <div className="space-y-2 border-t border-neutral-200 pt-4">
-            <label htmlFor="resultats" className="block text-sm font-medium text-neutral-700">
+          <div className="space-y-2 border-t border-chrome-dark pt-4">
+            <label htmlFor="resultats" className="block text-sm font-medium text-ink-secondary">
               Résultats
             </label>
             <textarea
@@ -123,7 +123,7 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
               value={resultats}
               onChange={(event) => setResultats(event.target.value)}
               placeholder="Notez les performances une fois l'action publiée…"
-              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500"
+              className="w-full input-chrome"
             />
             <div className="flex justify-end">
               <button

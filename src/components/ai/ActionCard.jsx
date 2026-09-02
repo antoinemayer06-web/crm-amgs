@@ -56,16 +56,16 @@ export default function ActionCard({ actions, onResolve, submitting }) {
             {items.map((item) => (
               <li
                 key={item.tool_use_id}
-                className={`flex items-center justify-between gap-2 rounded-md bg-white px-2.5 py-1.5 text-sm transition-opacity duration-150 ${
+                className={`flex items-center justify-between gap-2 rounded-md bg-surface px-2.5 py-1.5 text-sm transition-opacity duration-150 ${
                   removed.has(item.tool_use_id) ? 'opacity-40 line-through' : ''
                 }`}
               >
-                <span className="text-neutral-700">{item.description}</span>
+                <span className="text-ink-secondary">{item.description}</span>
                 {actions.length > 1 && (
                   <button
                     type="button"
                     onClick={() => toggleRemove(item.tool_use_id)}
-                    className="shrink-0 text-xs text-neutral-400 hover:text-red-600"
+                    className="shrink-0 text-xs text-ink-tertiary hover:text-red-600"
                   >
                     {removed.has(item.tool_use_id) ? 'Reprendre' : '✕ Retirer'}
                   </button>

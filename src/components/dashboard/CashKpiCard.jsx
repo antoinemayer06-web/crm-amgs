@@ -2,20 +2,20 @@ const formatMontant = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} 
 
 export default function CashKpiCard({ facture, encaisse, restant }) {
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
-      <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">
+    <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
+      <p className="text-xs font-medium uppercase tracking-wide text-ink-tertiary">
         Facturé vs encaissé
       </p>
       <div className="mt-1 flex items-baseline gap-2">
-        <span className="text-lg font-semibold text-neutral-900">{formatMontant(facture)}</span>
-        <span className="text-xs text-neutral-400">facturé</span>
+        <span className="text-lg font-semibold text-ink">{formatMontant(facture)}</span>
+        <span className="text-xs text-ink-tertiary">facturé</span>
       </div>
       <div className="flex items-baseline gap-2">
-        <span className="text-lg font-semibold text-emerald-600">{formatMontant(encaisse)}</span>
-        <span className="text-xs text-neutral-400">encaissé</span>
+        <span className="text-lg font-semibold text-ink">{formatMontant(encaisse)}</span>
+        <span className="text-xs text-ink-tertiary">encaissé</span>
       </div>
-      <p className="mt-1 text-xs text-neutral-500">
-        Reste à encaisser : <span className="font-medium text-neutral-700">{formatMontant(restant)}</span>
+      <p className="mt-1 text-xs text-ink-secondary">
+        Reste à encaisser : <span className="font-medium text-ink-secondary">{formatMontant(restant)}</span>
       </p>
     </div>
   )
