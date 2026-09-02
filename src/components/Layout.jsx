@@ -40,20 +40,6 @@ const COLLAPSE_KEY = 'sidebar-collapsed'
 function SidebarContent({ collapsed, user, signOut, onNavigate }) {
   return (
     <>
-      <div
-        className={`flex items-center gap-3 border-b border-chrome-dark px-5 py-5 ${collapsed ? 'justify-center px-3' : ''}`}
-      >
-        <Logo size={36} className="shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]" />
-        {!collapsed && (
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold tracking-tight text-ink">
-              AM Growth Solutions
-            </p>
-            <p className="truncate text-xs text-ink-tertiary">CRM</p>
-          </div>
-        )}
-      </div>
-
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
         {navItems.map((item) => (
           <NavLink
@@ -133,85 +119,101 @@ export default function Layout() {
 
   return (
     <AiChatProvider>
-      <div className="flex min-h-svh bg-canvas">
-        {/* Sidebar desktop : rail fixe, repliable */}
-        <aside
-          className={`relative hidden shrink-0 flex-col border-r border-chrome-dark bg-surface transition-[width] duration-200 md:flex ${
-            collapsed ? 'w-16' : 'w-60'
-          }`}
-        >
-          <button
-            type="button"
-            onClick={() => setCollapsed((prev) => !prev)}
-            className="absolute -right-3 top-6 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-chrome-dark bg-surface text-xs text-ink-secondary hover:text-ink"
-            aria-label={collapsed ? 'Déplier le menu' : 'Replier le menu'}
-            title={collapsed ? 'Déplier le menu' : 'Replier le menu'}
-          >
-            {collapsed ? '›' : '‹'}
-          </button>
-          <SidebarContent collapsed={collapsed} user={user} signOut={signOut} />
-        </aside>
-
-        {/* Menu mobile : tiroir plein écran, ferme au tap en dehors ou à Échap */}
-        {mobileNavOpen && (
-          <div className="fixed inset-0 z-50 flex md:hidden">
-            <div
-              className="absolute inset-0 bg-black/60"
-              onClick={() => setMobileNavOpen(false)}
-              aria-hidden="true"
-            />
-            <aside className="relative flex h-full w-[82vw] max-w-72 flex-col bg-surface shadow-2xl">
-              <button
-                type="button"
-                onClick={() => setMobileNavOpen(false)}
-                aria-label="Fermer le menu"
-                className="absolute right-3 top-5 flex h-11 w-11 items-center justify-center text-ink-tertiary hover:text-ink"
-              >
-                <IconClose className="h-5 w-5" />
-              </button>
-              <SidebarContent
-                collapsed={false}
-                user={user}
-                signOut={signOut}
-                onNavigate={() => setMobileNavOpen(false)}
-              />
-            </aside>
-          </div>
-        )}
-
-        <div className="flex min-w-0 flex-1 flex-col">
-          <div className="flex items-center justify-between gap-3 border-b border-chrome-dark px-4 py-3 md:justify-end md:px-6">
+      <div className="flex min-h-svh flex-col bg-canvas">
+        {/* Bandeau du haut, pleine largeur : logo/nom à gauche, recherche à droite */}
+        <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-chrome-dark bg-surface px-4 md:px-6">
+          <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
               onClick={() => setMobileNavOpen(true)}
               aria-label="Ouvrir le menu"
-              className="flex h-11 w-11 items-center justify-center rounded-md text-ink-secondary hover:bg-surface-hover hover:text-ink md:hidden"
+              className="-ml-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink-secondary hover:bg-surface-hover hover:text-ink md:hidden"
             >
               <IconMenu className="h-5 w-5" />
             </button>
-
-            <button
-              type="button"
-              onClick={() => setPaletteOpen(true)}
-              aria-label="Rechercher"
-              className="flex h-11 w-11 items-center justify-center rounded-md border border-chrome-dark text-ink-tertiary hover:border-chrome-mid hover:text-ink-secondary md:hidden"
-            >
-              <IconSearch className="h-4 w-4" />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setPaletteOpen(true)}
-              className="hidden items-center gap-2 rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-tertiary transition-colors duration-150 hover:border-chrome-mid hover:text-ink-secondary md:flex"
-            >
-              <IconSearch className="h-4 w-4" />
-              <span>Rechercher</span>
-              <span className="ml-1 rounded border border-chrome-dark px-1.5 py-0.5 text-xs text-ink-tertiary">
-                ⌘K
-              </span>
-            </button>
+            <Logo size={28} className="shrink-0" />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold tracking-tight text-ink">
+                AM Growth Solutions
+              </p>
+            </div>
           </div>
-          <main className="min-w-0 flex-1 overflow-x-hidden p-4 md:p-6">
+
+          <button
+            type="button"
+            onClick={() => setPaletteOpen(true)}
+            aria-label="Rechercher"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-chrome-dark text-ink-tertiary hover:border-chrome-mid hover:text-ink-secondary md:hidden"
+          >
+            <IconSearch className="h-4 w-4" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setPaletteOpen(true)}
+            className="hidden shrink-0 items-center gap-2 rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-tertiary transition-colors duration-150 hover:border-chrome-mid hover:text-ink-secondary md:flex"
+          >
+            <IconSearch className="h-4 w-4" />
+            <span>Rechercher</span>
+            <span className="ml-1 rounded border border-chrome-dark px-1.5 py-0.5 text-xs text-ink-tertiary">
+              ⌘K
+            </span>
+          </button>
+        </header>
+
+        <div className="flex min-h-0 flex-1">
+          {/* Sidebar desktop : rail fixe, repliable */}
+          <aside
+            className={`relative hidden shrink-0 flex-col border-r border-chrome-dark bg-surface transition-[width] duration-200 md:flex ${
+              collapsed ? 'w-16' : 'w-60'
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => setCollapsed((prev) => !prev)}
+              className="absolute -right-3 top-4 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-chrome-dark bg-surface text-xs text-ink-secondary hover:text-ink"
+              aria-label={collapsed ? 'Déplier le menu' : 'Replier le menu'}
+              title={collapsed ? 'Déplier le menu' : 'Replier le menu'}
+            >
+              {collapsed ? '›' : '‹'}
+            </button>
+            <SidebarContent collapsed={collapsed} user={user} signOut={signOut} />
+          </aside>
+
+          {/* Menu mobile : tiroir plein écran, ferme au tap en dehors ou à Échap */}
+          {mobileNavOpen && (
+            <div className="fixed inset-0 z-50 flex md:hidden">
+              <div
+                className="absolute inset-0 bg-black/60"
+                onClick={() => setMobileNavOpen(false)}
+                aria-hidden="true"
+              />
+              <aside className="relative flex h-full w-[82vw] max-w-72 flex-col bg-surface shadow-2xl">
+                <div className="flex items-center gap-3 border-b border-chrome-dark px-4 py-4">
+                  <Logo size={28} className="shrink-0" />
+                  <p className="min-w-0 flex-1 truncate text-sm font-semibold tracking-tight text-ink">
+                    AM Growth Solutions
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setMobileNavOpen(false)}
+                    aria-label="Fermer le menu"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center text-ink-tertiary hover:text-ink"
+                  >
+                    <IconClose className="h-5 w-5" />
+                  </button>
+                </div>
+                <SidebarContent
+                  collapsed={false}
+                  user={user}
+                  signOut={signOut}
+                  onNavigate={() => setMobileNavOpen(false)}
+                />
+              </aside>
+            </div>
+          )}
+
+          <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6">
             <Outlet />
           </main>
         </div>
