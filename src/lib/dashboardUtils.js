@@ -32,11 +32,10 @@ export function getCashSummary(documents) {
   return { facture, encaisse, restant: facture - encaisse }
 }
 
-// Valeur du pipeline : somme des valeurs estimées des prospects, hors refus.
-export function getPipelineValue(companies) {
-  return companies
-    .filter((company) => company.status === 'prospect' && company.statut_prospect !== 'refus')
-    .reduce((sum, company) => sum + Number(company.valeur_estimee ?? 0), 0)
+// Total des heures réellement travaillées, tous projets confondus
+// (somme du journal de travail).
+export function getTotalHoursWorked(workLogs) {
+  return workLogs.reduce((sum, log) => sum + Number(log.duree_heures ?? 0), 0)
 }
 
 // Taux de conversion sur la période (mois en cours) : parmi les

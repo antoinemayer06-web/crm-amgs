@@ -16,12 +16,13 @@ import {
   getLateProjectsCount,
   getMarketingWeekCount,
   getPipelineFunnel,
-  getPipelineValue,
   getRecentActivity,
+  getTotalHoursWorked,
   getUrgentItems,
 } from '../lib/dashboardUtils'
 
 const formatMontant = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} €`
+const formatHours = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} h`
 
 function Section({ title, action, children }) {
   return (
@@ -43,7 +44,7 @@ export default function DashboardPage() {
     return {
       ca: getCAThisMonth(data.documents),
       cash: getCashSummary(data.documents),
-      pipelineValue: getPipelineValue(data.companies),
+      totalHoursWorked: getTotalHoursWorked(data.workLogs),
       conversionRate: getConversionRate(data.companies),
       activeProjects: getActiveProjectsCount(data.projects),
       lateProjects: getLateProjectsCount(data.projects),
@@ -85,7 +86,7 @@ export default function DashboardPage() {
               encaisse={kpis.cash.encaisse}
               restant={kpis.cash.restant}
             />
-            <KpiCard label="Valeur du pipeline" value={formatMontant(kpis.pipelineValue)} />
+            <KpiCard label="Total heures travaillées" value={formatHours(kpis.totalHoursWorked)} />
             <KpiCard
               label="Taux de conversion"
               value={kpis.conversionRate == null ? '—' : `${kpis.conversionRate.toFixed(0)} %`}
