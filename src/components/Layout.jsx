@@ -12,12 +12,13 @@ const navItems = [
   { to: '/marketing', label: 'Marketing' },
   { to: '/knowledge', label: 'Base de connaissance' },
   { to: '/assistant', label: 'Assistant IA' },
+  { to: '/vision', label: 'Vision' },
 ]
 
 export default function Layout() {
   const { user, signOut } = useAuth()
   const location = useLocation()
-  const isAssistantPage = location.pathname === '/assistant'
+  const hideFloatingChat = location.pathname === '/assistant' || location.pathname === '/vision'
 
   return (
     <AiChatProvider>
@@ -61,7 +62,7 @@ export default function Layout() {
           <Outlet />
         </main>
 
-        {!isAssistantPage && (
+        {!hideFloatingChat && (
           <>
             <AiChatButton />
             <AiChatPanel />

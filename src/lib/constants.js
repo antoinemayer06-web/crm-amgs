@@ -189,6 +189,9 @@ export const EXPENSE_CATEGORY_TONES = {
   autre: 'neutral',
 }
 
+// Palette pastel pour les post-it du mur Vision.
+export const VISION_NOTE_COLORS = ['#fef08a', '#fbcfe8', '#bfdbfe', '#bbf7d0', '#fed7aa', '#e9d5ff']
+
 // Couleur d'avatar stable dérivée du nom (même entreprise = même couleur).
 const AVATAR_PALETTE = [
   'bg-blue-500', 'bg-violet-500', 'bg-emerald-500', 'bg-amber-500',

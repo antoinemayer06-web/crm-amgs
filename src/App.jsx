@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import MarketingPage from './pages/MarketingPage'
 import PipelinePage from './pages/PipelinePage'
 import ProjectsPage from './pages/ProjectsPage'
+import VisionPage from './pages/VisionPage'
 
 function App() {
   const { user, loading } = useAuth()
@@ -40,6 +41,7 @@ function App() {
         <Route path="knowledge" element={<KnowledgeBasePage />} />
         <Route path="knowledge/:id" element={<KnowledgeDetailPage />} />
         <Route path="assistant" element={<AiAssistantPage />} />
+        <Route path="vision" element={<VisionPage />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Routes>
