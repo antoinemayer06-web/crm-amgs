@@ -95,7 +95,7 @@ export default function FinancePage() {
       </div>
 
       {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
-      {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
+      {isError && <p className="text-sm font-medium text-red-400">Erreur : {error.message}</p>}
 
       {kpis && (
         <>
@@ -114,8 +114,8 @@ export default function FinancePage() {
                 <div>
                   <p className="text-xs font-medium text-ink-tertiary">Résultat prévu</p>
                   <p
-                    className={`mt-1 text-xl font-semibold ${
-                      kpis.resultatPrevu >= 0 ? 'text-emerald-600' : 'text-red-600'
+                    className={`mt-1 text-xl font-semibold tabular-nums ${
+                      kpis.resultatPrevu >= 0 ? 'text-emerald-400' : 'text-red-400'
                     }`}
                   >
                     {formatMontant(kpis.resultatPrevu)}
@@ -125,8 +125,8 @@ export default function FinancePage() {
                 <div>
                   <p className="text-xs font-medium text-ink-tertiary">Résultat réalisé</p>
                   <p
-                    className={`mt-1 text-xl font-semibold ${
-                      kpis.resultatRealise >= 0 ? 'text-emerald-600' : 'text-red-600'
+                    className={`mt-1 text-xl font-semibold tabular-nums ${
+                      kpis.resultatRealise >= 0 ? 'text-emerald-400' : 'text-red-400'
                     }`}
                   >
                     {formatMontant(kpis.resultatRealise)}
@@ -152,7 +152,7 @@ export default function FinancePage() {
                   value={objectif}
                   onChange={(event) => setObjectif(event.target.value)}
                   onBlur={handleObjectifBlur}
-                  className="w-full rounded-md border border-chrome-dark px-3 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
+                  className="w-full input-chrome"
                 />
               </div>
             </div>

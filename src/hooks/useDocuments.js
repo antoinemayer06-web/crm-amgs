@@ -101,7 +101,7 @@ export function useDeleteDocument() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ id, path }) => {
-      await supabase.storage.from(BUCKET).remove([path])
+      if (path) await supabase.storage.from(BUCKET).remove([path])
       const { error } = await supabase.from('documents').delete().eq('id', id)
       if (error) throw error
     },

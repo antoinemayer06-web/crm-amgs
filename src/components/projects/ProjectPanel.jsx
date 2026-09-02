@@ -58,6 +58,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const [addingCash, setAddingCash] = useState(false)
   const [cashAmount, setCashAmount] = useState('')
   const [cashDate, setCashDate] = useState(() => new Date().toISOString().slice(0, 10))
+  const [saveError, setSaveError] = useState(null)
 
   const steps = getStepsForProject(allSteps, projectId)
   const stepIds = steps.map((s) => s.id)
@@ -84,7 +85,11 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   }, [project, setEntityContext])
 
   function saveField(field, value) {
-    updateProject.mutate({ id: projectId, values: { [field]: value } })
+    setSaveError(null)
+    updateProject.mutate(
+      { id: projectId, values: { [field]: value } },
+      { onError: (err) => setSaveError(err.message) },
+    )
   }
 
   async function handleDelete() {
@@ -128,6 +133,12 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
         <p className="text-sm text-ink-secondary">Chargement…</p>
       ) : (
         <div className="space-y-6">
+          {saveError && (
+            <p className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-400" role="alert">
+              {saveError}
+            </p>
+          )}
+
           {project.archived && (
             <Badge tone="neutral">Archivé</Badge>
           )}
@@ -263,12 +274,16 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               onBlur={() => {
                 const value = montantFacture === '' ? null : Number(montantFacture)
                 if (value !== (project.montant_facture ?? null)) {
-                  updateMontantFacture.mutate({
-                    projectId,
-                    companyId: project.company_id,
-                    projectNom: project.nom,
-                    montant: value,
-                  })
+                  setSaveError(null)
+                  updateMontantFacture.mutate(
+                    {
+                      projectId,
+                      companyId: project.company_id,
+                      projectNom: project.nom,
+                      montant: value,
+                    },
+                    { onError: (err) => setSaveError(err.message) },
+                  )
                 }
               }}
               className="w-full input-chrome"

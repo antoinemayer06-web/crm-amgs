@@ -324,7 +324,7 @@ function VisionCanvas() {
 export default function VisionPage() {
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-neutral-900">Vision</h2>
+      <h2 className="text-xl font-semibold text-ink">Vision</h2>
       <ReactFlowProvider>
         <VisionCanvas />
       </ReactFlowProvider>

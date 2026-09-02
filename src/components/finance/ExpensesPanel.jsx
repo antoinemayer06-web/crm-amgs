@@ -46,7 +46,7 @@ export default function ExpensesPanel({ expenses, monthKey }) {
       ) : (
         <ul className="divide-y divide-chrome-dark">
           {monthExpenses.map((expense) => (
-            <li key={expense.id} className="flex items-center gap-3 py-2 text-sm">
+            <li key={expense.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
               <Badge tone={EXPENSE_CATEGORY_TONES[expense.categorie]}>
                 {EXPENSE_CATEGORY_LABELS[expense.categorie]}
               </Badge>
@@ -56,16 +56,18 @@ export default function ExpensesPanel({ expenses, monthKey }) {
                   ↻
                 </span>
               )}
-              <span className="shrink-0 text-xs text-ink-tertiary">{formatDate(expense.date_depense)}</span>
-              <span className="shrink-0 font-medium text-ink">{formatMontant(expense.montant)}</span>
               <button
                 type="button"
                 onClick={() => handleDelete(expense.id, expense.libelle)}
-                className="shrink-0 text-ink-tertiary hover:text-red-600"
+                className="order-last shrink-0 text-ink-tertiary hover:text-red-400 sm:order-none"
                 aria-label="Supprimer"
               >
                 ✕
               </button>
+              <span className="ml-auto shrink-0 text-xs text-ink-tertiary sm:ml-0">
+                {formatDate(expense.date_depense)}
+              </span>
+              <span className="shrink-0 font-medium tabular-nums text-ink">{formatMontant(expense.montant)}</span>
             </li>
           ))}
         </ul>

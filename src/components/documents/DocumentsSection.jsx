@@ -29,6 +29,7 @@ export default function DocumentsSection({ companyId, projectId }) {
   const deleteDocument = useDeleteDocument()
 
   async function handleOpen(document) {
+    if (!document.url) return
     setOpeningId(document.id)
     try {
       const signedUrl = await getDocumentSignedUrl(document.url)
@@ -79,14 +80,20 @@ export default function DocumentsSection({ companyId, projectId }) {
               {documents.map((document) => (
                 <tr key={document.id} className="hover:bg-surface-hover">
                   <td className="px-4 py-3">
-                    <button
-                      type="button"
-                      onClick={() => handleOpen(document)}
-                      disabled={openingId === document.id}
-                      className="font-medium text-ink hover:underline disabled:opacity-50"
-                    >
-                      {document.nom}
-                    </button>
+                    {document.url ? (
+                      <button
+                        type="button"
+                        onClick={() => handleOpen(document)}
+                        disabled={openingId === document.id}
+                        className="font-medium text-ink hover:underline disabled:opacity-50"
+                      >
+                        {document.nom}
+                      </button>
+                    ) : (
+                      <span className="font-medium text-ink" title="Suivi automatique, sans fichier">
+                        {document.nom}
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-ink-secondary">{formatEnumLabel(document.type)}</td>
                   <td className="px-4 py-3 text-ink-secondary">{formatMontant(document.montant)}</td>
