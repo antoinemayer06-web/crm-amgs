@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import DocumentsSection from '../documents/DocumentsSection'
 import { useWorkLogsForSteps } from '../../hooks/useProjectWorkLogs'
 import { useDeleteProject, useProject, useUpdateProject } from '../../hooks/useProjects'
+import { useAiChat } from '../../lib/AiChatContext'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_OPTIONS } from '../../lib/constants'
 import {
   getActualHoursByStep,
@@ -31,6 +32,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const { data: project, isLoading } = useProject(projectId)
   const updateProject = useUpdateProject()
   const deleteProject = useDeleteProject()
+  const { setEntityContext } = useAiChat()
 
   const [nom, setNom] = useState('')
   const [description, setDescription] = useState('')
@@ -47,6 +49,12 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
       setDescription(project.description ?? '')
     }
   }, [project])
+
+  useEffect(() => {
+    if (!project) return
+    setEntityContext({ type: 'project', id: project.id, label: project.nom })
+    return () => setEntityContext(null)
+  }, [project, setEntityContext])
 
   function saveField(field, value) {
     updateProject.mutate({ id: projectId, values: { [field]: value } })

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import CompanyForm from '../components/companies/CompanyForm'
 import ContactsTab from '../components/companies/ContactsTab'
@@ -10,6 +10,7 @@ import Badge from '../components/ui/Badge'
 import Modal from '../components/ui/Modal'
 import { useCompany, useDeleteCompany, useUpdateCompany } from '../hooks/useCompanies'
 import { useProjectsByCompany } from '../hooks/useProjects'
+import { useAiChat } from '../lib/AiChatContext'
 import { COMPANY_STATUS_TONES, formatEnumLabel } from '../lib/constants'
 
 const TABS = [
@@ -29,6 +30,13 @@ export default function CompanyDetailPage() {
   const { data: projects } = useProjectsByCompany(id)
   const updateCompany = useUpdateCompany()
   const deleteCompany = useDeleteCompany()
+  const { setEntityContext } = useAiChat()
+
+  useEffect(() => {
+    if (!company) return
+    setEntityContext({ type: 'company', id: company.id, label: company.name })
+    return () => setEntityContext(null)
+  }, [company, setEntityContext])
 
   if (isLoading) {
     return <p className="text-sm text-neutral-500">Chargement…</p>
