@@ -67,7 +67,7 @@ export default function ProspectsList() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-semibold text-ink">Prospects</h2>
         <button
           type="button"
@@ -140,57 +140,98 @@ export default function ProspectsList() {
           <p className="p-6 text-sm text-ink-secondary">Aucun prospect trouvé.</p>
         )}
         {!isLoading && !isError && companies.length > 0 && (
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-chrome-dark text-xs text-ink-secondary">
-              <tr>
-                <th className="px-4 py-3 font-medium">Nom</th>
-                <th className="px-4 py-3 font-medium">Étape</th>
-                <th className="px-4 py-3 font-medium">Température</th>
-                <th className="px-4 py-3 font-medium">Secteur</th>
-                <th className="px-4 py-3 font-medium" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-chrome-dark">
+          <>
+            <div className="hidden overflow-x-auto md:block">
+              <table className="w-full text-left text-sm">
+                <thead className="border-b border-chrome-dark text-xs text-ink-secondary">
+                  <tr>
+                    <th className="px-4 py-3 font-medium">Nom</th>
+                    <th className="px-4 py-3 font-medium">Étape</th>
+                    <th className="px-4 py-3 font-medium">Température</th>
+                    <th className="px-4 py-3 font-medium">Secteur</th>
+                    <th className="px-4 py-3 font-medium" />
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-chrome-dark">
+                  {companies.map((company) => (
+                    <tr key={company.id} className="hover:bg-surface-hover">
+                      <td className={`px-4 ${rowPadding}`}>
+                        <Link
+                          to={`/companies/${company.id}`}
+                          className="font-medium text-ink hover:underline"
+                        >
+                          {company.name}
+                        </Link>
+                      </td>
+                      <td className={`px-4 ${rowPadding}`}>
+                        <InlineSelect
+                          value={company.statut_prospect}
+                          options={STATUT_PROSPECT_OPTIONS}
+                          toneMap={STATUT_PROSPECT_TONES}
+                          onChange={(value) => handleStatutProspectChange(company, value)}
+                        />
+                      </td>
+                      <td className={`px-4 ${rowPadding}`}>
+                        <InlineSelect
+                          value={company.temperature}
+                          options={TEMPERATURE_OPTIONS}
+                          toneMap={TEMPERATURE_TONES}
+                          onChange={(value) => handleTemperatureChange(company, value)}
+                        />
+                      </td>
+                      <td className={`px-4 ${rowPadding} text-ink-secondary`}>{company.sector || '—'}</td>
+                      <td className={`px-4 ${rowPadding} text-right`}>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(company)}
+                          className="text-red-500 hover:text-red-400"
+                        >
+                          Supprimer
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <ul className="divide-y divide-chrome-dark md:hidden">
               {companies.map((company) => (
-                <tr key={company.id} className="hover:bg-surface-hover">
-                  <td className={`px-4 ${rowPadding}`}>
-                    <Link
-                      to={`/companies/${company.id}`}
-                      className="font-medium text-ink hover:underline"
-                    >
-                      {company.name}
-                    </Link>
-                  </td>
-                  <td className={`px-4 ${rowPadding}`}>
+                <li key={company.id} className="p-4">
+                  <Link
+                    to={`/companies/${company.id}`}
+                    className="block truncate font-medium text-ink hover:underline"
+                  >
+                    {company.name}
+                  </Link>
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
                     <InlineSelect
                       value={company.statut_prospect}
                       options={STATUT_PROSPECT_OPTIONS}
                       toneMap={STATUT_PROSPECT_TONES}
                       onChange={(value) => handleStatutProspectChange(company, value)}
                     />
-                  </td>
-                  <td className={`px-4 ${rowPadding}`}>
                     <InlineSelect
                       value={company.temperature}
                       options={TEMPERATURE_OPTIONS}
                       toneMap={TEMPERATURE_TONES}
                       onChange={(value) => handleTemperatureChange(company, value)}
                     />
-                  </td>
-                  <td className={`px-4 ${rowPadding} text-ink-secondary`}>{company.sector || '—'}</td>
-                  <td className={`px-4 ${rowPadding} text-right`}>
+                    <span className="text-xs text-ink-secondary">{company.sector || '—'}</span>
+                  </div>
+                  <div className="mt-2 flex justify-end">
                     <button
                       type="button"
                       onClick={() => handleDelete(company)}
-                      className="text-red-500 hover:text-red-400"
+                      className="py-2 text-sm text-red-500 hover:text-red-400"
                     >
                       Supprimer
                     </button>
-                  </td>
-                </tr>
+                  </div>
+                </li>
               ))}
-            </tbody>
-          </table>
+            </ul>
+          </>
         )}
       </div>
 

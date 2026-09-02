@@ -22,7 +22,7 @@ export default function SidePanel({ title, onClose, children }) {
         }`}
       />
       <div
-        className={`relative flex h-full w-full max-w-md flex-col bg-surface shadow-2xl transition-transform duration-200 ease-out ${
+        className={`relative flex h-full w-full flex-col bg-surface shadow-2xl transition-transform duration-200 ease-out sm:max-w-md ${
           visible ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -31,7 +31,7 @@ export default function SidePanel({ title, onClose, children }) {
           <button
             type="button"
             onClick={handleClose}
-            className="text-ink-tertiary hover:text-ink-secondary"
+            className="flex h-11 w-11 items-center justify-center text-ink-tertiary hover:text-ink-secondary"
             aria-label="Fermer"
           >
             ✕

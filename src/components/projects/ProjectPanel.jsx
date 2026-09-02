@@ -156,7 +156,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
               <label className="block text-xs font-medium text-ink-secondary">Statut</label>
               <select
@@ -174,7 +174,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             <div />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
               <label className="block text-xs font-medium text-ink-secondary">
                 Date de début
@@ -209,7 +209,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
               <label className="block text-xs font-medium text-ink-secondary">
                 Date de fin réelle

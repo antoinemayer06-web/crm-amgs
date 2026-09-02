@@ -79,11 +79,11 @@ h3 {
 
 @layer components {
   .input-chrome {
-    @apply w-full rounded-md border border-chrome-dark bg-surface px-3 py-2 text-sm text-ink placeholder-ink-tertiary transition-colors duration-200 focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid;
+    @apply w-full rounded-md border border-chrome-dark bg-surface px-3 py-2 text-sm text-ink placeholder-ink-tertiary transition-colors duration-200 focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid max-md:min-h-[44px];
   }
 
   .btn-primary {
-    @apply rounded-md px-3 py-2 text-sm font-semibold text-[#141416] transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply rounded-md px-3 py-2 text-sm font-semibold text-[#141416] transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 max-md:min-h-[44px];
     background-image: radial-gradient(circle at 30% 25%, #eef0f1 0%, #c7cacf 30%, #8e9196 70%, #5a5d61 100%);
     background-size: 160% 160%;
     background-position: 30% 25%;
@@ -98,7 +98,7 @@ h3 {
   }
 
   .btn-secondary {
-    @apply rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary transition-colors duration-200 hover:border-chrome-mid hover:bg-surface-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50;
+    @apply rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary transition-colors duration-200 hover:border-chrome-mid hover:bg-surface-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50 max-md:min-h-[44px];
   }
 
   .card-chrome {

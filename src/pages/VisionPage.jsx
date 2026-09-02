@@ -89,6 +89,7 @@ function VisionCanvas() {
   const createNote = useCreateVisionNote()
   const updateNote = useUpdateVisionNote()
   const uploadImage = useUploadVisionImage()
+  const lastTapRef = useRef({ time: 0, x: 0, y: 0 })
 
   const { screenToFlowPosition, setCenter } = useReactFlow()
 
@@ -184,6 +185,30 @@ function VisionCanvas() {
     createPostItAt(position)
   }
 
+  // Le pan/zoom tactile (glisser pour déplacer, pincer pour zoomer) est
+  // déjà géré nativement par React Flow. Mais un `dblclick` DOM ne se
+  // déclenche pas de façon fiable sur un double-tap tactile — on le
+  // détecte donc nous-mêmes à partir des `touchend` successifs.
+  function handleTouchEnd(event) {
+    if (event.target.closest('.react-flow__node')) return
+    if (!event.target.closest('.react-flow__pane')) return
+    const touch = event.changedTouches?.[0]
+    if (!touch) return
+
+    const now = Date.now()
+    const last = lastTapRef.current
+    const distance = Math.hypot(touch.clientX - last.x, touch.clientY - last.y)
+    const isDoubleTap = now - last.time < 350 && distance < 30
+
+    if (isDoubleTap) {
+      lastTapRef.current = { time: 0, x: 0, y: 0 }
+      const position = screenToFlowPosition({ x: touch.clientX, y: touch.clientY })
+      createPostItAt(position)
+    } else {
+      lastTapRef.current = { time: now, x: touch.clientX, y: touch.clientY }
+    }
+  }
+
   function handleDragOver(event) {
     event.preventDefault()
     setIsDraggingFile(true)
@@ -229,6 +254,7 @@ function VisionCanvas() {
       ref={wrapperRef}
       className="relative h-[calc(100vh-140px)] w-full overflow-hidden rounded-xl border border-neutral-700 bg-neutral-600"
       onDoubleClick={handleDoubleClick}
+      onTouchEnd={handleTouchEnd}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -278,7 +304,8 @@ function VisionCanvas() {
       {isEmpty && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <p className="max-w-xs text-center text-sm text-neutral-400">
-            Ton mur d'inspiration est vide, double-clique n'importe où pour poser ta première idée.
+            Ton mur d'inspiration est vide, double-clique (ou double-tape sur mobile) n'importe où
+            pour poser ta première idée.
           </p>
         </div>
       )}

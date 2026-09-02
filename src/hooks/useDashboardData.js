@@ -17,6 +17,7 @@ export function useDashboardData() {
         notesRes,
         tasksRes,
         marketingActionsRes,
+        cashCollectionsRes,
       ] = await Promise.all([
         supabase.from('documents').select('*, company:companies(id, name)'),
         supabase.from('companies').select('*'),
@@ -33,6 +34,12 @@ export function useDashboardData() {
           .limit(15),
         supabase.from('tasks').select('*, company:companies(id, name)'),
         supabase.from('marketing_actions').select('id, statut, date_prevue'),
+        // Le CA du mois se compte à la date d'encaissement réel, pas à la
+        // date de facturation — un projet facturé en juillet mais encaissé
+        // en septembre compte dans le CA de septembre.
+        supabase
+          .from('cash_collections')
+          .select('*, project:projects(id, nom, company:companies(id, name))'),
       ])
 
       for (const res of [
@@ -44,6 +51,7 @@ export function useDashboardData() {
         notesRes,
         tasksRes,
         marketingActionsRes,
+        cashCollectionsRes,
       ]) {
         if (res.error) throw res.error
       }
@@ -57,6 +65,7 @@ export function useDashboardData() {
         notes: notesRes.data,
         tasks: tasksRes.data,
         marketingActions: marketingActionsRes.data,
+        cashCollections: cashCollectionsRes.data,
       }
     },
   })

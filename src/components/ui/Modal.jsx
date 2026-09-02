@@ -14,7 +14,7 @@ export default function Modal({ title, onClose, children, size = 'md' }) {
           <button
             type="button"
             onClick={onClose}
-            className="text-ink-tertiary hover:text-ink-secondary"
+            className="flex h-11 w-11 items-center justify-center text-ink-tertiary hover:text-ink-secondary"
             aria-label="Fermer"
           >
             ✕

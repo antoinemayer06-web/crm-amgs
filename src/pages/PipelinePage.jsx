@@ -45,7 +45,7 @@ export default function PipelinePage() {
         <h2 className="text-xl font-semibold text-ink">Pipeline</h2>
       </div>
 
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <PipelineFilters filters={filters} onChange={setFilters} />
 
         <div className="flex shrink-0 rounded-lg border border-chrome-dark bg-surface p-1">

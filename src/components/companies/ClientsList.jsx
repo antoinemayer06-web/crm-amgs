@@ -51,7 +51,7 @@ export default function ClientsList() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-semibold text-ink">Clients</h2>
         <button
           type="button"
@@ -113,58 +113,100 @@ export default function ClientsList() {
           <p className="p-6 text-sm text-ink-secondary">Aucun client trouvé.</p>
         )}
         {!isLoading && !isError && companies.length > 0 && (
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-chrome-dark text-xs text-ink-secondary">
-              <tr>
-                <th className="px-4 py-3 font-medium">Nom</th>
-                <th className="px-4 py-3 font-medium">Activité</th>
-                <th className="px-4 py-3 font-medium">Température</th>
-                <th className="px-4 py-3 font-medium">Secteur</th>
-                <th className="px-4 py-3 font-medium" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-chrome-dark">
+          <>
+            <div className="hidden overflow-x-auto md:block">
+              <table className="w-full text-left text-sm">
+                <thead className="border-b border-chrome-dark text-xs text-ink-secondary">
+                  <tr>
+                    <th className="px-4 py-3 font-medium">Nom</th>
+                    <th className="px-4 py-3 font-medium">Activité</th>
+                    <th className="px-4 py-3 font-medium">Température</th>
+                    <th className="px-4 py-3 font-medium">Secteur</th>
+                    <th className="px-4 py-3 font-medium" />
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-chrome-dark">
+                  {companies.map((company) => {
+                    const actif = activityMap?.[company.id] ?? false
+
+                    return (
+                      <tr key={company.id} className="hover:bg-surface-hover">
+                        <td className={`px-4 ${rowPadding}`}>
+                          <Link
+                            to={`/companies/${company.id}`}
+                            className="font-medium text-ink hover:underline"
+                          >
+                            {company.name}
+                          </Link>
+                        </td>
+                        <td className={`px-4 ${rowPadding}`}>
+                          <Badge tone={actif ? 'green' : 'neutral'}>
+                            {actif ? 'Actif' : 'Inactif'}
+                          </Badge>
+                        </td>
+                        <td className={`px-4 ${rowPadding}`}>
+                          <InlineSelect
+                            value={company.temperature}
+                            options={TEMPERATURE_OPTIONS}
+                            toneMap={TEMPERATURE_TONES}
+                            onChange={(value) => handleTemperatureChange(company, value)}
+                          />
+                        </td>
+                        <td className={`px-4 ${rowPadding} text-ink-secondary`}>{company.sector || '—'}</td>
+                        <td className={`px-4 ${rowPadding} text-right`}>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(company)}
+                            className="text-red-500 hover:text-red-400"
+                          >
+                            Supprimer
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <ul className="divide-y divide-chrome-dark md:hidden">
               {companies.map((company) => {
                 const actif = activityMap?.[company.id] ?? false
 
                 return (
-                  <tr key={company.id} className="hover:bg-surface-hover">
-                    <td className={`px-4 ${rowPadding}`}>
+                  <li key={company.id} className="p-4">
+                    <div className="flex items-start justify-between gap-3">
                       <Link
                         to={`/companies/${company.id}`}
-                        className="font-medium text-ink hover:underline"
+                        className="min-w-0 flex-1 truncate font-medium text-ink hover:underline"
                       >
                         {company.name}
                       </Link>
-                    </td>
-                    <td className={`px-4 ${rowPadding}`}>
-                      <Badge tone={actif ? 'green' : 'neutral'}>
-                        {actif ? 'Actif' : 'Inactif'}
-                      </Badge>
-                    </td>
-                    <td className={`px-4 ${rowPadding}`}>
+                      <Badge tone={actif ? 'green' : 'neutral'}>{actif ? 'Actif' : 'Inactif'}</Badge>
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
                       <InlineSelect
                         value={company.temperature}
                         options={TEMPERATURE_OPTIONS}
                         toneMap={TEMPERATURE_TONES}
                         onChange={(value) => handleTemperatureChange(company, value)}
                       />
-                    </td>
-                    <td className={`px-4 ${rowPadding} text-ink-secondary`}>{company.sector || '—'}</td>
-                    <td className={`px-4 ${rowPadding} text-right`}>
+                      <span className="text-xs text-ink-secondary">{company.sector || '—'}</span>
+                    </div>
+                    <div className="mt-2 flex justify-end">
                       <button
                         type="button"
                         onClick={() => handleDelete(company)}
-                        className="text-red-500 hover:text-red-400"
+                        className="py-2 text-sm text-red-500 hover:text-red-400"
                       >
                         Supprimer
                       </button>
-                    </td>
-                  </tr>
+                    </div>
+                  </li>
                 )
               })}
-            </tbody>
-          </table>
+            </ul>
+          </>
         )}
       </div>
 

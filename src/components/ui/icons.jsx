@@ -159,3 +159,35 @@ export function IconCheck({ className }) {
     </Svg>
   )
 }
+
+export function IconMenu({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M4 6.5h16M4 12h16M4 17.5h16" />
+    </Svg>
+  )
+}
+
+export function IconClose({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M5.5 5.5l13 13M18.5 5.5l-13 13" />
+    </Svg>
+  )
+}
+
+export function IconChevronLeft({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M14.5 5.5L8 12l6.5 6.5" />
+    </Svg>
+  )
+}
+
+export function IconChevronRight({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M9.5 5.5L16 12l-6.5 6.5" />
+    </Svg>
+  )
+}

@@ -14,16 +14,6 @@ function isInCurrentMonth(dateStr) {
   return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()
 }
 
-// CA du mois en cours : documents de type facture, montant, sur le mois.
-// Basé sur date_document (date réelle du document), pas created_at (date
-// d'ajout dans le CRM) — sinon un document saisi en retard ne remonte
-// pas dans le bon mois.
-export function getCAThisMonth(documents) {
-  return documents
-    .filter((doc) => doc.type === 'facture' && isInCurrentMonth(doc.date_document))
-    .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
-}
-
 // -----------------------------------------------------------------
 // Page Finance : tout est paramétré par un "monthKey" (ex: "2026-09")
 // pour permettre le tri mensuel (mois sélectionné, pas juste le mois en
@@ -88,14 +78,16 @@ export function getFinanceRepartition(documents, projects, companies) {
   ]
 }
 
-// Top clients par CA facturé sur le mois sélectionné (le reste est
-// regroupé sous "Autres" pour garder le donut lisible).
-export function getCAByClientForMonth(documents, monthKey, topN = 5) {
+// Top clients par CA encaissé sur le mois sélectionné (même logique que
+// le CA du mois : compté à la date d'encaissement réel, pas de
+// facturation). Le reste est regroupé sous "Autres" pour garder le
+// donut lisible.
+export function getCAByClientForMonth(cashCollections, monthKey, topN = 5) {
   const totals = new Map()
-  for (const doc of documents) {
-    if (doc.type !== 'facture' || !isInMonth(doc.date_document, monthKey)) continue
-    const name = doc.company?.name ?? 'Sans client'
-    totals.set(name, (totals.get(name) ?? 0) + Number(doc.montant ?? 0))
+  for (const collection of cashCollections) {
+    if (!isInMonth(collection.date_encaissement, monthKey)) continue
+    const name = collection.project?.company?.name ?? 'Sans client'
+    totals.set(name, (totals.get(name) ?? 0) + Number(collection.montant ?? 0))
   }
 
   const sorted = [...totals.entries()].sort((a, b) => b[1] - a[1])

@@ -68,7 +68,7 @@ export default function PipelineListView({ companies, onCompanyClick }) {
                 key={company.id}
                 type="button"
                 onClick={() => onCompanyClick(company)}
-                className={`flex w-full items-center gap-4 px-4 ${rowPadding} text-left transition-colors duration-150 hover:bg-surface-hover ${
+                className={`flex w-full flex-col gap-2 px-4 ${rowPadding} text-left transition-colors duration-150 hover:bg-surface-hover md:flex-row md:items-center md:gap-4 ${
                   index > 0 ? 'border-t border-chrome-dark' : ''
                 } ${dimmed ? 'opacity-50' : ''}`}
               >
@@ -79,34 +79,36 @@ export default function PipelineListView({ companies, onCompanyClick }) {
                   </p>
                 </div>
 
-                <div className="w-40 shrink-0">
-                  <Badge tone={STATUT_PROSPECT_TONES[company.statut_prospect]}>
-                    {formatEnumLabel(company.statut_prospect)}
-                  </Badge>
-                </div>
-
-                <div className="w-24 shrink-0">
-                  {company.temperature && (
-                    <Badge tone={TEMPERATURE_TONES[company.temperature]}>
-                      {formatEnumLabel(company.temperature)}
+                <div className="flex flex-wrap items-center gap-2 md:contents">
+                  <div className="w-40 shrink-0">
+                    <Badge tone={STATUT_PROSPECT_TONES[company.statut_prospect]}>
+                      {formatEnumLabel(company.statut_prospect)}
                     </Badge>
-                  )}
-                </div>
+                  </div>
 
-                <div className="w-28 shrink-0 text-right text-sm font-medium text-ink-secondary">
-                  {formatMontant(company.valeur_estimee)}
-                </div>
+                  <div className="w-24 shrink-0">
+                    {company.temperature && (
+                      <Badge tone={TEMPERATURE_TONES[company.temperature]}>
+                        {formatEnumLabel(company.temperature)}
+                      </Badge>
+                    )}
+                  </div>
 
-                <div className="w-48 shrink-0 truncate text-sm text-ink-secondary">
-                  {company.prochaine_action || '—'}
-                </div>
+                  <div className="shrink-0 text-sm font-medium text-ink-secondary md:w-28 md:text-right">
+                    {formatMontant(company.valeur_estimee)}
+                  </div>
 
-                <div
-                  className={`w-24 shrink-0 text-right text-xs font-medium ${
-                    late ? 'text-red-400' : 'text-ink-secondary'
-                  }`}
-                >
-                  {formatDate(company.date_prochaine_action)}
+                  <div className="shrink-0 truncate text-sm text-ink-secondary md:w-48">
+                    {company.prochaine_action || '—'}
+                  </div>
+
+                  <div
+                    className={`shrink-0 text-xs font-medium md:w-24 md:text-right ${
+                      late ? 'text-red-400' : 'text-ink-secondary'
+                    }`}
+                  >
+                    {formatDate(company.date_prochaine_action)}
+                  </div>
                 </div>
               </button>
             )

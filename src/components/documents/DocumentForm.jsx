@@ -77,7 +77,7 @@ export default function DocumentForm({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1">
           <label htmlFor="type" className="block text-sm font-medium text-ink-secondary">
             Type
@@ -115,7 +115,7 @@ export default function DocumentForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1">
           <label htmlFor="montant" className="block text-sm font-medium text-ink-secondary">
             Montant (€)
@@ -149,11 +149,11 @@ export default function DocumentForm({
         </p>
       )}
 
-      <div className="flex justify-end gap-2 pt-2">
-        <button type="button" onClick={onCancel} className="btn-secondary">
+      <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
+        <button type="button" onClick={onCancel} className="btn-secondary w-full sm:w-auto">
           Annuler
         </button>
-        <button type="submit" disabled={submitting} className="btn-primary">
+        <button type="submit" disabled={submitting} className="btn-primary w-full sm:w-auto">
           {submitting ? 'Enregistrement…' : 'Enregistrer'}
         </button>
       </div>

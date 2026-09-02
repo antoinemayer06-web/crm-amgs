@@ -81,7 +81,7 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1">
           <label htmlFor="date_debut" className="block text-sm font-medium text-ink-secondary">
             Date de début
@@ -108,7 +108,7 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1">
           <label htmlFor="budget" className="block text-sm font-medium text-ink-secondary">
             Budget (€)
@@ -148,18 +148,18 @@ export default function CampaignForm({ initialValues, onSubmit, onCancel, submit
         </p>
       )}
 
-      <div className="flex justify-end gap-2 pt-2">
+      <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
+          className="w-full rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover max-md:min-h-[44px] sm:w-auto"
         >
           Annuler
         </button>
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
+          className="w-full rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50 max-md:min-h-[44px] sm:w-auto"
         >
           {submitting ? 'Enregistrement…' : 'Enregistrer'}
         </button>

@@ -109,7 +109,7 @@ export default function CompanyForm({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1">
           <label htmlFor="status" className="block text-sm font-medium text-ink-secondary">
             Statut
@@ -149,7 +149,7 @@ export default function CompanyForm({
       </div>
 
       {values.status === 'prospect' && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-1">
             <label htmlFor="statut_prospect" className="block text-sm font-medium text-ink-secondary">
               Étape prospect
@@ -231,7 +231,7 @@ export default function CompanyForm({
         </p>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1">
           <label htmlFor="sector" className="block text-sm font-medium text-ink-secondary">
             Secteur
@@ -257,7 +257,7 @@ export default function CompanyForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1">
           <label htmlFor="source" className="block text-sm font-medium text-ink-secondary">
             Source
@@ -310,11 +310,11 @@ export default function CompanyForm({
         </p>
       )}
 
-      <div className="flex justify-end gap-2 pt-2">
-        <button type="button" onClick={onCancel} className="btn-secondary">
+      <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
+        <button type="button" onClick={onCancel} className="btn-secondary w-full sm:w-auto">
           Annuler
         </button>
-        <button type="submit" disabled={submitting} className="btn-primary">
+        <button type="submit" disabled={submitting} className="btn-primary w-full sm:w-auto">
           {submitting ? 'Enregistrement…' : 'Enregistrer'}
         </button>
       </div>

@@ -12,8 +12,9 @@ export default function DonutChart({ data }) {
   }
 
   return (
-    <div className="flex items-center gap-4">
-      <ResponsiveContainer width="50%" height={180}>
+    <div className="flex flex-col items-center gap-4 sm:flex-row">
+      <div className="w-full sm:w-1/2">
+      <ResponsiveContainer width="100%" height={180}>
         <PieChart>
           <Pie
             data={data}
@@ -40,7 +41,8 @@ export default function DonutChart({ data }) {
           />
         </PieChart>
       </ResponsiveContainer>
-      <ul className="min-w-0 flex-1 space-y-1.5">
+      </div>
+      <ul className="w-full min-w-0 flex-1 space-y-1.5 sm:w-auto">
         {data.map((entry, index) => (
           <li key={entry.name} className="flex items-center gap-2 text-xs">
             <span

@@ -36,7 +36,7 @@ export default function ListView({ projects, allSteps, onProjectClick, showClien
             key={project.id}
             type="button"
             onClick={() => onProjectClick(project)}
-            className={`flex w-full items-center gap-4 px-4 ${rowPadding} text-left transition-colors duration-150 hover:bg-surface-hover ${
+            className={`flex w-full flex-col gap-2 px-4 ${rowPadding} text-left transition-colors duration-150 hover:bg-surface-hover md:flex-row md:items-center md:gap-4 ${
               index > 0 ? 'border-t border-chrome-dark' : ''
             }`}
           >
@@ -50,23 +50,25 @@ export default function ListView({ projects, allSteps, onProjectClick, showClien
               )}
             </div>
 
-            <div className="hidden w-40 shrink-0 sm:block">
-              <ProgressBar done={stepsCount.done} total={stepsCount.total} />
-            </div>
+            <div className="flex flex-wrap items-center gap-2 md:contents">
+              <div className="hidden w-40 shrink-0 sm:block">
+                <ProgressBar done={stepsCount.done} total={stepsCount.total} />
+              </div>
 
-            <div className="flex w-44 shrink-0 items-center gap-1.5">
-              <Badge tone={PROJECT_STATUT_TONES[project.statut]}>
-                {PROJECT_STATUT_LABELS[project.statut]}
-              </Badge>
-              {project.archived && <Badge tone="neutral">Archivé</Badge>}
-            </div>
+              <div className="flex w-44 shrink-0 items-center gap-1.5">
+                <Badge tone={PROJECT_STATUT_TONES[project.statut]}>
+                  {PROJECT_STATUT_LABELS[project.statut]}
+                </Badge>
+                {project.archived && <Badge tone="neutral">Archivé</Badge>}
+              </div>
 
-            <div
-              className={`w-24 shrink-0 text-right text-xs font-medium ${
-                urgent ? 'text-red-600' : 'text-ink-secondary'
-              }`}
-            >
-              {formatDate(project.date_livraison_prevue)}
+              <div
+                className={`shrink-0 text-xs font-medium md:w-24 md:text-right ${
+                  urgent ? 'text-red-600' : 'text-ink-secondary'
+                }`}
+              >
+                {formatDate(project.date_livraison_prevue)}
+              </div>
             </div>
           </button>
         )

@@ -9,6 +9,7 @@ import ProjectPanel from '../components/projects/ProjectPanel'
 import Modal from '../components/ui/Modal'
 import { useCreateProject, useAllProjectSteps, useProjects, useUpdateProject } from '../hooks/useProjects'
 import { isDatePassee } from '../lib/constants'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 const VIEWS = [
   { key: 'kanban', label: 'Kanban' },
@@ -20,11 +21,16 @@ const emptyFilters = { statut: '', companyId: '', lateOnly: false }
 
 export default function ProjectsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [view, setView] = useState('kanban')
+  const isMobile = useIsMobile()
+  // Le Planning (Gantt) est illisible sur petit écran et repose sur du
+  // survol (hover) qui n'existe pas au tactile : on démarre en Liste sur
+  // mobile et on masque l'onglet Planning.
+  const [view, setView] = useState(() => (isMobile ? 'list' : 'kanban'))
   const [filters, setFilters] = useState(emptyFilters)
   const [selectedProjectId, setSelectedProjectId] = useState(null)
   const [creating, setCreating] = useState(false)
   const [showArchived, setShowArchived] = useState(false)
+  const visibleViews = isMobile ? VIEWS.filter((v) => v.key !== 'planning') : VIEWS
 
   // Permet de deep-linker vers un projet précis (ex: depuis le dashboard)
   // via /projects?open=<id>.
@@ -33,6 +39,10 @@ export default function ProjectsPage() {
     if (openId) setSelectedProjectId(openId)
     if (searchParams.get('create')) setCreating(true)
   }, [searchParams])
+
+  useEffect(() => {
+    if (isMobile && view === 'planning') setView('list')
+  }, [isMobile, view])
 
   // Un projet archivé disparaît toujours du Kanban et du Planning ; seule
   // la vue Liste peut basculer pour les consulter.
@@ -61,7 +71,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-semibold text-ink">Projets / Livraison</h2>
         <button
           type="button"
@@ -72,7 +82,7 @@ export default function ProjectsPage() {
         </button>
       </div>
 
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <ProjectFilters filters={filters} onChange={setFilters} />
 
         <div className="flex shrink-0 items-center gap-3">
@@ -100,7 +110,7 @@ export default function ProjectsPage() {
           )}
 
           <div className="flex rounded-lg border border-chrome-dark bg-surface p-1">
-            {VIEWS.map((v) => (
+            {visibleViews.map((v) => (
               <button
                 key={v.key}
                 type="button"

@@ -107,7 +107,7 @@ export default function SettingsPage() {
 
       <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
         <h3 className="mb-3 text-sm font-semibold text-ink">Société</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Nom de la société" field="nom_societe" values={values} onChange={update} onBlurField={saveIfChanged} />
           <Field label="Forme juridique" field="forme_juridique" values={values} onChange={update} onBlurField={saveIfChanged} />
           <Field label="SIRET" field="siret" values={values} onChange={update} onBlurField={saveIfChanged} />
@@ -121,7 +121,7 @@ export default function SettingsPage() {
 
       <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
         <h3 className="mb-3 text-sm font-semibold text-ink">Coordonnées bancaires</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="IBAN" field="iban" values={values} onChange={update} onBlurField={saveIfChanged} />
           <Field label="BIC" field="bic" values={values} onChange={update} onBlurField={saveIfChanged} />
         </div>

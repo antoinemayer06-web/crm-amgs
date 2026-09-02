@@ -12,9 +12,9 @@ import {
   currentMonthKey,
   getActiveProjectsCount,
   getCAByClientForMonth,
-  getCAThisMonth,
   getCashSummary,
   getConversionRate,
+  getEncaisseForMonth,
   getFinanceRepartition,
   getHoursComparison,
   getLateProjectsCount,
@@ -46,7 +46,7 @@ export default function DashboardPage() {
   const kpis = useMemo(() => {
     if (!data) return null
     return {
-      ca: getCAThisMonth(data.documents),
+      ca: getEncaisseForMonth(data.cashCollections, currentMonthKey()),
       cash: getCashSummary(data.projects),
       totalHoursWorked: getTotalHoursWorked(data.workLogs),
       conversionRate: getConversionRate(data.companies),
@@ -65,7 +65,7 @@ export default function DashboardPage() {
     [data],
   )
   const caByClient = useMemo(
-    () => (data ? getCAByClientForMonth(data.documents, currentMonthKey()) : []),
+    () => (data ? getCAByClientForMonth(data.cashCollections, currentMonthKey()) : []),
     [data],
   )
   const urgentItems = useMemo(
@@ -91,8 +91,8 @@ export default function DashboardPage() {
 
       {kpis && (
         <>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
-            <KpiCard label="CA du mois" value={formatMontant(kpis.ca)} />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+            <KpiCard label="CA du mois" value={formatMontant(kpis.ca)} sublabel="Encaissé ce mois-ci" />
             <CashKpiCard
               facture={kpis.cash.facture}
               encaisse={kpis.cash.encaisse}

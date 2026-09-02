@@ -7,7 +7,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { STATUT_PROSPECT_OPTIONS, formatEnumLabel } from '../../lib/constants'
 import ProspectCard from './ProspectCard'
 
@@ -59,11 +59,23 @@ function Column({ statut, companies, onCompanyClick }) {
 
 export default function PipelineKanban({ companies, onCompanyClick, onStatusChange }) {
   const [activeCompany, setActiveCompany] = useState(null)
+  const [scrollIndex, setScrollIndex] = useState(0)
+  const scrollRef = useRef(null)
   // Sans distance d'activation, dnd-kit démarre un drag au moindre pixel
   // de mouvement et avale le clic : la carte ne s'ouvre plus jamais.
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
   )
+
+  // Indicateur de position pour le scroll horizontal tactile (mobile) :
+  // une colonne = ~ (largeur totale / nombre de colonnes).
+  function handleScroll() {
+    const el = scrollRef.current
+    if (!el) return
+    const columnWidth = el.scrollWidth / STATUT_PROSPECT_OPTIONS.length
+    const index = Math.round(el.scrollLeft / columnWidth)
+    setScrollIndex(Math.min(index, STATUT_PROSPECT_OPTIONS.length - 1))
+  }
 
   function handleDragStart(event) {
     const company = companies.find((c) => c.id === event.active.id)
@@ -83,13 +95,23 @@ export default function PipelineKanban({ companies, onCompanyClick, onStatusChan
 
   return (
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      <div ref={scrollRef} onScroll={handleScroll} className="flex gap-4 overflow-x-auto pb-2">
         {STATUT_PROSPECT_OPTIONS.map((statut) => (
           <Column
             key={statut}
             statut={statut}
             companies={companies.filter((c) => c.statut_prospect === statut)}
             onCompanyClick={onCompanyClick}
+          />
+        ))}
+      </div>
+      <div className="mt-2 flex justify-center gap-1.5 md:hidden">
+        {STATUT_PROSPECT_OPTIONS.map((statut, index) => (
+          <span
+            key={statut}
+            className={`h-1.5 rounded-full transition-all duration-150 ${
+              index === scrollIndex ? 'w-4 bg-ink-secondary' : 'w-1.5 bg-chrome-dark'
+            }`}
           />
         ))}
       </div>
