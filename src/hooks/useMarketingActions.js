@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../lib/supabaseClient'
-import { buildRecurrenceOccurrences } from '../lib/marketingUtils'
+import { buildRecurrenceOccurrences } from '../lib/recurrenceUtils'
 
 export function useMarketingActions(filters = {}) {
   return useQuery({
@@ -56,7 +56,7 @@ export function useCreateMarketingAction() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (values) => {
-      const occurrences = buildRecurrenceOccurrences(values)
+      const occurrences = buildRecurrenceOccurrences(values, 'date_prevue')
       const { data, error } = await supabase.from('marketing_actions').insert(occurrences).select()
       if (error) throw error
       return data

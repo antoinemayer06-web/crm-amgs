@@ -21,6 +21,16 @@ export function getCAThisMonth(documents) {
     .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
 }
 
+// Encaissé du mois en cours : documents de type facture ET payés, sur le
+// mois (même méthode/table que getCAThisMonth, pour rester sur la même
+// base temporelle — contrairement à getCashSummary qui est un cumul
+// "toute la vie" issu des projets).
+export function getEncaisseThisMonth(documents) {
+  return documents
+    .filter((doc) => doc.type === 'facture' && doc.statut === 'payé' && isInCurrentMonth(doc.created_at))
+    .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
+}
+
 // Dépenses du mois en cours (URSSAF, abonnements, marketing, etc.).
 export function getExpensesThisMonth(expenses) {
   return expenses
@@ -28,9 +38,16 @@ export function getExpensesThisMonth(expenses) {
     .reduce((sum, expense) => sum + Number(expense.montant ?? 0), 0)
 }
 
-// Résultat net du mois : CA facturé du mois moins les dépenses du mois.
-export function getResult(caThisMonth, expensesThisMonth) {
+// Résultat prévu du mois (accrual) : CA facturé du mois moins les
+// dépenses du mois.
+export function getResultatPrevu(caThisMonth, expensesThisMonth) {
   return caThisMonth - expensesThisMonth
+}
+
+// Résultat réalisé du mois (cash) : encaissé du mois moins les dépenses
+// du mois.
+export function getResultatRealise(encaisseThisMonth, expensesThisMonth) {
+  return encaisseThisMonth - expensesThisMonth
 }
 
 // Total facturé vs total encaissé, remontés directement des champs de

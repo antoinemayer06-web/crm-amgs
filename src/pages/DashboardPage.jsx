@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import ActivityFeed from '../components/dashboard/ActivityFeed'
 import CashKpiCard from '../components/dashboard/CashKpiCard'
-import ExpensesModule from '../components/dashboard/ExpensesModule'
+import FinanceModule from '../components/dashboard/FinanceModule'
 import HoursComparisonChart from '../components/dashboard/HoursComparisonChart'
 import KpiCard from '../components/dashboard/KpiCard'
 import MarketingRecapCard from '../components/dashboard/MarketingRecapCard'
@@ -13,13 +13,15 @@ import {
   getCAThisMonth,
   getCashSummary,
   getConversionRate,
+  getEncaisseThisMonth,
   getExpensesThisMonth,
   getHoursComparison,
   getLateProjectsCount,
   getMarketingWeekCount,
   getPipelineFunnel,
   getRecentActivity,
-  getResult,
+  getResultatPrevu,
+  getResultatRealise,
   getTotalHoursWorked,
   getUrgentItems,
 } from '../lib/dashboardUtils'
@@ -45,6 +47,7 @@ export default function DashboardPage() {
   const kpis = useMemo(() => {
     if (!data) return null
     const ca = getCAThisMonth(data.documents)
+    const encaisseThisMonth = getEncaisseThisMonth(data.documents)
     const expensesThisMonth = getExpensesThisMonth(data.expenses)
     return {
       ca,
@@ -53,8 +56,10 @@ export default function DashboardPage() {
       conversionRate: getConversionRate(data.companies),
       activeProjects: getActiveProjectsCount(data.projects),
       lateProjects: getLateProjectsCount(data.projects),
+      encaisseThisMonth,
       expensesThisMonth,
-      result: getResult(ca, expensesThisMonth),
+      resultatPrevu: getResultatPrevu(ca, expensesThisMonth),
+      resultatRealise: getResultatRealise(encaisseThisMonth, expensesThisMonth),
     }
   }, [data])
 
@@ -110,10 +115,13 @@ export default function DashboardPage() {
             />
           </div>
 
-          <ExpensesModule
+          <FinanceModule
             expenses={data.expenses}
+            caThisMonth={kpis.ca}
+            encaisseThisMonth={kpis.encaisseThisMonth}
             expensesThisMonth={kpis.expensesThisMonth}
-            result={kpis.result}
+            resultatPrevu={kpis.resultatPrevu}
+            resultatRealise={kpis.resultatRealise}
           />
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">

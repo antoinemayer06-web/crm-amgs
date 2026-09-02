@@ -15,24 +15,26 @@ function toDateString(date) {
   return `${year}-${month}-${day}`
 }
 
-// Une action récurrente est matérialisée en plusieurs lignes indépendantes
+// Une entrée récurrente est matérialisée en plusieurs lignes indépendantes
 // dès la création (une par occurrence), plutôt que calculée à la volée —
 // chaque occurrence reste ensuite modifiable/supprimable séparément.
-export function buildRecurrenceOccurrences(payload) {
-  const { recurrence_frequence, recurrence_intervalle, recurrence_fin, date_prevue, ...rest } = payload
+// `dateField` est le nom de la colonne date sur laquelle porte la récurrence
+// (ex : "date_prevue" pour marketing_actions, "date_depense" pour expenses).
+export function buildRecurrenceOccurrences(payload, dateField) {
+  const { recurrence_frequence, recurrence_intervalle, recurrence_fin, [dateField]: dateValue, ...rest } = payload
 
-  if (!recurrence_frequence || !date_prevue) {
-    return [{ ...rest, date_prevue, recurrence_frequence: null, recurrence_intervalle: null, recurrence_fin: null }]
+  if (!recurrence_frequence || !dateValue) {
+    return [{ ...rest, [dateField]: dateValue, recurrence_frequence: null, recurrence_intervalle: null, recurrence_fin: null }]
   }
 
   const occurrences = []
-  let current = new Date(date_prevue)
+  let current = new Date(dateValue)
   const end = new Date(recurrence_fin)
 
   while (current <= end && occurrences.length < MAX_OCCURRENCES) {
     occurrences.push({
       ...rest,
-      date_prevue: toDateString(current),
+      [dateField]: toDateString(current),
       recurrence_frequence,
       recurrence_intervalle,
       recurrence_fin,
