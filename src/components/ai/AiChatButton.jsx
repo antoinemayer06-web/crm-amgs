@@ -9,7 +9,7 @@ export default function AiChatButton() {
     <button
       type="button"
       onClick={toggleOpen}
-      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-neutral-900 text-2xl text-white shadow-lg transition-transform duration-150 hover:scale-105"
+      className="fixed bottom-6 left-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-neutral-900 text-2xl text-white shadow-lg transition-transform duration-150 hover:scale-105"
       aria-label="Ouvrir l'assistant IA"
     >
       <span className="relative">
