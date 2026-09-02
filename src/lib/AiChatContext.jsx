@@ -4,6 +4,18 @@ import { supabase } from './supabaseClient'
 
 const AiChatContext = createContext(undefined)
 
+const ALLOWED_ATTACHMENT_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'application/pdf']
+const MAX_ATTACHMENT_SIZE = 5 * 1024 * 1024 // 5 Mo
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result).split(',')[1])
+    reader.onerror = () => reject(new Error('Impossible de lire le fichier.'))
+    reader.readAsDataURL(file)
+  })
+}
+
 async function callAssistant(payload) {
   const {
     data: { session },
@@ -64,12 +76,44 @@ export function AiChatProvider({ children }) {
   )
 
   const sendMessage = useCallback(
-    async (text) => {
+    async (text, file) => {
       setIsLoading(true)
       setError(null)
-      setDisplayMessages((prev) => [...prev, { id: crypto.randomUUID(), role: 'user', text }])
+
+      let attachment = null
+      if (file) {
+        if (!ALLOWED_ATTACHMENT_TYPES.includes(file.type)) {
+          setError('Type de fichier non supporté (images ou PDF uniquement).')
+          setIsLoading(false)
+          return
+        }
+        if (file.size > MAX_ATTACHMENT_SIZE) {
+          setError('Fichier trop volumineux (5 Mo maximum).')
+          setIsLoading(false)
+          return
+        }
+        try {
+          const dataBase64 = await fileToBase64(file)
+          attachment = { name: file.name, mediaType: file.type, dataBase64 }
+        } catch (err) {
+          setError(err.message)
+          setIsLoading(false)
+          return
+        }
+      }
+
+      setDisplayMessages((prev) => [
+        ...prev,
+        { id: crypto.randomUUID(), role: 'user', text, attachmentName: attachment?.name },
+      ])
       try {
-        const data = await callAssistant({ mode: 'chat', message: text, history, context: entityContext })
+        const data = await callAssistant({
+          mode: 'chat',
+          message: text,
+          history,
+          context: entityContext,
+          attachment,
+        })
         applyResult(data)
       } catch (err) {
         setError(err.message)

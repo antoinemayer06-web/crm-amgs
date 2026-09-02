@@ -11,6 +11,14 @@ const MAX_ITERATIONS = 6
 
 const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY') })
 
+// Nécessaire quand la clé API est une clé personnelle liée à plusieurs
+// workspaces (erreur "anthropic-workspace-id is required..." sinon).
+// Optionnel : absent, aucun header n'est envoyé.
+const WORKSPACE_ID = Deno.env.get('ANTHROPIC_WORKSPACE_ID')
+const REQUEST_OPTIONS = WORKSPACE_ID
+  ? { headers: { 'anthropic-workspace-id': WORKSPACE_ID } }
+  : undefined
+
 const READ_TOOL_MAP = Object.fromEntries(READ_TOOLS.map((t) => [t.name, t]))
 const WRITE_TOOL_MAP = Object.fromEntries(WRITE_TOOLS.map((t) => [t.name, t]))
 const WRITE_TOOL_NAMES = new Set(WRITE_TOOLS.map((t) => t.name))
@@ -20,19 +28,37 @@ const API_TOOLS = [...READ_TOOLS, ...WRITE_TOOLS].map(({ name, description, inpu
   input_schema,
 }))
 
+// Un fichier joint (image ou PDF, en base64) devient un bloc de contenu
+// avant le texte du message, comme attendu par l'API Messages.
+function buildUserContent(message: string, attachment?: { mediaType: string; dataBase64: string } | null) {
+  if (!attachment) return message
+
+  const isPdf = attachment.mediaType === 'application/pdf'
+  return [
+    {
+      type: isPdf ? 'document' : 'image',
+      source: { type: 'base64', media_type: attachment.mediaType, data: attachment.dataBase64 },
+    },
+    { type: 'text', text: message },
+  ]
+}
+
 // Boucle agentique : exécute les tools de lecture immédiatement, s'arrête
 // dès qu'un tool d'écriture est demandé (ces actions attendent la
 // validation de l'utilisateur — voir resolveActions ci-dessous).
 async function runTurn(supabase: any, messages: any[], systemText: string) {
   for (let i = 0; i < MAX_ITERATIONS; i++) {
-    const response = await anthropic.messages.create({
-      model: MODEL,
-      max_tokens: 4096,
-      thinking: { type: 'adaptive' },
-      system: systemText,
-      tools: API_TOOLS as any,
-      messages,
-    })
+    const response = await anthropic.messages.create(
+      {
+        model: MODEL,
+        max_tokens: 4096,
+        thinking: { type: 'adaptive' },
+        system: systemText,
+        tools: API_TOOLS as any,
+        messages,
+      },
+      REQUEST_OPTIONS,
+    )
 
     messages.push({ role: 'assistant', content: response.content })
 
@@ -198,7 +224,7 @@ Deno.serve(async (req) => {
       result = await resolveActions(supabase, messages, body.decisions ?? [], body.pendingReadResults ?? [], systemText)
     } else {
       const messages = body.history ?? []
-      messages.push({ role: 'user', content: body.message })
+      messages.push({ role: 'user', content: buildUserContent(body.message, body.attachment) })
       result = await runTurn(supabase, messages, systemText)
     }
 
