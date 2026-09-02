@@ -105,11 +105,11 @@ export default function FinanceGoalJar({ objectif, realise }) {
 
       <div className="grid w-full grid-cols-2 gap-3 text-center">
         <div>
-          <p className="text-[10px] font-medium uppercase tracking-wide text-ink-tertiary">Objectif</p>
+          <p className="text-[10px] font-medium text-ink-tertiary">Objectif</p>
           <p className="text-sm font-semibold text-ink">{formatMontant(objectif)}</p>
         </div>
         <div>
-          <p className="text-[10px] font-medium uppercase tracking-wide text-ink-tertiary">Réalisé</p>
+          <p className="text-[10px] font-medium text-ink-tertiary">Réalisé</p>
           <p className={`text-sm font-semibold ${isNegative ? 'text-red-600' : 'text-emerald-600'}`}>
             {formatMontant(realise)}
           </p>

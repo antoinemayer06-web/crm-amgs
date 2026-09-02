@@ -63,3 +63,26 @@ export function useCreateCashCollection() {
     },
   })
 }
+
+// Supprime un encaissement et retire son montant du total cumulé sur le
+// projet, pour rester cohérent avec l'ajout.
+export function useDeleteCashCollection() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, projectId, montant, currentMontantEncaisse }) => {
+      const { error: deleteError } = await supabase.from('cash_collections').delete().eq('id', id)
+      if (deleteError) throw deleteError
+
+      const { error: updateError } = await supabase
+        .from('projects')
+        .update({ montant_encaisse: Number(currentMontantEncaisse ?? 0) - Number(montant) })
+        .eq('id', projectId)
+      if (updateError) throw updateError
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cash_collections'] })
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+    },
+  })
+}

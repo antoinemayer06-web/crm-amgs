@@ -28,7 +28,7 @@ const formatDate = (value) => new Date(value).toLocaleDateString('fr-FR')
 function Field({ label, field, values, onChange, onBlurField, type = 'text', className = '' }) {
   return (
     <div className={`space-y-1 ${className}`}>
-      <label htmlFor={field} className="block text-xs font-medium uppercase text-ink-secondary">
+      <label htmlFor={field} className="block text-xs font-medium text-ink-secondary">
         {label}
       </label>
       <input
@@ -181,6 +181,35 @@ export default function SettingsPage() {
             </ul>
           )}
         </div>
+      </div>
+
+      <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
+        <h3 className="mb-3 text-sm font-semibold text-ink">Informations</h3>
+        <p className="mb-3 text-xs text-ink-tertiary">Raccourcis clavier disponibles dans l'application.</p>
+        <ul className="divide-y divide-chrome-dark text-sm">
+          <li className="flex items-center justify-between py-2">
+            <span className="text-ink-secondary">Ouvrir la palette de commande</span>
+            <span className="flex items-center gap-1">
+              <kbd className="rounded border border-chrome-dark bg-canvas px-1.5 py-0.5 text-xs text-ink">⌘</kbd>
+              <kbd className="rounded border border-chrome-dark bg-canvas px-1.5 py-0.5 text-xs text-ink">K</kbd>
+            </span>
+          </li>
+          <li className="flex items-center justify-between py-2">
+            <span className="text-ink-secondary">Fermer la palette de commande</span>
+            <kbd className="rounded border border-chrome-dark bg-canvas px-1.5 py-0.5 text-xs text-ink">Échap</kbd>
+          </li>
+          <li className="flex items-center justify-between py-2">
+            <span className="text-ink-secondary">Naviguer dans les résultats</span>
+            <span className="flex items-center gap-1">
+              <kbd className="rounded border border-chrome-dark bg-canvas px-1.5 py-0.5 text-xs text-ink">↑</kbd>
+              <kbd className="rounded border border-chrome-dark bg-canvas px-1.5 py-0.5 text-xs text-ink">↓</kbd>
+            </span>
+          </li>
+          <li className="flex items-center justify-between py-2">
+            <span className="text-ink-secondary">Sélectionner un résultat</span>
+            <kbd className="rounded border border-chrome-dark bg-canvas px-1.5 py-0.5 text-xs text-ink">Entrée</kbd>
+          </li>
+        </ul>
       </div>
     </div>
   )

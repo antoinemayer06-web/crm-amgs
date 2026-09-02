@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import ActivityFeed from '../components/dashboard/ActivityFeed'
 import CashKpiCard from '../components/dashboard/CashKpiCard'
+import DonutChart from '../components/dashboard/DonutChart'
 import HoursComparisonChart from '../components/dashboard/HoursComparisonChart'
 import KpiCard from '../components/dashboard/KpiCard'
 import MarketingRecapCard from '../components/dashboard/MarketingRecapCard'
@@ -8,10 +9,13 @@ import PipelineFunnelChart from '../components/dashboard/PipelineFunnelChart'
 import UrgentActionsWidget from '../components/dashboard/UrgentActionsWidget'
 import { useDashboardData } from '../hooks/useDashboardData'
 import {
+  currentMonthKey,
   getActiveProjectsCount,
+  getCAByClientForMonth,
   getCAThisMonth,
   getCashSummary,
   getConversionRate,
+  getFinanceRepartition,
   getHoursComparison,
   getLateProjectsCount,
   getMarketingWeekCount,
@@ -56,6 +60,14 @@ export default function DashboardPage() {
     [data],
   )
   const pipelineFunnel = useMemo(() => (data ? getPipelineFunnel(data.companies) : []), [data])
+  const financeRepartition = useMemo(
+    () => (data ? getFinanceRepartition(data.documents, data.projects, data.companies) : []),
+    [data],
+  )
+  const caByClient = useMemo(
+    () => (data ? getCAByClientForMonth(data.documents, currentMonthKey()) : []),
+    [data],
+  )
   const urgentItems = useMemo(
     () => (data ? getUrgentItems(data.companies, data.projects, data.tasks) : []),
     [data],
@@ -101,6 +113,15 @@ export default function DashboardPage() {
               value={kpis.lateProjects}
               tone={kpis.lateProjects > 0 ? 'critical' : 'good'}
             />
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+            <Section title="Répartition financière">
+              <DonutChart data={financeRepartition} />
+            </Section>
+            <Section title="CA par client (mois en cours)">
+              <DonutChart data={caByClient} />
+            </Section>
           </div>
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">

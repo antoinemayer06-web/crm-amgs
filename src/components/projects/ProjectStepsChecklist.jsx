@@ -86,7 +86,8 @@ function StepRow({ step, actualHours, onToggle, onDateChange, onEstimateChange, 
           placeholder="h"
           className="w-16 rounded border border-chrome-dark px-1 py-0.5 text-xs text-ink-secondary focus:border-chrome-mid focus:outline-none"
         />
-        <span>h · Réel : {actualHours ? `${actualHours} h` : '—'}</span>
+        <span>h</span>
+        <span className="ml-2">Réel : {actualHours ? `${actualHours} h` : '—'}</span>
       </div>
     </div>
   )

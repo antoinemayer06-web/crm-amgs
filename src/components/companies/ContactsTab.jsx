@@ -43,7 +43,7 @@ export default function ContactsTab({ companyId }) {
         )}
         {!isLoading && !isError && contacts.length > 0 && (
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-chrome-dark text-xs uppercase text-ink-secondary">
+            <thead className="border-b border-chrome-dark text-xs text-ink-secondary">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>
                 <th className="px-4 py-3 font-medium">Fonction</th>

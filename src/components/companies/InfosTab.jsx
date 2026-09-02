@@ -4,7 +4,7 @@ import Badge from '../ui/Badge'
 function Field({ label, children }) {
   return (
     <div>
-      <dt className="text-xs font-medium uppercase text-ink-secondary">{label}</dt>
+      <dt className="text-xs font-medium text-ink-secondary">{label}</dt>
       <dd className="mt-1 text-sm text-ink">{children ?? '—'}</dd>
     </div>
   )
@@ -63,7 +63,7 @@ export default function InfosTab({ company, actif }) {
       )}
 
       <div>
-        <dt className="text-xs font-medium uppercase text-ink-secondary">Notes générales</dt>
+        <dt className="text-xs font-medium text-ink-secondary">Notes générales</dt>
         <dd className="mt-1 whitespace-pre-wrap text-sm text-ink">
           {company.notes_generales || '—'}
         </dd>

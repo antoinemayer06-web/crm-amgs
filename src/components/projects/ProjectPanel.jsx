@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import DocumentsSection from '../documents/DocumentsSection'
-import { useCashCollectionsForProject, useCreateCashCollection } from '../../hooks/useCashCollections'
+import {
+  useCashCollectionsForProject,
+  useCreateCashCollection,
+  useDeleteCashCollection,
+} from '../../hooks/useCashCollections'
 import { useWorkLogsForSteps } from '../../hooks/useProjectWorkLogs'
 import { useDeleteProject, useProject, useUpdateProject } from '../../hooks/useProjects'
 import { useAiChat } from '../../lib/AiChatContext'
@@ -23,7 +27,7 @@ const formatMontant = (value) => (value == null ? '—' : `${Number(value).toLoc
 function StatTile({ label, value }) {
   return (
     <div className="rounded-md bg-surface-hover px-3 py-2">
-      <p className="text-[10px] font-medium uppercase text-ink-tertiary">{label}</p>
+      <p className="text-[10px] font-medium text-ink-tertiary">{label}</p>
       <p className="mt-0.5 text-sm font-semibold text-ink">{value}</p>
     </div>
   )
@@ -35,6 +39,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const deleteProject = useDeleteProject()
   const { data: cashCollections } = useCashCollectionsForProject(projectId)
   const createCashCollection = useCreateCashCollection()
+  const deleteCashCollection = useDeleteCashCollection()
   const { setEntityContext } = useAiChat()
 
   const [nom, setNom] = useState('')
@@ -101,6 +106,16 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
     setAddingCash(false)
   }
 
+  async function handleDeleteCashCollection(collection) {
+    if (!window.confirm('Supprimer cet encaissement ?')) return
+    await deleteCashCollection.mutateAsync({
+      id: collection.id,
+      projectId,
+      montant: collection.montant,
+      currentMontantEncaisse: project.montant_encaisse,
+    })
+  }
+
   return (
     <SidePanel title={isLoading ? 'Chargement…' : project?.nom} onClose={onClose}>
       {isLoading || !project ? (
@@ -119,7 +134,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium uppercase text-ink-secondary">Nom</label>
+            <label className="block text-xs font-medium text-ink-secondary">Nom</label>
             <input
               value={nom}
               onChange={(event) => setNom(event.target.value)}
@@ -130,7 +145,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
           {project.company && (
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-ink-secondary">Client</label>
+              <label className="block text-xs font-medium text-ink-secondary">Client</label>
               <Link
                 to={`/companies/${project.company.id}`}
                 className="flex items-center gap-2 rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
@@ -143,7 +158,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-ink-secondary">Statut</label>
+              <label className="block text-xs font-medium text-ink-secondary">Statut</label>
               <select
                 value={project.statut}
                 onChange={(event) => saveField('statut', event.target.value)}
@@ -161,7 +176,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-ink-secondary">
+              <label className="block text-xs font-medium text-ink-secondary">
                 Date de début
               </label>
               <input
@@ -176,7 +191,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               />
             </div>
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-ink-secondary">
+              <label className="block text-xs font-medium text-ink-secondary">
                 Échéance
               </label>
               <input
@@ -196,7 +211,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-ink-secondary">
+              <label className="block text-xs font-medium text-ink-secondary">
                 Date de fin réelle
               </label>
               <input
@@ -211,7 +226,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               />
             </div>
             <div className="space-y-1">
-              <label className="block text-xs font-medium uppercase text-ink-secondary">
+              <label className="block text-xs font-medium text-ink-secondary">
                 Heures prévues (projet)
               </label>
               <input
@@ -230,7 +245,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium uppercase text-ink-secondary">
+            <label className="block text-xs font-medium text-ink-secondary">
               Montant facturé (€)
             </label>
             <input
@@ -249,7 +264,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
 
           <div className="space-y-2 rounded-md border border-chrome-dark p-3">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-medium uppercase text-ink-secondary">
+              <label className="block text-xs font-medium text-ink-secondary">
                 Cash encaissé — {formatMontant(project.montant_encaisse)}
               </label>
               <button
@@ -291,9 +306,19 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             {cashCollections?.length > 0 && (
               <ul className="space-y-1 pt-1">
                 {cashCollections.map((collection) => (
-                  <li key={collection.id} className="flex justify-between text-xs text-ink-secondary">
+                  <li key={collection.id} className="flex items-center justify-between gap-2 text-xs text-ink-secondary">
                     <span>{new Date(collection.date_encaissement).toLocaleDateString('fr-FR')}</span>
-                    <span className="font-medium text-ink-secondary">{formatMontant(collection.montant)}</span>
+                    <span className="ml-auto font-medium tabular-nums text-ink-secondary">
+                      {formatMontant(collection.montant)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteCashCollection(collection)}
+                      className="shrink-0 text-ink-tertiary hover:text-red-400"
+                      aria-label="Supprimer cet encaissement"
+                    >
+                      ✕
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -301,7 +326,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           </div>
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium uppercase text-ink-secondary">
+            <label className="block text-xs font-medium text-ink-secondary">
               Description
             </label>
             <textarea
@@ -317,7 +342,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-medium uppercase text-ink-secondary">
+            <label className="block text-xs font-medium text-ink-secondary">
               Étapes
             </label>
             <ProjectStepsChecklist
@@ -328,14 +353,14 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-medium uppercase text-ink-secondary">
+            <label className="block text-xs font-medium text-ink-secondary">
               Travail effectué
             </label>
             <ProjectWorkLog steps={steps} />
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-medium uppercase text-ink-secondary">
+            <label className="block text-xs font-medium text-ink-secondary">
               Documents
             </label>
             <DocumentsSection companyId={project.company_id} projectId={projectId} />

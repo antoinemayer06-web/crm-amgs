@@ -48,7 +48,7 @@ export default function ActionCard({ actions, onResolve, submitting }) {
     <div className="space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
       {groups.map(([type, items]) => (
         <div key={type} className="space-y-1.5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+          <p className="text-xs font-semibold text-amber-700">
             {ACTION_TYPE_LABELS[type] ?? type}
             {items.length > 1 ? ` (${items.length})` : ''}
           </p>

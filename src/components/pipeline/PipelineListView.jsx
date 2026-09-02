@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useDensity } from '../../hooks/useDensity'
 import {
   STATUT_PROSPECT_TONES,
   TEMPERATURE_TONES,
@@ -6,6 +7,7 @@ import {
   isDatePassee,
 } from '../../lib/constants'
 import Badge from '../ui/Badge'
+import DensityToggle from '../ui/DensityToggle'
 
 const formatDate = (value) => (value ? new Date(value).toLocaleDateString('fr-FR') : '—')
 const formatMontant = (value) =>
@@ -18,6 +20,8 @@ const SORT_OPTIONS = [
 
 export default function PipelineListView({ companies, onCompanyClick }) {
   const [sortBy, setSortBy] = useState('date_prochaine_action')
+  const [density, setDensity] = useDensity()
+  const rowPadding = density === 'compact' ? 'py-1.5' : 'py-3'
 
   const sorted = useMemo(() => {
     const list = [...companies]
@@ -33,7 +37,7 @@ export default function PipelineListView({ companies, onCompanyClick }) {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-end gap-2">
+      <div className="flex items-center justify-end gap-3">
         <label className="text-sm text-ink-secondary">Trier par</label>
         <select
           value={sortBy}
@@ -46,6 +50,7 @@ export default function PipelineListView({ companies, onCompanyClick }) {
             </option>
           ))}
         </select>
+        <DensityToggle density={density} onChange={setDensity} />
       </div>
 
       {sorted.length === 0 ? (
@@ -63,7 +68,7 @@ export default function PipelineListView({ companies, onCompanyClick }) {
                 key={company.id}
                 type="button"
                 onClick={() => onCompanyClick(company)}
-                className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors duration-150 hover:bg-surface-hover ${
+                className={`flex w-full items-center gap-4 px-4 ${rowPadding} text-left transition-colors duration-150 hover:bg-surface-hover ${
                   index > 0 ? 'border-t border-chrome-dark' : ''
                 } ${dimmed ? 'opacity-50' : ''}`}
               >

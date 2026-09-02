@@ -127,7 +127,7 @@ export default function CalendarView({ currentMonth, actions, onPrevMonth, onNex
                         event.stopPropagation()
                         onActionClick(action)
                       }}
-                      className={`truncate rounded px-1.5 py-0.5 text-[11px] font-medium transition-opacity duration-150 hover:opacity-80 ${
+                      className={`truncate rounded px-1.5 py-0.5 font-medium transition-opacity duration-150 hover:opacity-80 ${
                         tones[tone] ?? tones.neutral
                       } ${cancelled ? 'opacity-40 line-through' : ''}`}
                       title={`${action.titre} — ${formatEnumLabel(action.type)}`}

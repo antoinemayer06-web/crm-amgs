@@ -69,6 +69,42 @@ export function getExpensesForMonth(expenses, monthKey) {
     .reduce((sum, expense) => sum + Number(expense.montant ?? 0), 0)
 }
 
+// Répartition en valeur : factures émises mais pas encore payées, cash
+// réellement encaissé (cumul projets) et valeur du pipeline de
+// prospection encore actif (hors refus).
+export function getFinanceRepartition(documents, projects, companies) {
+  const factureNonPayee = documents
+    .filter((doc) => doc.type === 'facture' && doc.statut !== 'payé')
+    .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
+  const encaisse = projects.reduce((sum, project) => sum + Number(project.montant_encaisse ?? 0), 0)
+  const pipelineProspection = companies
+    .filter((company) => company.status === 'prospect' && company.statut_prospect !== 'refus')
+    .reduce((sum, company) => sum + Number(company.valeur_estimee ?? 0), 0)
+
+  return [
+    { name: 'Facturé non payé', value: factureNonPayee },
+    { name: 'Encaissé', value: encaisse },
+    { name: 'Pipeline prospection', value: pipelineProspection },
+  ]
+}
+
+// Top clients par CA facturé sur le mois sélectionné (le reste est
+// regroupé sous "Autres" pour garder le donut lisible).
+export function getCAByClientForMonth(documents, monthKey, topN = 5) {
+  const totals = new Map()
+  for (const doc of documents) {
+    if (doc.type !== 'facture' || !isInMonth(doc.date_document, monthKey)) continue
+    const name = doc.company?.name ?? 'Sans client'
+    totals.set(name, (totals.get(name) ?? 0) + Number(doc.montant ?? 0))
+  }
+
+  const sorted = [...totals.entries()].sort((a, b) => b[1] - a[1])
+  const top = sorted.slice(0, topN).map(([name, value]) => ({ name, value }))
+  const rest = sorted.slice(topN).reduce((sum, [, value]) => sum + value, 0)
+  if (rest > 0) top.push({ name: 'Autres', value: rest })
+  return top
+}
+
 // Résultat prévu du mois (accrual) : CA facturé du mois moins les
 // dépenses du mois.
 export function getResultatPrevu(caForMonth, expensesForMonth) {

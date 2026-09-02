@@ -1,13 +1,18 @@
+import { useDensity } from '../../hooks/useDensity'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_TONES, isDateUrgente } from '../../lib/constants'
 import { getStepsCount } from '../../lib/projectUtils'
 import Avatar from '../ui/Avatar'
 import Badge from '../ui/Badge'
+import DensityToggle from '../ui/DensityToggle'
 import ProgressBar from '../ui/ProgressBar'
 
 const formatDate = (value) =>
   value ? new Date(value).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'
 
 export default function ListView({ projects, allSteps, onProjectClick, showClient = true }) {
+  const [density, setDensity] = useDensity()
+  const rowPadding = density === 'compact' ? 'py-1.5' : 'py-3'
+
   if (projects.length === 0) {
     return (
       <div className="rounded-xl border border-chrome-dark bg-surface py-16 text-center">
@@ -17,7 +22,11 @@ export default function ListView({ projects, allSteps, onProjectClick, showClien
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-chrome-dark bg-surface">
+    <div className="space-y-3">
+      <div className="flex items-center justify-end">
+        <DensityToggle density={density} onChange={setDensity} />
+      </div>
+      <div className="overflow-hidden rounded-xl border border-chrome-dark bg-surface">
       {projects.map((project, index) => {
         const urgent = isDateUrgente(project.date_livraison_prevue)
         const stepsCount = getStepsCount(allSteps, project.id)
@@ -27,7 +36,7 @@ export default function ListView({ projects, allSteps, onProjectClick, showClien
             key={project.id}
             type="button"
             onClick={() => onProjectClick(project)}
-            className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors duration-150 hover:bg-surface-hover ${
+            className={`flex w-full items-center gap-4 px-4 ${rowPadding} text-left transition-colors duration-150 hover:bg-surface-hover ${
               index > 0 ? 'border-t border-chrome-dark' : ''
             }`}
           >
@@ -62,6 +71,7 @@ export default function ListView({ projects, allSteps, onProjectClick, showClien
           </button>
         )
       })}
+      </div>
     </div>
   )
 }

@@ -66,7 +66,7 @@ export default function ProjectWorkLog({ steps }) {
                 <p className="text-sm text-ink-secondary">{log.description}</p>
                 <p className="mt-1 text-xs text-ink-tertiary">
                   {formatDate(log.date)}
-                  {log.duree_heures != null && ` · ${log.duree_heures} h`}
+                  {log.duree_heures != null && ` — ${log.duree_heures} h`}
                 </p>
               </div>
               <button

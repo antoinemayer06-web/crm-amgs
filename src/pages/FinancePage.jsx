@@ -112,7 +112,7 @@ export default function FinancePage() {
 
               <div className="mt-4 grid grid-cols-2 gap-4 border-t border-chrome-dark pt-4">
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-ink-tertiary">Résultat prévu</p>
+                  <p className="text-xs font-medium text-ink-tertiary">Résultat prévu</p>
                   <p
                     className={`mt-1 text-xl font-semibold ${
                       kpis.resultatPrevu >= 0 ? 'text-emerald-600' : 'text-red-600'
@@ -123,7 +123,7 @@ export default function FinancePage() {
                   <p className="mt-0.5 text-xs text-ink-tertiary">CA facturé − dépenses</p>
                 </div>
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-ink-tertiary">Résultat réalisé</p>
+                  <p className="text-xs font-medium text-ink-tertiary">Résultat réalisé</p>
                   <p
                     className={`mt-1 text-xl font-semibold ${
                       kpis.resultatRealise >= 0 ? 'text-emerald-600' : 'text-red-600'

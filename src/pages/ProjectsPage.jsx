@@ -31,6 +31,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     const openId = searchParams.get('open')
     if (openId) setSelectedProjectId(openId)
+    if (searchParams.get('create')) setCreating(true)
   }, [searchParams])
 
   // Un projet archivé disparaît toujours du Kanban et du Planning ; seule

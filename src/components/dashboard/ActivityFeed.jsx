@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { formatRelativeTime } from '../../lib/dashboardUtils'
+import { IconCompanies, IconDocument, IconNote, IconProjects } from '../ui/icons'
 
-const TYPE_ICON = { note: '📝', document: '📄', project: '📁', company: '🏢' }
+const TYPE_ICON = { note: IconNote, document: IconDocument, project: IconProjects, company: IconCompanies }
 
 export default function ActivityFeed({ events }) {
   if (events.length === 0) {
@@ -11,9 +12,10 @@ export default function ActivityFeed({ events }) {
   return (
     <ul className="space-y-1">
       {events.map((event) => {
+        const Icon = TYPE_ICON[event.type]
         const row = (
           <div className="flex items-start gap-3">
-            <span className="mt-0.5 text-base">{TYPE_ICON[event.type]}</span>
+            <Icon className="mt-0.5 h-4 w-4 shrink-0 text-ink-tertiary" />
             <div className="min-w-0 flex-1">
               <p className="text-sm text-ink-secondary">{event.label}</p>
               <p className="text-xs text-ink-tertiary">{formatRelativeTime(event.timestamp)}</p>

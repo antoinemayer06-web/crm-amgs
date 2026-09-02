@@ -4,7 +4,7 @@ export default function MarketingRecapCard({ count }) {
   return (
     <div className="flex h-full flex-col justify-between rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
       <div>
-        <p className="text-xs font-medium uppercase tracking-wide text-ink-tertiary">
+        <p className="text-xs font-medium text-ink-tertiary">
           Marketing cette semaine
         </p>
         <p className="mt-1 text-2xl font-semibold text-ink">{count}</p>
@@ -13,7 +13,7 @@ export default function MarketingRecapCard({ count }) {
         </p>
       </div>
       <Link to="/marketing" className="mt-3 text-sm font-medium text-blue-400 hover:text-blue-300">
-        Voir le calendrier →
+        Voir le calendrier
       </Link>
     </div>
   )

@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useCompanies, useCreateCompany, useDeleteCompany, useUpdateCompany } from '../../hooks/useCompanies'
+import { useDensity } from '../../hooks/useDensity'
 import { buildStatutProspectUpdate } from '../../lib/companyUtils'
 import {
   STATUT_PROSPECT_OPTIONS,
@@ -9,6 +10,7 @@ import {
   TEMPERATURE_TONES,
   formatEnumLabel,
 } from '../../lib/constants'
+import DensityToggle from '../ui/DensityToggle'
 import InlineSelect from '../ui/InlineSelect'
 import Modal from '../ui/Modal'
 import CompanyForm from './CompanyForm'
@@ -16,8 +18,15 @@ import CompanyForm from './CompanyForm'
 const emptyFilters = { search: '', sector: '', statutProspect: '', temperature: '' }
 
 export default function ProspectsList() {
+  const [searchParams] = useSearchParams()
   const [filters, setFilters] = useState(emptyFilters)
   const [creating, setCreating] = useState(false)
+  const [density, setDensity] = useDensity()
+  const rowPadding = density === 'compact' ? 'py-1.5' : 'py-3'
+
+  useEffect(() => {
+    if (searchParams.get('create') === 'prospect') setCreating(true)
+  }, [searchParams])
 
   const { data: companies, isLoading, isError, error } = useCompanies({
     search: filters.search,
@@ -69,7 +78,7 @@ export default function ProspectsList() {
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-3 rounded-lg border border-chrome-dark bg-surface p-4">
+      <div className="flex flex-wrap items-center gap-3 rounded-lg border border-chrome-dark bg-surface p-4">
         <input
           value={filters.search}
           onChange={(event) => updateFilter('search', event.target.value)}
@@ -115,6 +124,7 @@ export default function ProspectsList() {
             Réinitialiser
           </button>
         )}
+        <DensityToggle density={density} onChange={setDensity} />
       </div>
 
       <p className="text-xs text-ink-tertiary">
@@ -131,7 +141,7 @@ export default function ProspectsList() {
         )}
         {!isLoading && !isError && companies.length > 0 && (
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-chrome-dark text-xs uppercase text-ink-secondary">
+            <thead className="border-b border-chrome-dark text-xs text-ink-secondary">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>
                 <th className="px-4 py-3 font-medium">Étape</th>
@@ -143,7 +153,7 @@ export default function ProspectsList() {
             <tbody className="divide-y divide-chrome-dark">
               {companies.map((company) => (
                 <tr key={company.id} className="hover:bg-surface-hover">
-                  <td className="px-4 py-3">
+                  <td className={`px-4 ${rowPadding}`}>
                     <Link
                       to={`/companies/${company.id}`}
                       className="font-medium text-ink hover:underline"
@@ -151,7 +161,7 @@ export default function ProspectsList() {
                       {company.name}
                     </Link>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className={`px-4 ${rowPadding}`}>
                     <InlineSelect
                       value={company.statut_prospect}
                       options={STATUT_PROSPECT_OPTIONS}
@@ -159,7 +169,7 @@ export default function ProspectsList() {
                       onChange={(value) => handleStatutProspectChange(company, value)}
                     />
                   </td>
-                  <td className="px-4 py-3">
+                  <td className={`px-4 ${rowPadding}`}>
                     <InlineSelect
                       value={company.temperature}
                       options={TEMPERATURE_OPTIONS}
@@ -167,8 +177,8 @@ export default function ProspectsList() {
                       onChange={(value) => handleTemperatureChange(company, value)}
                     />
                   </td>
-                  <td className="px-4 py-3 text-ink-secondary">{company.sector || '—'}</td>
-                  <td className="px-4 py-3 text-right">
+                  <td className={`px-4 ${rowPadding} text-ink-secondary`}>{company.sector || '—'}</td>
+                  <td className={`px-4 ${rowPadding} text-right`}>
                     <button
                       type="button"
                       onClick={() => handleDelete(company)}
