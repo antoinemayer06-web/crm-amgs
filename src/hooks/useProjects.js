@@ -98,6 +98,58 @@ export function useUpdateProject() {
   })
 }
 
+// Met à jour le montant facturé du projet ET maintient un document daté
+// (table `documents`, type "facture") en parallèle — c'est ce document
+// daté que lisent les rapports financiers (CA facturé du mois), alors
+// que `montant_facture` reste le total affiché sur la fiche projet.
+// Sans ce second écrit, la saisie sur le projet n'a aucune date et ne
+// remonte jamais dans les calculs mensuels.
+export function useUpdateProjectMontantFacture() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ projectId, companyId, projectNom, montant }) => {
+      const { error: updateError } = await supabase
+        .from('projects')
+        .update({ montant_facture: montant })
+        .eq('id', projectId)
+      if (updateError) throw updateError
+
+      const { data: existing, error: fetchError } = await supabase
+        .from('documents')
+        .select('id')
+        .eq('project_id', projectId)
+        .eq('type', 'facture')
+        .maybeSingle()
+      if (fetchError) throw fetchError
+
+      const today = new Date().toISOString().slice(0, 10)
+      if (existing) {
+        const { error } = await supabase
+          .from('documents')
+          .update({ montant, date_document: today })
+          .eq('id', existing.id)
+        if (error) throw error
+      } else if (montant != null) {
+        const { error } = await supabase.from('documents').insert({
+          company_id: companyId,
+          project_id: projectId,
+          nom: `Facture — ${projectNom}`,
+          type: 'facture',
+          montant,
+          date_document: today,
+        })
+        if (error) throw error
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] })
+      queryClient.invalidateQueries({ queryKey: ['documents'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+      queryClient.invalidateQueries({ queryKey: ['finance'] })
+    },
+  })
+}
+
 export function useDeleteProject() {
   const queryClient = useQueryClient()
   return useMutation({

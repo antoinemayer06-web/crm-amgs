@@ -59,22 +59,16 @@ export function getExpensesForMonth(expenses, monthKey) {
     .reduce((sum, expense) => sum + Number(expense.montant ?? 0), 0)
 }
 
-// Répartition en valeur : factures émises mais pas encore payées, cash
-// réellement encaissé (cumul projets) et valeur du pipeline de
-// prospection encore actif (hors refus).
-export function getFinanceRepartition(documents, projects, companies) {
-  const factureNonPayee = documents
-    .filter((doc) => doc.type === 'facture' && doc.statut !== 'payé')
-    .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
-  const encaisse = projects.reduce((sum, project) => sum + Number(project.montant_encaisse ?? 0), 0)
-  const pipelineProspection = companies
-    .filter((company) => company.status === 'prospect' && company.statut_prospect !== 'refus')
-    .reduce((sum, company) => sum + Number(company.valeur_estimee ?? 0), 0)
-
+// Répartition en valeur, tous projets confondus : facturé pas encore
+// encaissé vs. cash réellement encaissé. Basé sur les champs projet
+// (montant_facture / montant_encaisse), qui sont la source que le CRM
+// tient réellement à jour — pas sur la table documents, peu utilisée
+// en pratique.
+export function getFinanceRepartition(projects) {
+  const { encaisse, restant } = getCashSummary(projects)
   return [
-    { name: 'Facturé non payé', value: factureNonPayee },
+    { name: 'Facturé non payé', value: Math.max(restant, 0) },
     { name: 'Encaissé', value: encaisse },
-    { name: 'Pipeline prospection', value: pipelineProspection },
   ]
 }
 

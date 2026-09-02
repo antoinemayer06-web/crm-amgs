@@ -190,5 +190,14 @@ export const EXPENSE_CATEGORY_TONES = {
 }
 
 // Palette pastel pour les post-it du mur Vision.
-export const VISION_NOTE_COLORS = ['#fef08a', '#fbcfe8', '#bfdbfe', '#bbf7d0', '#fed7aa', '#e9d5ff']
+export const VISION_NOTE_COLORS = [
+  '#fef08a',
+  '#fbcfe8',
+  '#bfdbfe',
+  '#bbf7d0',
+  '#fed7aa',
+  '#e9d5ff',
+  '#ffffff',
+  '#fca5a5',
+]
 

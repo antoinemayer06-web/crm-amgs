@@ -7,7 +7,12 @@ import {
   useDeleteCashCollection,
 } from '../../hooks/useCashCollections'
 import { useWorkLogsForSteps } from '../../hooks/useProjectWorkLogs'
-import { useDeleteProject, useProject, useUpdateProject } from '../../hooks/useProjects'
+import {
+  useDeleteProject,
+  useProject,
+  useUpdateProject,
+  useUpdateProjectMontantFacture,
+} from '../../hooks/useProjects'
 import { useAiChat } from '../../lib/AiChatContext'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_OPTIONS } from '../../lib/constants'
 import {
@@ -36,6 +41,7 @@ function StatTile({ label, value }) {
 export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }) {
   const { data: project, isLoading } = useProject(projectId)
   const updateProject = useUpdateProject()
+  const updateMontantFacture = useUpdateProjectMontantFacture()
   const deleteProject = useDeleteProject()
   const { data: cashCollections } = useCashCollectionsForProject(projectId)
   const createCashCollection = useCreateCashCollection()
@@ -256,7 +262,14 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
               onChange={(event) => setMontantFacture(event.target.value)}
               onBlur={() => {
                 const value = montantFacture === '' ? null : Number(montantFacture)
-                if (value !== (project.montant_facture ?? null)) saveField('montant_facture', value)
+                if (value !== (project.montant_facture ?? null)) {
+                  updateMontantFacture.mutate({
+                    projectId,
+                    companyId: project.company_id,
+                    projectNom: project.nom,
+                    montant: value,
+                  })
+                }
               }}
               className="w-full input-chrome"
             />

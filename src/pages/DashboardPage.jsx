@@ -68,7 +68,7 @@ export default function DashboardPage() {
   )
   const pipelineFunnel = useMemo(() => (data ? getPipelineFunnel(data.companies) : []), [data])
   const financeRepartition = useMemo(
-    () => (data ? getFinanceRepartition(data.documents, data.projects, data.companies) : []),
+    () => (data ? getFinanceRepartition(data.projects) : []),
     [data],
   )
   const caByClient = useMemo(
