@@ -51,7 +51,7 @@ export default function ProjectCard({
       onClick={onClick}
       style={style}
       {...dragHandleProps}
-      className={`w-full rounded-lg border border-chrome-dark bg-surface p-3 text-left shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-chrome-mid ${
+      className={`card-glass w-full rounded-lg p-3 text-left hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-chrome-mid ${
         isDragging ? 'rotate-2 opacity-90 shadow-lg' : ''
       }`}
     >

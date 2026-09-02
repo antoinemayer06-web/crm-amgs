@@ -12,7 +12,7 @@ export default function AiChatPanel() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex justify-end">
-      <div className="pointer-events-auto flex h-full w-full max-w-sm flex-col border-l border-chrome-dark bg-surface shadow-2xl">
+      <div className="glass-panel pointer-events-auto flex h-full w-full max-w-sm flex-col shadow-2xl">
         <div className="flex items-center justify-between border-b border-chrome-dark px-4 py-3">
           <div className="min-w-0">
             <h2 className="text-sm font-semibold text-ink">Assistant IA</h2>

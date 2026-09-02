@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function MarketingRecapCard({ count }) {
   return (
-    <div className="flex h-full flex-col justify-between rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
+    <div className="card-glass flex h-full flex-col justify-between rounded-xl p-4">
       <div>
         <p className="text-xs font-medium text-ink-tertiary">
           Marketing cette semaine

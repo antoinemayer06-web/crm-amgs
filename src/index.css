@@ -117,4 +117,59 @@ h3 {
     border-radius: 8px 8px 0 0;
     background: linear-gradient(90deg, transparent, rgba(216, 219, 222, 0.35), transparent);
   }
+
+  /* Liquid glass : fond translucide + flou de ce qu'il y a derrière, à
+     la place d'un fond opaque plein. Utilisé sur les cards de contenu
+     (KPIs, cartes projet/entreprise, cartes de section) — pas sur les
+     éléments structurels (filtres, onglets, tableaux) ni sur les champs
+     de saisie, qui restent lisibles en plein. */
+  .card-glass {
+    @apply border transition-all duration-200;
+    background: rgba(20, 20, 22, 0.5);
+    border-color: rgba(216, 219, 222, 0.12);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .card-glass:hover {
+    background: rgba(28, 28, 31, 0.62);
+    border-color: rgba(216, 219, 222, 0.3);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Même famille, en plus opaque/flouté : panneaux latéraux, modales,
+     palette de commande — des surfaces plus grandes où le texte doit
+     rester très lisible. */
+  .glass-panel {
+    @apply border;
+    background: rgba(18, 18, 20, 0.78);
+    border-color: rgba(216, 219, 222, 0.14);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 24px 64px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Bulles du mur Vision (notes et images) : même cadre verre/chrome
+     pour les deux — seule la teinte change (couleur de note vs. neutre
+     pour une image). La couleur de fond/bordure est fixée en inline
+     style (teinte dynamique par note). */
+  .vision-glass-note {
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: box-shadow 220ms ease, border-color 220ms ease;
+  }
+
+  .vision-glass-note:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      0 10px 28px rgba(0, 0, 0, 0.4);
+  }
 }

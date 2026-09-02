@@ -119,12 +119,6 @@ export function getCashSummary(projects) {
   return { facture, encaisse, restant: facture - encaisse }
 }
 
-// Total des heures réellement travaillées, tous projets confondus
-// (somme du journal de travail).
-export function getTotalHoursWorked(workLogs) {
-  return workLogs.reduce((sum, log) => sum + Number(log.duree_heures ?? 0), 0)
-}
-
 // Taux de conversion sur la période (mois en cours) : parmi les
 // companies créées ce mois-ci, combien sont (déjà) client. Faute d'un
 // historique des transitions de statut_prospect, c'est la meilleure

@@ -100,7 +100,7 @@ export default function FinancePage() {
       {kpis && (
         <>
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-            <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm xl:col-span-2">
+            <div className="card-glass rounded-xl p-4 xl:col-span-2">
               <h3 className="mb-3 text-sm font-semibold text-ink">Vue d'ensemble du mois</h3>
               <FinanceChart
                 caThisMonth={kpis.ca}
@@ -136,7 +136,7 @@ export default function FinancePage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
+            <div className="card-glass rounded-xl p-4">
               <h3 className="mb-3 text-center text-sm font-semibold text-ink">
                 Objectif de résultat mensuel
               </h3>

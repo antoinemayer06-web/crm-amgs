@@ -29,7 +29,7 @@ export default function ExpensesPanel({ expenses, monthKey }) {
   }
 
   return (
-    <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
+    <div className="card-glass rounded-xl p-4">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-semibold text-ink">Dépenses du mois</h3>
         <button

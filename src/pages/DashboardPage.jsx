@@ -21,21 +21,29 @@ import {
   getMarketingWeekCount,
   getPipelineFunnel,
   getRecentActivity,
-  getTotalHoursWorked,
   getUrgentItems,
 } from '../lib/dashboardUtils'
 
 const formatMontant = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} €`
-const formatHours = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} h`
 
 function Section({ title, action, children }) {
   return (
-    <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
+    <div className="card-glass rounded-xl p-4">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-semibold text-ink">{title}</h3>
         {action}
       </div>
       {children}
+    </div>
+  )
+}
+
+function CaTotalHero({ value }) {
+  return (
+    <div className="card-chrome-lit card-glass rounded-xl p-6">
+      <p className="text-sm font-medium text-ink-tertiary">CA total</p>
+      <p className="mt-2 text-4xl font-bold tabular-nums text-ink sm:text-5xl">{value}</p>
+      <p className="mt-1 text-xs text-ink-secondary">Toutes périodes confondues — total encaissé</p>
     </div>
   )
 }
@@ -48,7 +56,6 @@ export default function DashboardPage() {
     return {
       ca: getEncaisseForMonth(data.cashCollections, currentMonthKey()),
       cash: getCashSummary(data.projects),
-      totalHoursWorked: getTotalHoursWorked(data.workLogs),
       conversionRate: getConversionRate(data.companies),
       activeProjects: getActiveProjectsCount(data.projects),
       lateProjects: getLateProjectsCount(data.projects),
@@ -91,14 +98,15 @@ export default function DashboardPage() {
 
       {kpis && (
         <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+          <CaTotalHero value={formatMontant(kpis.cash.encaisse)} />
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
             <KpiCard label="CA du mois" value={formatMontant(kpis.ca)} sublabel="Encaissé ce mois-ci" />
             <CashKpiCard
               facture={kpis.cash.facture}
               encaisse={kpis.cash.encaisse}
               restant={kpis.cash.restant}
             />
-            <KpiCard label="Total heures travaillées" value={formatHours(kpis.totalHoursWorked)} />
             <KpiCard
               label="Taux de conversion"
               value={kpis.conversionRate == null ? '—' : `${kpis.conversionRate.toFixed(0)} %`}

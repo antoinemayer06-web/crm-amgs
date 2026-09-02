@@ -28,8 +28,12 @@ export default function ImageNode({ id, data }) {
         lineStyle={{ borderWidth: 0 }}
       />
       <div
-        className="relative flex h-full w-full flex-col items-center bg-white p-2 pb-4 shadow-lg transition-shadow duration-150"
-        style={{ transform: `rotate(${data.rotation ?? 0}deg)` }}
+        className="vision-glass-note relative flex h-full w-full flex-col items-center rounded-lg border p-2"
+        style={{
+          backgroundColor: 'rgba(216, 219, 222, 0.14)',
+          borderColor: 'rgba(216, 219, 222, 0.4)',
+          transform: `rotate(${data.rotation ?? 0}deg)`,
+        }}
       >
         {hovered && (
           <button
@@ -46,11 +50,11 @@ export default function ImageNode({ id, data }) {
           <img
             src={data.imageUrl}
             alt=""
-            className="h-full w-full flex-1 select-none object-contain"
+            className="h-full w-full flex-1 select-none rounded-md object-contain"
             draggable={false}
           />
         ) : (
-          <div className="flex h-full w-full flex-1 items-center justify-center bg-neutral-100 text-xs text-neutral-400">
+          <div className="flex h-full w-full flex-1 items-center justify-center rounded-md bg-white/5 text-xs text-white/50">
             Chargement…
           </div>
         )}

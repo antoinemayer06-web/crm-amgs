@@ -1,6 +1,7 @@
 import { NodeResizer } from '@xyflow/react'
 import { useEffect, useRef, useState } from 'react'
 import { useDeleteVisionNote, useUpdateVisionNote } from '../../hooks/useVisionNotes'
+import { hexToRgba } from '../../lib/colorUtils'
 import { VISION_NOTE_COLORS } from '../../lib/constants'
 
 const DEBOUNCE_MS = 800
@@ -65,8 +66,12 @@ export default function PostItNode({ id, data }) {
         lineStyle={{ borderWidth: 0 }}
       />
       <div
-        className="relative flex h-full w-full flex-col rounded-md p-3 shadow-md transition-shadow duration-150"
-        style={{ backgroundColor: couleur, transform: `rotate(${data.rotation ?? 0}deg)` }}
+        className="vision-glass-note relative flex h-full w-full flex-col rounded-lg border p-3"
+        style={{
+          backgroundColor: hexToRgba(couleur, 0.28),
+          borderColor: hexToRgba(couleur, 0.6),
+          transform: `rotate(${data.rotation ?? 0}deg)`,
+        }}
       >
         {hovered && (
           <div className="nodrag absolute -right-2 -top-2 z-10 flex gap-1">
@@ -109,7 +114,7 @@ export default function PostItNode({ id, data }) {
           value={text}
           onChange={handleTextChange}
           placeholder="Écris ton idée…"
-          className="nodrag h-full w-full flex-1 resize-none border-none bg-transparent text-sm leading-snug text-neutral-800 placeholder:text-neutral-800/40 focus:outline-none"
+          className="nodrag h-full w-full flex-1 resize-none border-none bg-transparent text-sm leading-snug text-white placeholder:text-white/40 focus:outline-none"
         />
       </div>
     </div>

@@ -125,7 +125,7 @@ export default function CommandPalette({ open, onClose }) {
   return (
     <div className="fixed inset-0 z-[60] flex items-start justify-center bg-black/50 pt-[12vh]" onClick={onClose}>
       <div
-        className="w-full max-w-lg overflow-hidden rounded-lg border border-chrome-dark bg-surface shadow-2xl"
+        className="glass-panel w-full max-w-lg overflow-hidden rounded-lg shadow-2xl"
         onClick={(event) => event.stopPropagation()}
         onKeyDown={handleKeyDown}
       >

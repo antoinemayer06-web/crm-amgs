@@ -29,7 +29,7 @@ export default function CampaignsListSection({ campaigns, onCampaignClick, onCre
               key={campaign.id}
               type="button"
               onClick={() => onCampaignClick(campaign)}
-              className="flex flex-col gap-2 rounded-xl border border-chrome-dark bg-surface p-4 text-left shadow-sm transition-shadow duration-150 hover:shadow-md"
+              className="card-glass flex flex-col gap-2 rounded-xl p-4 text-left"
             >
               <div className="flex items-start justify-between gap-2">
                 <p className="font-medium text-ink">{campaign.nom}</p>

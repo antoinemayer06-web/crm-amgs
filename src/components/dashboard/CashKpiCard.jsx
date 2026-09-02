@@ -2,7 +2,7 @@ const formatMontant = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} 
 
 export default function CashKpiCard({ facture, encaisse, restant }) {
   return (
-    <div className="card-chrome-lit overflow-hidden rounded-xl border border-chrome-dark bg-surface p-4">
+    <div className="card-chrome-lit card-glass overflow-hidden rounded-xl p-4">
       <p className="text-xs font-medium text-ink-tertiary">
         Facturé vs encaissé
       </p>

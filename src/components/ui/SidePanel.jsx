@@ -22,7 +22,7 @@ export default function SidePanel({ title, onClose, children }) {
         }`}
       />
       <div
-        className={`relative flex h-full w-full flex-col bg-surface shadow-2xl transition-transform duration-200 ease-out sm:max-w-md ${
+        className={`glass-panel relative flex h-full w-full flex-col shadow-2xl transition-transform duration-200 ease-out sm:max-w-md ${
           visible ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
