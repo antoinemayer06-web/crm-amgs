@@ -120,45 +120,54 @@ export default function Layout() {
   return (
     <AiChatProvider>
       <div className="flex min-h-svh flex-col bg-canvas">
-        {/* Bandeau du haut, pleine largeur : logo/nom à gauche, recherche à droite */}
-        <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-chrome-dark bg-surface px-4 md:px-6">
-          <div className="flex min-w-0 items-center gap-3">
+        {/* Bandeau du haut, pleine largeur : logo/nom à gauche, recherche à droite.
+            padding-top en env(safe-area-inset-top) : sur iPhone en PWA installée,
+            la barre de statut (horloge, réseau) est superposée au contenu plutôt
+            que de le pousser — sans cette marge, le bouton menu/recherche se
+            retrouve caché dessous et n'est plus cliquable. */}
+        <header
+          className="shrink-0 border-b border-chrome-dark bg-surface"
+          style={{ paddingTop: 'env(safe-area-inset-top)' }}
+        >
+          <div className="flex h-14 items-center justify-between gap-3 px-4 md:px-6">
+            <div className="flex min-w-0 items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setMobileNavOpen(true)}
+                aria-label="Ouvrir le menu"
+                className="-ml-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink-secondary hover:bg-surface-hover hover:text-ink md:hidden"
+              >
+                <IconMenu className="h-5 w-5" />
+              </button>
+              <Logo size={28} className="shrink-0" />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold tracking-tight text-ink">
+                  AM Growth Solutions
+                </p>
+              </div>
+            </div>
+
             <button
               type="button"
-              onClick={() => setMobileNavOpen(true)}
-              aria-label="Ouvrir le menu"
-              className="-ml-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink-secondary hover:bg-surface-hover hover:text-ink md:hidden"
+              onClick={() => setPaletteOpen(true)}
+              aria-label="Rechercher"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-chrome-dark text-ink-tertiary hover:border-chrome-mid hover:text-ink-secondary md:hidden"
             >
-              <IconMenu className="h-5 w-5" />
+              <IconSearch className="h-4 w-4" />
             </button>
-            <Logo size={28} className="shrink-0" />
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold tracking-tight text-ink">
-                AM Growth Solutions
-              </p>
-            </div>
+
+            <button
+              type="button"
+              onClick={() => setPaletteOpen(true)}
+              className="hidden shrink-0 items-center gap-2 rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-tertiary transition-colors duration-150 hover:border-chrome-mid hover:text-ink-secondary md:flex"
+            >
+              <IconSearch className="h-4 w-4" />
+              <span>Rechercher</span>
+              <span className="ml-1 rounded border border-chrome-dark px-1.5 py-0.5 text-xs text-ink-tertiary">
+                ⌘K
+              </span>
+            </button>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setPaletteOpen(true)}
-            aria-label="Rechercher"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-chrome-dark text-ink-tertiary hover:border-chrome-mid hover:text-ink-secondary md:hidden"
-          >
-            <IconSearch className="h-4 w-4" />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setPaletteOpen(true)}
-            className="hidden shrink-0 items-center gap-2 rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-tertiary transition-colors duration-150 hover:border-chrome-mid hover:text-ink-secondary md:flex"
-          >
-            <IconSearch className="h-4 w-4" />
-            <span>Rechercher</span>
-            <span className="ml-1 rounded border border-chrome-dark px-1.5 py-0.5 text-xs text-ink-tertiary">
-              ⌘K
-            </span>
-          </button>
         </header>
 
         <div className="flex min-h-0 flex-1">
@@ -189,7 +198,10 @@ export default function Layout() {
                 aria-hidden="true"
               />
               <aside className="relative flex h-full w-[82vw] max-w-72 flex-col bg-surface shadow-2xl">
-                <div className="flex items-center gap-3 border-b border-chrome-dark px-4 py-4">
+                <div
+                  className="flex items-center gap-3 border-b border-chrome-dark px-4 py-4"
+                  style={{ paddingTop: 'calc(env(safe-area-inset-top) + 1rem)' }}
+                >
                   <Logo size={28} className="shrink-0" />
                   <p className="min-w-0 flex-1 truncate text-sm font-semibold tracking-tight text-ink">
                     AM Growth Solutions
