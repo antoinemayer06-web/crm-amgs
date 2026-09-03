@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAiChat } from '../../lib/AiChatContext'
+import { IconClose } from '../ui/icons'
 import AiActionsHistory from './AiActionsHistory'
 import ChatThread from './ChatThread'
 
@@ -13,7 +14,14 @@ export default function AiChatPanel() {
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex justify-end">
       <div className="glass-panel pointer-events-auto flex h-full w-full max-w-sm flex-col shadow-2xl">
-        <div className="flex items-center justify-between border-b border-chrome-dark px-4 py-3">
+        {/* padding-top en env(safe-area-inset-top) : ce panneau est plein
+            écran sur mobile, donc son en-tête se retrouve sinon exactement
+            sous la barre de statut iOS/horloge, avec la croix de fermeture
+            cachée dessous et non cliquable. */}
+        <div
+          className="flex items-center justify-between border-b border-chrome-dark px-4 py-3"
+          style={{ paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.5rem))' }}
+        >
           <div className="min-w-0">
             <h2 className="text-sm font-semibold text-ink">Assistant IA</h2>
             {entityContext?.label && (
@@ -34,10 +42,10 @@ export default function AiChatPanel() {
             <button
               type="button"
               onClick={closeChat}
-              className="text-ink-tertiary hover:text-ink-secondary"
+              className="flex h-11 w-11 shrink-0 items-center justify-center text-ink-tertiary hover:text-ink-secondary max-md:h-12 max-md:w-12"
               aria-label="Fermer"
             >
-              ✕
+              <IconClose className="h-4 w-4 max-md:h-5 max-md:w-5" />
             </button>
           </div>
         </div>

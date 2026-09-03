@@ -9,13 +9,19 @@ import {
 import { useWorkLogsForSteps } from '../../hooks/useProjectWorkLogs'
 import {
   useDeleteProject,
+  useGenerateRecurringFacture,
   useProject,
   useProjectFactureDate,
   useUpdateProject,
   useUpdateProjectMontantFacture,
 } from '../../hooks/useProjects'
 import { useAiChat } from '../../lib/AiChatContext'
-import { PROJECT_STATUT_LABELS, PROJECT_STATUT_OPTIONS } from '../../lib/constants'
+import {
+  PROJECT_STATUT_LABELS,
+  PROJECT_STATUT_OPTIONS,
+  RECURRENCE_FREQUENCES,
+  RECURRENCE_FREQUENCE_LABELS,
+} from '../../lib/constants'
 import {
   getActualHoursByStep,
   getProjectTimeSummary,
@@ -44,6 +50,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const { data: factureDate } = useProjectFactureDate(projectId)
   const updateProject = useUpdateProject()
   const updateMontantFacture = useUpdateProjectMontantFacture()
+  const generateRecurringFacture = useGenerateRecurringFacture()
   const deleteProject = useDeleteProject()
   const { data: cashCollections } = useCashCollectionsForProject(projectId)
   const createCashCollection = useCreateCashCollection()
@@ -62,6 +69,8 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const [cashAmount, setCashAmount] = useState('')
   const [cashDate, setCashDate] = useState(() => new Date().toISOString().slice(0, 10))
   const [saveError, setSaveError] = useState(null)
+  const [recurrence, setRecurrence] = useState({ frequence: '', intervalle: '1', fin: '' })
+  const [recurrenceMessage, setRecurrenceMessage] = useState(null)
 
   const steps = getStepsForProject(allSteps, projectId)
   const stepIds = steps.map((s) => s.id)
@@ -80,6 +89,14 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
       setDateFinReelle(project.date_fin_reelle ?? '')
     }
   }, [project])
+
+  // Outil ponctuel (pas un champ persisté) : ne se réinitialise que si
+  // le panneau change réellement de projet, pas à chaque refetch (sinon
+  // le message de confirmation disparaîtrait aussitôt après génération).
+  useEffect(() => {
+    setRecurrence({ frequence: '', intervalle: '1', fin: '' })
+    setRecurrenceMessage(null)
+  }, [project?.id])
 
   useEffect(() => {
     if (!project) return
@@ -123,6 +140,33 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
       },
       { onError: (err) => setSaveError(err.message) },
     )
+  }
+
+  function updateRecurrence(field, value) {
+    setRecurrence((prev) => ({ ...prev, [field]: value }))
+  }
+
+  async function handleGenerateRecurringFacture() {
+    setSaveError(null)
+    setRecurrenceMessage(null)
+    const montant = montantFacture === '' ? null : Number(montantFacture)
+    if (montant == null || !dateFacturation || !recurrence.frequence || !recurrence.fin) return
+
+    try {
+      const count = await generateRecurringFacture.mutateAsync({
+        projectId,
+        companyId: project.company_id,
+        projectNom: project.nom,
+        montant,
+        dateDebut: dateFacturation,
+        frequence: recurrence.frequence,
+        intervalle: Number(recurrence.intervalle) || 1,
+        dateFin: recurrence.fin,
+      })
+      setRecurrenceMessage(`${count} facture${count > 1 ? 's' : ''} générée${count > 1 ? 's' : ''}.`)
+    } catch (err) {
+      setSaveError(err.message)
+    }
   }
 
   async function handleDelete() {
@@ -324,6 +368,76 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
                 C'est cette date qui détermine le mois du CA facturé.
               </p>
             </div>
+          </div>
+
+          <div className="space-y-2 rounded-md border border-chrome-dark p-3">
+            <p className="text-xs font-medium text-ink-secondary">Facture récurrente (optionnel)</p>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="space-y-1">
+                <label htmlFor="recurrence_intervalle" className="block text-xs text-ink-tertiary">
+                  Tous les
+                </label>
+                <input
+                  id="recurrence_intervalle"
+                  type="number"
+                  min="1"
+                  value={recurrence.intervalle}
+                  onChange={(event) => updateRecurrence('intervalle', event.target.value)}
+                  disabled={!recurrence.frequence}
+                  className="w-full input-chrome disabled:opacity-50"
+                />
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="recurrence_frequence" className="block text-xs text-ink-tertiary">
+                  Fréquence
+                </label>
+                <select
+                  id="recurrence_frequence"
+                  value={recurrence.frequence}
+                  onChange={(event) => updateRecurrence('frequence', event.target.value)}
+                  className="w-full input-chrome"
+                >
+                  <option value="">Pas de récurrence</option>
+                  {RECURRENCE_FREQUENCES.map((frequence) => (
+                    <option key={frequence} value={frequence}>
+                      {RECURRENCE_FREQUENCE_LABELS[frequence]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="recurrence_fin" className="block text-xs text-ink-tertiary">
+                  Jusqu'au
+                </label>
+                <input
+                  id="recurrence_fin"
+                  type="date"
+                  value={recurrence.fin}
+                  onChange={(event) => updateRecurrence('fin', event.target.value)}
+                  disabled={!recurrence.frequence}
+                  className="w-full input-chrome disabled:opacity-50"
+                />
+              </div>
+            </div>
+            <p className="text-[11px] text-ink-tertiary">
+              Génère une facture (même montant) à partir du {dateFacturation || 'aujourd\'hui'}, à
+              la fréquence choisie, jusqu'à la date de fin — chaque occurrence reste ensuite
+              modifiable/supprimable indépendamment depuis « Documents » ci-dessous.
+            </p>
+            <button
+              type="button"
+              onClick={handleGenerateRecurringFacture}
+              disabled={
+                generateRecurringFacture.isPending ||
+                !recurrence.frequence ||
+                !recurrence.fin ||
+                montantFacture === ''
+              }
+              className="btn-secondary text-xs"
+            >
+              {generateRecurringFacture.isPending ? 'Génération…' : 'Générer les factures récurrentes'}
+            </button>
+            {recurrenceMessage && <p className="text-xs text-ink-secondary">{recurrenceMessage}</p>}
           </div>
 
           <div className="space-y-2 rounded-md border border-chrome-dark p-3">

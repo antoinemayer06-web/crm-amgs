@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { IconClose } from './icons'
 
 export default function SidePanel({ title, onClose, children }) {
   const [visible, setVisible] = useState(false)
@@ -26,15 +27,22 @@ export default function SidePanel({ title, onClose, children }) {
           visible ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between border-b border-chrome-dark px-5 py-4">
+        {/* padding-top en env(safe-area-inset-top) : ce panneau passe en
+            plein écran sur mobile (w-full h-full sous sm:), donc son en-tête
+            se retrouve sinon exactement sous la barre de statut iOS/horloge,
+            avec la croix de fermeture cachée dessous et non cliquable. */}
+        <div
+          className="flex items-center justify-between border-b border-chrome-dark px-5 py-4"
+          style={{ paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 0.5rem))' }}
+        >
           <h2 className="text-base font-semibold text-ink">{title}</h2>
           <button
             type="button"
             onClick={handleClose}
-            className="flex h-11 w-11 items-center justify-center text-ink-tertiary hover:text-ink-secondary"
+            className="flex h-11 w-11 shrink-0 items-center justify-center text-ink-tertiary hover:text-ink-secondary max-md:h-12 max-md:w-12"
             aria-label="Fermer"
           >
-            ✕
+            <IconClose className="h-4 w-4 max-md:h-5 max-md:w-5" />
           </button>
         </div>
         <div className="flex-1 overflow-y-auto p-5">{children}</div>
