@@ -67,15 +67,11 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
     </td>`
 
   return `<!doctype html>
-<html>
-  <head>
-    <meta name="color-scheme" content="dark" />
-    <meta name="supported-color-schemes" content="dark" />
-  </head>
-  <body style="margin:0;padding:0;background-color:#0a0a0b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#0a0a0b" style="background-color:#0a0a0b;">
+<html style="background-color:#0a0a0b;">
+  <body bgcolor="#0a0a0b" style="margin:0;padding:0;background-color:#0a0a0b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#0a0a0b" style="background-color:#0a0a0b;border-collapse:collapse;">
       <tr>
-        <td align="center" style="padding:32px 20px;">
+        <td align="center" bgcolor="#0a0a0b" style="background-color:#0a0a0b;padding:32px 20px;">
     <div style="max-width:560px;margin:0 auto;">
       <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:#f2f2f3;">AM Growth Solutions</p>
       <p style="margin:0 0 24px;font-size:13px;color:#8a8d91;">Rapport hebdomadaire — ${periodLabel}</p>
