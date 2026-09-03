@@ -112,14 +112,19 @@ export function useProjectFactureDate(projectId) {
   return useQuery({
     queryKey: ['documents', 'facture-date', projectId],
     queryFn: async () => {
+      // .order + .limit(1) plutôt que .maybeSingle() : robuste même si
+      // plusieurs documents "facture" existent déjà pour ce projet (pas
+      // de contrainte d'unicité en base), .maybeSingle() planterait sinon
+      // avec "multiple (or no) rows returned".
       const { data, error } = await supabase
         .from('documents')
         .select('date_document')
         .eq('project_id', projectId)
         .eq('type', 'facture')
-        .maybeSingle()
+        .order('created_at', { ascending: false })
+        .limit(1)
       if (error) throw error
-      return data?.date_document ?? null
+      return data?.[0]?.date_document ?? null
     },
     enabled: Boolean(projectId),
   })
@@ -135,13 +140,26 @@ export function useUpdateProjectMontantFacture() {
         .eq('id', projectId)
       if (updateError) throw updateError
 
-      const { data: existing, error: fetchError } = await supabase
+      // Récupère TOUS les documents "facture" du projet (pas .maybeSingle(),
+      // qui plante s'il y en a déjà plusieurs) : on garde le plus ancien et on
+      // supprime les doublons éventuels pour que la fiche projet reconverge
+      // vers un seul document de suivi, comme prévu.
+      const { data: existingRows, error: fetchError } = await supabase
         .from('documents')
         .select('id')
         .eq('project_id', projectId)
         .eq('type', 'facture')
-        .maybeSingle()
+        .order('created_at', { ascending: true })
       if (fetchError) throw fetchError
+
+      const [existing, ...duplicates] = existingRows ?? []
+      if (duplicates.length > 0) {
+        const { error: cleanupError } = await supabase
+          .from('documents')
+          .delete()
+          .in('id', duplicates.map((row) => row.id))
+        if (cleanupError) throw cleanupError
+      }
 
       const dateDocument = dateFacturation || new Date().toISOString().slice(0, 10)
       if (existing) {
