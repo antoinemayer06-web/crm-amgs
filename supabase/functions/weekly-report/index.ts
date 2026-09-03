@@ -5,10 +5,12 @@
 // fonctions de ce projet.
 //
 // Rendu 100% <table> (pas de <div>, pas de flexbox) : Gmail (surtout
-// l'appli mobile) a un support CSS très limité — background-color sur
-// <body>/<div> et display:flex sont ignorés ou mal gérés selon les
-// versions. Les tables avec bgcolor + style sont le seul format fiable
-// tous clients confondus (Gmail web/app, Outlook, Apple Mail).
+// l'appli mobile) a un support CSS très limité. Fond de page blanc avec
+// blocs noirs (plutôt qu'un design tout sombre) : l'appli Gmail mobile
+// "adapte" automatiquement les couleurs sombres d'un email pour son mode
+// sombre, ce qui rendait un design tout-noir illisible/éclairci de façon
+// incohérente — un fond blanc de base avec des blocs noirs contrastés
+// tient correctement dans les deux cas.
 
 import { createClient } from 'npm:@supabase/supabase-js@2.45.4'
 
@@ -20,18 +22,23 @@ const RESEND_FROM = Deno.env.get('RESEND_FROM') ?? 'AM Growth Solutions <onboard
 // cette adresse plutôt que l'email du compte Supabase Auth de l'owner.
 const REPORT_TO_EMAIL = Deno.env.get('REPORT_TO_EMAIL')
 
-const BG = '#0a0a0b'
-const CARD_BG = '#141416'
-const BORDER = '#3a3c40'
-const TEXT_PRIMARY = '#f2f2f3'
-const TEXT_SECONDARY = '#8a8d91'
-const TEXT_LABEL = '#8e9196'
-const TEXT_MUTED = '#5a5d61'
-const ROW_BORDER = '#26262a'
+const PAGE_BG = '#ffffff'
+const PAGE_TEXT = '#141416'
+const PAGE_TEXT_SECONDARY = '#5a5d61'
+
+const CARD_BG = '#0a0a0b'
+const CARD_BORDER = '#3a3c40'
+const ROW_BORDER = '#2a2c30'
+const CARD_TEXT_PRIMARY = '#ffffff'
+const CARD_TEXT_SECONDARY = '#b8bbbf'
+const CARD_TEXT_LABEL = '#9a9da2'
+const CARD_TEXT_MUTED = '#7a7d82'
 
 // Logo "AM" (même SVG que src/components/ui/Logo.jsx), encodé en data URI
 // pour le pied de mail — plus fiable que du SVG inline dans les clients mail.
-const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+// TODO : remplacer par le vrai fichier logo (rendu métal/3D) une fois
+// fourni, cette version SVG est un dérivé simplifié en attendant.
+const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40">
   <defs>
     <linearGradient id="logo-triangle" x1="15%" y1="0%" x2="85%" y2="100%">
       <stop offset="0%" stop-color="#8b6bf0" />
@@ -54,59 +61,62 @@ const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" 
 </svg>`
 const LOGO_DATA_URI = `data:image/svg+xml;base64,${btoa(LOGO_SVG)}`
 
-// Fonds posés en IMAGE (PNG 1x1 unie, tuilée) plutôt qu'en couleur CSS :
-// l'appli Gmail mobile "adapte" automatiquement les couleurs sombres d'un
-// email pour son mode sombre, ce qui éclaircit un design déjà sombre au
-// lieu de le préserver — testé et confirmé sur ce mail. Une image ne peut
-// pas être recolorée par cet algorithme, contrairement à background-color.
-const BG_IMAGE = `url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGPg4uIGAABBACBytP0OAAAAAElFTkSuQmCC') repeat`
-const CARD_BG_IMAGE = `url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGMQEREDAAB+AD8ywjOSAAAAAElFTkSuQmCC') repeat`
-
 const formatEUR = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} €`
 const formatDate = (value) =>
   new Date(value).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })
 const toIsoDate = (date) => date.toISOString().slice(0, 10)
 
 function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projectsUpcoming, marketing, notifCount, upcoming }) {
-  // Une "card" = une table pleine largeur avec bgcolor, jamais un <div>.
+  // Chaque "card" est un bloc noir plein, isolé par une marge — jamais de
+  // chevauchement possible puisque tout est empilé en tables (pas de
+  // position absolue/flottante).
   const card = (innerHtml) =>
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};border:1px solid ${BORDER};border-radius:12px;margin-bottom:16px;">
-      <tr><td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};padding:20px;">${innerHtml}</td></tr>
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${CARD_BORDER};border-radius:12px;">
+      <tr><td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:20px;">${innerHtml}</td></tr>
     </table>`
 
-  const sectionTitle = (title) =>
-    `<p style="margin:0 0 10px;font-size:13px;font-weight:600;color:${TEXT_LABEL};text-transform:uppercase;letter-spacing:0.04em;">${title}</p>`
+  // Espaceur explicite entre deux blocs (plutôt que margin-bottom, mal
+  // supporté sur <table> par certains clients) : garantit un espace fixe
+  // et jamais de blocs collés/chevauchants.
+  const spacer = (height) => `<div style="height:${height}px;line-height:${height}px;font-size:1px;">&nbsp;</div>`
 
-  const emptyRow = (text) => `<p style="margin:0;font-size:14px;color:${TEXT_MUTED};">${text}</p>`
+  const sectionTitle = (title) =>
+    `<p style="margin:0 0 10px;font-size:13px;font-weight:600;color:${CARD_TEXT_LABEL};text-transform:uppercase;letter-spacing:0.04em;">${title}</p>`
+
+  const emptyRow = (text) => `<p style="margin:0;font-size:14px;color:${CARD_TEXT_MUTED};">${text}</p>`
 
   // Ligne label/valeur en table (pas display:flex, non supporté par
   // l'appli Gmail mobile).
   const row = (label, value) =>
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};border-bottom:1px solid ${ROW_BORDER};">
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border-bottom:1px solid ${ROW_BORDER};">
       <tr>
-        <td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};padding:6px 0;font-size:14px;color:${TEXT_SECONDARY};">${label}</td>
-        <td align="right" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};padding:6px 0;font-size:14px;color:${TEXT_PRIMARY};font-weight:500;">${value}</td>
+        <td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:6px 0;font-size:14px;color:${CARD_TEXT_SECONDARY};">${label}</td>
+        <td align="right" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:6px 0;font-size:14px;color:${CARD_TEXT_PRIMARY};font-weight:500;">${value}</td>
       </tr>
     </table>`
 
   const kpiBlock = (label, value, sublabel) =>
-    `<td width="50%" valign="top" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};border:1px solid ${BORDER};border-radius:12px;padding:16px;">
-      <p style="margin:0;font-size:12px;color:${TEXT_LABEL};">${label}</p>
-      <p style="margin:6px 0 0;font-size:28px;font-weight:700;color:${TEXT_PRIMARY};">${value}</p>
-      <p style="margin:4px 0 0;font-size:11px;color:${TEXT_MUTED};">${sublabel}</p>
+    `<td width="50%" valign="top" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${CARD_BORDER};border-radius:12px;padding:16px;">
+      <p style="margin:0;font-size:12px;color:${CARD_TEXT_LABEL};">${label}</p>
+      <p style="margin:6px 0 0;font-size:26px;font-weight:700;color:${CARD_TEXT_PRIMARY};">${value}</p>
+      <p style="margin:4px 0 0;font-size:11px;color:${CARD_TEXT_MUTED};">${sublabel}</p>
     </td>`
 
   const body = `
-    <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:${TEXT_PRIMARY};">AM Growth Solutions</p>
-    <p style="margin:0 0 24px;font-size:13px;color:${TEXT_SECONDARY};">Rapport hebdomadaire — ${periodLabel}</p>
+    <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:${PAGE_TEXT};">AM Growth Solutions</p>
+    <p style="margin:0;font-size:13px;color:${PAGE_TEXT_SECONDARY};">Rapport hebdomadaire — ${periodLabel}</p>
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};margin-bottom:16px;">
+    ${spacer(24)}
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr>
         ${kpiBlock('CA facturé (semaine)', formatEUR(kpis.caFacture), 'Documents + factures récurrentes facturées')}
-        <td width="12" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};"></td>
+        <td width="12"></td>
         ${kpiBlock('CA encaissé (semaine)', formatEUR(kpis.caEncaisse), 'Encaissements + factures récurrentes payées')}
       </tr>
     </table>
+
+    ${spacer(16)}
 
     ${card(
       sectionTitle('Prospects convertis') +
@@ -115,16 +125,21 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
           : emptyRow('Aucune conversion cette semaine.')),
     )}
 
+    ${spacer(16)}
+
     ${card(
       sectionTitle('Projets livrés cette semaine') +
         (projectsDelivered.length
           ? projectsDelivered.map((p) => row(p.nom, p.company?.name ?? '')).join('')
           : emptyRow('Aucun projet livré cette semaine.')) +
-        `<p style="margin:14px 0 8px;font-size:12px;font-weight:600;color:${TEXT_LABEL};">Échéances proches</p>` +
+        spacer(14) +
+        `<p style="margin:0 0 8px;font-size:12px;font-weight:600;color:${CARD_TEXT_LABEL};">Échéances proches</p>` +
         (projectsUpcoming.length
           ? projectsUpcoming.map((p) => row(p.nom, formatDate(p.date_livraison_prevue))).join('')
           : emptyRow('Aucune échéance dans les 7 prochains jours.')),
     )}
+
+    ${spacer(16)}
 
     ${card(
       sectionTitle('Actions marketing publiées') +
@@ -133,10 +148,14 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
           : emptyRow('Aucune action publiée cette semaine.')),
     )}
 
+    ${spacer(16)}
+
     ${card(
       sectionTitle('Notifications') +
-        `<p style="margin:0;font-size:14px;color:${TEXT_PRIMARY};">${notifCount} notification${notifCount > 1 ? 's' : ''} reçue${notifCount > 1 ? 's' : ''} cette semaine</p>`,
+        `<p style="margin:0;font-size:14px;color:${CARD_TEXT_PRIMARY};">${notifCount} notification${notifCount > 1 ? 's' : ''} reçue${notifCount > 1 ? 's' : ''} cette semaine</p>`,
     )}
+
+    ${spacer(16)}
 
     ${card(
       sectionTitle('Cette semaine — 7 prochains jours') +
@@ -145,14 +164,16 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
           : emptyRow('Rien de prévu pour l\'instant.')),
     )}
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};">
+    ${spacer(32)}
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr>
-        <td align="center" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};padding-top:28px;">
-          <img src="${LOGO_DATA_URI}" width="32" height="32" alt="AM Growth Solutions" style="display:block;" />
+        <td align="center">
+          <img src="${LOGO_DATA_URI}" width="40" height="40" alt="AM Growth Solutions" style="display:block;" />
         </td>
       </tr>
       <tr>
-        <td align="center" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};padding-top:8px;font-size:11px;color:${TEXT_MUTED};">
+        <td align="center" style="padding-top:10px;font-size:11px;color:${PAGE_TEXT_SECONDARY};">
           Rapport automatique — désactivable dans Paramètres de l'application.
         </td>
       </tr>
@@ -160,17 +181,13 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
   `
 
   return `<!doctype html>
-<html style="background-color:${BG};background-image:${BG_IMAGE};">
-  <head>
-    <meta name="color-scheme" content="light dark" />
-    <meta name="supported-color-schemes" content="light dark" />
-  </head>
-  <body bgcolor="${BG}" style="margin:0;padding:0;background-color:${BG};background-image:${BG_IMAGE};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};">
+<html>
+  <body bgcolor="${PAGE_BG}" style="margin:0;padding:0;background-color:${PAGE_BG};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${PAGE_BG}" style="background-color:${PAGE_BG};">
       <tr>
-        <td align="center" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};padding:32px 20px;">
-          <table role="presentation" width="560" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};max-width:560px;width:100%;">
-            <tr><td bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};">${body}</td></tr>
+        <td align="center" style="padding:32px 20px;">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+            <tr><td>${body}</td></tr>
           </table>
         </td>
       </tr>
