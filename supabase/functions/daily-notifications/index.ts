@@ -129,7 +129,7 @@ Deno.serve(async (_req) => {
         if (await isDuplicate('action_marketing_du_jour', action.id)) continue
         queue(
           'action_marketing_du_jour',
-          'Action marketing prévue aujourd\'hui',
+          'Action marketing 📣',
           action.titre,
           'marketing_action',
           action.id,
@@ -151,7 +151,7 @@ Deno.serve(async (_req) => {
         if (await isDuplicate('facture_impayee_7j', project.id)) continue
         queue(
           'facture_impayee_7j',
-          'Facture en attente de paiement',
+          '⚠️ Facture ⚠️',
           `${project.nom} — ${project.company?.name ?? 'client'} : envoyée il y a ${days} jours`,
           'project',
           project.id,
@@ -185,7 +185,7 @@ Deno.serve(async (_req) => {
         if (caFacture < objectif * 0.5 && !(await isDuplicate('objectif_mi_mois', null))) {
           queue(
             'objectif_mi_mois',
-            'Lâche pas, tu vas réussir',
+            'Lâche pas 💶',
             'Sinon tu peux aussi garder ton CDI et un patron 😉',
             null,
             null,
@@ -216,7 +216,7 @@ Deno.serve(async (_req) => {
           if (await isDuplicate('projet_demarre_ou_termine_bientot', project.id)) continue
           queue(
             'projet_demarre_ou_termine_bientot',
-            'Projet démarre bientôt',
+            'Démarrage projet⏱️',
             `${project.nom} — ${project.company?.name ?? 'client'} : début le ${project.date_debut}`,
             'project',
             project.id,
@@ -225,7 +225,7 @@ Deno.serve(async (_req) => {
           if (await isDuplicate('projet_demarre_ou_termine_bientot', project.id)) continue
           queue(
             'projet_demarre_ou_termine_bientot',
-            'Projet se termine bientôt',
+            'Projet deadline 🚨',
             `${project.nom} — ${project.company?.name ?? 'client'} : échéance le ${project.date_livraison_prevue}`,
             'project',
             project.id,
@@ -249,7 +249,7 @@ Deno.serve(async (_req) => {
         if (await isDuplicate('prospect_bloque_devis', company.id)) continue
         queue(
           'prospect_bloque_devis',
-          'Devis à transmettre en attente',
+          'Devis ⏳',
           `${company.name} — en attente depuis ${days} jours`,
           'company',
           company.id,
