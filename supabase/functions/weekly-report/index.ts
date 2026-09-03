@@ -63,7 +63,7 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
   // Une "card" = une table pleine largeur avec bgcolor, jamais un <div>.
   const card = (innerHtml) =>
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${BORDER};border-radius:12px;margin-bottom:16px;">
-      <tr><td style="padding:20px;">${innerHtml}</td></tr>
+      <tr><td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:20px;">${innerHtml}</td></tr>
     </table>`
 
   const sectionTitle = (title) =>
@@ -74,10 +74,10 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
   // Ligne label/valeur en table (pas display:flex, non supporté par
   // l'appli Gmail mobile).
   const row = (label, value) =>
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-bottom:1px solid ${ROW_BORDER};">
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border-bottom:1px solid ${ROW_BORDER};">
       <tr>
-        <td style="padding:6px 0;font-size:14px;color:${TEXT_SECONDARY};">${label}</td>
-        <td align="right" style="padding:6px 0;font-size:14px;color:${TEXT_PRIMARY};font-weight:500;">${value}</td>
+        <td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:6px 0;font-size:14px;color:${TEXT_SECONDARY};">${label}</td>
+        <td align="right" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:6px 0;font-size:14px;color:${TEXT_PRIMARY};font-weight:500;">${value}</td>
       </tr>
     </table>`
 
@@ -92,10 +92,10 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
     <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:${TEXT_PRIMARY};">AM Growth Solutions</p>
     <p style="margin:0 0 24px;font-size:13px;color:${TEXT_SECONDARY};">Rapport hebdomadaire — ${periodLabel}</p>
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};margin-bottom:16px;">
       <tr>
         ${kpiBlock('CA facturé (semaine)', formatEUR(kpis.caFacture), 'Documents + factures récurrentes facturées')}
-        <td width="12"></td>
+        <td width="12" bgcolor="${BG}" style="background-color:${BG};"></td>
         ${kpiBlock('CA encaissé (semaine)', formatEUR(kpis.caEncaisse), 'Encaissements + factures récurrentes payées')}
       </tr>
     </table>
@@ -137,14 +137,14 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
           : emptyRow('Rien de prévu pour l\'instant.')),
     )}
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};">
       <tr>
-        <td align="center" style="padding-top:28px;">
+        <td align="center" bgcolor="${BG}" style="background-color:${BG};padding-top:28px;">
           <img src="${LOGO_DATA_URI}" width="32" height="32" alt="AM Growth Solutions" style="display:block;" />
         </td>
       </tr>
       <tr>
-        <td align="center" style="padding-top:8px;font-size:11px;color:${TEXT_MUTED};">
+        <td align="center" bgcolor="${BG}" style="background-color:${BG};padding-top:8px;font-size:11px;color:${TEXT_MUTED};">
           Rapport automatique — désactivable dans Paramètres de l'application.
         </td>
       </tr>
@@ -157,8 +157,8 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};">
       <tr>
         <td align="center" bgcolor="${BG}" style="background-color:${BG};padding:32px 20px;">
-          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
-            <tr><td>${body}</td></tr>
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};max-width:560px;width:100%;">
+            <tr><td bgcolor="${BG}" style="background-color:${BG};">${body}</td></tr>
           </table>
         </td>
       </tr>
