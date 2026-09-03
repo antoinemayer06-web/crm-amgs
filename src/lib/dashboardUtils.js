@@ -41,6 +41,16 @@ export function getCAForMonth(documents, monthKey) {
     .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
 }
 
+// Factures récurrentes (entreprise, indépendantes des projets) payées
+// sur le mois sélectionné — comptent dans le CA facturé uniquement une
+// fois marquées payées, sur la base de la date de paiement (pas la date
+// prévue, qui peut différer du mois où le paiement est réellement arrivé).
+export function getRecurringInvoicesCAForMonth(recurringInvoices, monthKey) {
+  return recurringInvoices
+    .filter((invoice) => invoice.payee && isInMonth(invoice.date_paiement, monthKey))
+    .reduce((sum, invoice) => sum + Number(invoice.montant ?? 0), 0)
+}
+
 // Cash réellement encaissé sur le mois sélectionné : somme des
 // encaissements enregistrés projet par projet (table cash_collections).
 // C'est la seule source qui reflète l'argent réellement reçu avec une

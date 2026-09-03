@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import ExpensesPanel from '../components/finance/ExpensesPanel'
 import FinanceChart from '../components/finance/FinanceChart'
 import FinanceGoalJar from '../components/finance/FinanceGoalJar'
+import RecurringInvoicesPanel from '../components/finance/RecurringInvoicesPanel'
 import { useFinanceData } from '../hooks/useFinanceData'
 import { useUpdateFinanceGoal } from '../hooks/useFinance'
 import { useAuth } from '../lib/AuthContext'
@@ -10,6 +11,7 @@ import {
   getCAForMonth,
   getEncaisseForMonth,
   getExpensesForMonth,
+  getRecurringInvoicesCAForMonth,
   getResultatPrevu,
   getResultatRealise,
 } from '../lib/dashboardUtils'
@@ -40,7 +42,9 @@ export default function FinancePage() {
 
   const kpis = useMemo(() => {
     if (!data) return null
-    const ca = getCAForMonth(data.documents, monthKey)
+    const ca =
+      getCAForMonth(data.documents, monthKey) +
+      getRecurringInvoicesCAForMonth(data.recurringInvoices, monthKey)
     const encaisse = getEncaisseForMonth(data.cashCollections, monthKey)
     const depenses = getExpensesForMonth(data.expenses, monthKey)
     return {
@@ -157,6 +161,8 @@ export default function FinancePage() {
               </div>
             </div>
           </div>
+
+          <RecurringInvoicesPanel recurringInvoices={data.recurringInvoices} monthKey={monthKey} />
 
           <ExpensesPanel expenses={data.expenses} monthKey={monthKey} />
         </>

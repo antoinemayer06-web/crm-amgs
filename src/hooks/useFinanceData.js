@@ -7,14 +7,16 @@ export function useFinanceData() {
   return useQuery({
     queryKey: ['finance'],
     queryFn: async () => {
-      const [documentsRes, cashCollectionsRes, expensesRes, financeGoalRes] = await Promise.all([
-        supabase.from('documents').select('id, type, montant, date_document'),
-        supabase.from('cash_collections').select('*, project:projects(id, nom)'),
-        supabase.from('expenses').select('*'),
-        supabase.from('finance_goals').select('*').maybeSingle(),
-      ])
+      const [documentsRes, cashCollectionsRes, expensesRes, financeGoalRes, recurringInvoicesRes] =
+        await Promise.all([
+          supabase.from('documents').select('id, type, montant, date_document'),
+          supabase.from('cash_collections').select('*, project:projects(id, nom)'),
+          supabase.from('expenses').select('*'),
+          supabase.from('finance_goals').select('*').maybeSingle(),
+          supabase.from('recurring_invoices').select('*, company:companies(id, name)'),
+        ])
 
-      for (const res of [documentsRes, cashCollectionsRes, expensesRes, financeGoalRes]) {
+      for (const res of [documentsRes, cashCollectionsRes, expensesRes, financeGoalRes, recurringInvoicesRes]) {
         if (res.error) throw res.error
       }
 
@@ -23,6 +25,7 @@ export function useFinanceData() {
         cashCollections: cashCollectionsRes.data,
         expenses: expensesRes.data,
         financeGoal: financeGoalRes.data,
+        recurringInvoices: recurringInvoicesRes.data,
       }
     },
   })

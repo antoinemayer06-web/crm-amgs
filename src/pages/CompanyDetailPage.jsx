@@ -6,6 +6,7 @@ import DocumentsTab from '../components/companies/DocumentsTab'
 import InfosTab from '../components/companies/InfosTab'
 import NotesTab from '../components/companies/NotesTab'
 import ProjectsTab from '../components/companies/ProjectsTab'
+import RecurringInvoicesTab from '../components/companies/RecurringInvoicesTab'
 import Badge from '../components/ui/Badge'
 import Modal from '../components/ui/Modal'
 import { useCompany, useDeleteCompany, useUpdateCompany } from '../hooks/useCompanies'
@@ -18,6 +19,7 @@ const TABS = [
   { key: 'contacts', label: 'Contacts' },
   { key: 'notes', label: 'Notes' },
   { key: 'documents', label: 'Documents' },
+  { key: 'recurring_invoices', label: 'Factures récurrentes' },
   { key: 'projects', label: 'Projets liés' },
 ]
 
@@ -92,14 +94,14 @@ export default function CompanyDetailPage() {
         </div>
       </div>
 
-      <div className="border-b border-chrome-dark">
-        <nav className="flex gap-1">
+      <div className="overflow-x-auto border-b border-chrome-dark">
+        <nav className="flex w-max min-w-full gap-1">
           {TABS.map((tab) => (
             <button
               key={tab.key}
               type="button"
               onClick={() => setActiveTab(tab.key)}
-              className={`border-b-2 px-3 py-2 text-sm font-medium ${
+              className={`shrink-0 border-b-2 px-3 py-2 text-sm font-medium ${
                 activeTab === tab.key
                   ? 'border-chrome-light text-ink'
                   : 'border-transparent text-ink-secondary hover:text-ink'
@@ -116,6 +118,7 @@ export default function CompanyDetailPage() {
         {activeTab === 'contacts' && <ContactsTab companyId={company.id} />}
         {activeTab === 'notes' && <NotesTab companyId={company.id} />}
         {activeTab === 'documents' && <DocumentsTab companyId={company.id} />}
+        {activeTab === 'recurring_invoices' && <RecurringInvoicesTab companyId={company.id} />}
         {activeTab === 'projects' && <ProjectsTab companyId={company.id} />}
       </div>
 

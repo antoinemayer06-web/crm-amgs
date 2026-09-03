@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import { IconClose } from './icons'
 
 const sizes = {
@@ -6,7 +7,15 @@ const sizes = {
 }
 
 export default function Modal({ title, onClose, children, size = 'md' }) {
-  return (
+  return createPortal(
+    // Portail vers document.body : rendu depuis un composant imbriqué
+    // dans une carte .card-glass/.glass-panel (backdrop-filter), ce
+    // "position: fixed" se retrouverait sinon positionné/limité par
+    // rapport à cette carte plutôt que par rapport à tout le viewport
+    // (backdrop-filter crée un "containing block" pour ses descendants
+    // fixed) — d'où le modal qui restait coincé dans sa colonne au lieu
+    // de s'afficher centré en plein écran.
+    //
     // items-start + overlay scrollable sur mobile : quand le clavier
     // virtuel s'ouvre (ex. en tapant dans un champ du formulaire), un
     // centrage vertical strict (items-center) fait paraître le modal
@@ -30,6 +39,7 @@ export default function Modal({ title, onClose, children, size = 'md' }) {
         </div>
         <div className="p-5">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

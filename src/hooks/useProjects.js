@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { buildRecurrenceOccurrences } from '../lib/recurrenceUtils'
 import { supabase } from '../lib/supabaseClient'
 
 const PROJECT_SELECT = '*, company:companies(id, name, status)'
@@ -162,91 +161,6 @@ export function useUpdateProjectMontantFacture() {
         })
         if (error) throw error
       }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] })
-      queryClient.invalidateQueries({ queryKey: ['documents'] })
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
-      queryClient.invalidateQueries({ queryKey: ['finance'] })
-    },
-  })
-}
-
-// Génère une série de factures récurrentes (même mécanique que les
-// dépenses/actions marketing : occurrences matérialisées en plusieurs
-// lignes indépendantes) — la première occurrence remplace/crée le
-// document "facture" suivi pour ce projet, les suivantes sont ajoutées.
-export function useGenerateRecurringFacture() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async ({
-      projectId,
-      companyId,
-      projectNom,
-      montant,
-      dateDebut,
-      frequence,
-      intervalle,
-      dateFin,
-    }) => {
-      const occurrences = buildRecurrenceOccurrences(
-        {
-          date_document: dateDebut,
-          recurrence_frequence: frequence,
-          recurrence_intervalle: intervalle,
-          recurrence_fin: dateFin,
-        },
-        'date_document',
-      )
-      const [first, ...rest] = occurrences
-
-      const { error: updateError } = await supabase
-        .from('projects')
-        .update({ montant_facture: montant })
-        .eq('id', projectId)
-      if (updateError) throw updateError
-
-      const { data: existing, error: fetchError } = await supabase
-        .from('documents')
-        .select('id')
-        .eq('project_id', projectId)
-        .eq('type', 'facture')
-        .maybeSingle()
-      if (fetchError) throw fetchError
-
-      if (existing) {
-        const { error } = await supabase
-          .from('documents')
-          .update({ montant, ...first })
-          .eq('id', existing.id)
-        if (error) throw error
-      } else {
-        const { error } = await supabase.from('documents').insert({
-          company_id: companyId,
-          project_id: projectId,
-          nom: `Facture — ${projectNom}`,
-          type: 'facture',
-          montant,
-          ...first,
-        })
-        if (error) throw error
-      }
-
-      if (rest.length > 0) {
-        const { error } = await supabase.from('documents').insert(
-          rest.map((occurrence) => ({
-            company_id: companyId,
-            project_id: projectId,
-            nom: `Facture — ${projectNom}`,
-            type: 'facture',
-            montant,
-            ...occurrence,
-          })),
-        )
-        if (error) throw error
-      }
-
-      return occurrences.length
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] })

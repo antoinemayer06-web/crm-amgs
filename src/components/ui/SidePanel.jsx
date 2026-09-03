@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { IconClose } from './icons'
 
 export default function SidePanel({ title, onClose, children }) {
@@ -14,7 +15,11 @@ export default function SidePanel({ title, onClose, children }) {
     setTimeout(onClose, 150)
   }
 
-  return (
+  // Portail vers document.body : voir Modal.jsx pour la même raison
+  // (un ancêtre en .card-glass/.glass-panel — backdrop-filter — ferait
+  // sinon de ce "position: fixed" un positionnement relatif à cet
+  // ancêtre plutôt qu'au viewport).
+  return createPortal(
     <div className="fixed inset-0 z-50 flex justify-end">
       <div
         onClick={handleClose}
@@ -47,6 +52,7 @@ export default function SidePanel({ title, onClose, children }) {
         </div>
         <div className="flex-1 overflow-y-auto p-5">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
