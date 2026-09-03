@@ -9,7 +9,6 @@ import {
 } from '../hooks/useCompanySettings'
 import { useAuth } from '../lib/AuthContext'
 import { useSoundSettings } from '../hooks/useSoundSettings'
-import { useUpdateWeeklyReportSetting, useWeeklyReportSetting } from '../hooks/useNotifications'
 import Toggle from '../components/ui/Toggle'
 
 const emptyValues = {
@@ -54,8 +53,6 @@ export default function SettingsPage() {
   const uploadFile = useUploadCompanyFile()
   const deleteFile = useDeleteCompanyFile()
   const { enabled: soundsEnabled, toggle: toggleSounds } = useSoundSettings()
-  const { data: weeklyReportActive } = useWeeklyReportSetting()
-  const updateWeeklyReportSetting = useUpdateWeeklyReportSetting()
 
   const [values, setValues] = useState(emptyValues)
   const [openingId, setOpeningId] = useState(null)
@@ -190,17 +187,12 @@ export default function SettingsPage() {
       </div>
 
       <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
-        <h3 className="mb-3 text-sm font-semibold text-ink">Sons & rapports</h3>
+        <h3 className="mb-3 text-sm font-semibold text-ink">Sons</h3>
         <div className="divide-y divide-chrome-dark">
           <Toggle
             label="Sons de l'interface"
             checked={soundsEnabled}
             onChange={toggleSounds}
-          />
-          <Toggle
-            label="Rapport hebdomadaire par email (chaque lundi)"
-            checked={weeklyReportActive ?? true}
-            onChange={(value) => updateWeeklyReportSetting.mutate({ ownerId: user.id, active: value })}
           />
         </div>
       </div>

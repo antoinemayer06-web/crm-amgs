@@ -82,37 +82,6 @@ export function useNotificationSettings() {
   })
 }
 
-// Rapport hebdomadaire par email (voir supabase/functions/weekly-report) —
-// même ligne de réglages, colonne dédiée distincte de types_actifs.
-export function useWeeklyReportSetting() {
-  return useQuery({
-    queryKey: ['notification_settings', 'weekly_report'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('notification_settings')
-        .select('rapport_hebdomadaire_actif')
-        .maybeSingle()
-      if (error) throw error
-      return data?.rapport_hebdomadaire_actif ?? true
-    },
-  })
-}
-
-export function useUpdateWeeklyReportSetting() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: async ({ ownerId, active }) => {
-      const { error } = await supabase
-        .from('notification_settings')
-        .upsert({ owner_id: ownerId, rapport_hebdomadaire_actif: active }, { onConflict: 'owner_id' })
-      if (error) throw error
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notification_settings'] })
-    },
-  })
-}
-
 export function useUpdateNotificationSettings() {
   const queryClient = useQueryClient()
   return useMutation({
