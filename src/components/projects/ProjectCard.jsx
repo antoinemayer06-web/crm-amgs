@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_TONES, isDateUrgente } from '../../lib/constants'
 import { getProjectHealth } from '../../lib/projectUtils'
 import Avatar from '../ui/Avatar'
@@ -32,7 +33,7 @@ function HealthIndicator({ project }) {
   )
 }
 
-export default function ProjectCard({
+function ProjectCard({
   project,
   stepsCount,
   showClient = true,
@@ -93,3 +94,5 @@ export default function ProjectCard({
     </button>
   )
 }
+
+export default memo(ProjectCard)

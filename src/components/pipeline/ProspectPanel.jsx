@@ -12,6 +12,7 @@ import {
   TEMPERATURE_OPTIONS,
   TEMPERATURE_TONES,
 } from '../../lib/constants'
+import { playProspectConverted } from '../../lib/sounds'
 import InlineSelect from '../ui/InlineSelect'
 import Modal from '../ui/Modal'
 import SidePanel from '../ui/SidePanel'
@@ -31,6 +32,9 @@ export default function ProspectPanel({ companyId, onClose, onDeleted }) {
   const deleteCompany = useDeleteCompany()
 
   async function handleStatutChange(newValue) {
+    if (newValue === 'devis_signé' && company.statut_prospect !== 'devis_signé') {
+      playProspectConverted()
+    }
     await updateCompany.mutateAsync({ id: companyId, values: buildStatutProspectUpdate(newValue) })
   }
 

@@ -7,10 +7,29 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_OPTIONS } from '../../lib/constants'
 import { getStepsCount } from '../../lib/projectUtils'
 import ProjectCard from './ProjectCard'
+
+const EMPTY_STEPS_COUNT = { done: 0, total: 0 }
+
+// Une passe unique sur allSteps plutôt qu'un filter+reduce répété par
+// carte à chaque rendu (coûteux dès que le kanban a beaucoup d'étapes,
+// et recalculé inutilement à chaque changement de activeProject pendant
+// un drag puisque KanbanView entier re-rendait avant).
+function useStepsCountByProject(allSteps) {
+  return useMemo(() => {
+    const map = new Map()
+    for (const step of allSteps ?? []) {
+      const entry = map.get(step.project_id) ?? { done: 0, total: 0 }
+      entry.total += 1
+      if (step.statut === 'fait') entry.done += 1
+      map.set(step.project_id, entry)
+    }
+    return map
+  }, [allSteps])
+}
 
 function DraggableCard({ project, stepsCount, onClick }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -31,7 +50,7 @@ function DraggableCard({ project, stepsCount, onClick }) {
   )
 }
 
-function Column({ statut, projects, allSteps, onProjectClick }) {
+const Column = memo(function Column({ statut, projects, stepsCountByProject, onProjectClick }) {
   const { setNodeRef, isOver } = useDroppable({ id: statut })
 
   return (
@@ -55,14 +74,14 @@ function Column({ statut, projects, allSteps, onProjectClick }) {
           <DraggableCard
             key={project.id}
             project={project}
-            stepsCount={getStepsCount(allSteps, project.id)}
+            stepsCount={stepsCountByProject.get(project.id) ?? EMPTY_STEPS_COUNT}
             onClick={() => onProjectClick(project)}
           />
         ))}
       </div>
     </div>
   )
-}
+})
 
 export default function KanbanView({ projects, allSteps, onProjectClick, onStatusChange }) {
   const [activeProject, setActiveProject] = useState(null)
@@ -71,6 +90,18 @@ export default function KanbanView({ projects, allSteps, onProjectClick, onStatu
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
   )
+  const stepsCountByProject = useStepsCountByProject(allSteps)
+  // Un seul passage plutôt qu'un .filter() par colonne à chaque rendu —
+  // évite de recalculer 4 tableaux (et donc de re-rendre 4 colonnes)
+  // rien qu'en bougeant le pointeur pendant un drag (activeProject change).
+  const projectsByStatut = useMemo(() => {
+    const map = new Map()
+    for (const statut of PROJECT_STATUT_OPTIONS) map.set(statut, [])
+    for (const project of projects) {
+      map.get(project.statut)?.push(project)
+    }
+    return map
+  }, [projects])
 
   function handleDragStart(event) {
     const project = projects.find((p) => p.id === event.active.id)
@@ -95,8 +126,8 @@ export default function KanbanView({ projects, allSteps, onProjectClick, onStatu
           <Column
             key={statut}
             statut={statut}
-            projects={projects.filter((p) => p.statut === statut)}
-            allSteps={allSteps}
+            projects={projectsByStatut.get(statut) ?? []}
+            stepsCountByProject={stepsCountByProject}
             onProjectClick={onProjectClick}
           />
         ))}

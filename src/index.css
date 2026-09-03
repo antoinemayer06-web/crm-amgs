@@ -26,6 +26,15 @@
   --text-tertiary: #5a5d61;
 }
 
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @keyframes fadein {
   from {
     opacity: 0;
@@ -211,6 +220,17 @@ h3 {
       inset 0 1px 0 rgba(255, 255, 255, 0.4),
       0 8px 24px rgba(0, 0, 0, 0.35);
     transition: box-shadow 220ms ease, border-color 220ms ease;
+  }
+
+  /* Skeleton screens : préfigure la forme du contenu à venir plutôt
+     qu'un texte "Chargement…" ou un spinner générique. Dégradé qui
+     balaie doucement de gauche à droite dans les tons chrome déjà en
+     place — jamais de couleur vive. */
+  .skeleton {
+    @apply rounded-md;
+    background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-surface-hover) 50%, var(--bg-surface) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
   }
 
   .vision-glass-note:hover {

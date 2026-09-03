@@ -13,6 +13,7 @@ import {
 import DensityToggle from '../ui/DensityToggle'
 import InlineSelect from '../ui/InlineSelect'
 import Modal from '../ui/Modal'
+import { SkeletonRows } from '../ui/Skeleton'
 import CompanyForm from './CompanyForm'
 
 const emptyFilters = { search: '', sector: '', statutProspect: '', temperature: '' }
@@ -132,7 +133,7 @@ export default function ProspectsList() {
       </p>
 
       <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
-        {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
+        {isLoading && <SkeletonRows count={6} />}
         {isError && (
           <p className="p-6 text-sm font-medium text-red-400">Erreur de chargement : {error.message}</p>
         )}

@@ -7,6 +7,7 @@ import ProjectFilters from '../components/projects/ProjectFilters'
 import ProjectForm from '../components/projects/ProjectForm'
 import ProjectPanel from '../components/projects/ProjectPanel'
 import Modal from '../components/ui/Modal'
+import { SkeletonRows } from '../components/ui/Skeleton'
 import { useCreateProject, useAllProjectSteps, useProjects, useUpdateProject } from '../hooks/useProjects'
 import { isDatePassee } from '../lib/constants'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -128,7 +129,11 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
+      {isLoading && (
+        <div className="card-glass overflow-hidden rounded-xl">
+          <SkeletonRows count={6} />
+        </div>
+      )}
       {isError && <p className="text-sm text-red-600">Erreur : {error.message}</p>}
 
       {!isLoading && !isError && (

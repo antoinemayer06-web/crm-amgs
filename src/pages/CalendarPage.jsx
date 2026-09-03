@@ -5,6 +5,7 @@ import CalendarEventDetailPanel from '../components/calendar/CalendarEventDetail
 import CalendarEventForm from '../components/calendar/CalendarEventForm'
 import CalendarMonthView from '../components/calendar/CalendarMonthView'
 import Modal from '../components/ui/Modal'
+import { SkeletonBlock } from '../components/ui/Skeleton'
 import { useCalendarData, useCreateCalendarEvent } from '../hooks/useCalendarEvents'
 import { useIsMobile } from '../hooks/useIsMobile'
 import { getWeekDays, toLocalDateKey } from '../lib/calendarUtils'
@@ -132,7 +133,7 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
+      {isLoading && <SkeletonBlock className="h-[480px] w-full rounded-lg" />}
       {isError && <p className="text-sm font-medium text-red-400">Erreur de chargement du calendrier.</p>}
 
       {!isLoading && !isError && (

@@ -7,6 +7,8 @@ import KpiCard from '../components/dashboard/KpiCard'
 import MarketingRecapCard from '../components/dashboard/MarketingRecapCard'
 import PipelineFunnelChart from '../components/dashboard/PipelineFunnelChart'
 import UrgentActionsWidget from '../components/dashboard/UrgentActionsWidget'
+import { Skeleton, SkeletonStatGrid } from '../components/ui/Skeleton'
+import PullToRefresh from '../components/ui/PullToRefresh'
 import { useDashboardData } from '../hooks/useDashboardData'
 import {
   currentMonthKey,
@@ -90,10 +92,17 @@ export default function DashboardPage() {
   )
 
   return (
+    <PullToRefresh>
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-ink">Dashboard</h2>
 
-      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
+      {isLoading && (
+        <div className="space-y-6">
+          <Skeleton className="h-32 w-full rounded-xl" />
+          <SkeletonStatGrid />
+          <Skeleton className="h-64 w-full rounded-xl" />
+        </div>
+      )}
       {isError && <p className="text-sm font-medium text-red-400">Erreur : {error.message}</p>}
 
       {kpis && (
@@ -159,5 +168,6 @@ export default function DashboardPage() {
         </>
       )}
     </div>
+    </PullToRefresh>
   )
 }

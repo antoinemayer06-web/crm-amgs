@@ -7,6 +7,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useState } from 'react'
+import { playTaskComplete } from '../../lib/sounds'
 import {
   useCreateProjectStep,
   useDeleteProjectStep,
@@ -101,7 +102,9 @@ export default function ProjectStepsChecklist({ projectId, steps, actualHoursByS
   const reorderSteps = useReorderProjectSteps()
 
   function handleToggle(step) {
-    updateStep.mutate({ id: step.id, values: { statut: step.statut === 'fait' ? 'à_faire' : 'fait' } })
+    const nowDone = step.statut !== 'fait'
+    if (nowDone) playTaskComplete()
+    updateStep.mutate({ id: step.id, values: { statut: nowDone ? 'fait' : 'à_faire' } })
   }
 
   function handleDateChange(step, field, value) {

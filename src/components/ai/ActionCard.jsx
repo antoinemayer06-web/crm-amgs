@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { playActionValidated } from '../../lib/sounds'
 
 const ACTION_TYPE_LABELS = {
   creer_entreprise: 'Créer une entreprise',
@@ -37,6 +38,7 @@ export default function ActionCard({ actions, onResolve, submitting }) {
   const keptCount = actions.length - removed.size
 
   function handleValidate() {
+    playActionValidated()
     onResolve(actions.map((a) => ({ tool_use_id: a.tool_use_id, approved: !removed.has(a.tool_use_id) })))
   }
 

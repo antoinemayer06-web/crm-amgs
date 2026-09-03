@@ -12,6 +12,7 @@ import {
 } from '../../hooks/useNotifications'
 import { usePushSubscription } from '../../hooks/usePushSubscription'
 import SidePanel from '../ui/SidePanel'
+import Toggle from '../ui/Toggle'
 import {
   IconBell,
   IconCalendar,
@@ -87,31 +88,6 @@ function NotificationRow({ notification, onMarkRead, onNavigate }) {
   )
 }
 
-function SettingsToggle({ label, checked, onChange }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onChange(!checked)}
-      className="flex w-full items-center justify-between gap-3 py-2 text-left"
-    >
-      <span className="text-sm text-ink-secondary">{label}</span>
-      <span
-        className={`relative h-6 w-10 shrink-0 rounded-full transition-colors duration-150 ${
-          checked ? 'bg-chrome-light' : 'bg-chrome-dark'
-        }`}
-      >
-        <span
-          className={`absolute top-0.5 h-5 w-5 rounded-full bg-surface shadow transition-transform duration-150 ${
-            checked ? 'translate-x-[18px]' : 'translate-x-0.5'
-          }`}
-        />
-      </span>
-    </button>
-  )
-}
-
 function NotificationSettingsSection({ onClose }) {
   const { user } = useAuth()
   const { data: typesActifs } = useNotificationSettings()
@@ -155,7 +131,7 @@ function NotificationSettingsSection({ onClose }) {
         <p className="mb-1 text-sm font-medium text-ink">Types d'alertes</p>
         <div className="divide-y divide-chrome-dark">
           {Object.entries(TYPE_META).map(([type, meta]) => (
-            <SettingsToggle
+            <Toggle
               key={type}
               label={meta.label}
               checked={typesActifs?.[type] ?? true}

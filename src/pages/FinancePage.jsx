@@ -3,6 +3,7 @@ import ExpensesPanel from '../components/finance/ExpensesPanel'
 import FinanceChart from '../components/finance/FinanceChart'
 import FinanceGoalJar from '../components/finance/FinanceGoalJar'
 import RecurringInvoicesPanel from '../components/finance/RecurringInvoicesPanel'
+import { Skeleton, SkeletonStatGrid } from '../components/ui/Skeleton'
 import { useFinanceData } from '../hooks/useFinanceData'
 import { useUpdateFinanceGoal } from '../hooks/useFinance'
 import { useAuth } from '../lib/AuthContext'
@@ -98,7 +99,15 @@ export default function FinancePage() {
         </div>
       </div>
 
-      {isLoading && <p className="text-sm text-ink-secondary">Chargement…</p>}
+      {isLoading && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+            <Skeleton className="h-72 w-full rounded-xl xl:col-span-2" />
+            <Skeleton className="h-72 w-full rounded-xl" />
+          </div>
+          <SkeletonStatGrid count={3} />
+        </div>
+      )}
       {isError && <p className="text-sm font-medium text-red-400">Erreur : {error.message}</p>}
 
       {kpis && (

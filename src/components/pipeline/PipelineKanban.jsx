@@ -7,7 +7,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { useRef, useState } from 'react'
+import { memo, useMemo, useRef, useState } from 'react'
 import { STATUT_PROSPECT_OPTIONS, formatEnumLabel } from '../../lib/constants'
 import ProspectCard from './ProspectCard'
 
@@ -29,7 +29,7 @@ function DraggableCard({ company, onClick }) {
   )
 }
 
-function Column({ statut, companies, onCompanyClick }) {
+const Column = memo(function Column({ statut, companies, onCompanyClick }) {
   const { setNodeRef, isOver } = useDroppable({ id: statut })
 
   return (
@@ -55,12 +55,23 @@ function Column({ statut, companies, onCompanyClick }) {
       </div>
     </div>
   )
-}
+})
 
 export default function PipelineKanban({ companies, onCompanyClick, onStatusChange }) {
   const [activeCompany, setActiveCompany] = useState(null)
   const [scrollIndex, setScrollIndex] = useState(0)
   const scrollRef = useRef(null)
+  // scrollIndex change à chaque scroll tactile (voir handleScroll) : sans
+  // ce useMemo, les ~8 colonnes recalculaient leur filter() et
+  // re-rendaient toutes en boucle pendant un simple scroll horizontal.
+  const companiesByStatut = useMemo(() => {
+    const map = new Map()
+    for (const statut of STATUT_PROSPECT_OPTIONS) map.set(statut, [])
+    for (const company of companies) {
+      map.get(company.statut_prospect)?.push(company)
+    }
+    return map
+  }, [companies])
   // Sans distance d'activation, dnd-kit démarre un drag au moindre pixel
   // de mouvement et avale le clic : la carte ne s'ouvre plus jamais.
   const sensors = useSensors(
@@ -100,7 +111,7 @@ export default function PipelineKanban({ companies, onCompanyClick, onStatusChan
           <Column
             key={statut}
             statut={statut}
-            companies={companies.filter((c) => c.statut_prospect === statut)}
+            companies={companiesByStatut.get(statut) ?? []}
             onCompanyClick={onCompanyClick}
           />
         ))}

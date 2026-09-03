@@ -50,6 +50,8 @@ export default function ImageNode({ id, data }) {
           <img
             src={data.imageUrl}
             alt=""
+            loading="lazy"
+            decoding="async"
             className="h-full w-full flex-1 select-none rounded-md object-contain"
             draggable={false}
           />

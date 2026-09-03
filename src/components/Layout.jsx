@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import AiChatButton from './ai/AiChatButton'
 import AiChatPanel from './ai/AiChatPanel'
@@ -25,6 +25,7 @@ import {
 import { useAuth } from '../lib/AuthContext'
 import { AiChatProvider } from '../lib/AiChatContext'
 import { useNotifications } from '../hooks/useNotifications'
+import { playNotification, playPaletteOpen } from '../lib/sounds'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', Icon: IconDashboard },
@@ -99,6 +100,19 @@ export default function Layout() {
   const [notificationsOpen, setNotificationsOpen] = useState(false)
   const { data: notifications = [] } = useNotifications()
   const unreadCount = notifications.filter((n) => !n.lue).length
+  const previousUnreadIdsRef = useRef(null)
+
+  // Son joué uniquement pour une notification réellement nouvelle
+  // (id absent du précédent snapshot), jamais au premier chargement ni
+  // quand une notification passe simplement à "lue".
+  useEffect(() => {
+    const currentUnreadIds = new Set(notifications.filter((n) => !n.lue).map((n) => n.id))
+    if (previousUnreadIdsRef.current) {
+      const hasNewUnread = [...currentUnreadIds].some((id) => !previousUnreadIdsRef.current.has(id))
+      if (hasNewUnread) playNotification()
+    }
+    previousUnreadIdsRef.current = currentUnreadIds
+  }, [notifications])
 
   useEffect(() => {
     try {
@@ -112,7 +126,10 @@ export default function Layout() {
     function handleKeyDown(event) {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault()
-        setPaletteOpen((prev) => !prev)
+        setPaletteOpen((prev) => {
+          if (!prev) playPaletteOpen()
+          return !prev
+        })
       } else if (event.key === 'Escape') {
         setMobileNavOpen(false)
       }
@@ -250,7 +267,11 @@ export default function Layout() {
           )}
 
           <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6">
-            <Outlet />
+            {/* Même fondu que les bascules de vue internes (Kanban/Liste…) :
+                pas de saut brutal au changement de page. */}
+            <div key={location.pathname} className="animate-[fadein_180ms_ease-out]">
+              <Outlet />
+            </div>
           </main>
         </div>
 

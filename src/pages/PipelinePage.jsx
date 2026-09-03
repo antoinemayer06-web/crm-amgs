@@ -6,6 +6,7 @@ import ProspectPanel from '../components/pipeline/ProspectPanel'
 import { useCompanies, useUpdateCompany } from '../hooks/useCompanies'
 import { buildStatutProspectUpdate } from '../lib/companyUtils'
 import { isDatePassee } from '../lib/constants'
+import { playProspectConverted } from '../lib/sounds'
 
 const VIEWS = [
   { key: 'kanban', label: 'Kanban' },
@@ -33,6 +34,9 @@ export default function PipelinePage() {
   }, [allCompanies, filters.lateOnly])
 
   async function handleStatusChange(company, newStatut) {
+    if (newStatut === 'devis_signé' && company.statut_prospect !== 'devis_signé') {
+      playProspectConverted()
+    }
     await updateCompany.mutateAsync({
       id: company.id,
       values: buildStatutProspectUpdate(newStatut),
