@@ -68,8 +68,15 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
 
   return `<!doctype html>
 <html>
-  <body style="margin:0;padding:0;background:#0a0a0b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-    <div style="max-width:560px;margin:0 auto;padding:32px 20px;">
+  <head>
+    <meta name="color-scheme" content="dark" />
+    <meta name="supported-color-schemes" content="dark" />
+  </head>
+  <body style="margin:0;padding:0;background-color:#0a0a0b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#0a0a0b" style="background-color:#0a0a0b;">
+      <tr>
+        <td align="center" style="padding:32px 20px;">
+    <div style="max-width:560px;margin:0 auto;">
       <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:#f2f2f3;">AM Growth Solutions</p>
       <p style="margin:0 0 24px;font-size:13px;color:#8a8d91;">Rapport hebdomadaire — ${periodLabel}</p>
 
@@ -125,6 +132,9 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
         Rapport automatique — désactivable dans Paramètres de l'application.
       </p>
     </div>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>`
 }

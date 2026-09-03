@@ -52,6 +52,7 @@ export function useCreateRecurringInvoice() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recurring_invoices'] })
       queryClient.invalidateQueries({ queryKey: ['finance'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
     },
   })
 }
@@ -66,6 +67,7 @@ export function useDeleteRecurringInvoice() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recurring_invoices'] })
       queryClient.invalidateQueries({ queryKey: ['finance'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
     },
   })
 }
@@ -86,6 +88,7 @@ export function useSetRecurringInvoiceFactured() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recurring_invoices'] })
       queryClient.invalidateQueries({ queryKey: ['finance'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
     },
   })
 }
@@ -103,6 +106,7 @@ export function useUpdateRecurringInvoiceFacturationDate() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recurring_invoices'] })
       queryClient.invalidateQueries({ queryKey: ['finance'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
     },
   })
 }
@@ -123,6 +127,7 @@ export function useSetRecurringInvoicePaid() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recurring_invoices'] })
       queryClient.invalidateQueries({ queryKey: ['finance'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
     },
   })
 }
@@ -140,6 +145,7 @@ export function useUpdateRecurringInvoicePaymentDate() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recurring_invoices'] })
       queryClient.invalidateQueries({ queryKey: ['finance'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
     },
   })
 }
