@@ -3,6 +3,12 @@
 // à venir, via l'API Resend. Fonction autonome (pas d'import partagé)
 // pour rester déployable en un seul copier-coller, comme les autres
 // fonctions de ce projet.
+//
+// Rendu 100% <table> (pas de <div>, pas de flexbox) : Gmail (surtout
+// l'appli mobile) a un support CSS très limité — background-color sur
+// <body>/<div> et display:flex sont ignorés ou mal gérés selon les
+// versions. Les tables avec bgcolor + style sont le seul format fiable
+// tous clients confondus (Gmail web/app, Outlook, Apple Mail).
 
 import { createClient } from 'npm:@supabase/supabase-js@2.45.4'
 
@@ -13,6 +19,15 @@ const RESEND_FROM = Deno.env.get('RESEND_FROM') ?? 'AM Growth Solutions <onboard
 // Destinataire fixe optionnel : si présent, le rapport part toujours vers
 // cette adresse plutôt que l'email du compte Supabase Auth de l'owner.
 const REPORT_TO_EMAIL = Deno.env.get('REPORT_TO_EMAIL')
+
+const BG = '#0a0a0b'
+const CARD_BG = '#141416'
+const BORDER = '#3a3c40'
+const TEXT_PRIMARY = '#f2f2f3'
+const TEXT_SECONDARY = '#8a8d91'
+const TEXT_LABEL = '#8e9196'
+const TEXT_MUTED = '#5a5d61'
+const ROW_BORDER = '#26262a'
 
 // Logo "AM" (même SVG que src/components/ui/Logo.jsx), encodé en data URI
 // pour le pied de mail — plus fiable que du SVG inline dans les clients mail.
@@ -45,89 +60,106 @@ const formatDate = (value) =>
 const toIsoDate = (date) => date.toISOString().slice(0, 10)
 
 function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projectsUpcoming, marketing, notifCount, upcoming }) {
-  const card = (content) =>
-    `<div style="background:#141416;border:1px solid #3a3c40;border-radius:12px;padding:20px;margin-bottom:16px;">${content}</div>`
+  // Une "card" = une table pleine largeur avec bgcolor, jamais un <div>.
+  const card = (innerHtml) =>
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${BORDER};border-radius:12px;margin-bottom:16px;">
+      <tr><td style="padding:20px;">${innerHtml}</td></tr>
+    </table>`
 
   const sectionTitle = (title) =>
-    `<p style="margin:0 0 10px;font-size:13px;font-weight:600;color:#8e9196;text-transform:uppercase;letter-spacing:0.04em;">${title}</p>`
+    `<p style="margin:0 0 10px;font-size:13px;font-weight:600;color:${TEXT_LABEL};text-transform:uppercase;letter-spacing:0.04em;">${title}</p>`
 
-  const emptyRow = (text) => `<p style="margin:0;font-size:14px;color:#5a5d61;">${text}</p>`
+  const emptyRow = (text) => `<p style="margin:0;font-size:14px;color:${TEXT_MUTED};">${text}</p>`
 
+  // Ligne label/valeur en table (pas display:flex, non supporté par
+  // l'appli Gmail mobile).
   const row = (label, value) =>
-    `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #26262a;font-size:14px;">
-      <span style="color:#8a8d91;">${label}</span>
-      <span style="color:#f2f2f3;font-weight:500;">${value}</span>
-    </div>`
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-bottom:1px solid ${ROW_BORDER};">
+      <tr>
+        <td style="padding:6px 0;font-size:14px;color:${TEXT_SECONDARY};">${label}</td>
+        <td align="right" style="padding:6px 0;font-size:14px;color:${TEXT_PRIMARY};font-weight:500;">${value}</td>
+      </tr>
+    </table>`
 
   const kpiBlock = (label, value, sublabel) =>
-    `<td style="width:50%;padding:16px;background:#141416;border:1px solid #3a3c40;border-radius:12px;">
-      <p style="margin:0;font-size:12px;color:#8e9196;">${label}</p>
-      <p style="margin:6px 0 0;font-size:28px;font-weight:700;color:#f2f2f3;">${value}</p>
-      <p style="margin:4px 0 0;font-size:11px;color:#5a5d61;">${sublabel}</p>
+    `<td width="50%" valign="top" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${BORDER};border-radius:12px;padding:16px;">
+      <p style="margin:0;font-size:12px;color:${TEXT_LABEL};">${label}</p>
+      <p style="margin:6px 0 0;font-size:28px;font-weight:700;color:${TEXT_PRIMARY};">${value}</p>
+      <p style="margin:4px 0 0;font-size:11px;color:${TEXT_MUTED};">${sublabel}</p>
     </td>`
 
-  return `<!doctype html>
-<html style="background-color:#0a0a0b;">
-  <body bgcolor="#0a0a0b" style="margin:0;padding:0;background-color:#0a0a0b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#0a0a0b" style="background-color:#0a0a0b;border-collapse:collapse;">
+  const body = `
+    <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:${TEXT_PRIMARY};">AM Growth Solutions</p>
+    <p style="margin:0 0 24px;font-size:13px;color:${TEXT_SECONDARY};">Rapport hebdomadaire — ${periodLabel}</p>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
       <tr>
-        <td align="center" bgcolor="#0a0a0b" style="background-color:#0a0a0b;padding:32px 20px;">
-    <div style="max-width:560px;margin:0 auto;">
-      <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:#f2f2f3;">AM Growth Solutions</p>
-      <p style="margin:0 0 24px;font-size:13px;color:#8a8d91;">Rapport hebdomadaire — ${periodLabel}</p>
+        ${kpiBlock('CA facturé (semaine)', formatEUR(kpis.caFacture), 'Documents + factures récurrentes facturées')}
+        <td width="12"></td>
+        ${kpiBlock('CA encaissé (semaine)', formatEUR(kpis.caEncaisse), 'Encaissements + factures récurrentes payées')}
+      </tr>
+    </table>
 
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
-        <tr>
-          ${kpiBlock('CA facturé (semaine)', formatEUR(kpis.caFacture), 'Documents + factures récurrentes facturées')}
-          <td style="width:12px;"></td>
-          ${kpiBlock('CA encaissé (semaine)', formatEUR(kpis.caEncaisse), 'Encaissements + factures récurrentes payées')}
-        </tr>
-      </table>
+    ${card(
+      sectionTitle('Prospects convertis') +
+        (prospects.length
+          ? prospects.map((c) => row(c.name, 'Devis signé')).join('')
+          : emptyRow('Aucune conversion cette semaine.')),
+    )}
 
-      ${card(
-        sectionTitle('Prospects convertis') +
-          (prospects.length
-            ? prospects.map((c) => row(c.name, 'Devis signé')).join('')
-            : emptyRow('Aucune conversion cette semaine.')),
-      )}
+    ${card(
+      sectionTitle('Projets livrés cette semaine') +
+        (projectsDelivered.length
+          ? projectsDelivered.map((p) => row(p.nom, p.company?.name ?? '')).join('')
+          : emptyRow('Aucun projet livré cette semaine.')) +
+        `<p style="margin:14px 0 8px;font-size:12px;font-weight:600;color:${TEXT_LABEL};">Échéances proches</p>` +
+        (projectsUpcoming.length
+          ? projectsUpcoming.map((p) => row(p.nom, formatDate(p.date_livraison_prevue))).join('')
+          : emptyRow('Aucune échéance dans les 7 prochains jours.')),
+    )}
 
-      ${card(
-        sectionTitle('Projets livrés cette semaine') +
-          (projectsDelivered.length
-            ? projectsDelivered.map((p) => row(p.nom, p.company?.name ?? '')).join('')
-            : emptyRow('Aucun projet livré cette semaine.')) +
-          `<p style="margin:14px 0 8px;font-size:12px;font-weight:600;color:#8e9196;">Échéances proches</p>` +
-          (projectsUpcoming.length
-            ? projectsUpcoming.map((p) => row(p.nom, formatDate(p.date_livraison_prevue))).join('')
-            : emptyRow('Aucune échéance dans les 7 prochains jours.')),
-      )}
+    ${card(
+      sectionTitle('Actions marketing publiées') +
+        (marketing.length
+          ? marketing.map((m) => row(m.titre, formatDate(m.date_prevue))).join('')
+          : emptyRow('Aucune action publiée cette semaine.')),
+    )}
 
-      ${card(
-        sectionTitle('Actions marketing publiées') +
-          (marketing.length
-            ? marketing.map((m) => row(m.titre, formatDate(m.date_prevue))).join('')
-            : emptyRow('Aucune action publiée cette semaine.')),
-      )}
+    ${card(
+      sectionTitle('Notifications') +
+        `<p style="margin:0;font-size:14px;color:${TEXT_PRIMARY};">${notifCount} notification${notifCount > 1 ? 's' : ''} reçue${notifCount > 1 ? 's' : ''} cette semaine</p>`,
+    )}
 
-      ${card(
-        sectionTitle('Notifications') +
-          `<p style="margin:0;font-size:14px;color:#f2f2f3;">${notifCount} notification${notifCount > 1 ? 's' : ''} reçue${notifCount > 1 ? 's' : ''} cette semaine</p>`,
-      )}
+    ${card(
+      sectionTitle('Cette semaine — 7 prochains jours') +
+        (upcoming.length
+          ? upcoming.map((item) => row(item.title, formatDate(item.date))).join('')
+          : emptyRow('Rien de prévu pour l\'instant.')),
+    )}
 
-      ${card(
-        sectionTitle('Cette semaine — 7 prochains jours') +
-          (upcoming.length
-            ? upcoming.map((item) => row(item.title, formatDate(item.date))).join('')
-            : emptyRow('Rien de prévu pour l\'instant.')),
-      )}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" style="padding-top:28px;">
+          <img src="${LOGO_DATA_URI}" width="32" height="32" alt="AM Growth Solutions" style="display:block;" />
+        </td>
+      </tr>
+      <tr>
+        <td align="center" style="padding-top:8px;font-size:11px;color:${TEXT_MUTED};">
+          Rapport automatique — désactivable dans Paramètres de l'application.
+        </td>
+      </tr>
+    </table>
+  `
 
-      <div style="margin:28px 0 0;text-align:center;">
-        <img src="${LOGO_DATA_URI}" width="32" height="32" alt="AM Growth Solutions" style="display:inline-block;" />
-      </div>
-      <p style="margin:8px 0 0;font-size:11px;color:#5a5d61;text-align:center;">
-        Rapport automatique — désactivable dans Paramètres de l'application.
-      </p>
-    </div>
+  return `<!doctype html>
+<html style="background-color:${BG};">
+  <body bgcolor="${BG}" style="margin:0;padding:0;background-color:${BG};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};">
+      <tr>
+        <td align="center" bgcolor="${BG}" style="background-color:${BG};padding:32px 20px;">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+            <tr><td>${body}</td></tr>
+          </table>
         </td>
       </tr>
     </table>
@@ -181,7 +213,9 @@ Deno.serve(async (_req) => {
       { data: cashCollections },
       { data: prospects },
       { data: allProjects },
-      { data: marketing },
+      { data: marketingPublished },
+      { data: marketingUpcoming },
+      { data: stepsUpcoming },
       { count: notifCount },
       { data: calendarEvents },
     ] = await Promise.all([
@@ -230,6 +264,25 @@ Deno.serve(async (_req) => {
         .eq('statut', 'publié')
         .gte('date_prevue', toIsoDate(weekAgo))
         .lte('date_prevue', toIsoDate(now)),
+      // Actions marketing planifiées dans les 7 prochains jours (pour la
+      // section "Cette semaine", même logique que la page Calendrier).
+      supabase
+        .from('marketing_actions')
+        .select('titre, date_prevue')
+        .eq('owner_id', ownerId)
+        .neq('statut', 'annulé')
+        .gte('date_prevue', toIsoDate(now))
+        .lte('date_prevue', toIsoDate(weekAhead)),
+      // Étapes de projet prévues dans les 7 prochains jours, même logique
+      // que la page Calendrier (project_steps, projets non archivés).
+      supabase
+        .from('project_steps')
+        .select('titre, date_debut, date_fin, project:projects!inner(nom, archived)')
+        .eq('owner_id', ownerId)
+        .eq('project.archived', false)
+        .or(
+          `and(date_fin.gte.${toIsoDate(now)},date_fin.lte.${toIsoDate(weekAhead)}),and(date_debut.gte.${toIsoDate(now)},date_debut.lte.${toIsoDate(weekAhead)})`,
+        ),
       supabase
         .from('notifications')
         .select('id', { count: 'exact', head: true })
@@ -266,6 +319,11 @@ Deno.serve(async (_req) => {
     const upcoming = [
       ...(calendarEvents ?? []).map((e) => ({ title: e.titre, date: e.date_debut })),
       ...projectsUpcoming.map((p) => ({ title: `Échéance — ${p.nom}`, date: p.date_livraison_prevue })),
+      ...(marketingUpcoming ?? []).map((m) => ({ title: `Marketing — ${m.titre}`, date: m.date_prevue })),
+      ...(stepsUpcoming ?? []).map((s) => ({
+        title: s.project?.nom ? `${s.titre} — ${s.project.nom}` : s.titre,
+        date: s.date_fin || s.date_debut,
+      })),
     ].sort((a, b) => new Date(a.date) - new Date(b.date))
 
     const html = renderEmail({
@@ -274,7 +332,7 @@ Deno.serve(async (_req) => {
       prospects: prospects ?? [],
       projectsDelivered,
       projectsUpcoming,
-      marketing: marketing ?? [],
+      marketing: marketingPublished ?? [],
       notifCount: notifCount ?? 0,
       upcoming,
     })
