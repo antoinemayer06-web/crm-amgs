@@ -54,6 +54,14 @@ const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" 
 </svg>`
 const LOGO_DATA_URI = `data:image/svg+xml;base64,${btoa(LOGO_SVG)}`
 
+// Fonds posés en IMAGE (PNG 1x1 unie, tuilée) plutôt qu'en couleur CSS :
+// l'appli Gmail mobile "adapte" automatiquement les couleurs sombres d'un
+// email pour son mode sombre, ce qui éclaircit un design déjà sombre au
+// lieu de le préserver — testé et confirmé sur ce mail. Une image ne peut
+// pas être recolorée par cet algorithme, contrairement à background-color.
+const BG_IMAGE = `url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGPg4uIGAABBACBytP0OAAAAAElFTkSuQmCC') repeat`
+const CARD_BG_IMAGE = `url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGMQEREDAAB+AD8ywjOSAAAAAElFTkSuQmCC') repeat`
+
 const formatEUR = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} €`
 const formatDate = (value) =>
   new Date(value).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })
@@ -62,8 +70,8 @@ const toIsoDate = (date) => date.toISOString().slice(0, 10)
 function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projectsUpcoming, marketing, notifCount, upcoming }) {
   // Une "card" = une table pleine largeur avec bgcolor, jamais un <div>.
   const card = (innerHtml) =>
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${BORDER};border-radius:12px;margin-bottom:16px;">
-      <tr><td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:20px;">${innerHtml}</td></tr>
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};border:1px solid ${BORDER};border-radius:12px;margin-bottom:16px;">
+      <tr><td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};padding:20px;">${innerHtml}</td></tr>
     </table>`
 
   const sectionTitle = (title) =>
@@ -74,15 +82,15 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
   // Ligne label/valeur en table (pas display:flex, non supporté par
   // l'appli Gmail mobile).
   const row = (label, value) =>
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border-bottom:1px solid ${ROW_BORDER};">
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};border-bottom:1px solid ${ROW_BORDER};">
       <tr>
-        <td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:6px 0;font-size:14px;color:${TEXT_SECONDARY};">${label}</td>
-        <td align="right" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:6px 0;font-size:14px;color:${TEXT_PRIMARY};font-weight:500;">${value}</td>
+        <td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};padding:6px 0;font-size:14px;color:${TEXT_SECONDARY};">${label}</td>
+        <td align="right" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};padding:6px 0;font-size:14px;color:${TEXT_PRIMARY};font-weight:500;">${value}</td>
       </tr>
     </table>`
 
   const kpiBlock = (label, value, sublabel) =>
-    `<td width="50%" valign="top" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${BORDER};border-radius:12px;padding:16px;">
+    `<td width="50%" valign="top" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};background-image:${CARD_BG_IMAGE};border:1px solid ${BORDER};border-radius:12px;padding:16px;">
       <p style="margin:0;font-size:12px;color:${TEXT_LABEL};">${label}</p>
       <p style="margin:6px 0 0;font-size:28px;font-weight:700;color:${TEXT_PRIMARY};">${value}</p>
       <p style="margin:4px 0 0;font-size:11px;color:${TEXT_MUTED};">${sublabel}</p>
@@ -92,10 +100,10 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
     <p style="margin:0 0 4px;font-size:20px;font-weight:700;color:${TEXT_PRIMARY};">AM Growth Solutions</p>
     <p style="margin:0 0 24px;font-size:13px;color:${TEXT_SECONDARY};">Rapport hebdomadaire — ${periodLabel}</p>
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};margin-bottom:16px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};margin-bottom:16px;">
       <tr>
         ${kpiBlock('CA facturé (semaine)', formatEUR(kpis.caFacture), 'Documents + factures récurrentes facturées')}
-        <td width="12" bgcolor="${BG}" style="background-color:${BG};"></td>
+        <td width="12" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};"></td>
         ${kpiBlock('CA encaissé (semaine)', formatEUR(kpis.caEncaisse), 'Encaissements + factures récurrentes payées')}
       </tr>
     </table>
@@ -137,14 +145,14 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
           : emptyRow('Rien de prévu pour l\'instant.')),
     )}
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};">
       <tr>
-        <td align="center" bgcolor="${BG}" style="background-color:${BG};padding-top:28px;">
+        <td align="center" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};padding-top:28px;">
           <img src="${LOGO_DATA_URI}" width="32" height="32" alt="AM Growth Solutions" style="display:block;" />
         </td>
       </tr>
       <tr>
-        <td align="center" bgcolor="${BG}" style="background-color:${BG};padding-top:8px;font-size:11px;color:${TEXT_MUTED};">
+        <td align="center" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};padding-top:8px;font-size:11px;color:${TEXT_MUTED};">
           Rapport automatique — désactivable dans Paramètres de l'application.
         </td>
       </tr>
@@ -152,17 +160,17 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
   `
 
   return `<!doctype html>
-<html style="background-color:${BG};">
+<html style="background-color:${BG};background-image:${BG_IMAGE};">
   <head>
     <meta name="color-scheme" content="light dark" />
     <meta name="supported-color-schemes" content="light dark" />
   </head>
-  <body bgcolor="${BG}" style="margin:0;padding:0;background-color:${BG};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};">
+  <body bgcolor="${BG}" style="margin:0;padding:0;background-color:${BG};background-image:${BG_IMAGE};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};">
       <tr>
-        <td align="center" bgcolor="${BG}" style="background-color:${BG};padding:32px 20px;">
-          <table role="presentation" width="560" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};max-width:560px;width:100%;">
-            <tr><td bgcolor="${BG}" style="background-color:${BG};">${body}</td></tr>
+        <td align="center" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};padding:32px 20px;">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};max-width:560px;width:100%;">
+            <tr><td bgcolor="${BG}" style="background-color:${BG};background-image:${BG_IMAGE};">${body}</td></tr>
           </table>
         </td>
       </tr>
