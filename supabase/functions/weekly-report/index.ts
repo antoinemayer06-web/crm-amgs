@@ -10,6 +10,9 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
 const RESEND_FROM = Deno.env.get('RESEND_FROM') ?? 'AM Growth Solutions <onboarding@resend.dev>'
+// Destinataire fixe optionnel : si présent, le rapport part toujours vers
+// cette adresse plutôt que l'email du compte Supabase Auth de l'owner.
+const REPORT_TO_EMAIL = Deno.env.get('REPORT_TO_EMAIL')
 
 const formatEUR = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} €`
 const formatDate = (value) =>
@@ -241,7 +244,7 @@ Deno.serve(async (_req) => {
         },
         body: JSON.stringify({
           from: RESEND_FROM,
-          to: [user.email],
+          to: [REPORT_TO_EMAIL || user.email],
           subject: `Rapport hebdomadaire — ${periodLabel}`,
           html,
         }),
