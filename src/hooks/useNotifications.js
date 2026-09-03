@@ -5,6 +5,7 @@ const DEFAULT_TYPES_ACTIFS = {
   action_marketing_du_jour: true,
   facture_impayee_7j: true,
   objectif_mi_mois: true,
+  objectif_fin_mois: true,
   projet_demarre_ou_termine_bientot: true,
   prospect_bloque_devis: true,
 }

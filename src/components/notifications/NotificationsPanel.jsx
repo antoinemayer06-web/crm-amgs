@@ -24,9 +24,10 @@ import {
 } from '../ui/icons'
 
 const TYPE_META = {
-  action_marketing_du_jour: { Icon: IconMarketing, label: 'Action marketing du jour' },
+  action_marketing_du_jour: { Icon: IconMarketing, label: 'Marketing du jour' },
   facture_impayee_7j: { Icon: IconInvoiceClock, label: 'Facture impayée' },
   objectif_mi_mois: { Icon: IconTarget, label: 'Objectif mi-mois' },
+  objectif_fin_mois: { Icon: IconTarget, label: 'Bilan fin de mois' },
   projet_demarre_ou_termine_bientot: { Icon: IconCalendarClock, label: 'Projet démarre/se termine' },
   prospect_bloque_devis: { Icon: IconDocument, label: 'Devis à transmettre' },
 }

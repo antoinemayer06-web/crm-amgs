@@ -21,6 +21,7 @@ const DEFAULT_TYPES_ACTIFS = {
   action_marketing_du_jour: true,
   facture_impayee_7j: true,
   objectif_mi_mois: true,
+  objectif_fin_mois: true,
   projet_demarre_ou_termine_bientot: true,
   prospect_bloque_devis: true,
 }
@@ -60,6 +61,7 @@ Deno.serve(async (_req) => {
   const in3Days = toIsoDate(new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000))
   const monthStart = toIsoDate(new Date(now.getFullYear(), now.getMonth(), 1))
   const monthEnd = toIsoDate(new Date(now.getFullYear(), now.getMonth() + 1, 0))
+  const isLastDayOfMonth = today === monthEnd
 
   const summary = { usersProcessed: 0, notificationsCreated: 0, pushSent: 0, pushErrors: 0 }
 
@@ -129,7 +131,7 @@ Deno.serve(async (_req) => {
         if (await isDuplicate('action_marketing_du_jour', action.id)) continue
         queue(
           'action_marketing_du_jour',
-          'Action marketing 📣',
+          'Marketing du jour 🚀',
           action.titre,
           'marketing_action',
           action.id,
@@ -159,8 +161,9 @@ Deno.serve(async (_req) => {
       }
     }
 
-    // 3) objectif_mi_mois (uniquement le 15 du mois)
-    if (typesActifs.objectif_mi_mois && isFifteenth) {
+    // CA facturé du mois en cours + objectif défini (finance_goals) —
+    // partagé par les alertes mi-mois et fin de mois ci-dessous.
+    async function getMonthlyCaFactureAndObjectif() {
       const [{ data: documents, error: documentsError }, { data: goal, error: goalError }] =
         await Promise.all([
           supabase
@@ -178,19 +181,32 @@ Deno.serve(async (_req) => {
         ])
       if (documentsError) throw documentsError
       if (goalError) throw goalError
-
       const objectif = goal?.objectif_resultat_mensuel ?? 0
-      if (objectif > 0) {
-        const caFacture = (documents ?? []).reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
-        if (caFacture < objectif * 0.5 && !(await isDuplicate('objectif_mi_mois', null))) {
-          queue(
-            'objectif_mi_mois',
-            'Lâche pas 💶',
-            'Sinon tu peux aussi garder ton CDI et un patron 😉',
-            null,
-            null,
-          )
-        }
+      const caFacture = (documents ?? []).reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
+      return { caFacture, objectif }
+    }
+
+    // 3) objectif_mi_mois (uniquement le 15 du mois)
+    if (typesActifs.objectif_mi_mois && isFifteenth) {
+      const { caFacture, objectif } = await getMonthlyCaFactureAndObjectif()
+      if (objectif > 0 && caFacture < objectif * 0.5 && !(await isDuplicate('objectif_mi_mois', null))) {
+        queue(
+          'objectif_mi_mois',
+          'Lâche pas 💶',
+          'Sinon tu peux aussi garder ton CDI et un patron 😉',
+          null,
+          null,
+        )
+      }
+    }
+
+    // 6) objectif_fin_mois (dernier jour du mois : bilan du mois écoulé)
+    if (typesActifs.objectif_fin_mois && isLastDayOfMonth) {
+      const { caFacture, objectif } = await getMonthlyCaFactureAndObjectif()
+      if (objectif > 0 && !(await isDuplicate('objectif_fin_mois', null))) {
+        const pourcentage = Math.round((caFacture / objectif) * 100)
+        const titre = pourcentage >= 90 ? "T'es un boss 🐺" : 'Lâche rien ⏱️'
+        queue('objectif_fin_mois', titre, `${pourcentage}% de l'objectif atteint`, null, null)
       }
     }
 
