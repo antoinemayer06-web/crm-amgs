@@ -71,8 +71,8 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
   // chevauchement possible puisque tout est empilé en tables (pas de
   // position absolue/flottante).
   const card = (innerHtml) =>
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${CARD_BORDER};border-radius:12px;">
-      <tr><td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};padding:20px;">${innerHtml}</td></tr>
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${CARD_BORDER};border-radius:16px;">
+      <tr><td bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border-radius:16px;padding:20px;">${innerHtml}</td></tr>
     </table>`
 
   // Espaceur explicite entre deux blocs (plutôt que margin-bottom, mal
@@ -96,7 +96,7 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
     </table>`
 
   const kpiBlock = (label, value, sublabel) =>
-    `<td width="50%" valign="top" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${CARD_BORDER};border-radius:12px;padding:16px;">
+    `<td width="48%" valign="top" bgcolor="${CARD_BG}" style="background-color:${CARD_BG};border:1px solid ${CARD_BORDER};border-radius:16px;padding:16px;">
       <p style="margin:0;font-size:12px;color:${CARD_TEXT_LABEL};">${label}</p>
       <p style="margin:6px 0 0;font-size:26px;font-weight:700;color:${CARD_TEXT_PRIMARY};">${value}</p>
       <p style="margin:4px 0 0;font-size:11px;color:${CARD_TEXT_MUTED};">${sublabel}</p>
@@ -111,7 +111,7 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr>
         ${kpiBlock('CA facturé (semaine)', formatEUR(kpis.caFacture), 'Documents + factures récurrentes facturées')}
-        <td width="12"></td>
+        <td width="4%"></td>
         ${kpiBlock('CA encaissé (semaine)', formatEUR(kpis.caEncaisse), 'Encaissements + factures récurrentes payées')}
       </tr>
     </table>
