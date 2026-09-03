@@ -109,7 +109,7 @@ export default function ActionPanel({ actionId, onClose, onDeleted }) {
           {action.description && (
             <div>
               <p className="mb-1 text-sm font-medium text-ink-secondary">Description</p>
-              <p className="whitespace-pre-wrap text-sm text-ink-secondary">{action.description}</p>
+              <p className="text-selectable whitespace-pre-wrap text-sm text-ink-secondary">{action.description}</p>
             </div>
           )}
 

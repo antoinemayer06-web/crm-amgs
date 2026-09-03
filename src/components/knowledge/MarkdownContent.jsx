@@ -25,5 +25,9 @@ export default function MarkdownContent({ content }) {
     return <p className="text-sm text-ink-tertiary">Aucun contenu.</p>
   }
 
-  return <ReactMarkdown components={components}>{content}</ReactMarkdown>
+  return (
+    <div className="text-selectable">
+      <ReactMarkdown components={components}>{content}</ReactMarkdown>
+    </div>
+  )
 }

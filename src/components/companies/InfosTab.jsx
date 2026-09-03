@@ -64,7 +64,7 @@ export default function InfosTab({ company, actif }) {
 
       <div>
         <dt className="text-xs font-medium text-ink-secondary">Notes générales</dt>
-        <dd className="mt-1 whitespace-pre-wrap text-sm text-ink">
+        <dd className="text-selectable mt-1 whitespace-pre-wrap text-sm text-ink">
           {company.notes_generales || '—'}
         </dd>
       </div>

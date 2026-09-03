@@ -42,6 +42,52 @@ body {
   color: var(--text-primary);
 }
 
+/* Comportement "app installée", pas "page web dans un navigateur" :
+   pas de rebond élastique en bord de page, pas de flash gris au tap,
+   pas de sélection de texte accidentelle sur les boutons/menus/cartes,
+   pas de menu contextuel iOS au appui long sur l'interface. Le zoom
+   utilisateur est déjà verrouillé côté meta viewport (index.html) — ces
+   règles couvrent ce que le viewport seul ne gère pas. */
+html,
+body {
+  overscroll-behavior: none;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Contenu à garder sélectionnable/copiable malgré la règle ci-dessus :
+   champs de saisie, et les zones de texte marquées .text-selectable
+   (notes, descriptions, contenu markdown — tout texte long en lecture
+   que l'utilisateur peut vouloir copier). */
+input,
+textarea,
+select,
+[contenteditable='true'],
+.text-selectable,
+.text-selectable * {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* Retire le délai de tap et le double-tap-to-zoom sur les contrôles
+   interactifs, sans toucher au scroll (manipulation garde le pan et le
+   pincer-zoomer, seul le double-tap natif est désactivé). Le canvas
+   Vision (React Flow) gère ses propres gestes tactiles indépendamment
+   de cette règle. */
+button,
+a,
+[role='button'],
+input,
+select {
+  touch-action: manipulation;
+}
+
 h1,
 h2,
 h3 {

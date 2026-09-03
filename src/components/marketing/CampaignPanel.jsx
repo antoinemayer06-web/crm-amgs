@@ -66,7 +66,7 @@ export default function CampaignPanel({ campaignId, onClose, onDeleted, onAction
           {campaign.objectif && (
             <div>
               <p className="mb-1 text-sm font-medium text-ink-secondary">Objectif</p>
-              <p className="whitespace-pre-wrap text-sm text-ink-secondary">{campaign.objectif}</p>
+              <p className="text-selectable whitespace-pre-wrap text-sm text-ink-secondary">{campaign.objectif}</p>
             </div>
           )}
 

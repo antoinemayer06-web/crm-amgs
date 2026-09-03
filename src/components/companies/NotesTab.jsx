@@ -63,7 +63,7 @@ export default function NotesTab({ companyId }) {
                 </button>
               </div>
             </div>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-ink-secondary">{note.contenu}</p>
+            <p className="text-selectable mt-2 whitespace-pre-wrap text-sm text-ink-secondary">{note.contenu}</p>
           </li>
         ))}
       </ul>
