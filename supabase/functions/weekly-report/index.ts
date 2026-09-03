@@ -250,6 +250,8 @@ Deno.serve(async (_req) => {
         }),
       })
       if (!response.ok) {
+        const errorBody = await response.text()
+        console.error(`Resend error for ${REPORT_TO_EMAIL || user.email}: ${response.status} ${errorBody}`)
         summary.emailErrors += 1
       } else {
         summary.emailsSent += 1
