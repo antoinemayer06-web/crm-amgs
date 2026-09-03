@@ -191,3 +191,44 @@ export function IconChevronRight({ className }) {
     </Svg>
   )
 }
+
+export function IconBell({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M6 10.5a6 6 0 0 1 12 0v3.8l1.6 2.7H4.4L6 14.3V10.5Z" />
+      <path d="M10 19.5a2 2 0 0 0 4 0" />
+    </Svg>
+  )
+}
+
+export function IconTarget({ className }) {
+  return (
+    <Svg className={className}>
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="12" cy="12" r="0.7" fill="currentColor" />
+    </Svg>
+  )
+}
+
+export function IconInvoiceClock({ className }) {
+  return (
+    <Svg className={className}>
+      <path d="M6.5 3.5h7l4 4V20a.8.8 0 0 1-.8.8H6.8A.8.8 0 0 1 6 20V4.3a.8.8 0 0 1 .5-.8Z" />
+      <circle cx="14.5" cy="15" r="4" />
+      <path d="M14.5 13v2l1.4 1" />
+    </Svg>
+  )
+}
+
+export function IconCalendarClock({ className }) {
+  return (
+    <Svg className={className}>
+      <rect x="3.5" y="5" width="17" height="15" rx="2" />
+      <path d="M3.5 9.5h17" />
+      <path d="M8 3v3M16 3v3" />
+      <circle cx="15.5" cy="15" r="3.2" />
+      <path d="M15.5 13.5v1.5l1 0.8" />
+    </Svg>
+  )
+}

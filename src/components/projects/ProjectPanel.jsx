@@ -10,6 +10,7 @@ import { useWorkLogsForSteps } from '../../hooks/useProjectWorkLogs'
 import {
   useDeleteProject,
   useProject,
+  useProjectFactureDate,
   useUpdateProject,
   useUpdateProjectMontantFacture,
 } from '../../hooks/useProjects'
@@ -40,6 +41,7 @@ function StatTile({ label, value }) {
 
 export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }) {
   const { data: project, isLoading } = useProject(projectId)
+  const { data: factureDate } = useProjectFactureDate(projectId)
   const updateProject = useUpdateProject()
   const updateMontantFacture = useUpdateProjectMontantFacture()
   const deleteProject = useDeleteProject()
@@ -52,6 +54,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const [description, setDescription] = useState('')
   const [heuresPrevues, setHeuresPrevues] = useState('')
   const [montantFacture, setMontantFacture] = useState('')
+  const [dateFacturation, setDateFacturation] = useState('')
   const [dateDebut, setDateDebut] = useState('')
   const [dateLivraisonPrevue, setDateLivraisonPrevue] = useState('')
   const [dateFinReelle, setDateFinReelle] = useState('')
@@ -84,10 +87,40 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
     return () => setEntityContext(null)
   }, [project, setEntityContext])
 
+  // Préremplit avec la date déjà enregistrée sur le document de
+  // facturation lié, ou aujourd'hui si aucun n'existe encore.
+  useEffect(() => {
+    if (factureDate !== undefined) {
+      setDateFacturation(factureDate || new Date().toISOString().slice(0, 10))
+    }
+  }, [factureDate])
+
   function saveField(field, value) {
     setSaveError(null)
     updateProject.mutate(
       { id: projectId, values: { [field]: value } },
+      { onError: (err) => setSaveError(err.message) },
+    )
+  }
+
+  // Montant et date de facturation sont commis ensemble (le document
+  // sous-jacent porte les deux) — au blur de l'un ou l'autre, dès que
+  // l'un des deux a changé par rapport à ce qui est enregistré.
+  function commitFacturation() {
+    const montant = montantFacture === '' ? null : Number(montantFacture)
+    const montantChanged = montant !== (project.montant_facture ?? null)
+    const dateChanged = dateFacturation !== (factureDate ?? '')
+    if (!montantChanged && !dateChanged) return
+
+    setSaveError(null)
+    updateMontantFacture.mutate(
+      {
+        projectId,
+        companyId: project.company_id,
+        projectNom: project.nom,
+        montant,
+        dateFacturation,
+      },
       { onError: (err) => setSaveError(err.message) },
     )
   }
@@ -261,33 +294,36 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="block text-xs font-medium text-ink-secondary">
-              Montant facturé (€)
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              value={montantFacture}
-              onChange={(event) => setMontantFacture(event.target.value)}
-              onBlur={() => {
-                const value = montantFacture === '' ? null : Number(montantFacture)
-                if (value !== (project.montant_facture ?? null)) {
-                  setSaveError(null)
-                  updateMontantFacture.mutate(
-                    {
-                      projectId,
-                      companyId: project.company_id,
-                      projectNom: project.nom,
-                      montant: value,
-                    },
-                    { onError: (err) => setSaveError(err.message) },
-                  )
-                }
-              }}
-              className="w-full input-chrome"
-            />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="space-y-1">
+              <label className="block text-xs font-medium text-ink-secondary">
+                Montant facturé (€)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={montantFacture}
+                onChange={(event) => setMontantFacture(event.target.value)}
+                onBlur={commitFacturation}
+                className="w-full input-chrome"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-xs font-medium text-ink-secondary">
+                Date de facturation
+              </label>
+              <input
+                type="date"
+                value={dateFacturation}
+                onChange={(event) => setDateFacturation(event.target.value)}
+                onBlur={commitFacturation}
+                className="w-full input-chrome"
+              />
+              <p className="text-[11px] text-ink-tertiary">
+                C'est cette date qui détermine le mois du CA facturé.
+              </p>
+            </div>
           </div>
 
           <div className="space-y-2 rounded-md border border-chrome-dark p-3">

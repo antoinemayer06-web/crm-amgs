@@ -3,9 +3,11 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import AiChatButton from './ai/AiChatButton'
 import AiChatPanel from './ai/AiChatPanel'
 import CommandPalette from './CommandPalette'
+import NotificationsPanel from './notifications/NotificationsPanel'
 import Logo from './ui/Logo'
 import {
   IconAssistant,
+  IconBell,
   IconClose,
   IconCompanies,
   IconDashboard,
@@ -21,6 +23,7 @@ import {
 } from './ui/icons'
 import { useAuth } from '../lib/AuthContext'
 import { AiChatProvider } from '../lib/AiChatContext'
+import { useNotifications } from '../hooks/useNotifications'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', Icon: IconDashboard },
@@ -91,6 +94,9 @@ export default function Layout() {
   })
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const { data: notifications = [] } = useNotifications()
+  const unreadCount = notifications.filter((n) => !n.lue).length
 
   useEffect(() => {
     try {
@@ -147,26 +153,42 @@ export default function Layout() {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setPaletteOpen(true)}
-              aria-label="Rechercher"
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-chrome-dark text-ink-tertiary hover:border-chrome-mid hover:text-ink-secondary md:hidden"
-            >
-              <IconSearch className="h-4 w-4" />
-            </button>
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPaletteOpen(true)}
+                aria-label="Rechercher"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-chrome-dark text-ink-tertiary hover:border-chrome-mid hover:text-ink-secondary md:hidden"
+              >
+                <IconSearch className="h-4 w-4" />
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setPaletteOpen(true)}
-              className="hidden shrink-0 items-center gap-2 rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-tertiary transition-colors duration-150 hover:border-chrome-mid hover:text-ink-secondary md:flex"
-            >
-              <IconSearch className="h-4 w-4" />
-              <span>Rechercher</span>
-              <span className="ml-1 rounded border border-chrome-dark px-1.5 py-0.5 text-xs text-ink-tertiary">
-                ⌘K
-              </span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setPaletteOpen(true)}
+                className="hidden shrink-0 items-center gap-2 rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-tertiary transition-colors duration-150 hover:border-chrome-mid hover:text-ink-secondary md:flex"
+              >
+                <IconSearch className="h-4 w-4" />
+                <span>Rechercher</span>
+                <span className="ml-1 rounded border border-chrome-dark px-1.5 py-0.5 text-xs text-ink-tertiary">
+                  ⌘K
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setNotificationsOpen(true)}
+                aria-label="Notifications"
+                className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-chrome-dark text-ink-tertiary hover:border-chrome-mid hover:text-ink-secondary"
+              >
+                <IconBell className="h-4 w-4" />
+                {unreadCount > 0 && (
+                  <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-medium leading-none text-white">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </header>
 
@@ -238,6 +260,7 @@ export default function Layout() {
         )}
 
         <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+        {notificationsOpen && <NotificationsPanel onClose={() => setNotificationsOpen(false)} />}
       </div>
     </AiChatProvider>
   )

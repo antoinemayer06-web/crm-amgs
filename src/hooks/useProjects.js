@@ -104,10 +104,31 @@ export function useUpdateProject() {
 // que `montant_facture` reste le total affiché sur la fiche projet.
 // Sans ce second écrit, la saisie sur le projet n'a aucune date et ne
 // remonte jamais dans les calculs mensuels.
+// Date du document "facture" lié au projet (si déjà créé) — sert à
+// pré-remplir le champ date de facturation sur la fiche projet, pour
+// que l'utilisateur voie et puisse corriger la date déjà enregistrée
+// plutôt que de repartir d'aujourd'hui à chaque ouverture.
+export function useProjectFactureDate(projectId) {
+  return useQuery({
+    queryKey: ['documents', 'facture-date', projectId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('documents')
+        .select('date_document')
+        .eq('project_id', projectId)
+        .eq('type', 'facture')
+        .maybeSingle()
+      if (error) throw error
+      return data?.date_document ?? null
+    },
+    enabled: Boolean(projectId),
+  })
+}
+
 export function useUpdateProjectMontantFacture() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ projectId, companyId, projectNom, montant }) => {
+    mutationFn: async ({ projectId, companyId, projectNom, montant, dateFacturation }) => {
       const { error: updateError } = await supabase
         .from('projects')
         .update({ montant_facture: montant })
@@ -122,11 +143,11 @@ export function useUpdateProjectMontantFacture() {
         .maybeSingle()
       if (fetchError) throw fetchError
 
-      const today = new Date().toISOString().slice(0, 10)
+      const dateDocument = dateFacturation || new Date().toISOString().slice(0, 10)
       if (existing) {
         const { error } = await supabase
           .from('documents')
-          .update({ montant, date_document: today })
+          .update({ montant, date_document: dateDocument })
           .eq('id', existing.id)
         if (error) throw error
       } else if (montant != null) {
@@ -136,7 +157,7 @@ export function useUpdateProjectMontantFacture() {
           nom: `Facture — ${projectNom}`,
           type: 'facture',
           montant,
-          date_document: today,
+          date_document: dateDocument,
         })
         if (error) throw error
       }
