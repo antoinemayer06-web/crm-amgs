@@ -58,14 +58,14 @@ export default function DocumentsSection({ companyId, projectId }) {
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
+      <div className="overflow-x-auto rounded-lg border border-chrome-dark bg-surface">
         {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
         {isError && <p className="p-6 text-sm font-medium text-red-400">Erreur : {error.message}</p>}
         {!isLoading && !isError && documents.length === 0 && (
           <p className="p-6 text-sm text-ink-secondary">Aucun document pour l'instant.</p>
         )}
         {!isLoading && !isError && documents.length > 0 && (
-          <table className="w-full text-left text-sm">
+          <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="border-b border-chrome-dark text-xs text-ink-secondary">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>

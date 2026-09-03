@@ -13,6 +13,7 @@ import {
   getEncaisseForMonth,
   getExpensesForMonth,
   getRecurringInvoicesCAForMonth,
+  getRecurringInvoicesEncaisseForMonth,
   getResultatPrevu,
   getResultatRealise,
 } from '../lib/dashboardUtils'
@@ -46,7 +47,9 @@ export default function FinancePage() {
     const ca =
       getCAForMonth(data.documents, monthKey) +
       getRecurringInvoicesCAForMonth(data.recurringInvoices, monthKey)
-    const encaisse = getEncaisseForMonth(data.cashCollections, monthKey)
+    const encaisse =
+      getEncaisseForMonth(data.cashCollections, monthKey) +
+      getRecurringInvoicesEncaisseForMonth(data.recurringInvoices, monthKey)
     const depenses = getExpensesForMonth(data.expenses, monthKey)
     return {
       ca,

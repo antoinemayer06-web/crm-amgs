@@ -68,15 +68,15 @@ export default function CompanyDetailPage() {
         </Link>
       </div>
 
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <h2 className="text-xl font-semibold text-ink">{company.name}</h2>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <h2 className="min-w-0 truncate text-xl font-semibold text-ink">{company.name}</h2>
           <Badge tone={COMPANY_STATUS_TONES[company.status]}>{formatEnumLabel(company.status)}</Badge>
           {company.status === 'client' && (
             <Badge tone={actif ? 'green' : 'neutral'}>{actif ? 'Actif' : 'Inactif'}</Badge>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex shrink-0 gap-2">
           <button
             type="button"
             onClick={() => setEditing(true)}
@@ -87,7 +87,7 @@ export default function CompanyDetailPage() {
           <button
             type="button"
             onClick={handleDelete}
-            className="rounded-md border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
+            className="rounded-md border border-red-500/40 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10"
           >
             Supprimer
           </button>

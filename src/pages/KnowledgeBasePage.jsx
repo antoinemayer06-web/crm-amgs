@@ -22,7 +22,7 @@ export default function KnowledgeBasePage() {
         <button
           type="button"
           onClick={() => setCreating(true)}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+          className="btn-primary"
         >
           Nouvelle fiche
         </button>

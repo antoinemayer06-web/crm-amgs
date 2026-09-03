@@ -14,6 +14,31 @@ const RESEND_FROM = Deno.env.get('RESEND_FROM') ?? 'AM Growth Solutions <onboard
 // cette adresse plutôt que l'email du compte Supabase Auth de l'owner.
 const REPORT_TO_EMAIL = Deno.env.get('REPORT_TO_EMAIL')
 
+// Logo "AM" (même SVG que src/components/ui/Logo.jsx), encodé en data URI
+// pour le pied de mail — plus fiable que du SVG inline dans les clients mail.
+const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+  <defs>
+    <linearGradient id="logo-triangle" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#8b6bf0" />
+      <stop offset="45%" stop-color="#6d3fd6" />
+      <stop offset="100%" stop-color="#3f1f8f" />
+    </linearGradient>
+    <linearGradient id="logo-chevrons" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f2effc" />
+      <stop offset="100%" stop-color="#c9c0e8" />
+    </linearGradient>
+  </defs>
+  <path d="M50 4 L96 94 L4 94 Z" fill="url(#logo-triangle)" />
+  <path d="M17 94 L34 58 L50 80 L66 58 L83 94 Z" fill="url(#logo-chevrons)" />
+  <g>
+    <path d="M50 28 L37 45 L50 45 Z" fill="#8f86b8" />
+    <path d="M50 28 L63 45 L50 45 Z" fill="#ffffff" />
+    <path d="M37 45 L50 62 L50 45 Z" fill="#ffffff" />
+    <path d="M63 45 L50 62 L50 45 Z" fill="#8f86b8" />
+  </g>
+</svg>`
+const LOGO_DATA_URI = `data:image/svg+xml;base64,${btoa(LOGO_SVG)}`
+
 const formatEUR = (value) => `${Number(value ?? 0).toLocaleString('fr-FR')} €`
 const formatDate = (value) =>
   new Date(value).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })
@@ -50,9 +75,9 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
 
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
         <tr>
-          ${kpiBlock('CA facturé (semaine)', formatEUR(kpis.caFacture), 'Documents + factures récurrentes payées')}
+          ${kpiBlock('CA facturé (semaine)', formatEUR(kpis.caFacture), 'Documents + factures récurrentes facturées')}
           <td style="width:12px;"></td>
-          ${kpiBlock('CA encaissé (semaine)', formatEUR(kpis.caEncaisse), 'Encaissements réels enregistrés')}
+          ${kpiBlock('CA encaissé (semaine)', formatEUR(kpis.caEncaisse), 'Encaissements + factures récurrentes payées')}
         </tr>
       </table>
 
@@ -93,7 +118,10 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
             : emptyRow('Rien de prévu pour l\'instant.')),
       )}
 
-      <p style="margin:24px 0 0;font-size:11px;color:#5a5d61;text-align:center;">
+      <div style="margin:28px 0 0;text-align:center;">
+        <img src="${LOGO_DATA_URI}" width="32" height="32" alt="AM Growth Solutions" style="display:inline-block;" />
+      </div>
+      <p style="margin:8px 0 0;font-size:11px;color:#5a5d61;text-align:center;">
         Rapport automatique — désactivable dans Paramètres de l'application.
       </p>
     </div>
@@ -142,7 +170,8 @@ Deno.serve(async (_req) => {
 
     const [
       { data: documents },
-      { data: recurringInvoices },
+      { data: recurringInvoicesFactured },
+      { data: recurringInvoicesPaid },
       { data: cashCollections },
       { data: prospects },
       { data: allProjects },
@@ -157,6 +186,13 @@ Deno.serve(async (_req) => {
         .eq('type', 'facture')
         .gte('date_document', toIsoDate(weekAgo))
         .lte('date_document', toIsoDate(now)),
+      supabase
+        .from('recurring_invoices')
+        .select('montant')
+        .eq('owner_id', ownerId)
+        .eq('facturee', true)
+        .gte('date_facturation', toIsoDate(weekAgo))
+        .lte('date_facturation', toIsoDate(now)),
       supabase
         .from('recurring_invoices')
         .select('montant')
@@ -203,8 +239,10 @@ Deno.serve(async (_req) => {
 
     const caFacture =
       (documents ?? []).reduce((sum, d) => sum + Number(d.montant ?? 0), 0) +
-      (recurringInvoices ?? []).reduce((sum, r) => sum + Number(r.montant ?? 0), 0)
-    const caEncaisse = (cashCollections ?? []).reduce((sum, c) => sum + Number(c.montant ?? 0), 0)
+      (recurringInvoicesFactured ?? []).reduce((sum, r) => sum + Number(r.montant ?? 0), 0)
+    const caEncaisse =
+      (cashCollections ?? []).reduce((sum, c) => sum + Number(c.montant ?? 0), 0) +
+      (recurringInvoicesPaid ?? []).reduce((sum, r) => sum + Number(r.montant ?? 0), 0)
 
     const projectsDelivered = (allProjects ?? []).filter(
       (p) =>

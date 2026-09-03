@@ -41,14 +41,34 @@ export function getCAForMonth(documents, monthKey) {
     .reduce((sum, doc) => sum + Number(doc.montant ?? 0), 0)
 }
 
-// Factures récurrentes (entreprise, indépendantes des projets) payées
-// sur le mois sélectionné — comptent dans le CA facturé uniquement une
-// fois marquées payées, sur la base de la date de paiement (pas la date
-// prévue, qui peut différer du mois où le paiement est réellement arrivé).
+// Factures récurrentes (entreprise, indépendantes des projets) facturées
+// sur le mois sélectionné — comptent dans le CA facturé une fois marquées
+// facturées, sur la base de la date de facturation (état distinct du
+// paiement, voir getRecurringInvoicesEncaisseForMonth ci-dessous).
 export function getRecurringInvoicesCAForMonth(recurringInvoices, monthKey) {
+  return recurringInvoices
+    .filter((invoice) => invoice.facturee && isInMonth(invoice.date_facturation, monthKey))
+    .reduce((sum, invoice) => sum + Number(invoice.montant ?? 0), 0)
+}
+
+// Factures récurrentes payées sur le mois sélectionné — comptent dans le
+// CA encaissé, sur la base de la date de paiement.
+export function getRecurringInvoicesEncaisseForMonth(recurringInvoices, monthKey) {
   return recurringInvoices
     .filter((invoice) => invoice.payee && isInMonth(invoice.date_paiement, monthKey))
     .reduce((sum, invoice) => sum + Number(invoice.montant ?? 0), 0)
+}
+
+// Totaux all-time (toutes périodes confondues) des factures récurrentes,
+// pour agréger avec getCashSummary(projects) dans le CA total du Dashboard.
+export function getRecurringInvoicesTotals(recurringInvoices) {
+  const facture = recurringInvoices
+    .filter((invoice) => invoice.facturee)
+    .reduce((sum, invoice) => sum + Number(invoice.montant ?? 0), 0)
+  const encaisse = recurringInvoices
+    .filter((invoice) => invoice.payee)
+    .reduce((sum, invoice) => sum + Number(invoice.montant ?? 0), 0)
+  return { facture, encaisse }
 }
 
 // Cash réellement encaissé sur le mois sélectionné : somme des

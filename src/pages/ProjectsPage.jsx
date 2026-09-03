@@ -77,7 +77,7 @@ export default function ProjectsPage() {
         <button
           type="button"
           onClick={() => setCreating(true)}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+          className="btn-primary"
         >
           + Nouveau projet
         </button>
@@ -93,7 +93,7 @@ export default function ProjectsPage() {
                 type="button"
                 onClick={() => setShowArchived(false)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-                  !showArchived ? 'bg-neutral-900 text-white' : 'text-ink-secondary hover:text-ink'
+                  !showArchived ? 'bg-surface-hover text-ink' : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 Actifs
@@ -102,7 +102,7 @@ export default function ProjectsPage() {
                 type="button"
                 onClick={() => setShowArchived(true)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-                  showArchived ? 'bg-neutral-900 text-white' : 'text-ink-secondary hover:text-ink'
+                  showArchived ? 'bg-surface-hover text-ink' : 'text-ink-secondary hover:text-ink'
                 }`}
               >
                 Archivés
@@ -118,7 +118,7 @@ export default function ProjectsPage() {
                 onClick={() => setView(v.key)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
                   view === v.key
-                    ? 'bg-neutral-900 text-white'
+                    ? 'bg-surface-hover text-ink'
                     : 'text-ink-secondary hover:text-ink'
                 }`}
               >

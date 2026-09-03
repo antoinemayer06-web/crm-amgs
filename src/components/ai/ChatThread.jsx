@@ -43,7 +43,7 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-ink-ter
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
               className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
-                msg.role === 'user' ? 'bg-neutral-900 text-white' : 'bg-surface-hover text-ink-secondary'
+                msg.role === 'user' ? 'bg-chrome-dark text-ink' : 'bg-surface-hover text-ink-secondary'
               }`}
             >
               {msg.attachmentName && (
@@ -103,7 +103,7 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-ink-ter
           <button
             type="submit"
             disabled={isLoading || (!input.trim() && !file)}
-            className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
+            className="btn-primary"
           >
             Envoyer
           </button>

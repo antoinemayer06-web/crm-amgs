@@ -114,7 +114,7 @@ export default function PostItNode({ id, data }) {
           value={text}
           onChange={handleTextChange}
           placeholder="Écris ton idée…"
-          className="nodrag h-full w-full flex-1 resize-none border-none bg-transparent text-sm leading-snug text-white placeholder:text-white/40 focus:outline-none"
+          className="font-handwriting nodrag h-full w-full flex-1 resize-none border-none bg-transparent text-xl leading-snug text-white placeholder:text-white/40 focus:outline-none"
         />
       </div>
     </div>

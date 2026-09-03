@@ -59,7 +59,7 @@ export default function KnowledgeDetailPage() {
           <button
             type="button"
             onClick={handleDelete}
-            className="rounded-md border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
+            className="rounded-md border border-red-500/40 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10"
           >
             Supprimer
           </button>

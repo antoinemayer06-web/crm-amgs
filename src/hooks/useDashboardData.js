@@ -18,6 +18,7 @@ export function useDashboardData() {
         tasksRes,
         marketingActionsRes,
         cashCollectionsRes,
+        recurringInvoicesRes,
       ] = await Promise.all([
         supabase.from('documents').select('*, company:companies(id, name)'),
         supabase.from('companies').select('*'),
@@ -40,6 +41,7 @@ export function useDashboardData() {
         supabase
           .from('cash_collections')
           .select('*, project:projects(id, nom, company:companies(id, name))'),
+        supabase.from('recurring_invoices').select('*'),
       ])
 
       for (const res of [
@@ -52,6 +54,7 @@ export function useDashboardData() {
         tasksRes,
         marketingActionsRes,
         cashCollectionsRes,
+        recurringInvoicesRes,
       ]) {
         if (res.error) throw res.error
       }
@@ -66,6 +69,7 @@ export function useDashboardData() {
         tasks: tasksRes.data,
         marketingActions: marketingActionsRes.data,
         cashCollections: cashCollectionsRes.data,
+        recurringInvoices: recurringInvoicesRes.data,
       }
     },
   })

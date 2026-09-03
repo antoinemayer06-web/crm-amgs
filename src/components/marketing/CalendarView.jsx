@@ -107,7 +107,7 @@ export default function CalendarView({ currentMonth, actions, onPrevMonth, onNex
               <span
                 className={`self-start rounded-full px-1.5 py-0.5 text-xs font-medium ${
                   isToday
-                    ? 'bg-neutral-900 text-white'
+                    ? 'bg-chrome-light text-[#141416]'
                     : isCurrentMonth
                       ? 'text-ink-secondary'
                       : 'text-ink-tertiary'

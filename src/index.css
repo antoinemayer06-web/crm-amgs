@@ -233,6 +233,13 @@ h3 {
     animation: skeleton-shimmer 1.6s ease-in-out infinite;
   }
 
+  /* Écriture manuscrite pour les post-its Vision — touche personnelle,
+     cohérente avec le côté "mur d'inspiration" plutôt qu'un champ de
+     saisie générique. */
+  .font-handwriting {
+    font-family: 'Caveat', cursive;
+  }
+
   .vision-glass-note:hover {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.55),

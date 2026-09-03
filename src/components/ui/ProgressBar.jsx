@@ -9,7 +9,7 @@ export default function ProgressBar({ done, total }) {
     <div className="flex items-center gap-2">
       <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-hover">
         <div
-          className="h-full rounded-full bg-neutral-900 transition-[width] duration-300 ease-out"
+          className="h-full rounded-full bg-chrome-light transition-[width] duration-300 ease-out"
           style={{ width: `${percent}%` }}
         />
       </div>

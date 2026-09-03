@@ -29,20 +29,20 @@ export default function ContactsTab({ companyId }) {
         <button
           type="button"
           onClick={() => setModalMode('create')}
-          className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+          className="btn-primary"
         >
           + Ajouter un contact
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
+      <div className="overflow-x-auto rounded-lg border border-chrome-dark bg-surface">
         {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
         {isError && <p className="p-6 text-sm text-red-600">Erreur : {error.message}</p>}
         {!isLoading && !isError && contacts.length === 0 && (
           <p className="p-6 text-sm text-ink-secondary">Aucun contact pour cette entreprise.</p>
         )}
         {!isLoading && !isError && contacts.length > 0 && (
-          <table className="w-full text-left text-sm">
+          <table className="w-full min-w-[560px] text-left text-sm">
             <thead className="border-b border-chrome-dark text-xs text-ink-secondary">
               <tr>
                 <th className="px-4 py-3 font-medium">Nom</th>

@@ -70,9 +70,46 @@ export function useDeleteRecurringInvoice() {
   })
 }
 
+// Marquer facturée fixe la date de facturation (aujourd'hui par défaut) ;
+// démarquer l'efface — c'est cette date qui détermine le mois où la
+// facture compte dans le CA facturé (distinct du paiement, voir plus bas).
+export function useSetRecurringInvoiceFactured() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, facturee, dateFacturation }) => {
+      const { error } = await supabase
+        .from('recurring_invoices')
+        .update({ facturee, date_facturation: facturee ? dateFacturation || today() : null })
+        .eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recurring_invoices'] })
+      queryClient.invalidateQueries({ queryKey: ['finance'] })
+    },
+  })
+}
+
+export function useUpdateRecurringInvoiceFacturationDate() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, dateFacturation }) => {
+      const { error } = await supabase
+        .from('recurring_invoices')
+        .update({ date_facturation: dateFacturation })
+        .eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recurring_invoices'] })
+      queryClient.invalidateQueries({ queryKey: ['finance'] })
+    },
+  })
+}
+
 // Marquer payée fixe la date de paiement (aujourd'hui par défaut) ;
 // démarquer l'efface — c'est cette date qui détermine le mois où la
-// facture compte dans le CA facturé.
+// facture compte dans le CA encaissé (distinct de la facturation, ci-dessus).
 export function useSetRecurringInvoicePaid() {
   const queryClient = useQueryClient()
   return useMutation({

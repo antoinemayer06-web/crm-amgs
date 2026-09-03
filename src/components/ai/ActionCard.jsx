@@ -83,7 +83,7 @@ export default function ActionCard({ actions, onResolve, submitting }) {
           type="button"
           onClick={handleReject}
           disabled={submitting}
-          className="rounded-md border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+          className="rounded-md border border-red-500/40 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10 disabled:opacity-50"
         >
           ❌ Rejeter
         </button>
@@ -91,7 +91,7 @@ export default function ActionCard({ actions, onResolve, submitting }) {
           type="button"
           onClick={handleValidate}
           disabled={submitting || keptCount === 0}
-          className="rounded-md bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
+          className="btn-primary"
         >
           ✅ Valider{actions.length > 1 ? ` (${keptCount})` : ''}
         </button>

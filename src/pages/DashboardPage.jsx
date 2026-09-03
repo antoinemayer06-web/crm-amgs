@@ -23,6 +23,7 @@ import {
   getMarketingWeekCount,
   getPipelineFunnel,
   getRecentActivity,
+  getRecurringInvoicesTotals,
   getUrgentItems,
 } from '../lib/dashboardUtils'
 
@@ -55,9 +56,15 @@ export default function DashboardPage() {
 
   const kpis = useMemo(() => {
     if (!data) return null
+    const projectCash = getCashSummary(data.projects)
+    const recurringTotals = getRecurringInvoicesTotals(data.recurringInvoices)
     return {
       ca: getEncaisseForMonth(data.cashCollections, currentMonthKey()),
-      cash: getCashSummary(data.projects),
+      cash: {
+        facture: projectCash.facture + recurringTotals.facture,
+        encaisse: projectCash.encaisse + recurringTotals.encaisse,
+        restant: projectCash.facture + recurringTotals.facture - (projectCash.encaisse + recurringTotals.encaisse),
+      },
       conversionRate: getConversionRate(data.companies),
       activeProjects: getActiveProjectsCount(data.projects),
       lateProjects: getLateProjectsCount(data.projects),

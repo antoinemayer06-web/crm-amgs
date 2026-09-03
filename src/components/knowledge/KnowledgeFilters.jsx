@@ -20,7 +20,7 @@ export default function KnowledgeFilters({ search, onSearchChange, categorie, on
             type="button"
             onClick={() => onCategorieChange(tab.key)}
             className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-              categorie === tab.key ? 'bg-neutral-900 text-white' : 'text-ink-secondary hover:text-ink'
+              categorie === tab.key ? 'bg-surface-hover text-ink' : 'text-ink-secondary hover:text-ink'
             }`}
           >
             {tab.label}

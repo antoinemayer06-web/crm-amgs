@@ -134,7 +134,7 @@ export default function ContactForm({ initialValues, onSubmit, onCancel, submitt
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50 max-md:min-h-[44px] sm:w-auto"
+          className="w-full btn-primary sm:w-auto"
         >
           {submitting ? 'Enregistrement…' : 'Enregistrer'}
         </button>

@@ -29,7 +29,7 @@ export default function ProjectsTab({ companyId }) {
             type="button"
             onClick={() => setShowArchived(false)}
             className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-              !showArchived ? 'bg-neutral-900 text-white' : 'text-ink-secondary hover:text-ink'
+              !showArchived ? 'bg-surface-hover text-ink' : 'text-ink-secondary hover:text-ink'
             }`}
           >
             Actifs
@@ -38,7 +38,7 @@ export default function ProjectsTab({ companyId }) {
             type="button"
             onClick={() => setShowArchived(true)}
             className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-              showArchived ? 'bg-neutral-900 text-white' : 'text-ink-secondary hover:text-ink'
+              showArchived ? 'bg-surface-hover text-ink' : 'text-ink-secondary hover:text-ink'
             }`}
           >
             Archivés ({archivedCount})
