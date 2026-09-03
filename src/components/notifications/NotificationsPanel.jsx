@@ -14,6 +14,7 @@ import { usePushSubscription } from '../../hooks/usePushSubscription'
 import SidePanel from '../ui/SidePanel'
 import {
   IconBell,
+  IconCalendar,
   IconCalendarClock,
   IconCheck,
   IconDocument,
@@ -30,6 +31,7 @@ const TYPE_META = {
   objectif_fin_mois: { Icon: IconTarget, label: 'Bilan fin de mois' },
   projet_demarre_ou_termine_bientot: { Icon: IconCalendarClock, label: 'Projet démarre/se termine' },
   prospect_bloque_devis: { Icon: IconDocument, label: 'Devis à transmettre' },
+  evenement_calendrier: { Icon: IconCalendar, label: 'Rappel événement calendrier' },
 }
 
 function NotificationRow({ notification, onMarkRead, onNavigate }) {

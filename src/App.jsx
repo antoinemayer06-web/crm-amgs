@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import { useAuth } from './lib/AuthContext'
 import AiAssistantPage from './pages/AiAssistantPage'
+import CalendarPage from './pages/CalendarPage'
 import CompanyDetailPage from './pages/CompanyDetailPage'
 import CompaniesListPage from './pages/CompaniesListPage'
 import DashboardPage from './pages/DashboardPage'
@@ -41,6 +42,7 @@ function App() {
         <Route path="pipeline" element={<PipelinePage />} />
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="marketing" element={<MarketingPage />} />
+        <Route path="calendar" element={<CalendarPage />} />
         <Route path="knowledge" element={<KnowledgeBasePage />} />
         <Route path="knowledge/:id" element={<KnowledgeDetailPage />} />
         <Route path="assistant" element={<AiAssistantPage />} />

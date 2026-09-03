@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../lib/supabaseClient'
 import {
   IconAssistant,
+  IconCalendar,
   IconCompanies,
   IconDashboard,
   IconFinance,
@@ -24,6 +25,7 @@ const NAV_COMMANDS = [
   { id: 'nav-pipeline', label: 'Pipeline', to: '/pipeline', Icon: IconPipeline, group: 'Pages' },
   { id: 'nav-projects', label: 'Projets', to: '/projects', Icon: IconProjects, group: 'Pages' },
   { id: 'nav-marketing', label: 'Marketing', to: '/marketing', Icon: IconMarketing, group: 'Pages' },
+  { id: 'nav-calendar', label: 'Calendrier', to: '/calendar', Icon: IconCalendar, group: 'Pages' },
   { id: 'nav-knowledge', label: 'Base de connaissance', to: '/knowledge', Icon: IconKnowledge, group: 'Pages' },
   { id: 'nav-assistant', label: 'Assistant IA', to: '/assistant', Icon: IconAssistant, group: 'Pages' },
   { id: 'nav-vision', label: 'Vision', to: '/vision', Icon: IconVision, group: 'Pages' },

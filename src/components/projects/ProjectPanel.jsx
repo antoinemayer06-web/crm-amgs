@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import DocumentsSection from '../documents/DocumentsSection'
 import {
@@ -23,18 +24,27 @@ import {
 } from '../../lib/projectUtils'
 import Avatar from '../ui/Avatar'
 import Badge from '../ui/Badge'
-import SidePanel from '../ui/SidePanel'
+import { IconClose } from '../ui/icons'
+import ProjectImpactTab from './ProjectImpactTab'
 import ProjectStepsChecklist from './ProjectStepsChecklist'
+import ProjectTestimonialsTab from './ProjectTestimonialsTab'
 import ProjectWorkLog from './ProjectWorkLog'
+
+const TABS = [
+  { key: 'overview', label: "Vue d'ensemble" },
+  { key: 'impact', label: 'Impact' },
+  { key: 'testimonials', label: 'Témoignages' },
+  { key: 'hours', label: 'Heures' },
+]
 
 const formatHours = (value) => (value == null ? '—' : `${value} h`)
 const formatMontant = (value) => (value == null ? '—' : `${Number(value).toLocaleString('fr-FR')} €`)
 
-function StatTile({ label, value }) {
+function StatTile({ label, value, big }) {
   return (
     <div className="rounded-md bg-surface-hover px-3 py-2">
       <p className="text-[10px] font-medium text-ink-tertiary">{label}</p>
-      <p className="mt-0.5 text-sm font-semibold text-ink">{value}</p>
+      <p className={`mt-0.5 font-semibold text-ink ${big ? 'text-2xl' : 'text-sm'}`}>{value}</p>
     </div>
   )
 }
@@ -50,6 +60,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
   const deleteCashCollection = useDeleteCashCollection()
   const { setEntityContext } = useAiChat()
 
+  const [activeTab, setActiveTab] = useState('overview')
   const [nom, setNom] = useState('')
   const [description, setDescription] = useState('')
   const [heuresPrevues, setHeuresPrevues] = useState('')
@@ -80,6 +91,10 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
       setDateFinReelle(project.date_fin_reelle ?? '')
     }
   }, [project])
+
+  useEffect(() => {
+    setActiveTab('overview')
+  }, [projectId])
 
   useEffect(() => {
     if (!project) return
@@ -160,294 +175,327 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
     })
   }
 
-  return (
-    <SidePanel title={isLoading ? 'Chargement…' : project?.nom} onClose={onClose}>
-      {isLoading || !project ? (
-        <p className="text-sm text-ink-secondary">Chargement…</p>
-      ) : (
-        <div className="space-y-6">
-          {saveError && (
-            <p className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-400" role="alert">
-              {saveError}
-            </p>
-          )}
+  return createPortal(
+    // Fenêtre dédiée agrandie : plein écran sur mobile (comme avant),
+    // large fenêtre centrée sur desktop (au lieu du panneau étroit qui
+    // manquait de place pour Impact/Témoignages/Heures en plus de la
+    // vue d'ensemble). Portail vers document.body — voir Modal.jsx pour
+    // la raison (backdrop-filter d'un ancêtre casserait le centrage).
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 sm:items-center sm:p-6">
+      <div className="glass-panel flex h-full w-full flex-col shadow-2xl sm:h-[88vh] sm:max-w-5xl sm:rounded-xl">
+        <div
+          className="flex items-center justify-between border-b border-chrome-dark px-5 py-4"
+          style={{ paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 0.5rem))' }}
+        >
+          <h2 className="truncate text-base font-semibold text-ink">
+            {isLoading ? 'Chargement…' : project?.nom}
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-11 w-11 shrink-0 items-center justify-center text-ink-tertiary hover:text-ink-secondary max-md:h-12 max-md:w-12"
+            aria-label="Fermer"
+          >
+            <IconClose className="h-4 w-4 max-md:h-5 max-md:w-5" />
+          </button>
+        </div>
 
-          {project.archived && (
-            <Badge tone="neutral">Archivé</Badge>
-          )}
-
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <StatTile label="Temps prévu" value={formatHours(tempsPrevu)} />
-            <StatTile label="Temps réalisé" value={formatHours(tempsRealise || null)} />
-            <StatTile label="Facturé" value={formatMontant(project.montant_facture)} />
-            <StatTile label="Reçu" value={formatMontant(project.montant_encaisse)} />
-          </div>
-
-          <div className="space-y-1">
-            <label className="block text-xs font-medium text-ink-secondary">Nom</label>
-            <input
-              value={nom}
-              onChange={(event) => setNom(event.target.value)}
-              onBlur={() => nom.trim() && nom !== project.nom && saveField('nom', nom.trim())}
-              className="w-full rounded-md border border-chrome-dark px-3 py-2 text-sm font-medium focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
-            />
-          </div>
-
-          {project.company && (
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-ink-secondary">Client</label>
-              <Link
-                to={`/companies/${project.company.id}`}
-                className="flex items-center gap-2 rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
-              >
-                <Avatar name={project.company.name} />
-                {project.company.name}
-              </Link>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-ink-secondary">Statut</label>
-              <select
-                value={project.statut}
-                onChange={(event) => saveField('statut', event.target.value)}
-                className="w-full input-chrome"
-              >
-                {PROJECT_STATUT_OPTIONS.map((statut) => (
-                  <option key={statut} value={statut}>
-                    {PROJECT_STATUT_LABELS[statut]}
-                  </option>
+        {isLoading || !project ? (
+          <p className="p-5 text-sm text-ink-secondary">Chargement…</p>
+        ) : (
+          <>
+            <div className="overflow-x-auto border-b border-chrome-dark">
+              <nav className="flex w-max min-w-full gap-1 px-5">
+                {TABS.map((tab) => (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    onClick={() => setActiveTab(tab.key)}
+                    className={`shrink-0 border-b-2 px-3 py-2 text-sm font-medium ${
+                      activeTab === tab.key
+                        ? 'border-chrome-light text-ink'
+                        : 'border-transparent text-ink-secondary hover:text-ink'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
                 ))}
-              </select>
+              </nav>
             </div>
-            <div />
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-ink-secondary">
-                Date de début
-              </label>
-              <input
-                type="date"
-                value={dateDebut}
-                onChange={(event) => setDateDebut(event.target.value)}
-                onBlur={() => {
-                  const value = dateDebut || null
-                  if (value !== (project.date_debut ?? null)) saveField('date_debut', value)
-                }}
-                className="w-full input-chrome"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-ink-secondary">
-                Échéance
-              </label>
-              <input
-                type="date"
-                value={dateLivraisonPrevue}
-                onChange={(event) => setDateLivraisonPrevue(event.target.value)}
-                onBlur={() => {
-                  const value = dateLivraisonPrevue || null
-                  if (value !== (project.date_livraison_prevue ?? null)) {
-                    saveField('date_livraison_prevue', value)
-                  }
-                }}
-                className="w-full input-chrome"
-              />
-            </div>
-          </div>
+            <div className="flex-1 overflow-y-auto p-5">
+              {saveError && (
+                <p className="mb-4 rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-400" role="alert">
+                  {saveError}
+                </p>
+              )}
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-ink-secondary">
-                Date de fin réelle
-              </label>
-              <input
-                type="date"
-                value={dateFinReelle}
-                onChange={(event) => setDateFinReelle(event.target.value)}
-                onBlur={() => {
-                  const value = dateFinReelle || null
-                  if (value !== (project.date_fin_reelle ?? null)) saveField('date_fin_reelle', value)
-                }}
-                className="w-full input-chrome"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-ink-secondary">
-                Heures prévues (projet)
-              </label>
-              <input
-                type="number"
-                step="0.5"
-                min="0"
-                value={heuresPrevues}
-                onChange={(event) => setHeuresPrevues(event.target.value)}
-                onBlur={() => {
-                  const value = heuresPrevues === '' ? null : Number(heuresPrevues)
-                  if (value !== (project.heures_prevues ?? null)) saveField('heures_prevues', value)
-                }}
-                className="w-full input-chrome"
-              />
-            </div>
-          </div>
+              {activeTab === 'overview' && (
+                <div className="space-y-6">
+                  {project.archived && <Badge tone="neutral">Archivé</Badge>}
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-ink-secondary">
-                Montant facturé (€)
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                value={montantFacture}
-                onChange={(event) => setMontantFacture(event.target.value)}
-                onBlur={commitFacturation}
-                className="w-full input-chrome"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="block text-xs font-medium text-ink-secondary">
-                Date de facturation
-              </label>
-              <input
-                type="date"
-                value={dateFacturation}
-                onChange={(event) => setDateFacturation(event.target.value)}
-                onBlur={commitFacturation}
-                className="w-full input-chrome"
-              />
-              <p className="text-[11px] text-ink-tertiary">
-                C'est cette date qui détermine le mois du CA facturé.
-              </p>
-            </div>
-          </div>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    <StatTile label="Temps prévu" value={formatHours(tempsPrevu)} />
+                    <StatTile label="Temps réalisé" value={formatHours(tempsRealise || null)} />
+                    <StatTile label="Facturé" value={formatMontant(project.montant_facture)} />
+                    <StatTile label="Reçu" value={formatMontant(project.montant_encaisse)} />
+                  </div>
 
-          <div className="space-y-2 rounded-md border border-chrome-dark p-3">
-            <div className="flex items-center justify-between">
-              <label className="block text-xs font-medium text-ink-secondary">
-                Cash encaissé — {formatMontant(project.montant_encaisse)}
-              </label>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-ink-secondary">Nom</label>
+                      <input
+                        value={nom}
+                        onChange={(event) => setNom(event.target.value)}
+                        onBlur={() => nom.trim() && nom !== project.nom && saveField('nom', nom.trim())}
+                        className="w-full input-chrome font-medium"
+                      />
+                    </div>
+                    {project.company && (
+                      <div className="space-y-1">
+                        <label className="block text-xs font-medium text-ink-secondary">Client</label>
+                        <Link
+                          to={`/companies/${project.company.id}`}
+                          className="flex items-center gap-2 rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:bg-surface-hover"
+                        >
+                          <Avatar name={project.company.name} />
+                          {project.company.name}
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-ink-secondary">Statut</label>
+                      <select
+                        value={project.statut}
+                        onChange={(event) => saveField('statut', event.target.value)}
+                        className="w-full input-chrome"
+                      >
+                        {PROJECT_STATUT_OPTIONS.map((statut) => (
+                          <option key={statut} value={statut}>
+                            {PROJECT_STATUT_LABELS[statut]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-ink-secondary">Date de début</label>
+                      <input
+                        type="date"
+                        value={dateDebut}
+                        onChange={(event) => setDateDebut(event.target.value)}
+                        onBlur={() => {
+                          const value = dateDebut || null
+                          if (value !== (project.date_debut ?? null)) saveField('date_debut', value)
+                        }}
+                        className="w-full input-chrome"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-ink-secondary">Échéance</label>
+                      <input
+                        type="date"
+                        value={dateLivraisonPrevue}
+                        onChange={(event) => setDateLivraisonPrevue(event.target.value)}
+                        onBlur={() => {
+                          const value = dateLivraisonPrevue || null
+                          if (value !== (project.date_livraison_prevue ?? null)) {
+                            saveField('date_livraison_prevue', value)
+                          }
+                        }}
+                        className="w-full input-chrome"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-ink-secondary">Date de fin réelle</label>
+                      <input
+                        type="date"
+                        value={dateFinReelle}
+                        onChange={(event) => setDateFinReelle(event.target.value)}
+                        onBlur={() => {
+                          const value = dateFinReelle || null
+                          if (value !== (project.date_fin_reelle ?? null)) saveField('date_fin_reelle', value)
+                        }}
+                        className="w-full input-chrome"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-ink-secondary">
+                        Heures prévues (projet)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.5"
+                        min="0"
+                        value={heuresPrevues}
+                        onChange={(event) => setHeuresPrevues(event.target.value)}
+                        onBlur={() => {
+                          const value = heuresPrevues === '' ? null : Number(heuresPrevues)
+                          if (value !== (project.heures_prevues ?? null)) saveField('heures_prevues', value)
+                        }}
+                        className="w-full input-chrome"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-ink-secondary">Montant facturé (€)</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={montantFacture}
+                        onChange={(event) => setMontantFacture(event.target.value)}
+                        onBlur={commitFacturation}
+                        className="w-full input-chrome"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-ink-secondary">Date de facturation</label>
+                      <input
+                        type="date"
+                        value={dateFacturation}
+                        onChange={(event) => setDateFacturation(event.target.value)}
+                        onBlur={commitFacturation}
+                        className="w-full input-chrome"
+                      />
+                      <p className="text-[11px] text-ink-tertiary">Détermine le mois du CA facturé.</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 rounded-md border border-chrome-dark p-3">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-medium text-ink-secondary">
+                        Cash encaissé — {formatMontant(project.montant_encaisse)}
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setAddingCash((prev) => !prev)}
+                        className="rounded-md border border-chrome-dark px-2 py-1 text-xs font-medium text-ink-secondary hover:bg-surface-hover"
+                      >
+                        + Encaissement
+                      </button>
+                    </div>
+
+                    {addingCash && (
+                      <form onSubmit={handleAddCashCollection} className="grid grid-cols-3 gap-2">
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="Montant (€)"
+                          value={cashAmount}
+                          onChange={(event) => setCashAmount(event.target.value)}
+                          className="col-span-1 rounded-md border border-chrome-dark px-2 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
+                        />
+                        <input
+                          type="date"
+                          value={cashDate}
+                          onChange={(event) => setCashDate(event.target.value)}
+                          className="col-span-1 rounded-md border border-chrome-dark px-2 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
+                        />
+                        <button
+                          type="submit"
+                          disabled={createCashCollection.isPending}
+                          className="btn-primary col-span-1 px-2 py-1.5 text-xs"
+                        >
+                          Ajouter
+                        </button>
+                      </form>
+                    )}
+
+                    {cashCollections?.length > 0 && (
+                      <ul className="space-y-1 pt-1">
+                        {cashCollections.map((collection) => (
+                          <li
+                            key={collection.id}
+                            className="flex items-center justify-between gap-2 text-xs text-ink-secondary"
+                          >
+                            <span>{new Date(collection.date_encaissement).toLocaleDateString('fr-FR')}</span>
+                            <span className="ml-auto font-medium tabular-nums text-ink-secondary">
+                              {formatMontant(collection.montant)}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteCashCollection(collection)}
+                              className="shrink-0 text-ink-tertiary hover:text-red-400"
+                              aria-label="Supprimer cet encaissement"
+                            >
+                              ✕
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-xs font-medium text-ink-secondary">Description</label>
+                    <textarea
+                      rows={3}
+                      value={description}
+                      onChange={(event) => setDescription(event.target.value)}
+                      onBlur={() =>
+                        description !== (project.description ?? '') &&
+                        saveField('description', description.trim() || null)
+                      }
+                      className="w-full input-chrome"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-medium text-ink-secondary">Étapes</label>
+                    <ProjectStepsChecklist
+                      projectId={projectId}
+                      steps={steps}
+                      actualHoursByStep={actualHoursByStep}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-medium text-ink-secondary">Documents</label>
+                    <DocumentsSection companyId={project.company_id} projectId={projectId} />
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'impact' && <ProjectImpactTab project={project} onSave={saveField} />}
+
+              {activeTab === 'testimonials' && <ProjectTestimonialsTab projectId={projectId} />}
+
+              {activeTab === 'hours' && (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <StatTile label="Temps prévu" value={formatHours(tempsPrevu)} big />
+                    <StatTile label="Temps réalisé" value={formatHours(tempsRealise || null)} big />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-xs font-medium text-ink-secondary">Travail effectué</label>
+                    <ProjectWorkLog steps={steps} />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between border-t border-chrome-dark px-5 py-4">
               <button
                 type="button"
-                onClick={() => setAddingCash((prev) => !prev)}
-                className="rounded-md border border-chrome-dark px-2 py-1 text-xs font-medium text-ink-secondary hover:bg-surface-hover"
+                onClick={handleArchiveToggle}
+                className="text-sm text-ink-secondary hover:text-ink"
               >
-                + Encaissement
+                {project.archived ? 'Désarchiver ce projet' : 'Archiver ce projet'}
+              </button>
+              <button type="button" onClick={handleDelete} className="text-sm text-red-500 hover:text-red-400">
+                Supprimer ce projet
               </button>
             </div>
-
-            {addingCash && (
-              <form onSubmit={handleAddCashCollection} className="grid grid-cols-3 gap-2">
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  placeholder="Montant (€)"
-                  value={cashAmount}
-                  onChange={(event) => setCashAmount(event.target.value)}
-                  className="col-span-1 rounded-md border border-chrome-dark px-2 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
-                />
-                <input
-                  type="date"
-                  value={cashDate}
-                  onChange={(event) => setCashDate(event.target.value)}
-                  className="col-span-1 rounded-md border border-chrome-dark px-2 py-1.5 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
-                />
-                <button
-                  type="submit"
-                  disabled={createCashCollection.isPending}
-                  className="btn-primary col-span-1 px-2 py-1.5 text-xs"
-                >
-                  Ajouter
-                </button>
-              </form>
-            )}
-
-            {cashCollections?.length > 0 && (
-              <ul className="space-y-1 pt-1">
-                {cashCollections.map((collection) => (
-                  <li key={collection.id} className="flex items-center justify-between gap-2 text-xs text-ink-secondary">
-                    <span>{new Date(collection.date_encaissement).toLocaleDateString('fr-FR')}</span>
-                    <span className="ml-auto font-medium tabular-nums text-ink-secondary">
-                      {formatMontant(collection.montant)}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteCashCollection(collection)}
-                      className="shrink-0 text-ink-tertiary hover:text-red-400"
-                      aria-label="Supprimer cet encaissement"
-                    >
-                      ✕
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <div className="space-y-1">
-            <label className="block text-xs font-medium text-ink-secondary">
-              Description
-            </label>
-            <textarea
-              rows={3}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              onBlur={() =>
-                description !== (project.description ?? '') &&
-                saveField('description', description.trim() || null)
-              }
-              className="w-full input-chrome"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-xs font-medium text-ink-secondary">
-              Étapes
-            </label>
-            <ProjectStepsChecklist
-              projectId={projectId}
-              steps={steps}
-              actualHoursByStep={actualHoursByStep}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-xs font-medium text-ink-secondary">
-              Travail effectué
-            </label>
-            <ProjectWorkLog steps={steps} />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-xs font-medium text-ink-secondary">
-              Documents
-            </label>
-            <DocumentsSection companyId={project.company_id} projectId={projectId} />
-          </div>
-
-          <div className="flex items-center justify-between border-t border-chrome-dark pt-4">
-            <button
-              type="button"
-              onClick={handleArchiveToggle}
-              className="text-sm text-ink-secondary hover:text-ink"
-            >
-              {project.archived ? 'Désarchiver ce projet' : 'Archiver ce projet'}
-            </button>
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="text-sm text-red-500 hover:text-red-400"
-            >
-              Supprimer ce projet
-            </button>
-          </div>
-        </div>
-      )}
-    </SidePanel>
+          </>
+        )}
+      </div>
+    </div>,
+    document.body,
   )
 }

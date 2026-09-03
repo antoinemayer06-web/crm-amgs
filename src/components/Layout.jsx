@@ -8,6 +8,7 @@ import Logo from './ui/Logo'
 import {
   IconAssistant,
   IconBell,
+  IconCalendar,
   IconClose,
   IconCompanies,
   IconDashboard,
@@ -32,6 +33,7 @@ const navItems = [
   { to: '/pipeline', label: 'Pipeline', Icon: IconPipeline },
   { to: '/projects', label: 'Projets', Icon: IconProjects },
   { to: '/marketing', label: 'Marketing', Icon: IconMarketing },
+  { to: '/calendar', label: 'Calendrier', Icon: IconCalendar },
   { to: '/knowledge', label: 'Base de connaissance', Icon: IconKnowledge },
   { to: '/assistant', label: 'Assistant IA', Icon: IconAssistant },
   { to: '/vision', label: 'Vision', Icon: IconVision },

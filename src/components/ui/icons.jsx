@@ -77,6 +77,17 @@ export function IconMarketing({ className }) {
   )
 }
 
+export function IconCalendar({ className }) {
+  return (
+    <Svg className={className}>
+      <rect x="3.5" y="5" width="17" height="15" rx="2" />
+      <path d="M3.5 9.5h17" />
+      <path d="M8 3v3M16 3v3" />
+      <path d="M7.5 13h1.4M11.3 13h1.4M15.1 13h1.4M7.5 16.3h1.4M11.3 16.3h1.4" />
+    </Svg>
+  )
+}
+
 export function IconKnowledge({ className }) {
   return (
     <Svg className={className}>
