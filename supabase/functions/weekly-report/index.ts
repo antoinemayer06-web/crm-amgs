@@ -153,6 +153,10 @@ function renderEmail({ periodLabel, kpis, prospects, projectsDelivered, projects
 
   return `<!doctype html>
 <html style="background-color:${BG};">
+  <head>
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
+  </head>
   <body bgcolor="${BG}" style="margin:0;padding:0;background-color:${BG};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="${BG}" style="background-color:${BG};">
       <tr>
