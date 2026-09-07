@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import Problem from "@/components/Problem";
+import Process from "@/components/Process";
 import Proof from "@/components/Proof";
 import Services from "@/components/Services";
 
@@ -15,7 +16,7 @@ export default function Home() {
 
       <Proof />
 
-      {/* Processus — les étapes de collaboration avec l'agence */}
+      <Process />
 
       {/* Témoignages — retours clients (cabinets, bureaux d'études, agences) */}
 
