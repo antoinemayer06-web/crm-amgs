@@ -173,7 +173,7 @@ function StepMarker({
   index: number;
   reveal: MotionValue<number>;
 }) {
-  const backgroundColor = useTransform(reveal, [0, 1], ["#b9bec9", "#1f9d6b"]);
+  const backgroundColor = useTransform(reveal, [0, 1], ["#b9bec9", "#167a52"]);
   const color = useTransform(reveal, [0, 1], ["#22262b", "#ffffff"]);
 
   return (

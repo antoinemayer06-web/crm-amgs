@@ -11,10 +11,16 @@
 
   /* Accent : vert — gain de temps, efficacité, automatisation.
      Conservé malgré le violet du logo : bon complémentaire visuel, et le
-     logo ne porte pas de couleur dédiée à ce sens. */
-  --color-accent: #1f9d6b;
-  --color-accent-light: #34c087;
-  --color-accent-dark: #167a52;
+     logo ne porte pas de couleur dédiée à ce sens.
+     DEFAULT volontairement plus foncé que le vert "vif" d'origine : sur
+     fond accent avec du texte blanc (boutons CTA, bulle WhatsApp), le vert
+     vif (#1f9d6b) ne tient que 3.45:1 — sous le seuil AA de 4.5:1 pour du
+     texte normal. #167a52 tient 5.33:1. Le vert vif reste disponible en
+     accent-light pour les usages sans texte blanc dessus (icônes, texte
+     accent sur fond clair, bordures). */
+  --color-accent: #167a52;
+  --color-accent-light: #1f9d6b;
+  --color-accent-dark: #11603f;
 
   /* Argenté : repris des reflets métalliques du "M" et du losange du logo,
      utile pour des touches discrètes (bordures, icônes, séparateurs). */
@@ -41,6 +47,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Compense le header fixe : évite qu'il masque le haut d'une section
+     visée par une ancre (nav, liens du footer, etc.). */
+  scroll-padding-top: 96px;
 }
 
 body {
@@ -57,4 +66,14 @@ h5,
 h6 {
   font-family: var(--font-heading);
   font-weight: 800;
+}
+
+/* Focus clavier visible sur tous les liens/boutons (nav, CTA, burger
+   mobile, accordéons...), sans dépendre du style par défaut du navigateur. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
 }

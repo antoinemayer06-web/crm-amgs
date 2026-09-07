@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -10,13 +11,30 @@ const inter = Inter({
   display: "swap",
 });
 
+const TITLE = "AM Growth Solutions | Automatisation sur mesure pour PME";
+const DESCRIPTION =
+  "Fini la double saisie entre vos outils. AM Growth Solutions connecte votre CRM, votre gestion de projet et vos outils métier pour automatiser vos tâches répétitives — sans changer d'outils. Résultats concrets, délais courts.";
+
 export const metadata: Metadata = {
-  title: "AM Growth Solutions — Automatisation pour PME et cabinets",
-  description:
-    "AM Growth Solutions connecte vos outils existants (CRM, gestion de projet, stockage, messagerie) pour supprimer la double saisie et automatiser les tâches répétitives, sans imposer de nouveaux outils.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
   icons: {
     icon: "/brand/logo.png",
     apple: "/brand/logo.png",
+  },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    type: "website",
+    locale: "fr_FR",
+    siteName: "AM Growth Solutions",
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
   },
 };
 
