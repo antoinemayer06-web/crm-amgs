@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import Problem from "@/components/Problem";
+import Proof from "@/components/Proof";
 import Services from "@/components/Services";
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
 
       <Services />
 
-      {/* Preuve concrète — cas d'usage / résultats chiffrés (animation de compteurs) */}
+      <Proof />
 
       {/* Processus — les étapes de collaboration avec l'agence */}
 
