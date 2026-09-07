@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primaire : bleu/indigo profond — crédibilité, sérieux, tech B2B */
+  --color-primary: #1e2a5e;
+  --color-primary-light: #2f3f82;
+  --color-primary-dark: #12193d;
+
+  /* Accent : vert — gain de temps, efficacité, automatisation */
+  --color-accent: #1f9d6b;
+  --color-accent-light: #34c087;
+  --color-accent-dark: #167a52;
+
+  /* Fond et surfaces : blanc cassé / gris très clair */
+  --color-background: #f7f8fa;
+  --color-surface: #ffffff;
+
+  /* Texte : anthracite */
+  --color-foreground: #22262b;
+  --color-muted: #5b6270;
+
+  --color-border: #e3e5ea;
+
+  /* Polices : corps en Inter, titres en Inter (poids marqués) */
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-heading: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+}
