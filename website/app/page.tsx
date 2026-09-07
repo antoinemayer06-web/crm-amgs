@@ -1,3 +1,5 @@
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Problem from "@/components/Problem";
 import Process from "@/components/Process";
@@ -6,23 +8,26 @@ import Services from "@/components/Services";
 
 export default function Home() {
   return (
-    <main>
-      <Hero />
-      {/* Hero + bandeau outils — voir components/Hero.tsx */}
+    <>
+      <main>
+        <Hero />
+        {/* Hero + bandeau outils — voir components/Hero.tsx */}
 
-      <Problem />
+        <Problem />
 
-      <Services />
+        <Services />
 
-      <Proof />
+        <Proof />
 
-      <Process />
+        <Process />
 
-      {/* Témoignages — retours clients (cabinets, bureaux d'études, agences) */}
+        {/* Témoignages — retours clients (cabinets, bureaux d'études, agences) */}
 
-      {/* FAQ — questions fréquentes des dirigeants de petites structures */}
+        {/* FAQ — questions fréquentes des dirigeants de petites structures */}
 
-      {/* Contact — formulaire ou prise de rendez-vous */}
-    </main>
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
 }

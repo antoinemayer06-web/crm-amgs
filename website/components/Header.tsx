@@ -4,14 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { MessageCircle } from "lucide-react";
 import { buttonHover } from "@/lib/animations";
-
-const NAV_LINKS = [
-  { label: "Services", href: "#services" },
-  { label: "Preuve", href: "#preuve" },
-  { label: "Processus", href: "#processus" },
-  { label: "Contact", href: "#contact" },
-];
+import { WHATSAPP_URL } from "@/lib/links";
+import { NAV_LINKS } from "@/lib/nav";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -70,7 +66,17 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-3 md:flex">
+          <motion.a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={buttonHover}
+            aria-label="Discuter sur WhatsApp"
+            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent text-accent transition-colors hover:bg-accent hover:text-white"
+          >
+            <MessageCircle className="h-5 w-5" strokeWidth={2} />
+          </motion.a>
           <motion.a
             href="#contact"
             whileHover={buttonHover}
@@ -122,6 +128,16 @@ export default function Header() {
                   {link.label}
                 </a>
               ))}
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileOpen(false)}
+                className="mt-2 flex items-center justify-center gap-2 rounded-full border-2 border-accent px-5 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-white"
+              >
+                <MessageCircle className="h-4 w-4" strokeWidth={2} />
+                WhatsApp
+              </a>
               <a
                 href="#contact"
                 onClick={() => setMobileOpen(false)}
