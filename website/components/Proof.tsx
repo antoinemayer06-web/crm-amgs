@@ -61,8 +61,8 @@ export default function Proof() {
                 <span className="text-lg font-semibold text-muted line-through decoration-2">
                   3-4 semaines
                 </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-accent" />
-                <span className="font-heading text-3xl font-black text-accent">
+                <ArrowRight className="h-4 w-4 shrink-0 text-primary-dark" />
+                <span className="font-heading text-3xl font-black text-primary-dark">
                   1,5 semaine
                 </span>
               </div>
@@ -78,7 +78,7 @@ export default function Proof() {
               <AnimatedCounter
                 to={4}
                 suffix=" jours"
-                className="font-heading text-4xl font-black text-accent"
+                className="font-heading text-4xl font-black text-primary-dark"
               />
               <p className="mt-2 text-sm text-muted">
                 Pour livrer l&apos;automatisation complète — mission 2
@@ -92,7 +92,7 @@ export default function Proof() {
               <AnimatedCounter
                 to={5}
                 suffix=" outils"
-                className="font-heading text-4xl font-black text-accent"
+                className="font-heading text-4xl font-black text-primary-dark"
               />
               <p className="mt-2 text-sm text-muted">
                 Connectés en un seul système cohérent
@@ -106,7 +106,7 @@ export default function Proof() {
             className="rounded-2xl border border-border bg-background p-8 sm:p-10"
           >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <span className="text-xs font-semibold uppercase tracking-widest text-accent">
+              <span className="text-xs font-semibold uppercase tracking-widest text-primary-dark">
                 Étude de cas
               </span>
               <span className="font-heading text-lg font-bold text-foreground">
@@ -169,7 +169,7 @@ export default function Proof() {
                 <ul className="mt-3 space-y-3">
                   {APRES.map((item) => (
                     <li key={item} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary-dark" />
                       <span className="text-sm leading-relaxed text-foreground/80">
                         {item}
                       </span>

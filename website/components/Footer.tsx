@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MessageCircle } from "lucide-react";
-import { LinkedInIcon } from "@/components/icons";
+import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
 import { LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
 import { NAV_LINKS } from "@/lib/nav";
 
@@ -52,7 +51,7 @@ export default function Footer() {
               aria-label="WhatsApp"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
             >
-              <MessageCircle className="h-4 w-4" strokeWidth={2} />
+              <WhatsAppIcon className="h-4 w-4" />
             </a>
           </div>
         </div>

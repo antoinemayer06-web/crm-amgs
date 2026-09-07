@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons";
 import { WHATSAPP_URL } from "@/lib/links";
 
 // Bulle WhatsApp flottante, présente sur toutes les pages (montée depuis
@@ -51,7 +51,7 @@ export default function WhatsAppFloat() {
         transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white shadow-lg shadow-accent/30"
       >
-        <MessageCircle className="h-7 w-7" strokeWidth={2} />
+        <WhatsAppIcon className="h-7 w-7" />
       </motion.a>
     </motion.div>
   );

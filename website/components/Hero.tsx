@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { buttonHover, fadeInUp, staggerContainer } from "@/lib/animations";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 // Outils courants chez les cibles (cabinets de conseil, bureaux d'études,
 // cabinets d'ingénierie, agences). Wordmarks stylisés, pas de logos réels
@@ -23,58 +23,118 @@ const TOOLS = [
 // 3. "Moins de ressaisie. Plus de temps pour vos dossiers."
 const HEADLINE = "On connecte vos outils. Vous arrêtez la double saisie.";
 
+// Halos flous en fond, dérive lente en boucle — discret, pas un effet
+// "gamer". Couleurs violettes uniquement (le vert reste réservé au
+// bouton WhatsApp).
+const BLOBS = [
+  {
+    className: "left-[-10%] top-[-15%] h-[32rem] w-[32rem] bg-primary/40",
+    animate: { x: [0, 40, -20, 0], y: [0, 30, -10, 0] },
+    duration: 26,
+  },
+  {
+    className: "right-[-15%] top-[10%] h-[28rem] w-[28rem] bg-primary-light/30",
+    animate: { x: [0, -30, 20, 0], y: [0, -20, 25, 0] },
+    duration: 22,
+  },
+  {
+    className: "bottom-[-20%] left-[20%] h-[26rem] w-[26rem] bg-primary-dark/50",
+    animate: { x: [0, 25, -25, 0], y: [0, -15, 15, 0] },
+    duration: 30,
+  },
+];
+
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-16 sm:pt-40 sm:pb-20">
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-        className="mx-auto flex max-w-4xl flex-col items-center px-4 text-center sm:px-6 lg:px-8"
-      >
-        <motion.h1
-          variants={fadeInUp}
-          className="text-balance font-heading text-4xl font-black leading-tight text-foreground sm:text-5xl lg:text-6xl"
-        >
-          {HEADLINE}
-        </motion.h1>
+    <>
+      <section className="relative overflow-hidden bg-ink pt-32 pb-20 sm:pt-40 sm:pb-24">
+        {/* Dégradé de fond */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 25% 15%, #2b2064 0%, #17122b 55%, #0d0a1a 100%)",
+          }}
+        />
 
-        <motion.p
-          variants={fadeInUp}
-          className="mt-6 max-w-2xl text-balance text-lg text-muted sm:text-xl"
-        >
-          AM Growth Solutions automatise la gestion de projet, la charge de
-          travail et les échanges entre vos outils métier existants — sans
-          rien changer à votre façon de travailler.
-        </motion.p>
+        {/* Halos animés */}
+        <div className="absolute inset-0 overflow-hidden">
+          {BLOBS.map((blob, index) => (
+            <motion.div
+              key={index}
+              animate={blob.animate}
+              transition={{
+                duration: blob.duration,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              }}
+              className={`absolute rounded-full blur-3xl ${blob.className}`}
+            />
+          ))}
+        </div>
+
+        {/* Texture points, façon plan technique — discrète */}
+        <div
+          className="absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
 
         <motion.div
-          variants={fadeInUp}
-          className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+          className="relative mx-auto flex max-w-4xl flex-col items-center px-4 text-center sm:px-6 lg:px-8"
         >
-          <motion.a
-            href="#contact"
-            whileHover={buttonHover}
-            className="inline-block rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-white shadow-md shadow-accent/25 transition-colors hover:bg-accent-dark"
+          <motion.h1
+            variants={fadeInUp}
+            className="text-balance font-heading text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl"
           >
-            Prendre rendez-vous
-          </motion.a>
-          <motion.a
-            href="#preuve"
-            whileHover={buttonHover}
-            className="inline-block rounded-full border-2 border-primary px-7 py-3.5 text-base font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
-          >
-            Voir un cas concret
-          </motion.a>
-        </motion.div>
-      </motion.div>
+            {HEADLINE}
+          </motion.h1>
 
-      {/* Bandeau outils — défilement horizontal infini (marquee) */}
+          <motion.p
+            variants={fadeInUp}
+            className="mt-6 max-w-2xl text-balance text-lg text-white/70 sm:text-xl"
+          >
+            AM Growth Solutions automatise la gestion de projet, la charge de
+            travail et les échanges entre vos outils métier existants — sans
+            rien changer à votre façon de travailler.
+          </motion.p>
+
+          <motion.div
+            variants={fadeInUp}
+            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+          >
+            <motion.a
+              href="#contact"
+              whileHover={{ scale: 1.03 }}
+              className="inline-block rounded-full bg-white px-7 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
+            >
+              Prendre rendez-vous
+            </motion.a>
+            <motion.a
+              href="#preuve"
+              whileHover={{ scale: 1.03 }}
+              className="inline-block rounded-full border-2 border-white/40 px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white hover:text-ink"
+            >
+              Voir un cas concret
+            </motion.a>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Bandeau outils — défilement horizontal infini (marquee), en
+          dehors du hero sombre pour rester lisible sur fond clair. */}
       <motion.div
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="mt-16 sm:mt-20"
+        className="bg-background py-10 sm:py-14"
       >
         <p className="text-center text-xs font-semibold uppercase tracking-widest text-muted">
           Connecté à vos outils actuels
@@ -93,6 +153,6 @@ export default function Hero() {
           </div>
         </div>
       </motion.div>
-    </section>
+    </>
   );
 }

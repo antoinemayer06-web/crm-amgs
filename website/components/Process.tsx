@@ -114,7 +114,7 @@ export default function Process() {
                 pathLength={100}
                 strokeDasharray={100}
                 style={{ strokeDashoffset: dashOffset }}
-                className="stroke-accent"
+                className="stroke-primary"
               />
             </svg>
           </div>
@@ -142,7 +142,7 @@ export default function Process() {
                   <div className="relative mt-1 w-px flex-1 bg-border">
                     <motion.div
                       style={{ scaleY: reveals[index + 1] }}
-                      className="absolute inset-x-0 top-0 h-full w-px origin-top bg-accent"
+                      className="absolute inset-x-0 top-0 h-full w-px origin-top bg-primary"
                     />
                   </div>
                 )}
@@ -173,7 +173,7 @@ function StepMarker({
   index: number;
   reveal: MotionValue<number>;
 }) {
-  const backgroundColor = useTransform(reveal, [0, 1], ["#b9bec9", "#167a52"]);
+  const backgroundColor = useTransform(reveal, [0, 1], ["#b9bec9", "#2b2064"]);
   const color = useTransform(reveal, [0, 1], ["#22262b", "#ffffff"]);
 
   return (

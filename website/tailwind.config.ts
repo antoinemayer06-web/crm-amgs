@@ -9,22 +9,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // rgb(var(--x) / <alpha-value>) plutôt que var(--x) brut : c'est
+        // ce qui permet à Tailwind de générer les variantes d'opacité
+        // (bg-surface/80, text-primary/70, etc.) — indispensable puisque
+        // les variables CSS ci-dessus sont des triplets RGB, pas des hex.
         primary: {
-          DEFAULT: "var(--color-primary)",
-          light: "var(--color-primary-light)",
-          dark: "var(--color-primary-dark)",
+          DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
+          light: "rgb(var(--color-primary-light) / <alpha-value>)",
+          dark: "rgb(var(--color-primary-dark) / <alpha-value>)",
         },
         accent: {
-          DEFAULT: "var(--color-accent)",
-          light: "var(--color-accent-light)",
-          dark: "var(--color-accent-dark)",
+          DEFAULT: "rgb(var(--color-accent) / <alpha-value>)",
+          light: "rgb(var(--color-accent-light) / <alpha-value>)",
+          dark: "rgb(var(--color-accent-dark) / <alpha-value>)",
         },
-        background: "var(--color-background)",
-        surface: "var(--color-surface)",
-        foreground: "var(--color-foreground)",
-        muted: "var(--color-muted)",
-        border: "var(--color-border)",
-        silver: "var(--color-silver)",
+        background: "rgb(var(--color-background) / <alpha-value>)",
+        surface: "rgb(var(--color-surface) / <alpha-value>)",
+        foreground: "rgb(var(--color-foreground) / <alpha-value>)",
+        muted: "rgb(var(--color-muted) / <alpha-value>)",
+        border: "rgb(var(--color-border) / <alpha-value>)",
+        silver: "rgb(var(--color-silver) / <alpha-value>)",
+        ink: "rgb(var(--color-ink) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],

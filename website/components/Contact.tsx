@@ -41,7 +41,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
             whileHover={buttonHover}
-            className="inline-block rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-white shadow-md shadow-accent/25 transition-colors hover:bg-accent-dark"
+            className="inline-block rounded-full bg-ink px-8 py-3.5 text-base font-semibold text-white shadow-md shadow-ink/25 transition-colors hover:bg-primary-dark"
           >
             Prendre rendez-vous
           </motion.a>

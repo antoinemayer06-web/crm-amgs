@@ -3,38 +3,49 @@
 @tailwind utilities;
 
 :root {
+  /* Toutes les couleurs sont stockées en triplet RGB "R G B" (sans
+     wrapper rgb()) afin que Tailwind puisse leur appliquer un modificateur
+     d'opacité (ex: bg-surface/80) via rgb(var(--x) / <alpha-value>) dans
+     tailwind.config.ts. Une valeur hex classique ici empêcherait Tailwind
+     de générer la moindre règle pour les classes avec "/NN". */
+
   /* Primaire : violet/indigo profond, repris du dégradé métallique du logo
      (triangle "AM") — crédibilité, sérieux, tech B2B */
-  --color-primary: #4c3aa1;
-  --color-primary-light: #6f5bc9;
-  --color-primary-dark: #2b2064;
+  --color-primary: 76 58 161; /* #4c3aa1 */
+  --color-primary-light: 111 91 201; /* #6f5bc9 */
+  --color-primary-dark: 43 32 100; /* #2b2064 */
 
-  /* Accent : vert — gain de temps, efficacité, automatisation.
-     Conservé malgré le violet du logo : bon complémentaire visuel, et le
-     logo ne porte pas de couleur dédiée à ce sens.
+  /* Accent : vert — réservé exclusivement aux points de contact WhatsApp
+     (bouton header, bulle flottante, icône footer). Partout ailleurs sur
+     le site, le noir/violet foncé (--color-ink / --color-primary-dark)
+     remplace le vert comme couleur de mise en avant.
      DEFAULT volontairement plus foncé que le vert "vif" d'origine : sur
-     fond accent avec du texte blanc (boutons CTA, bulle WhatsApp), le vert
-     vif (#1f9d6b) ne tient que 3.45:1 — sous le seuil AA de 4.5:1 pour du
-     texte normal. #167a52 tient 5.33:1. Le vert vif reste disponible en
-     accent-light pour les usages sans texte blanc dessus (icônes, texte
-     accent sur fond clair, bordures). */
-  --color-accent: #167a52;
-  --color-accent-light: #1f9d6b;
-  --color-accent-dark: #11603f;
+     fond accent avec du texte blanc, le vert vif (#1f9d6b) ne tient que
+     3.45:1 — sous le seuil AA de 4.5:1 pour du texte normal. #167a52
+     tient 5.33:1. Le vert vif reste disponible en accent-light pour les
+     bordures/icônes (seuil graphique 3:1) sur fond sombre ou clair. */
+  --color-accent: 22 122 82; /* #167a52 */
+  --color-accent-light: 31 157 107; /* #1f9d6b */
+  --color-accent-dark: 17 96 63; /* #11603f */
+
+  /* Encre : noir à dominante violette, nouvelle couleur de mise en avant
+     (boutons pleins, éléments actifs) à la place du vert sur le reste du
+     site. */
+  --color-ink: 23 18 43; /* #17122b */
 
   /* Argenté : repris des reflets métalliques du "M" et du losange du logo,
      utile pour des touches discrètes (bordures, icônes, séparateurs). */
-  --color-silver: #b9bec9;
+  --color-silver: 185 190 201; /* #b9bec9 */
 
   /* Fond et surfaces : blanc cassé / gris très clair */
-  --color-background: #f7f8fa;
-  --color-surface: #ffffff;
+  --color-background: 247 248 250; /* #f7f8fa */
+  --color-surface: 255 255 255; /* #ffffff */
 
   /* Texte : anthracite */
-  --color-foreground: #22262b;
-  --color-muted: #5b6270;
+  --color-foreground: 34 38 43; /* #22262b */
+  --color-muted: 91 98 112; /* #5b6270 */
 
-  --color-border: #e3e5ea;
+  --color-border: 227 229 234; /* #e3e5ea */
 
   /* Polices : corps en Inter, titres en Inter (poids marqués) */
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
@@ -42,7 +53,7 @@
 }
 
 * {
-  border-color: var(--color-border);
+  border-color: rgb(var(--color-border));
 }
 
 html {
@@ -53,8 +64,8 @@ html {
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
   font-family: var(--font-sans);
 }
 
@@ -73,7 +84,7 @@ h6 {
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid rgb(var(--color-primary));
   outline-offset: 2px;
   border-radius: 4px;
 }

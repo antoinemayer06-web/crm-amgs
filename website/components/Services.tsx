@@ -65,7 +65,7 @@ export default function Services() {
               whileHover={cardHover}
               className="group rounded-2xl border border-border bg-background p-7"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-accent/10 group-hover:text-accent">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-ink group-hover:text-white">
                 <service.icon className="h-6 w-6" strokeWidth={2} />
               </div>
               <h3 className="mt-5 font-heading text-lg font-bold text-foreground">

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons";
 import { buttonHover } from "@/lib/animations";
 import { WHATSAPP_URL } from "@/lib/links";
 import { NAV_LINKS } from "@/lib/nav";
@@ -49,7 +49,11 @@ export default function Header() {
               scrolled ? "h-8" : "h-10"
             }`}
           />
-          <span className="font-heading text-sm font-extrabold tracking-tight text-foreground sm:text-base">
+          <span
+            className={`font-heading text-sm font-extrabold tracking-tight transition-colors duration-300 sm:text-base ${
+              scrolled ? "text-foreground" : "text-white"
+            }`}
+          >
             AM Growth Solutions
           </span>
         </Link>
@@ -59,7 +63,11 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+              className={`text-sm font-medium transition-colors duration-300 ${
+                scrolled
+                  ? "text-foreground/80 hover:text-primary"
+                  : "text-white/80 hover:text-white"
+              }`}
             >
               {link.label}
             </a>
@@ -73,14 +81,14 @@ export default function Header() {
             rel="noopener noreferrer"
             whileHover={buttonHover}
             aria-label="Discuter sur WhatsApp"
-            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent text-accent transition-colors hover:bg-accent hover:text-white"
+            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent-light text-accent-light transition-colors hover:bg-accent-light hover:text-white"
           >
-            <MessageCircle className="h-5 w-5" strokeWidth={2} />
+            <WhatsAppIcon className="h-5 w-5" />
           </motion.a>
           <motion.a
             href="#contact"
             whileHover={buttonHover}
-            className="inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-accent/20 transition-colors hover:bg-accent-dark"
+            className="inline-block rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-ink/20 transition-colors hover:bg-primary-dark"
           >
             Prendre rendez-vous
           </motion.a>
@@ -95,15 +103,21 @@ export default function Header() {
         >
           <motion.span
             animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-            className="h-0.5 w-6 rounded-full bg-foreground"
+            className={`h-0.5 w-6 rounded-full transition-colors duration-300 ${
+              scrolled ? "bg-foreground" : "bg-white"
+            }`}
           />
           <motion.span
             animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-            className="h-0.5 w-6 rounded-full bg-foreground"
+            className={`h-0.5 w-6 rounded-full transition-colors duration-300 ${
+              scrolled ? "bg-foreground" : "bg-white"
+            }`}
           />
           <motion.span
             animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-            className="h-0.5 w-6 rounded-full bg-foreground"
+            className={`h-0.5 w-6 rounded-full transition-colors duration-300 ${
+              scrolled ? "bg-foreground" : "bg-white"
+            }`}
           />
         </button>
       </div>
@@ -135,13 +149,13 @@ export default function Header() {
                 onClick={() => setMobileOpen(false)}
                 className="mt-2 flex items-center justify-center gap-2 rounded-full border-2 border-accent px-5 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-white"
               >
-                <MessageCircle className="h-4 w-4" strokeWidth={2} />
+                <WhatsAppIcon className="h-4 w-4" />
                 WhatsApp
               </a>
               <a
                 href="#contact"
                 onClick={() => setMobileOpen(false)}
-                className="mt-2 rounded-full bg-accent px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
+                className="mt-2 rounded-full bg-ink px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
               >
                 Prendre rendez-vous
               </a>
