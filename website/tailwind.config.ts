@@ -24,10 +24,20 @@ const config: Config = {
         foreground: "var(--color-foreground)",
         muted: "var(--color-muted)",
         border: "var(--color-border)",
+        silver: "var(--color-silver)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         heading: ["var(--font-heading)", "system-ui", "sans-serif"],
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+      },
+      animation: {
+        marquee: "marquee 28s linear infinite",
       },
     },
   },

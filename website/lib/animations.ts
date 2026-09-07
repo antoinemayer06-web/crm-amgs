@@ -69,7 +69,7 @@ export const slideInFromRight: Variants = {
 // À utiliser avec whileHover={cardHover} sur un motion.div.
 export const cardHover = {
   y: -4,
-  boxShadow: "0 12px 24px -8px rgba(30, 42, 94, 0.15)",
+  boxShadow: "0 12px 24px -8px rgba(76, 58, 161, 0.18)",
   transition: { duration: 0.25, ease: "easeOut" },
 };
 

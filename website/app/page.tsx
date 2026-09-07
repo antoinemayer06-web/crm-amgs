@@ -1,9 +1,10 @@
+import Hero from "@/components/Hero";
+
 export default function Home() {
   return (
     <main>
-      {/* Hero — accroche principale, proposition de valeur, CTA de contact */}
-
-      {/* Bandeau outils — logos des outils compatibles (CRM, gestion de projet, stockage, messagerie) */}
+      <Hero />
+      {/* Hero + bandeau outils — voir components/Hero.tsx */}
 
       {/* Problème — la double saisie et les tâches répétitives qui freinent les petites structures */}
 

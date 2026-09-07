@@ -3,15 +3,22 @@
 @tailwind utilities;
 
 :root {
-  /* Primaire : bleu/indigo profond — crédibilité, sérieux, tech B2B */
-  --color-primary: #1e2a5e;
-  --color-primary-light: #2f3f82;
-  --color-primary-dark: #12193d;
+  /* Primaire : violet/indigo profond, repris du dégradé métallique du logo
+     (triangle "AM") — crédibilité, sérieux, tech B2B */
+  --color-primary: #4c3aa1;
+  --color-primary-light: #6f5bc9;
+  --color-primary-dark: #2b2064;
 
-  /* Accent : vert — gain de temps, efficacité, automatisation */
+  /* Accent : vert — gain de temps, efficacité, automatisation.
+     Conservé malgré le violet du logo : bon complémentaire visuel, et le
+     logo ne porte pas de couleur dédiée à ce sens. */
   --color-accent: #1f9d6b;
   --color-accent-light: #34c087;
   --color-accent-dark: #167a52;
+
+  /* Argenté : repris des reflets métalliques du "M" et du losange du logo,
+     utile pour des touches discrètes (bordures, icônes, séparateurs). */
+  --color-silver: #b9bec9;
 
   /* Fond et surfaces : blanc cassé / gris très clair */
   --color-background: #f7f8fa;
