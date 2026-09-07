@@ -1,4 +1,6 @@
 import Hero from "@/components/Hero";
+import Problem from "@/components/Problem";
+import Services from "@/components/Services";
 
 export default function Home() {
   return (
@@ -6,9 +8,9 @@ export default function Home() {
       <Hero />
       {/* Hero + bandeau outils — voir components/Hero.tsx */}
 
-      {/* Problème — la double saisie et les tâches répétitives qui freinent les petites structures */}
+      <Problem />
 
-      {/* Services — ce que fait concrètement l'agence (connecter les outils, automatiser, éliminer la double saisie) */}
+      <Services />
 
       {/* Preuve concrète — cas d'usage / résultats chiffrés (animation de compteurs) */}
 
