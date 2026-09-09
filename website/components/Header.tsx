@@ -35,8 +35,10 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#0d0d0d]/95 backdrop-blur-md transition-all duration-300 ${
-        scrolled ? "py-2 shadow-lg shadow-black/30" : "py-4"
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "border-b border-white/5 bg-[#0d0d0d]/95 py-2 shadow-lg shadow-black/30 backdrop-blur-md"
+          : "border-b border-transparent bg-transparent py-4"
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
