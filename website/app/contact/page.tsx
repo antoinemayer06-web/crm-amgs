@@ -2,16 +2,10 @@ import type { Metadata } from "next";
 import Contact from "@/components/Contact";
 import PageIntro from "@/components/PageIntro";
 
-// TODO (page volontairement minimale pour l'instant) : ajouter un
-// formulaire de prise de contact et un lead magnet ("5 signes que votre
-// PME perd du temps en double saisie" contre email), prévus dans le brief
-// mais pas encore construits — pour l'instant la prise de contact passe
-// par Calendly et WhatsApp.
-
 export const metadata: Metadata = {
   title: "Contact — échangeons sur votre projet",
   description:
-    "Prenez rendez-vous pour un appel de 20-30 minutes avec AM Growth Solutions, ou échangez directement par WhatsApp ou LinkedIn.",
+    "Prenez rendez-vous pour un appel de 20-30 minutes avec AM Growth Solutions, envoyez un message, ou téléchargez la checklist double saisie.",
   alternates: { canonical: "/contact" },
 };
 
