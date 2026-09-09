@@ -12,7 +12,7 @@ export default function Footer() {
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/brand/logo.png"
-              alt="AM Growth Solutions"
+              alt="Logo AM Growth Solutions, automatisation PME à La Réunion"
               width={32}
               height={32}
               className="h-8 w-auto"

@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import ParallaxAccent from "@/components/ParallaxAccent";
 import { cardHover, fadeInUp, staggerContainer } from "@/lib/animations";
 import { PILLARS } from "@/lib/content";
 
 export default function PillarsOverview() {
   return (
-    <section className="bg-surface py-20 sm:py-28">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-surface py-20 sm:py-28">
+      <ParallaxAccent className="right-[-10%] top-[-10%] h-80 w-80 bg-primary-dark/[0.06]" />
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={fadeInUp}
           initial="hidden"
@@ -18,7 +20,7 @@ export default function PillarsOverview() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Deux façons de vous faire gagner du temps
+            Deux façons de supprimer la double saisie
           </h2>
           <p className="mt-4 text-lg text-muted">
             Chaque mission est sur mesure, mais elle s&apos;appuie toujours

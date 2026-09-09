@@ -57,17 +57,20 @@ export default function Proof() {
               variants={fadeInUp}
               className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-background p-8 text-center"
             >
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                <span className="text-lg font-semibold text-muted line-through decoration-2">
-                  3-4 semaines
-                </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-primary-dark" />
-                <span className="font-heading text-3xl font-black text-primary-dark">
-                  1,5 semaine
-                </span>
-              </div>
+              <span className="text-sm font-semibold text-muted line-through decoration-2">
+                Devis annoncé : 3-4 semaines
+              </span>
+              <AnimatedCounter
+                from={3.5}
+                to={1.5}
+                decimals={1}
+                suffix=" semaine"
+                colorFrom="#5b6270"
+                colorTo="#2b2064"
+                className="font-heading text-4xl font-black"
+              />
               <p className="mt-2 text-sm text-muted">
-                Délai annoncé vs délai livré — mission 1
+                Délai réellement livré — mission 1
               </p>
             </motion.div>
 

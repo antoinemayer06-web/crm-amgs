@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import ParallaxAccent from "@/components/ParallaxAccent";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 const PROBLEMS = [
@@ -23,8 +24,13 @@ const PROBLEMS = [
 
 export default function Problem() {
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden py-20 sm:py-28">
+      <ParallaxAccent className="left-[-8%] top-[10%] h-72 w-72 bg-primary/[0.06]" />
+      <ParallaxAccent
+        className="right-[-6%] bottom-[5%] h-64 w-64 bg-primary-light/[0.08]"
+        range={60}
+      />
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={fadeInUp}
           initial="hidden"

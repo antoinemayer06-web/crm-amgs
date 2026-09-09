@@ -30,18 +30,13 @@ export default function Header() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const linkClass = `text-sm font-medium transition-colors duration-300 ${
-    scrolled
-      ? "text-foreground/80 hover:text-primary"
-      : "text-white/80 hover:text-white"
-  }`;
+  const linkClass =
+    "text-sm font-medium text-white/80 transition-colors hover:text-white";
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-surface/80 py-2 shadow-md backdrop-blur-md"
-          : "bg-transparent py-4"
+      className={`fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#0d0d0d]/95 backdrop-blur-md transition-all duration-300 ${
+        scrolled ? "py-2 shadow-lg shadow-black/30" : "py-4"
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -52,7 +47,7 @@ export default function Header() {
         >
           <Image
             src="/brand/logo.png"
-            alt="AM Growth Solutions"
+            alt="Logo AM Growth Solutions, automatisation PME à La Réunion"
             width={40}
             height={40}
             priority
@@ -60,11 +55,7 @@ export default function Header() {
               scrolled ? "h-8" : "h-10"
             }`}
           />
-          <span
-            className={`font-heading text-sm font-extrabold tracking-tight transition-colors duration-300 sm:text-base ${
-              scrolled ? "text-foreground" : "text-white"
-            }`}
-          >
+          <span className="font-heading text-sm font-extrabold tracking-tight text-white sm:text-base">
             AM Growth Solutions
           </span>
         </Link>
@@ -141,21 +132,15 @@ export default function Header() {
         >
           <motion.span
             animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-            className={`h-0.5 w-6 rounded-full transition-colors duration-300 ${
-              scrolled ? "bg-foreground" : "bg-white"
-            }`}
+            className="h-0.5 w-6 rounded-full bg-white"
           />
           <motion.span
             animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-            className={`h-0.5 w-6 rounded-full transition-colors duration-300 ${
-              scrolled ? "bg-foreground" : "bg-white"
-            }`}
+            className="h-0.5 w-6 rounded-full bg-white"
           />
           <motion.span
             animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-            className={`h-0.5 w-6 rounded-full transition-colors duration-300 ${
-              scrolled ? "bg-foreground" : "bg-white"
-            }`}
+            className="h-0.5 w-6 rounded-full bg-white"
           />
         </button>
       </div>

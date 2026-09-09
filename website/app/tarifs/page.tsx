@@ -53,7 +53,7 @@ export default function TarifsPage() {
             </p>
             <Link
               href="/contact"
-              className="mt-6 inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/90"
+              className="mt-6 inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:scale-[1.03] hover:bg-white/90 active:scale-[0.98]"
             >
               Demander un devis personnalisé
             </Link>

@@ -15,6 +15,31 @@ interface AnimatedCounterProps {
   /** Nombre de décimales affichées (0 par défaut). */
   decimals?: number;
   className?: string;
+  /** Couleur au départ de l'animation (hex). Avec colorTo, le chiffre
+   * change de couleur en même temps qu'il compte — utile pour un
+   * compteur qui se "transforme" (ex: une estimation qui devient un
+   * résultat prouvé). */
+  colorFrom?: string;
+  colorTo?: string;
+}
+
+function hexToRgb(hex: string) {
+  const clean = hex.replace("#", "");
+  const value = parseInt(clean, 16);
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255,
+  };
+}
+
+function mixColor(from: string, to: string, progress: number) {
+  const a = hexToRgb(from);
+  const b = hexToRgb(to);
+  const r = Math.round(a.r + (b.r - a.r) * progress);
+  const g = Math.round(a.g + (b.g - a.g) * progress);
+  const bl = Math.round(a.b + (b.b - a.b) * progress);
+  return `rgb(${r}, ${g}, ${bl})`;
 }
 
 // Compteur qui s'incrémente de `from` à `to` dès que le composant entre
@@ -27,10 +52,13 @@ export default function AnimatedCounter({
   suffix = "",
   decimals = 0,
   className,
+  colorFrom,
+  colorTo,
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.6 });
   const [value, setValue] = useState(from);
+  const [color, setColor] = useState(colorFrom);
 
   useEffect(() => {
     if (!isInView) return;
@@ -43,17 +71,23 @@ export default function AnimatedCounter({
       const progress = Math.min((timestamp - start) / (duration * 1000), 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setValue(from + (to - from) * eased);
+      if (colorFrom && colorTo) {
+        setColor(mixColor(colorFrom, colorTo, eased));
+      }
       if (progress < 1) frame = requestAnimationFrame(step);
     };
 
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
-  }, [isInView, from, to, duration]);
+  }, [isInView, from, to, duration, colorFrom, colorTo]);
 
   return (
-    <span ref={ref} className={className}>
+    <span ref={ref} className={className} style={color ? { color } : undefined}>
       {prefix}
-      {value.toFixed(decimals)}
+      {value.toLocaleString("fr-FR", {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      })}
       {suffix}
     </span>
   );

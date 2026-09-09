@@ -1,7 +1,9 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import NetworkBackground from "@/components/NetworkBackground";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 // Outils courants chez les cibles (cabinets de conseil, bureaux d'études,
@@ -18,11 +20,17 @@ const TOOLS = [
   "Google Drive",
 ];
 
-// Options de titre principal (H1) — la première est utilisée ci-dessous.
-// Aligné sur le mot-clé cible de la home : "automatisation PME La Réunion".
-// 1. "Automatisation PME à La Réunion : la fin de la double saisie entre vos outils"
-// 2. "On connecte vos outils. Vous arrêtez la double saisie."
-// 3. "L'automatisation qui libère les PME réunionnaises de la double saisie"
+// Options de titre principal (H1) — la première est utilisée ci-dessous
+// (alignée sur le mot-clé SEO cible de la home). Trois nouvelles pistes
+// proposées, chacune sur un angle différent — à choisir/arbitrer :
+// A. Orientée problème :
+//    "Vos outils ne se parlent pas ? Voici pourquoi vous perdez du temps chaque jour."
+// B. Orientée résultat/preuve :
+//    "Un devis annoncé à 3 semaines. Livré en 1 semaine et demie."
+// C. Orientée promesse directe :
+//    "J'automatise la gestion de projet des PME de La Réunion pour que leurs outils travaillent enfin ensemble."
+// Actif pour l'instant (garde le mot-clé "automatisation PME La Réunion"
+// dans le H1 en attendant l'arbitrage sur A/B/C) :
 const HEADLINE =
   "Automatisation PME à La Réunion : la fin de la double saisie entre vos outils";
 
@@ -48,34 +56,58 @@ const BLOBS = [
 ];
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  // Les calques de fond dérivent plus lentement que le contenu au scroll
+  // (parallaxe) — donne une sensation de profondeur/superposition.
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const networkY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+
   return (
     <>
-      <section className="relative overflow-hidden bg-black pt-32 pb-20 sm:pt-40 sm:pb-24">
+      <section
+        ref={sectionRef}
+        className="relative overflow-hidden bg-black pt-32 pb-20 sm:pt-40 sm:pb-24"
+      >
         {/* Fond noir — le violet ne vient que des halos animés ci-dessous */}
-        <div
+        <motion.div
+          style={{ y: bgY }}
           className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(circle at 25% 15%, #0a0a0f 0%, #000000 70%)",
-          }}
-        />
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(circle at 25% 15%, #0a0a0f 0%, #000000 70%)",
+            }}
+          />
 
-        {/* Halos animés */}
-        <div className="absolute inset-0 overflow-hidden">
-          {BLOBS.map((blob, index) => (
-            <motion.div
-              key={index}
-              animate={blob.animate}
-              transition={{
-                duration: blob.duration,
-                repeat: Infinity,
-                repeatType: "mirror",
-                ease: "easeInOut",
-              }}
-              className={`absolute rounded-full blur-3xl ${blob.className}`}
-            />
-          ))}
-        </div>
+          {/* Halos animés */}
+          <div className="absolute inset-0 overflow-hidden">
+            {BLOBS.map((blob, index) => (
+              <motion.div
+                key={index}
+                animate={blob.animate}
+                transition={{
+                  duration: blob.duration,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                }}
+                className={`absolute rounded-full blur-3xl ${blob.className}`}
+              />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Réseau de nœuds connectés — dérive à une vitesse différente du
+            fond pour accentuer la profondeur */}
+        <motion.div style={{ y: networkY }} className="absolute inset-0">
+          <NetworkBackground />
+        </motion.div>
 
         {/* Texture points, façon plan technique — discrète */}
         <div
