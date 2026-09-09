@@ -47,13 +47,13 @@ const BLOBS = [
 export default function Hero() {
   return (
     <>
-      <section className="relative overflow-hidden bg-ink pt-32 pb-20 sm:pt-40 sm:pb-24">
-        {/* Dégradé de fond */}
+      <section className="relative overflow-hidden bg-black pt-32 pb-20 sm:pt-40 sm:pb-24">
+        {/* Fond noir — le violet ne vient que des halos animés ci-dessous */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(circle at 25% 15%, #2b2064 0%, #17122b 55%, #0d0a1a 100%)",
+              "radial-gradient(circle at 25% 15%, #0a0a0f 0%, #000000 70%)",
           }}
         />
 
