@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
 import { LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
-import { NAV_LINKS } from "@/lib/nav";
+import { FOOTER_LINKS } from "@/lib/nav";
 
 export default function Footer() {
   return (
@@ -22,15 +22,15 @@ export default function Footer() {
             </span>
           </Link>
 
-          <nav className="flex flex-col items-center gap-2 md:items-start">
-            {NAV_LINKS.map((link) => (
-              <a
+          <nav className="grid grid-cols-2 gap-2 text-center sm:flex sm:flex-col sm:items-center md:items-start md:text-left">
+            {FOOTER_LINKS.map((link) => (
+              <Link
                 key={link.href}
                 href={link.href}
                 className="text-sm text-muted transition-colors hover:text-primary"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 

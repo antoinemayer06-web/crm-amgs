@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import JsonLd from "@/components/JsonLd";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import { localBusinessSchema } from "@/lib/schema";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -11,21 +14,25 @@ const inter = Inter({
   display: "swap",
 });
 
-const TITLE = "AM Growth Solutions | Automatisation sur mesure pour PME";
-const DESCRIPTION =
-  "Fini la double saisie entre vos outils. AM Growth Solutions connecte votre CRM, votre gestion de projet et vos outils métier pour automatiser vos tâches répétitives — sans changer d'outils. Résultats concrets, délais courts.";
+const DEFAULT_TITLE =
+  "AM Growth Solutions | Automatisation PME à La Réunion";
+const DEFAULT_DESCRIPTION =
+  "Fini la double saisie entre vos outils. AM Growth Solutions automatise la gestion de projet et l'administratif des PME réunionnaises — sans changer d'outils. Résultats concrets, délais courts.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
-  description: DESCRIPTION,
+  title: {
+    default: DEFAULT_TITLE,
+    template: "%s | AM Growth Solutions",
+  },
+  description: DEFAULT_DESCRIPTION,
   icons: {
     icon: "/brand/logo.png",
     apple: "/brand/logo.png",
   },
   openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     type: "website",
     locale: "fr_FR",
     siteName: "AM Growth Solutions",
@@ -33,8 +40,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: TITLE,
-    description: DESCRIPTION,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
   },
 };
 
@@ -46,8 +53,10 @@ export default function RootLayout({
   return (
     <html lang="fr" className={inter.variable}>
       <body>
+        <JsonLd data={localBusinessSchema()} />
         <Header />
         {children}
+        <Footer />
         <WhatsAppFloat />
       </body>
     </html>

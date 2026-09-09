@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
@@ -18,10 +19,12 @@ const TOOLS = [
 ];
 
 // Options de titre principal (H1) — la première est utilisée ci-dessous.
-// 1. "On connecte vos outils. Vous arrêtez la double saisie."
-// 2. "Vos outils actuels, enfin connectés entre eux."
-// 3. "Moins de ressaisie. Plus de temps pour vos dossiers."
-const HEADLINE = "On connecte vos outils. Vous arrêtez la double saisie.";
+// Aligné sur le mot-clé cible de la home : "automatisation PME La Réunion".
+// 1. "Automatisation PME à La Réunion : la fin de la double saisie entre vos outils"
+// 2. "On connecte vos outils. Vous arrêtez la double saisie."
+// 3. "L'automatisation qui libère les PME réunionnaises de la double saisie"
+const HEADLINE =
+  "Automatisation PME à La Réunion : la fin de la double saisie entre vos outils";
 
 // Halos flous en fond, dérive lente en boucle — discret, pas un effet
 // "gamer". Couleurs violettes uniquement (le vert reste réservé au
@@ -101,29 +104,32 @@ export default function Hero() {
             variants={fadeInUp}
             className="mt-6 max-w-2xl text-balance text-lg text-white/70 sm:text-xl"
           >
-            AM Growth Solutions automatise la gestion de projet, la charge de
-            travail et les échanges entre vos outils métier existants — sans
-            rien changer à votre façon de travailler.
+            AM Growth Solutions connecte votre CRM, votre gestion de projet
+            et vos outils administratifs pour supprimer la ressaisie
+            manuelle — sans changer d&apos;outils, avec des résultats livrés
+            en quelques jours.
           </motion.p>
 
           <motion.div
             variants={fadeInUp}
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
           >
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.03 }}
-              className="inline-block rounded-full bg-white px-7 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
-            >
-              Prendre rendez-vous
-            </motion.a>
-            <motion.a
-              href="#preuve"
-              whileHover={{ scale: 1.03 }}
-              className="inline-block rounded-full border-2 border-white/40 px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white hover:text-ink"
-            >
-              Voir un cas concret
-            </motion.a>
+            <motion.div whileHover={{ scale: 1.03 }}>
+              <Link
+                href="/contact"
+                className="inline-block rounded-full bg-white px-7 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
+              >
+                Prendre rendez-vous
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.03 }}>
+              <Link
+                href="/etude-de-cas-ecodden"
+                className="inline-block rounded-full border-2 border-white/40 px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white hover:text-ink"
+              >
+                Voir un cas concret
+              </Link>
+            </motion.div>
           </motion.div>
         </motion.div>
       </section>
