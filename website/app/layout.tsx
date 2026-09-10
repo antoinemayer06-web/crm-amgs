@@ -26,21 +26,9 @@ export const metadata: Metadata = {
     template: "%s | AM Growth Solutions",
   },
   description: DEFAULT_DESCRIPTION,
-  // Fichiers dans public/ (pas la convention app/icon.png, qui renvoyait un
-  // 404 en production sur ce déploiement Vercel monorepo malgré un build
-  // local correct). Le "?v=2" est volontaire : une URL de favicon stable
-  // peut rester bloquée en cache (CDN et/ou navigateur) sur un ancien
-  // contenu ou un 404 antérieur pendant toute sa durée de cache, sans lien
-  // avec le déploiement en cours. Changer l'URL force tout le monde à
-  // recharger un favicon jamais vu — à incrémenter si un futur changement
-  // de logo doit à nouveau forcer un rafraîchissement immédiat.
-  icons: {
-    icon: [
-      { url: "/favicon.ico?v=2", sizes: "any" },
-      { url: "/favicon-512.png?v=2", type: "image/png", sizes: "512x512" },
-    ],
-    apple: "/apple-touch-icon.png?v=2",
-  },
+  // Pas de bloc `icons` manuel ici : app/icon.tsx et app/apple-icon.tsx
+  // (générés dynamiquement via next/og) sont auto-détectés par Next et
+  // injectent eux-mêmes les bonnes balises <link>.
   openGraph: {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,

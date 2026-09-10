@@ -48,8 +48,8 @@ export default function Header() {
       <div
         className={`mx-auto flex w-fit items-center gap-6 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-8 md:w-full md:justify-between ${
           scrolled
-            ? "mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-4 py-2 shadow-lg shadow-black/30 sm:px-6 sm:py-2.5"
-            : "max-w-6xl border-transparent bg-transparent px-4 py-3 shadow-none sm:px-6 sm:py-4 lg:px-8"
+            ? "mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-5 py-2.5 shadow-lg shadow-black/30 sm:px-6 sm:py-3"
+            : "max-w-6xl border-transparent bg-transparent px-5 py-3.5 shadow-none sm:px-6 sm:py-4 lg:px-8"
         }`}
       >
         <Link
@@ -64,12 +64,12 @@ export default function Header() {
             height={40}
             priority
             className={`w-auto transition-all duration-300 ${
-              scrolled ? "h-7 sm:h-8" : "h-8 sm:h-10"
+              scrolled ? "h-8 sm:h-9" : "h-9 sm:h-10"
             }`}
           />
           <span
             className={`whitespace-nowrap font-heading font-extrabold tracking-tight text-white transition-all duration-300 ${
-              scrolled ? "text-xs sm:text-sm" : "text-sm sm:text-base"
+              scrolled ? "text-sm" : "text-base"
             }`}
           >
             AM Growth Solutions
@@ -148,7 +148,7 @@ export default function Header() {
           onClick={() => setMobileOpen((open) => !open)}
           aria-expanded={mobileOpen}
           aria-label="Ouvrir le menu"
-          className="flex h-8 w-8 flex-col items-center justify-center gap-1.5 md:hidden"
+          className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 md:hidden"
         >
           <motion.span
             animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
