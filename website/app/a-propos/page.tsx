@@ -57,10 +57,19 @@ export default function AProposPage() {
               .
             </p>
             <p>
-              Basé à La Réunion, j&apos;interviens auprès d&apos;entreprises
-              réunionnaises qui connaissent les mêmes contraintes que moi :
-              des équipes resserrées, où chaque heure passée à ressaisir une
-              information est une heure qui manque ailleurs.
+              Basé à La Réunion (974), j&apos;interviens auprès
+              d&apos;entreprises réunionnaises qui connaissent les mêmes
+              contraintes que moi : des équipes resserrées, où chaque heure
+              passée à ressaisir une information est une heure qui manque
+              ailleurs.
+            </p>
+            <p>
+              Automatisation, intelligence artificielle : l&apos;étiquette
+              importe peu — ce qui compte, c&apos;est que la brique
+              technique choisie (règle simple, connecteur entre outils, ou
+              IA pour l&apos;extraction ou la catégorisation de documents)
+              résolve un vrai problème chez vous, pas qu&apos;elle soit à la
+              mode.
             </p>
           </div>
 

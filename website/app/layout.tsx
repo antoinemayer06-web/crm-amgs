@@ -17,7 +17,7 @@ const inter = Inter({
 const DEFAULT_TITLE =
   "AM Growth Solutions | Automatisation PME à La Réunion (974)";
 const DEFAULT_DESCRIPTION =
-  "Fini la double saisie entre vos outils. AM Growth Solutions automatise la gestion de projet et l'administratif des PME réunionnaises (La Réunion, 974) — sans changer d'outils. Résultats concrets, délais courts.";
+  "Fini la double saisie entre vos outils. AM Growth Solutions automatise — parfois avec l'IA — la gestion de projet et l'administratif des PME réunionnaises (La Réunion, 974) — sans changer d'outils. Résultats concrets, délais courts.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
