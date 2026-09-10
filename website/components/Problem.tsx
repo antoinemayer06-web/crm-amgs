@@ -6,19 +6,19 @@ import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 const PROBLEMS = [
   {
-    title: "La ressaisie qui coûte du temps et des erreurs",
+    title: "Le temps perdu sur des tâches répétitives",
     description:
-      "Chaque nouvelle info se recopie à la main dans le CRM, la gestion de projet, le stockage, la messagerie... Multipliez ça par le nombre de dossiers en cours, et l'erreur de saisie devient une question de temps.",
+      "Chaque semaine, les mêmes actions manuelles reviennent — recopier une info, relancer un client, mettre à jour un fichier. Ce temps ne crée aucune valeur, mais personne n'a le temps de s'arrêter pour le corriger.",
   },
   {
-    title: "La surcharge, découverte trop tard",
+    title: "Le manque de visibilité sur l'activité réelle",
     description:
-      "Sans vue d'ensemble centralisée, personne ne sait vraiment qui est débordé et qui a de la marge — jusqu'au jour où un dossier prend du retard.",
+      "Impossible de savoir en un coup d'œil où en sont les dossiers, qui est surchargé, ce qui a été fait ou non — l'information existe, mais elle est éparpillée entre plusieurs outils, fichiers ou têtes.",
   },
   {
-    title: "Des process qui tiennent à un fil",
+    title: "Des process qui reposent sur une seule personne",
     description:
-      "Sans système fiable, tout repose sur la mémoire ou la bonne volonté d'une seule personne — et disparaît le jour où elle est absente.",
+      "Sans système fiable, tout tient à la mémoire ou à la disponibilité d'un collaborateur clé — et s'effondre dès qu'il est absent, débordé, ou qu'il part.",
   },
 ];
 
@@ -42,8 +42,8 @@ export default function Problem() {
             Le symptôme est toujours le même
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Dès qu&apos;une structure combine plusieurs outils, ces trois
-            problèmes apparaissent — quel que soit le secteur.
+            Trois signes qui reviennent dans presque toutes les PME, quelle
+            que soit leur organisation ou leur secteur.
           </p>
         </motion.div>
 

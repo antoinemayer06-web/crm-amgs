@@ -26,10 +26,6 @@ export const metadata: Metadata = {
     template: "%s | AM Growth Solutions",
   },
   description: DEFAULT_DESCRIPTION,
-  icons: {
-    icon: "/brand/logo.png",
-    apple: "/brand/logo.png",
-  },
   openGraph: {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,

@@ -40,9 +40,9 @@ export default function Header() {
           Ça évite un saut brutal de largeur de bordure / rayon d'angle qui
           produisait un flash de rectangle blanc pendant la transition. */}
       <div
-        className={`mx-auto flex items-center justify-between gap-4 rounded-full border backdrop-blur-md transition-all duration-300 ${
+        className={`mx-auto flex items-center justify-between gap-2 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-4 ${
           scrolled
-            ? "mx-4 mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-4 py-2 shadow-lg shadow-black/30 sm:mx-auto sm:px-6 sm:py-2.5"
+            ? "mx-6 mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-3 py-2 shadow-lg shadow-black/30 sm:mx-auto sm:px-6 sm:py-2.5"
             : "max-w-6xl border-transparent bg-transparent px-4 py-4 shadow-none sm:px-6 lg:px-8"
         }`}
       >
@@ -62,8 +62,8 @@ export default function Header() {
             }`}
           />
           <span
-            className={`whitespace-nowrap font-heading text-sm font-extrabold tracking-tight text-white transition-all duration-300 sm:text-base ${
-              scrolled ? "hidden lg:inline" : "inline"
+            className={`whitespace-nowrap font-heading font-extrabold tracking-tight text-white transition-all duration-300 ${
+              scrolled ? "text-xs sm:text-sm" : "text-sm sm:text-base"
             }`}
           >
             AM Growth Solutions

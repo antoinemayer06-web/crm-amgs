@@ -21,7 +21,6 @@ export const NAV_ITEMS: NavItem[] = [
   },
   { label: "Étude de cas", href: "/etude-de-cas" },
   { label: "Comment ça marche", href: "/comment-ca-marche" },
-  { label: "Tarifs", href: "/tarifs" },
   { label: "Blog", href: "/blog" },
   { label: "À propos", href: "/a-propos" },
 ];

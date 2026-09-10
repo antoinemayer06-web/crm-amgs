@@ -37,12 +37,16 @@ const STEPS = [
 ];
 
 // Fenêtre de scroll (dans la progression 0-1 de la section) à laquelle
-// chaque étape est considérée comme "atteinte" par la ligne.
+// chaque étape est considérée comme "atteinte" par la ligne. Compressées
+// dans les 90% premiers de la progression (avec la marge du useScroll
+// ci-dessous) pour que les 4 étapes soient bien révélées une fois la
+// section normalement visible à l'écran, sans avoir à scroller bien
+// au-delà de ce qu'un visiteur ferait naturellement.
 const REVEAL_RANGES: [number, number][] = [
-  [0, 0.08],
-  [0.25, 0.36],
-  [0.58, 0.69],
-  [0.92, 1],
+  [0, 0.12],
+  [0.25, 0.4],
+  [0.5, 0.65],
+  [0.75, 0.9],
 ];
 
 function useStepReveal(
@@ -56,7 +60,11 @@ export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start 0.8", "end 0.3"],
+    // La progression atteint 1 quand le bas de la section arrive à
+    // mi-écran, pas quand elle a presque entièrement défilé — sinon les
+    // dernières étapes ne se révèlent qu'après avoir scrollé bien plus
+    // bas que ce qui semble nécessaire visuellement.
+    offset: ["start 0.9", "end 0.5"],
   });
 
   const dashOffset = useTransform(scrollYProgress, [0, 1], [100, 0]);
