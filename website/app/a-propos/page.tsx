@@ -44,8 +44,8 @@ export default function AProposPage() {
             <p>
               Ce qui me différencie, ce n&apos;est pas un discours sur le
               gain de temps — c&apos;est la rapidité de livraison, vérifiable
-              sur des missions réelles. Pour {CASE_STUDY.client}, un{" "}
-              {CASE_STUDY.sector} réunionnais, une mission annoncée à{" "}
+              sur des missions réelles. Pour un {CASE_STUDY.sector}
+              {" "}réunionnais, une mission annoncée à{" "}
               {CASE_STUDY.missions[0].quotedDelay} a été livrée en{" "}
               {CASE_STUDY.missions[0].actualDelay}. Le détail est dans{" "}
               <Link
@@ -62,14 +62,6 @@ export default function AProposPage() {
               contraintes que moi : des équipes resserrées, où chaque heure
               passée à ressaisir une information est une heure qui manque
               ailleurs.
-            </p>
-            <p>
-              Automatisation, intelligence artificielle : l&apos;étiquette
-              importe peu — ce qui compte, c&apos;est que la brique
-              technique choisie (règle simple, connecteur entre outils, ou
-              IA pour l&apos;extraction ou la catégorisation de documents)
-              résolve un vrai problème chez vous, pas qu&apos;elle soit à la
-              mode.
             </p>
           </div>
 

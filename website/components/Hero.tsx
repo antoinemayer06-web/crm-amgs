@@ -18,6 +18,9 @@ const TOOLS = [
   "Monday.com",
   "Trello",
   "Google Drive",
+  "Power Automate",
+  "Power BI",
+  "Microsoft 365",
 ];
 
 // Options de titre principal (H1) — la première est utilisée ci-dessous
@@ -156,7 +159,7 @@ export default function Hero() {
             </motion.div>
             <motion.div whileHover={{ scale: 1.03 }}>
               <Link
-                href="/etude-de-cas-ecodden"
+                href="/etude-de-cas"
                 className="inline-block rounded-full border-2 border-white/40 px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white hover:text-ink"
               >
                 Voir un cas concret

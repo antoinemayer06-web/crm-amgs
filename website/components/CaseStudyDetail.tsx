@@ -2,8 +2,28 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { CheckCircle2, ClipboardList, Database, RefreshCw } from "lucide-react";
+import DashboardMockup from "@/components/DashboardMockup";
+import FlowDiagram from "@/components/FlowDiagram";
 import { buttonHover, fadeInUp } from "@/lib/animations";
 import { CASE_STUDY, PILLARS } from "@/lib/content";
+
+const FLOW_STEPS = [
+  { icon: Database, label: "CRM", sublabel: "Données déjà saisies" },
+  {
+    icon: RefreshCw,
+    label: "Connecteur automatique",
+    sublabel: "Aucune intervention manuelle",
+    emphasis: true,
+  },
+  { icon: ClipboardList, label: "Gestion de projet", sublabel: "Dossier créé" },
+  {
+    icon: CheckCircle2,
+    label: "0 ressaisie",
+    sublabel: "Résultat",
+    emphasis: true,
+  },
+];
 
 export default function CaseStudyDetail() {
   return (
@@ -20,7 +40,7 @@ export default function CaseStudyDetail() {
             précieux en ressaisie
           </h2>
           <p className="mt-4 text-base leading-relaxed text-muted">
-            {CASE_STUDY.client} est un {CASE_STUDY.sector} à La Réunion.
+            Il s&apos;agit d&apos;un {CASE_STUDY.sector} à La Réunion.
             Comme beaucoup de PME de sa taille, l&apos;équipe utilisait déjà
             de bons outils — {CASE_STUDY.toolsConnected} au total : un CRM,
             un outil de gestion de tâches, un stockage cloud, une messagerie
@@ -57,6 +77,10 @@ export default function CaseStudyDetail() {
             </Link>
             .
           </p>
+
+          <div className="mt-8">
+            <FlowDiagram steps={FLOW_STEPS} />
+          </div>
         </motion.div>
 
         <motion.div
@@ -76,7 +100,7 @@ export default function CaseStudyDetail() {
                 className="rounded-xl border border-border bg-surface p-5"
               >
                 <p className="font-heading text-sm font-bold text-foreground">
-                  {mission.label} — {mission.price}
+                  {mission.label}
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-muted">
                   {mission.quotedDelay ? (
@@ -118,6 +142,10 @@ export default function CaseStudyDetail() {
             en un coup d&apos;œil qui, dans l&apos;équipe, a de la marge ou
             est déjà surchargé — sans avoir à demander un point d&apos;étape.
           </p>
+
+          <div className="mt-8">
+            <DashboardMockup />
+          </div>
         </motion.div>
 
         <motion.div

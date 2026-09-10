@@ -14,8 +14,6 @@ interface PillarPageProps {
   questionAnswer: string[];
   bulletsHeading: string;
   bullets: string[];
-  pricingLabel: string;
-  pricingFrom: string;
 }
 
 export default function PillarPage({
@@ -25,8 +23,6 @@ export default function PillarPage({
   questionAnswer,
   bulletsHeading,
   bullets,
-  pricingLabel,
-  pricingFrom,
 }: PillarPageProps) {
   return (
     <main>
@@ -93,7 +89,7 @@ export default function PillarPage({
               Preuve concrète
             </span>
             <h2 className="mt-2 font-heading text-xl font-bold text-foreground">
-              {CASE_STUDY.client}, {CASE_STUDY.sector} : la double saisie
+              Un {CASE_STUDY.sector} réunionnais : la double saisie
               supprimée en quelques jours
             </h2>
             <p className="mt-3 text-base leading-relaxed text-muted">
@@ -106,7 +102,7 @@ export default function PillarPage({
               href={CASE_STUDY.href}
               className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
             >
-              Voir l&apos;étude de cas EcoDDen
+              Voir l&apos;étude de cas complète
               <ArrowRight className="h-4 w-4" />
             </Link>
           </motion.div>
@@ -119,15 +115,12 @@ export default function PillarPage({
             className="mt-14 flex flex-col items-center gap-4 rounded-2xl bg-ink p-8 text-center sm:flex-row sm:justify-between sm:text-left"
           >
             <div>
-              <p className="text-sm font-semibold uppercase tracking-widest text-white/60">
-                {pricingLabel}
-              </p>
-              <p className="mt-1 font-heading text-2xl font-black text-white">
-                À partir de {pricingFrom}
+              <p className="font-heading text-xl font-black text-white">
+                Un fonctionnement similaire au vôtre ?
               </p>
               <p className="mt-1 text-sm text-white/60">
-                Fourchette indicative — le devis dépend de votre
-                fonctionnement réel.
+                Chaque système est chiffré sur mesure après un premier
+                échange, selon votre fonctionnement réel.
               </p>
             </div>
             <motion.div whileHover={buttonHover}>

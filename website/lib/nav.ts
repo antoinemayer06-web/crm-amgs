@@ -19,7 +19,7 @@ export const NAV_ITEMS: NavItem[] = [
     href: PILLARS[0].href,
     children: PILLARS.map((p) => ({ label: p.navLabel, href: p.href })),
   },
-  { label: "Étude de cas", href: "/etude-de-cas-ecodden" },
+  { label: "Étude de cas", href: "/etude-de-cas" },
   { label: "Comment ça marche", href: "/comment-ca-marche" },
   { label: "Tarifs", href: "/tarifs" },
   { label: "Blog", href: "/blog" },

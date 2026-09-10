@@ -31,17 +31,17 @@ export default function Header() {
   }, []);
 
   const linkClass =
-    "text-sm font-medium text-white/80 transition-colors hover:text-white";
+    "whitespace-nowrap text-sm font-medium text-white/80 transition-colors hover:text-white";
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-white/5 bg-[#0d0d0d]/95 py-2 shadow-lg shadow-black/30 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent py-4"
-      }`}
-    >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="fixed inset-x-0 top-0 z-50">
+      <div
+        className={`mx-auto flex items-center justify-between gap-4 transition-all duration-300 ${
+          scrolled
+            ? "mt-3 max-w-5xl rounded-full border border-white/10 bg-[#0d0d0d]/95 px-5 py-2.5 shadow-lg shadow-black/30 backdrop-blur-md sm:px-6"
+            : "max-w-6xl px-4 py-4 sm:px-6 lg:px-8"
+        }`}
+      >
         <Link
           href="/"
           className="flex items-center gap-2"
@@ -57,12 +57,20 @@ export default function Header() {
               scrolled ? "h-8" : "h-10"
             }`}
           />
-          <span className="font-heading text-sm font-extrabold tracking-tight text-white sm:text-base">
+          <span
+            className={`whitespace-nowrap font-heading text-sm font-extrabold tracking-tight text-white transition-all duration-300 sm:text-base ${
+              scrolled ? "hidden lg:inline" : "inline"
+            }`}
+          >
             AM Growth Solutions
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav
+          className={`hidden items-center md:flex ${
+            scrolled ? "gap-5" : "gap-7"
+          }`}
+        >
           {NAV_ITEMS.map((item) =>
             item.children ? (
               <div
@@ -105,24 +113,24 @@ export default function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
+          <motion.div whileHover={buttonHover}>
+            <Link
+              href="/contact"
+              className="inline-block whitespace-nowrap rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-sm transition-colors hover:bg-white/90"
+            >
+              Prendre rendez-vous
+            </Link>
+          </motion.div>
           <motion.a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             whileHover={buttonHover}
             aria-label="Discuter sur WhatsApp"
-            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent-light text-accent-light transition-colors hover:bg-accent-light hover:text-white"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-accent shadow-sm transition-colors hover:bg-accent hover:text-white"
           >
             <WhatsAppIcon className="h-5 w-5" />
           </motion.a>
-          <motion.div whileHover={buttonHover}>
-            <Link
-              href="/contact"
-              className="inline-block rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-ink/20 transition-colors hover:bg-primary-dark"
-            >
-              Prendre rendez-vous
-            </Link>
-          </motion.div>
         </div>
 
         <button
@@ -169,6 +177,13 @@ export default function Header() {
                   </Link>
                 )
               )}
+              <Link
+                href="/contact"
+                onClick={() => setMobileOpen(false)}
+                className="mt-2 rounded-full bg-ink px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+              >
+                Prendre rendez-vous
+              </Link>
               <a
                 href={WHATSAPP_URL}
                 target="_blank"
@@ -179,13 +194,6 @@ export default function Header() {
                 <WhatsAppIcon className="h-4 w-4" />
                 WhatsApp
               </a>
-              <Link
-                href="/contact"
-                onClick={() => setMobileOpen(false)}
-                className="mt-2 rounded-full bg-ink px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
-              >
-                Prendre rendez-vous
-              </Link>
             </div>
           </motion.nav>
         )}

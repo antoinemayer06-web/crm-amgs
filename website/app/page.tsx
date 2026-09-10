@@ -8,7 +8,7 @@ import Proof from "@/components/Proof";
 export const metadata: Metadata = {
   title: "Automatisation PME à La Réunion (974)",
   description:
-    "AM Growth Solutions automatise — parfois à l'aide de l'IA — la gestion de projet et l'administratif des PME réunionnaises (La Réunion, 974) pour supprimer la double saisie. Résultats vérifiables, livrés en quelques jours.",
+    "AM Growth Solutions automatise la gestion de projet et l'administratif des PME réunionnaises (La Réunion, 974) pour supprimer la double saisie. Résultats vérifiables, livrés en quelques jours.",
   alternates: { canonical: "/" },
 };
 

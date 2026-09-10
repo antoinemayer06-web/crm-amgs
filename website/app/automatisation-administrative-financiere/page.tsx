@@ -37,8 +37,6 @@ export default function AutomatisationAdministrativeFinanciere() {
         ]}
         bulletsHeading="Ce qui est automatisé concrètement"
         bullets={[...PILLAR.bullets]}
-        pricingLabel="Automatisation administrative & financière"
-        pricingFrom="800€"
       />
     </>
   );

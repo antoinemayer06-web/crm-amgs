@@ -65,10 +65,9 @@ export default function PillarsOverview() {
           viewport={{ once: true, amount: 0.6 }}
           className="mx-auto mt-10 max-w-2xl text-center text-sm text-muted"
         >
-          Règle métier simple, connecteur entre deux outils, ou brique
-          d&apos;IA ponctuelle (extraction de documents, catégorisation
-          automatique) — la technique choisie s&apos;adapte à ce qui est
-          réellement utile chez vous, jamais l&apos;inverse.
+          Connecteur no-code, workflow Power Automate, tableau Power BI, ou
+          site relié à une base de données — la brique technique s&apos;adapte
+          à ce qui élimine réellement une tâche répétitive chez vous.
         </motion.p>
       </div>
     </section>

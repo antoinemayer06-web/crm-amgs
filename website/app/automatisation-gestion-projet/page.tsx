@@ -37,8 +37,6 @@ export default function AutomatisationGestionProjetPage() {
         ]}
         bulletsHeading="Ce qui est automatisé concrètement"
         bullets={[...PILLAR.bullets]}
-        pricingLabel="Automatisation de gestion de projet"
-        pricingFrom="1 800€"
       />
     </>
   );

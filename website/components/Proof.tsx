@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
+import { CASE_STUDY } from "@/lib/content";
 
 // Options de titre — la première est utilisée ci-dessous.
 // 1. "La rapidité, prouvée par les chiffres"
@@ -113,7 +114,7 @@ export default function Proof() {
                 Étude de cas
               </span>
               <span className="font-heading text-lg font-bold text-foreground">
-                EcoDDen
+                {CASE_STUDY.sector} réunionnais
               </span>
             </div>
 
