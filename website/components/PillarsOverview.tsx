@@ -1,11 +1,59 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import {
+  FileSpreadsheet,
+  Globe,
+  LayoutDashboard,
+  Receipt,
+  RefreshCw,
+  Users,
+} from "lucide-react";
 import ParallaxAccent from "@/components/ParallaxAccent";
-import { cardHover, fadeInUp, staggerContainer } from "@/lib/animations";
-import { PILLARS } from "@/lib/content";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
+
+// Exemples concrets de systèmes construits — volontairement présentés comme
+// des EXEMPLES de ce qui est possible, pas comme une liste figée de
+// "services" à cocher. Le message central reste : je construis le système
+// adapté au process, quelle que soit la brique technique nécessaire.
+const EXAMPLES = [
+  {
+    icon: RefreshCw,
+    title: "Connexion d'outils entre eux",
+    description:
+      "CRM, gestion de projet, stockage... vos outils échangent l'information automatiquement, sans ressaisie.",
+  },
+  {
+    icon: Globe,
+    title: "Sites ou formulaires reliés à une base de données",
+    description:
+      "Collecte et traitement automatique des informations dès qu'un formulaire est rempli.",
+  },
+  {
+    icon: LayoutDashboard,
+    title: "Dashboards de pilotage automatiques",
+    description:
+      "Tableaux de bord type Power BI, alimentés et mis à jour sans compilation manuelle.",
+  },
+  {
+    icon: FileSpreadsheet,
+    title: "Automatisations Microsoft 365",
+    description:
+      "Excel avancé, Power Automate, Forms — vos fichiers et process Microsoft travaillent pour vous.",
+  },
+  {
+    icon: Receipt,
+    title: "Automatisation administrative & financière",
+    description:
+      "Devis, factures et relances générés et envoyés sans ressaisie.",
+  },
+  {
+    icon: Users,
+    title: "Suivi de charge d'équipe",
+    description:
+      "Plans de charge automatiques : qui est disponible, qui est débordé, en temps réel.",
+  },
+];
 
 export default function PillarsOverview() {
   return (
@@ -20,11 +68,11 @@ export default function PillarsOverview() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Deux façons de supprimer la double saisie
+            Le type de systèmes que je construis
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Chaque mission est sur mesure, mais elle s&apos;appuie toujours
-            sur l&apos;un de ces deux piliers.
+            Quelques exemples de ce qui est possible — toujours au service du
+            même objectif : éliminer les tâches répétitives de votre PME.
           </p>
         </motion.div>
 
@@ -33,29 +81,28 @@ export default function PillarsOverview() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="mt-14 grid gap-6 sm:grid-cols-2"
+          className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {PILLARS.map((pillar) => (
-            <motion.div key={pillar.slug} variants={fadeInUp}>
-              <Link href={pillar.href} className="group block h-full">
-                <motion.div
-                  whileHover={cardHover}
-                  className="flex h-full flex-col rounded-2xl border border-border bg-background p-8"
-                >
-                  <h3 className="font-heading text-xl font-bold text-foreground">
-                    {pillar.title}
-                  </h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
-                    {pillar.shortDescription}
-                  </p>
-                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                    En savoir plus
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </motion.div>
-              </Link>
-            </motion.div>
-          ))}
+          {EXAMPLES.map((example) => {
+            const Icon = example.icon;
+            return (
+              <motion.div
+                key={example.title}
+                variants={fadeInUp}
+                className="flex h-full flex-col rounded-2xl border border-border bg-background p-7"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary-dark">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-4 font-heading text-base font-bold text-foreground">
+                  {example.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {example.description}
+                </p>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         <motion.p
@@ -65,9 +112,9 @@ export default function PillarsOverview() {
           viewport={{ once: true, amount: 0.6 }}
           className="mx-auto mt-10 max-w-2xl text-center text-sm text-muted"
         >
-          Connecteur no-code, workflow Power Automate, tableau Power BI, ou
-          site relié à une base de données — la brique technique s&apos;adapte
-          à ce qui élimine réellement une tâche répétitive chez vous.
+          Ce ne sont pas des prestations à cocher : je construis le système
+          adapté à votre process, quelle que soit la brique technique
+          nécessaire.
         </motion.p>
       </div>
     </section>

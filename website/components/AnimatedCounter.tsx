@@ -57,11 +57,19 @@ export default function AnimatedCounter({
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.6 });
-  const [value, setValue] = useState(from);
-  const [color, setColor] = useState(colorFrom);
+  // La valeur initiale (SSR + premier rendu client) est la valeur FINALE,
+  // pas `from` : le HTML statique/indexable doit toujours montrer le
+  // vrai chiffre, jamais un 0 qui ne s'anime qu'après hydratation. Le
+  // compteur ne repart de `from` que juste avant de lancer l'animation,
+  // au moment où l'élément entre dans le viewport.
+  const [value, setValue] = useState(to);
+  const [color, setColor] = useState(colorTo ?? colorFrom);
 
   useEffect(() => {
     if (!isInView) return;
+
+    setValue(from);
+    if (colorFrom) setColor(colorFrom);
 
     let frame: number;
     let start: number | null = null;

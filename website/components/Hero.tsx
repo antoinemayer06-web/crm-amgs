@@ -23,19 +23,9 @@ const TOOLS = [
   "Microsoft 365",
 ];
 
-// Options de titre principal (H1) — la première est utilisée ci-dessous
-// (alignée sur le mot-clé SEO cible de la home). Trois nouvelles pistes
-// proposées, chacune sur un angle différent — à choisir/arbitrer :
-// A. Orientée problème :
-//    "Vos outils ne se parlent pas ? Voici pourquoi vous perdez du temps chaque jour."
-// B. Orientée résultat/preuve :
-//    "Un devis annoncé à 3 semaines. Livré en 1 semaine et demie."
-// C. Orientée promesse directe :
-//    "J'automatise la gestion de projet des PME de La Réunion pour que leurs outils travaillent enfin ensemble."
-// Actif pour l'instant (garde le mot-clé "automatisation PME La Réunion"
-// dans le H1 en attendant l'arbitrage sur A/B/C) :
-const HEADLINE =
-  "Automatisation PME à La Réunion : la fin de la double saisie entre vos outils";
+const HEADLINE = "Automatisations pour les PME";
+const SUBTITLE =
+  "On automatise vos process internes pour que vous ne perdiez plus de temps sur des tâches répétitives.";
 
 // Halos flous en fond, dérive lente en boucle — discret, pas un effet
 // "gamer". Couleurs violettes uniquement (le vert reste réservé au
@@ -128,9 +118,16 @@ export default function Hero() {
           animate="visible"
           className="relative mx-auto flex max-w-4xl flex-col items-center px-4 text-center sm:px-6 lg:px-8"
         >
+          <motion.span
+            variants={fadeInUp}
+            className="text-xs font-semibold uppercase tracking-widest text-white/40"
+          >
+            La Réunion (974)
+          </motion.span>
+
           <motion.h1
             variants={fadeInUp}
-            className="text-balance font-heading text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl"
+            className="mt-4 text-balance font-heading text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl"
           >
             {HEADLINE}
           </motion.h1>
@@ -139,54 +136,37 @@ export default function Hero() {
             variants={fadeInUp}
             className="mt-6 max-w-2xl text-balance text-lg text-white/70 sm:text-xl"
           >
-            AM Growth Solutions connecte votre CRM, votre gestion de projet
-            et vos outils administratifs pour supprimer la ressaisie
-            manuelle — sans changer d&apos;outils, avec des résultats livrés
-            en quelques jours. Basé à La Réunion (974).
+            {SUBTITLE}
           </motion.p>
 
-          <motion.div
-            variants={fadeInUp}
-            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
-          >
+          <motion.div variants={fadeInUp} className="mt-10">
             <motion.div whileHover={{ scale: 1.03 }}>
               <Link
                 href="/contact"
-                className="inline-block rounded-full bg-white px-7 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
+                className="inline-block rounded-full bg-white px-8 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
               >
                 Prendre rendez-vous
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }}>
-              <Link
-                href="/etude-de-cas"
-                className="inline-block rounded-full border-2 border-white/40 px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white hover:text-ink"
-              >
-                Voir un cas concret
               </Link>
             </motion.div>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Bandeau outils — défilement horizontal infini (marquee), en
-          dehors du hero sombre pour rester lisible sur fond clair. */}
+      {/* Bandeau outils — défilement horizontal infini (marquee), délibérément
+          discret : simple signal de crédibilité en arrière-plan, jamais un
+          second message qui entre en concurrence avec le hero. */}
       <motion.div
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="bg-background py-10 sm:py-14"
+        className="bg-background py-5 sm:py-6"
       >
-        <p className="text-center text-xs font-semibold uppercase tracking-widest text-muted">
-          Connecté à vos outils actuels
-        </p>
-
-        <div className="relative mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-          <div className="flex w-max animate-marquee items-center gap-x-14 py-2 [animation-play-state:running] hover:[animation-play-state:paused]">
+        <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+          <div className="flex w-max animate-marquee items-center gap-x-10 [animation-play-state:running] hover:[animation-play-state:paused]">
             {[...TOOLS, ...TOOLS].map((tool, index) => (
               <span
                 key={`${tool}-${index}`}
-                className="whitespace-nowrap font-heading text-lg font-bold text-muted/70 transition-colors hover:text-foreground"
+                className="whitespace-nowrap text-sm font-medium text-muted/50 transition-colors hover:text-muted"
               >
                 {tool}
               </span>

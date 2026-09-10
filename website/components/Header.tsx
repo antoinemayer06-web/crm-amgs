@@ -35,11 +35,15 @@ export default function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
+      {/* border et rounded-full toujours présents (même à l'état transparent
+          "non scrollé") : seules leur couleur/opacité changent au scroll.
+          Ça évite un saut brutal de largeur de bordure / rayon d'angle qui
+          produisait un flash de rectangle blanc pendant la transition. */}
       <div
-        className={`mx-auto flex items-center justify-between gap-4 transition-all duration-300 ${
+        className={`mx-auto flex items-center justify-between gap-4 rounded-full border backdrop-blur-md transition-all duration-300 ${
           scrolled
-            ? "mt-3 max-w-5xl rounded-full border border-white/10 bg-[#0d0d0d]/95 px-5 py-2.5 shadow-lg shadow-black/30 backdrop-blur-md sm:px-6"
-            : "max-w-6xl px-4 py-4 sm:px-6 lg:px-8"
+            ? "mx-4 mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-4 py-2 shadow-lg shadow-black/30 sm:mx-auto sm:px-6 sm:py-2.5"
+            : "max-w-6xl border-transparent bg-transparent px-4 py-4 shadow-none sm:px-6 lg:px-8"
         }`}
       >
         <Link
