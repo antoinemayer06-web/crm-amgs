@@ -50,7 +50,7 @@ export default function BlogPage() {
             href="/contact"
             className="mt-10 inline-block rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.03] hover:bg-primary-dark active:scale-[0.98]"
           >
-            Une question en attendant ? Contactez-moi
+            Une question en attendant ? Contactez-nous
           </Link>
         </div>
       </section>

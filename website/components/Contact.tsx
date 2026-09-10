@@ -46,7 +46,7 @@ export default function Contact() {
               La voie la plus rapide
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Réservez directement un créneau de 20-30 minutes dans mon
+              Réservez directement un créneau de 20-30 minutes dans notre
               agenda — pas d&apos;aller-retour par email.
             </p>
             <div className="mt-6 flex flex-col items-start gap-4">
@@ -87,7 +87,8 @@ export default function Contact() {
               Pas encore prêt à réserver un créneau ?
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Laissez-moi un message, je vous réponds sous 24-48h ouvrées.
+              Laissez-nous un message, nous vous répondons sous 24-48h
+              ouvrées.
             </p>
             <div className="mt-6">
               <ContactForm />

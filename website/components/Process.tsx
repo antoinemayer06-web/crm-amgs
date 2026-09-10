@@ -32,7 +32,7 @@ const STEPS = [
   {
     title: "Mise en service & suivi",
     description:
-      "Le système est activé, votre équipe est formée dessus, et je reste disponible pour ajuster si votre fonctionnement évolue.",
+      "Le système est activé, votre équipe est formée dessus, et nous restons disponibles pour ajuster si votre fonctionnement évolue.",
   },
 ];
 

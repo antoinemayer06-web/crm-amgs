@@ -46,7 +46,7 @@ export default function ContactForm() {
           Message envoyé !
         </p>
         <p className="mt-2 text-sm text-muted">
-          Je vous réponds sous 24-48h ouvrées.
+          Nous vous répondons sous 24-48h ouvrées.
         </p>
       </div>
     );
@@ -135,7 +135,7 @@ export default function ContactForm() {
             Le message n&apos;a pas pu être envoyé.
           </p>
           <p className="mt-1 text-muted">
-            Contactez-moi directement en attendant :
+            Contactez-nous directement en attendant :
           </p>
           <div className="mt-3 flex flex-wrap gap-3">
             <a

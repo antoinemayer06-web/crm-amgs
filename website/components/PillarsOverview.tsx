@@ -9,13 +9,14 @@ import {
   RefreshCw,
   Users,
 } from "lucide-react";
+import Note from "@/components/Note";
 import ParallaxAccent from "@/components/ParallaxAccent";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 // Exemples concrets de systèmes construits — volontairement présentés comme
 // des EXEMPLES de ce qui est possible, pas comme une liste figée de
-// "services" à cocher. Le message central reste : je construis le système
-// adapté au process, quelle que soit la brique technique nécessaire.
+// "services" à cocher. Le message central reste : nous construisons le
+// système adapté au process, quelle que soit la brique technique nécessaire.
 const EXAMPLES = [
   {
     icon: RefreshCw,
@@ -68,7 +69,7 @@ export default function PillarsOverview() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Le type de systèmes que je construis
+            Le type de systèmes que nous construisons
           </h2>
           <p className="mt-4 text-lg text-muted">
             Quelques exemples de ce qui est possible — toujours au service du
@@ -105,17 +106,11 @@ export default function PillarsOverview() {
           })}
         </motion.div>
 
-        <motion.p
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.6 }}
-          className="mx-auto mt-10 max-w-2xl text-center text-sm text-muted"
-        >
-          Ce ne sont pas des prestations à cocher : je construis le système
-          adapté à votre process, quelle que soit la brique technique
-          nécessaire.
-        </motion.p>
+        <Note>
+          Ce ne sont pas des prestations à cocher : nous construisons le
+          système adapté à votre process, quelle que soit la brique
+          technique nécessaire.
+        </Note>
       </div>
     </section>
   );

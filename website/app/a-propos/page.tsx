@@ -24,25 +24,25 @@ export default function AProposPage() {
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
           <div className="space-y-5 text-base leading-relaxed text-muted">
             <p>
-              Je dirige AM Growth Solutions, une activité freelance
-              d&apos;automatisation basée à La Réunion. Je travaille avec des
-              PME de 3 à 30 personnes — cabinets de conseil, bureaux
+              Antoine Mayer a fondé AM Growth Solutions, une activité
+              d&apos;automatisation basée à La Réunion. Nous travaillons avec
+              des PME de 3 à 30 personnes — cabinets de conseil, bureaux
               d&apos;études, cabinets d&apos;ingénierie et d&apos;expertise,
               agences — qui utilisent déjà un CRM ou un outil de gestion,
               mais qui perdent du temps à ressaisir la même information dans
               plusieurs logiciels.
             </p>
             <p>
-              Mon approche part d&apos;un constat simple : la plupart des
+              Notre approche part d&apos;un constat simple : la plupart des
               PME n&apos;ont pas besoin d&apos;un outil supplémentaire, mais
-              d&apos;un lien entre ceux qu&apos;elles utilisent déjà. Je ne
-              propose donc pas de solution standardisée à imposer à votre
-              équipe — je connecte les outils en place, j&apos;automatise ce
-              qui se répète, et j&apos;adapte le système à votre
-              fonctionnement réel, pas l&apos;inverse.
+              d&apos;un lien entre ceux qu&apos;elles utilisent déjà. Nous ne
+              proposons donc pas de solution standardisée à imposer à votre
+              équipe — nous connectons les outils en place, nous
+              automatisons ce qui se répète, et nous adaptons le système à
+              votre fonctionnement réel, pas l&apos;inverse.
             </p>
             <p>
-              Ce qui me différencie, ce n&apos;est pas un discours sur le
+              Ce qui nous différencie, ce n&apos;est pas un discours sur le
               gain de temps — c&apos;est la rapidité de livraison, vérifiable
               sur des missions réelles. Pour un {CASE_STUDY.sector}
               {" "}réunionnais, une mission annoncée à{" "}
@@ -57,11 +57,10 @@ export default function AProposPage() {
               .
             </p>
             <p>
-              Basé à La Réunion (974), j&apos;interviens auprès
+              Basés à La Réunion (974), nous intervenons auprès
               d&apos;entreprises réunionnaises qui connaissent les mêmes
-              contraintes que moi : des équipes resserrées, où chaque heure
-              passée à ressaisir une information est une heure qui manque
-              ailleurs.
+              contraintes : des équipes resserrées, où chaque heure passée à
+              ressaisir une information est une heure qui manque ailleurs.
             </p>
           </div>
 

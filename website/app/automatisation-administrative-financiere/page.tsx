@@ -33,7 +33,7 @@ export default function AutomatisationAdministrativeFinanciere() {
         questionAnswer={[
           "Dans beaucoup de PME, l'information existe déjà dans le CRM — le client, le montant, les prestations — mais elle est retapée une deuxième fois pour éditer le devis, puis une troisième fois dans le logiciel de comptabilité pour la facture. Chaque ressaisie est une occasion d'erreur, et personne n'a le temps de relancer systématiquement les factures impayées.",
           "L'automatisation consiste à faire circuler cette information une seule fois : le devis et la facture sont générés directement depuis les données du CRM, puis synchronisés avec l'outil de comptabilité déjà en place. Aucun nouveau logiciel n'est imposé à l'équipe comptable — le système vient combler le vide entre les outils existants, pas les remplacer.",
-          "Deux automatisations reviennent le plus souvent chez mes clients réunionnais : les relances de factures impayées, déclenchées automatiquement à échéance sans qu'un dirigeant ait à s'en souvenir, et le reporting périodique — un tableau de bord ou un rapport envoyé par email, généré tout seul, sans avoir à le demander ni à le compiler à la main.",
+          "Deux automatisations reviennent le plus souvent chez nos clients réunionnais : les relances de factures impayées, déclenchées automatiquement à échéance sans qu'un dirigeant ait à s'en souvenir, et le reporting périodique — un tableau de bord ou un rapport envoyé par email, généré tout seul, sans avoir à le demander ni à le compiler à la main.",
         ]}
         bulletsHeading="Ce qui est automatisé concrètement"
         bullets={[...PILLAR.bullets]}

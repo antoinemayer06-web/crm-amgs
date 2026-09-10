@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import ParallaxAccent from "@/components/ParallaxAccent";
+import SymptomIllustration from "@/components/SymptomIllustration";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 const PROBLEMS = [
@@ -58,15 +59,13 @@ export default function Problem() {
             <motion.div
               key={problem.title}
               variants={fadeInUp}
-              className="rounded-2xl border border-border bg-surface p-7 shadow-sm"
+              className="rounded-2xl border border-border bg-surface p-7 text-center shadow-sm"
             >
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 font-heading text-sm font-bold text-primary">
-                0{index + 1}
-              </span>
+              <SymptomIllustration index={index} />
               <h3 className="mt-5 font-heading text-lg font-bold text-foreground">
                 {problem.title}
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
+              <p className="mt-3 text-left text-sm leading-relaxed text-muted">
                 {problem.description}
               </p>
             </motion.div>
