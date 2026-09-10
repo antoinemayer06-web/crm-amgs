@@ -40,15 +40,20 @@ export default function Header() {
           Ça évite un saut brutal de largeur de bordure / rayon d'angle qui
           produisait un flash de rectangle blanc pendant la transition. */}
       <div
-        className={`mx-auto flex items-center justify-between gap-2 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-4 ${
+        className={`mx-auto grid grid-cols-[2.25rem_1fr_2.25rem] items-center gap-2 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-4 md:flex md:justify-between ${
           scrolled
-            ? "mx-6 mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-3 py-2 shadow-lg shadow-black/30 sm:mx-auto sm:px-6 sm:py-2.5"
-            : "max-w-6xl border-transparent bg-transparent px-6 py-4 shadow-none sm:px-6 lg:px-8"
+            ? "mx-8 mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-3 py-2 shadow-lg shadow-black/30 sm:mx-auto sm:px-6 sm:py-2.5"
+            : "mx-8 max-w-6xl border-transparent bg-transparent px-0 py-4 shadow-none sm:mx-auto sm:px-6 lg:px-8"
         }`}
       >
+        {/* Espaceur invisible, même largeur que le bouton burger : sert à
+            équilibrer la grille mobile pour que le logo soit réellement
+            centré (pas juste centré entre le logo et le burger). */}
+        <div className="col-start-1 h-9 w-9 md:hidden" aria-hidden="true" />
+
         <Link
           href="/"
-          className="flex items-center gap-2"
+          className="col-start-2 flex items-center justify-center gap-2 justify-self-center md:col-auto md:justify-self-auto"
           aria-label="AM Growth Solutions — accueil"
         >
           <Image
@@ -142,7 +147,7 @@ export default function Header() {
           onClick={() => setMobileOpen((open) => !open)}
           aria-expanded={mobileOpen}
           aria-label="Ouvrir le menu"
-          className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 md:hidden"
+          className="col-start-3 flex h-9 w-9 flex-col items-center justify-center justify-self-end gap-1.5 md:hidden"
         >
           <motion.span
             animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
