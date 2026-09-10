@@ -46,7 +46,7 @@ export default function Header() {
           une marge au pixel près). À partir de md, elle redevient une
           barre complète avec nav + boutons répartis (justify-between). */}
       <div
-        className={`mx-auto flex w-fit items-center gap-3 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-4 md:w-full md:justify-between ${
+        className={`mx-auto flex w-fit items-center gap-6 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-8 md:w-full md:justify-between ${
           scrolled
             ? "mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-4 py-2 shadow-lg shadow-black/30 sm:px-6 sm:py-2.5"
             : "max-w-6xl border-transparent bg-transparent px-4 py-3 shadow-none sm:px-6 sm:py-4 lg:px-8"
