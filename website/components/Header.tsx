@@ -39,21 +39,22 @@ export default function Header() {
           "non scrollé") : seules leur couleur/opacité changent au scroll.
           Ça évite un saut brutal de largeur de bordure / rayon d'angle qui
           produisait un flash de rectangle blanc pendant la transition. */}
+      {/* Sur mobile, la pastille épouse la largeur de son contenu (w-fit)
+          au lieu de s'étirer sur tout l'espace disponible — logo, nom et
+          bouton burger forment un seul groupe compact centré, avec une
+          vraie marge de chaque côté par construction (pas besoin d'ajuster
+          une marge au pixel près). À partir de md, elle redevient une
+          barre complète avec nav + boutons répartis (justify-between). */}
       <div
-        className={`mx-auto grid grid-cols-[2rem_1fr_2rem] items-center gap-2 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-4 md:flex md:justify-between ${
+        className={`mx-auto flex w-fit items-center gap-3 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-4 md:w-full md:justify-between ${
           scrolled
-            ? "mx-10 mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-3 py-1.5 shadow-lg shadow-black/30 sm:mx-auto sm:px-6 sm:py-2.5"
-            : "mx-10 max-w-6xl border-transparent bg-transparent px-0 py-3 shadow-none sm:mx-auto sm:px-6 sm:py-4 lg:px-8"
+            ? "mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-4 py-2 shadow-lg shadow-black/30 sm:px-6 sm:py-2.5"
+            : "max-w-6xl border-transparent bg-transparent px-4 py-3 shadow-none sm:px-6 sm:py-4 lg:px-8"
         }`}
       >
-        {/* Espaceur invisible, même largeur que le bouton burger : sert à
-            équilibrer la grille mobile pour que le logo soit réellement
-            centré (pas juste centré entre le logo et le burger). */}
-        <div className="col-start-1 h-8 w-8 md:hidden" aria-hidden="true" />
-
         <Link
           href="/"
-          className="col-start-2 flex items-center justify-center gap-2 justify-self-center md:col-auto md:justify-self-auto"
+          className="flex items-center gap-2"
           aria-label="AM Growth Solutions — accueil"
         >
           <Image
@@ -147,7 +148,7 @@ export default function Header() {
           onClick={() => setMobileOpen((open) => !open)}
           aria-expanded={mobileOpen}
           aria-label="Ouvrir le menu"
-          className="col-start-3 flex h-8 w-8 flex-col items-center justify-center justify-self-end gap-1.5 md:hidden"
+          className="flex h-8 w-8 flex-col items-center justify-center gap-1.5 md:hidden"
         >
           <motion.span
             animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
