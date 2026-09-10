@@ -26,6 +26,19 @@ export const metadata: Metadata = {
     template: "%s | AM Growth Solutions",
   },
   description: DEFAULT_DESCRIPTION,
+  // Fichiers dans public/ (pas la convention app/icon.png) : sur ce
+  // déploiement Vercel (monorepo, Root Directory = website), les fichiers
+  // de convention Next.js (app/icon.png, app/favicon.ico) renvoyaient un
+  // 404 en production malgré un build local correct. Les assets statiques
+  // classiques de public/ passent par le chemin de service le plus simple
+  // et le plus fiable (déjà utilisé pour le logo et les autres images).
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
