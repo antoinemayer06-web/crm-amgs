@@ -139,7 +139,7 @@ export default function Hero() {
             AM Growth Solutions connecte votre CRM, votre gestion de projet
             et vos outils administratifs pour supprimer la ressaisie
             manuelle — sans changer d&apos;outils, avec des résultats livrés
-            en quelques jours.
+            en quelques jours. Basé à La Réunion (974).
           </motion.p>
 
           <motion.div

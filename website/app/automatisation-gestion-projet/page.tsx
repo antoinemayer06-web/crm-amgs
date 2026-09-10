@@ -12,7 +12,7 @@ const PILLAR = PILLARS[0];
 export const metadata: Metadata = {
   title: "Automatisation de la gestion de projet à La Réunion",
   description:
-    "Connectez votre CRM et votre outil de gestion de projet : dossiers, tâches et plans de charge créés automatiquement. Pour les PME de La Réunion, sans changer d'outils.",
+    "Connectez votre CRM et votre outil de gestion de projet : dossiers, tâches et plans de charge créés automatiquement. Pour les PME de La Réunion (974), sans changer d'outils.",
   alternates: { canonical: PILLAR.href },
 };
 

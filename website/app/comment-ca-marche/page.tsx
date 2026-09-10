@@ -5,7 +5,7 @@ import Process from "@/components/Process";
 export const metadata: Metadata = {
   title: "Comment ça marche — méthode sur mesure",
   description:
-    "Appel de cadrage, diagnostic, build et mise en service : la méthode AM Growth Solutions pour automatiser votre PME à La Réunion, sans délai générique imposé.",
+    "Appel de cadrage, diagnostic, build et mise en service : la méthode AM Growth Solutions pour automatiser votre PME à La Réunion (974), sans délai générique imposé.",
   alternates: { canonical: "/comment-ca-marche" },
 };
 

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
-import { LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
+import { CONTACT_EMAIL, LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
 import { FOOTER_LINKS } from "@/lib/nav";
 
 export default function Footer() {
@@ -22,17 +22,25 @@ export default function Footer() {
             </span>
           </Link>
 
-          <nav className="grid grid-cols-2 gap-2 text-center sm:flex sm:flex-col sm:items-center md:items-start md:text-left">
-            {FOOTER_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm text-muted transition-colors hover:text-primary"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="flex flex-col items-center gap-4 sm:items-start">
+            <nav className="grid grid-cols-2 gap-2 text-center sm:flex sm:flex-col sm:items-center md:items-start md:text-left">
+              {FOOTER_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-muted transition-colors hover:text-primary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="text-sm text-muted transition-colors hover:text-primary"
+            >
+              {CONTACT_EMAIL}
+            </a>
+          </div>
 
           <div className="flex items-center gap-3">
             <a

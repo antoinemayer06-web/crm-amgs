@@ -12,7 +12,7 @@ const PILLAR = PILLARS[1];
 export const metadata: Metadata = {
   title: "Automatisation administrative & financière à La Réunion",
   description:
-    "Devis, factures et relances générés depuis votre CRM, reporting automatique envoyé au dirigeant. Optimisation des processus administratifs des PME de La Réunion.",
+    "Devis, factures et relances générés depuis votre CRM, reporting automatique envoyé au dirigeant. Optimisation des processus administratifs des PME de La Réunion (974).",
   alternates: { canonical: PILLAR.href },
 };
 

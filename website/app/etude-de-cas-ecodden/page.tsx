@@ -11,7 +11,7 @@ import { CASE_STUDY } from "@/lib/content";
 export const metadata: Metadata = {
   title: `Étude de cas ${CASE_STUDY.client} — suppression de la double saisie`,
   description:
-    "Comment un bureau d'études à La Réunion a supprimé la double saisie entre 5 outils, avec des missions livrées en 4 jours à 1 semaine et demie. Chiffres et méthode détaillés.",
+    "Comment un bureau d'études à La Réunion (974) a supprimé la double saisie entre 5 outils, avec des missions livrées en 4 jours à 1 semaine et demie. Chiffres et méthode détaillés.",
   alternates: { canonical: CASE_STUDY.href },
 };
 

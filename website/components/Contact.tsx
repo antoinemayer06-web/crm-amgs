@@ -5,7 +5,7 @@ import ContactForm from "@/components/ContactForm";
 import LeadMagnet from "@/components/LeadMagnet";
 import { LinkedInIcon } from "@/components/icons";
 import { buttonHover, fadeInUp, staggerContainer } from "@/lib/animations";
-import { CALENDLY_URL, LINKEDIN_URL } from "@/lib/links";
+import { CALENDLY_URL, CONTACT_EMAIL, LINKEDIN_URL } from "@/lib/links";
 
 // Options de titre — la première est utilisée ci-dessous.
 // 1. "Prêt à arrêter la double saisie ?"
@@ -68,6 +68,13 @@ export default function Contact() {
               >
                 <LinkedInIcon className="h-4 w-4" />
                 Ou échangeons sur LinkedIn
+              </motion.a>
+              <motion.a
+                href={`mailto:${CONTACT_EMAIL}`}
+                whileHover={buttonHover}
+                className="inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-primary"
+              >
+                Ou écrivez-nous : {CONTACT_EMAIL}
               </motion.a>
             </div>
           </motion.div>

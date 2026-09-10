@@ -11,7 +11,7 @@ import PageIntro from "@/components/PageIntro";
 export const metadata: Metadata = {
   title: "Blog — ressources automatisation PME",
   description:
-    "Articles à venir sur l'automatisation de la gestion de projet et de l'administratif des PME à La Réunion.",
+    "Articles à venir sur l'automatisation de la gestion de projet et de l'administratif des PME à La Réunion (974).",
   alternates: { canonical: "/blog" },
 };
 

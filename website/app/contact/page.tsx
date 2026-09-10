@@ -3,9 +3,9 @@ import Contact from "@/components/Contact";
 import PageIntro from "@/components/PageIntro";
 
 export const metadata: Metadata = {
-  title: "Contact — échangeons sur votre projet à La Réunion",
+  title: "Contact — échangeons sur votre projet à La Réunion (974)",
   description:
-    "Prenez rendez-vous avec AM Growth Solutions à La Réunion pour un appel de 20-30 minutes, envoyez un message, ou téléchargez la checklist double saisie.",
+    "Prenez rendez-vous avec AM Growth Solutions à La Réunion (974) pour un appel de 20-30 minutes, envoyez un message, ou téléchargez la checklist double saisie.",
   alternates: { canonical: "/contact" },
 };
 

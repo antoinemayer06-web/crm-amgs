@@ -6,7 +6,7 @@ import { PRICING_TIERS } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Tarifs — fourchettes indicatives",
   description:
-    "Fourchettes de prix pour l'automatisation de PME à La Réunion : audit, automatisation simple, gestion de projet, systèmes multi-outils et suivi mensuel.",
+    "Fourchettes de prix pour l'automatisation de PME à La Réunion (974) : audit, automatisation simple, gestion de projet, systèmes multi-outils et suivi mensuel.",
   alternates: { canonical: "/tarifs" },
 };
 

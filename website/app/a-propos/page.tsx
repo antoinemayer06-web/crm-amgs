@@ -8,7 +8,7 @@ import { CASE_STUDY } from "@/lib/content";
 export const metadata: Metadata = {
   title: "À propos — Antoine Mayer, consultant automatisation à La Réunion",
   description:
-    "AM Growth Solutions est dirigée par Antoine Mayer, consultant en automatisation basé à La Réunion. Une approche sur mesure, sans imposer de nouveaux outils.",
+    "AM Growth Solutions est dirigée par Antoine Mayer, consultant en automatisation basé à La Réunion (974). Une approche sur mesure, sans imposer de nouveaux outils.",
   alternates: { canonical: "/a-propos" },
 };
 

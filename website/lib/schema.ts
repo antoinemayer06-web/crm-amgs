@@ -15,6 +15,7 @@ export function localBusinessSchema() {
       name: BUSINESS.founder,
     },
     telephone: BUSINESS.telephone,
+    email: BUSINESS.email,
     url: BUSINESS.url,
     address: {
       "@type": "PostalAddress",
@@ -22,7 +23,7 @@ export function localBusinessSchema() {
       addressCountry: BUSINESS.addressCountry,
     },
     areaServed: BUSINESS.areaServed,
-    sameAs: [] as string[],
+    sameAs: BUSINESS.sameAs,
   };
 }
 
