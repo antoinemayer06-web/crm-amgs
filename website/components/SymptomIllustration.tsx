@@ -1,13 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AlertCircle, FileText, RefreshCw, User } from "lucide-react";
+import { AppWindow, User } from "lucide-react";
 
-// Trois petites illustrations animées, une par symptôme — construites en
-// SVG/icônes (cohérent avec le reste du site : NetworkBackground,
-// FlowDiagram...), pas des photos. `size` (en px, référence 96) permet de
-// les réutiliser aussi bien en petit badge que comme grande illustration
-// dans le carrousel — tout est calculé proportionnellement.
+// Trois illustrations animées, une par symptôme — construites en SVG/CSS
+// (cohérent avec le reste du site), pas des photos. `size` (en px,
+// référence 96) permet de les réutiliser en petit badge ou en grande
+// illustration — tout est calculé proportionnellement.
 
 interface IllustrationProps {
   size: number;
@@ -15,95 +14,113 @@ interface IllustrationProps {
 
 const BASE = 96;
 
+// 1. Temps perdu sur tâches répétitives — une donnée qui fait la navette
+// en boucle infinie entre deux outils, symbole de la ressaisie continue.
 function RepetitiveTasks({ size }: IllustrationProps) {
   const scale = size / BASE;
-  const iconSize = 32 * scale;
-  const ghostSize = 40 * scale;
+  const toolSize = 30 * scale;
+  const gap = 44 * scale;
+  const dotSize = 8 * scale;
+
   return (
     <div
       className="relative mx-auto flex items-center justify-center rounded-full bg-primary/[0.07]"
       style={{ width: size, height: size }}
     >
-      {[0, 1, 2].map((i) => (
-        <motion.span
-          key={i}
-          className="absolute text-primary/25"
-          animate={{ opacity: [0, 0.6, 0], scale: [0.8, 1.3, 1.6] }}
-          transition={{
-            duration: 2.4,
-            repeat: Infinity,
-            delay: i * 0.8,
-            ease: "easeOut",
-          }}
-        >
-          <RefreshCw style={{ width: ghostSize, height: ghostSize }} />
-        </motion.span>
-      ))}
-      <motion.span
-        className="relative text-primary-dark"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+      <div
+        className="flex items-center"
+        style={{ gap }}
       >
-        <RefreshCw style={{ width: iconSize, height: iconSize }} />
-      </motion.span>
+        <div className="flex items-center justify-center rounded-xl border border-primary/20 bg-surface text-primary-dark shadow-sm" style={{ width: toolSize, height: toolSize }}>
+          <AppWindow style={{ width: toolSize * 0.55, height: toolSize * 0.55 }} />
+        </div>
+        <div className="flex items-center justify-center rounded-xl border border-primary/20 bg-surface text-primary-dark shadow-sm" style={{ width: toolSize, height: toolSize }}>
+          <AppWindow style={{ width: toolSize * 0.55, height: toolSize * 0.55 }} />
+        </div>
+      </div>
+
+      {/* Trajectoire pointillée entre les deux outils */}
+      <div
+        className="absolute border-t-2 border-dashed border-primary/25"
+        style={{ width: gap, top: "50%" }}
+      />
+
+      {/* Particule de données qui fait l'aller-retour */}
+      <motion.span
+        className="absolute rounded-full bg-primary shadow"
+        style={{ width: dotSize, height: dotSize }}
+        animate={{ x: [-gap / 2, gap / 2, -gap / 2] }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+          times: [0, 0.5, 1],
+        }}
+      />
     </div>
   );
 }
 
+// 2. Manque de visibilité — plusieurs fenêtres de données séparées,
+// floues et non reliées entre elles, qui flottent chacune indépendamment.
 function ScatteredInfo({ size }: IllustrationProps) {
   const scale = size / BASE;
-  const fileSize = 24 * scale;
-  const alertSize = 28 * scale;
-  const files = [
-    { x: -20, y: -14, rotate: -12, delay: 0 },
-    { x: 18, y: -18, rotate: 10, delay: 0.3 },
-    { x: -16, y: 16, rotate: 8, delay: 0.6 },
-    { x: 20, y: 14, rotate: -8, delay: 0.9 },
+  const windows = [
+    { x: -22, y: -16, rot: -8, w: 30, blur: 0.5, delay: 0 },
+    { x: 16, y: -12, rot: 10, w: 26, blur: 0.8, delay: 0.4 },
+    { x: -8, y: 18, rot: -4, w: 28, blur: 0.3, delay: 0.8 },
   ];
+
   return (
     <div
-      className="relative mx-auto flex items-center justify-center rounded-full bg-primary/[0.07]"
+      className="relative mx-auto flex items-center justify-center overflow-hidden rounded-full bg-primary/[0.07]"
       style={{ width: size, height: size }}
     >
-      {files.map((f, i) => {
-        const x = f.x * scale;
-        const y = f.y * scale;
+      {windows.map((win, i) => {
+        const w = win.w * scale;
+        const h = w * 0.72;
         return (
-          <motion.span
+          <motion.div
             key={i}
-            className="absolute text-primary/30"
-            style={{ x, y, rotate: f.rotate }}
-            animate={{ y: [y, y - 5 * scale, y] }}
+            className="absolute rounded-md border border-primary/25 bg-surface p-1 shadow-sm"
+            style={{
+              width: w,
+              height: h,
+              x: win.x * scale,
+              y: win.y * scale,
+              rotate: win.rot,
+              filter: `blur(${win.blur}px)`,
+            }}
+            animate={{ opacity: [0.55, 0.95, 0.55] }}
             transition={{
-              duration: 3,
+              duration: 3.4,
               repeat: Infinity,
-              delay: f.delay,
+              delay: win.delay,
               ease: "easeInOut",
             }}
           >
-            <FileText style={{ width: fileSize, height: fileSize }} />
-          </motion.span>
+            <div className="h-[15%] w-2/3 rounded-full bg-primary/30" />
+            <div className="mt-[10%] h-[15%] w-full rounded-full bg-silver/70" />
+            <div className="mt-[10%] h-[15%] w-1/2 rounded-full bg-silver/70" />
+          </motion.div>
         );
       })}
-      <motion.span
-        className="relative text-primary-dark"
-        animate={{ opacity: [1, 0.35, 1] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <AlertCircle style={{ width: alertSize, height: alertSize }} />
-      </motion.span>
     </div>
   );
 }
 
+// 3. Process reposant sur une personne — un point central relié à
+// d'autres, dont les liens s'estompent en pointillés gris pour symboliser
+// la fragilité du système (rien ne tient si le point central lâche).
 function SinglePointOfFailure({ size }: IllustrationProps) {
   const scale = size / BASE;
-  const userSize = 36 * scale;
+  const userSize = 34 * scale;
   const nodes = [
     { x: 0, y: -30 },
     { x: 28, y: 16 },
     { x: -28, y: 16 },
   ];
+
   return (
     <div
       className="relative mx-auto flex items-center justify-center rounded-full bg-primary/[0.07]"
@@ -116,46 +133,52 @@ function SinglePointOfFailure({ size }: IllustrationProps) {
         aria-hidden="true"
       >
         {nodes.map((n, i) => (
-          <motion.line
-            key={i}
-            x1={0}
-            y1={0}
-            x2={n.x}
-            y2={n.y}
-            strokeWidth={1.5}
-            className="stroke-primary/30"
-            animate={{ opacity: [1, 0.15, 1] }}
-            transition={{
-              duration: 2.6,
-              repeat: Infinity,
-              delay: i * 0.4,
-              ease: "easeInOut",
-            }}
-          />
+          <g key={i}>
+            {/* Trait plein coloré, qui s'efface... */}
+            <motion.line
+              x1={0}
+              y1={0}
+              x2={n.x}
+              y2={n.y}
+              strokeWidth={1.5}
+              className="stroke-primary"
+              animate={{ opacity: [1, 0, 1] }}
+              transition={{
+                duration: 2.8,
+                repeat: Infinity,
+                delay: i * 0.4,
+                ease: "easeInOut",
+              }}
+            />
+            {/* ...pour laisser place à un pointillé gris (fragilité) */}
+            <motion.line
+              x1={0}
+              y1={0}
+              x2={n.x}
+              y2={n.y}
+              strokeWidth={1.5}
+              strokeDasharray="3 3"
+              className="stroke-muted/50"
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{
+                duration: 2.8,
+                repeat: Infinity,
+                delay: i * 0.4,
+                ease: "easeInOut",
+              }}
+            />
+          </g>
         ))}
         {nodes.map((n, i) => (
-          <circle
-            key={i}
-            cx={n.x}
-            cy={n.y}
-            r={3}
-            className="fill-primary/40"
-          />
+          <circle key={i} cx={n.x} cy={n.y} r={3} className="fill-muted/50" />
         ))}
       </svg>
-      <motion.span
-        className="relative flex items-center justify-center rounded-full bg-primary-dark text-white"
+      <span
+        className="relative flex items-center justify-center rounded-full bg-primary-dark text-white shadow"
         style={{ width: userSize, height: userSize }}
-        animate={{
-          boxShadow: [
-            "0 0 0 0 rgba(43,32,100,0.35)",
-            "0 0 0 8px rgba(43,32,100,0)",
-          ],
-        }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
       >
         <User style={{ width: userSize * 0.45, height: userSize * 0.45 }} />
-      </motion.span>
+      </span>
     </div>
   );
 }

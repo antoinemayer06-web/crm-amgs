@@ -1,26 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import AnimatedCounter from "@/components/AnimatedCounter";
+import DelayTimeline from "@/components/DelayTimeline";
+import ToolNetworkDiagram from "@/components/ToolNetworkDiagram";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { CASE_STUDY } from "@/lib/content";
 
 // Options de titre — la première est utilisée ci-dessous.
 // 1. "La rapidité, prouvée par les chiffres"
 // 2. "Les délais tenus, pas juste promis"
-
-const AVANT = [
-  "Ressaisie manuelle des mêmes infos dans 5 outils différents",
-  "Aucune vue d'ensemble sur la charge de travail de l'équipe",
-  "Suivi dispersé entre CRM, tâches, stockage, messagerie et suite collaborative",
-];
-
-const APRES = [
-  "Les 5 outils connectés : chaque info saisie une seule fois",
-  "Tableau de bord de charge de travail automatique, en temps réel",
-  "Une seule source de vérité, partagée par toute l'équipe",
-];
 
 export default function Proof() {
   return (
@@ -56,21 +46,10 @@ export default function Proof() {
           >
             <motion.div
               variants={fadeInUp}
-              className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-background p-8 text-center"
+              className="flex flex-col justify-center rounded-2xl border border-border bg-background p-8"
             >
-              <span className="text-sm font-semibold text-muted line-through decoration-2">
-                Devis annoncé : 3-4 semaines
-              </span>
-              <AnimatedCounter
-                from={3.5}
-                to={1.5}
-                decimals={1}
-                suffix=" semaine"
-                colorFrom="#5b6270"
-                colorTo="#2b2064"
-                className="font-heading text-4xl font-black"
-              />
-              <p className="mt-2 text-sm text-muted">
+              <DelayTimeline />
+              <p className="mt-4 text-center text-sm text-muted">
                 Délai réellement livré — mission 1
               </p>
             </motion.div>
@@ -142,44 +121,29 @@ export default function Proof() {
               </div>
             </div>
 
-            <div className="mt-10 grid gap-6 sm:grid-cols-[1fr_auto_1fr] sm:gap-10">
-              <div>
-                <h4 className="text-sm font-bold text-muted">Avant</h4>
-                <ul className="mt-3 space-y-3">
-                  {AVANT.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-muted/60" />
-                      <span className="text-sm leading-relaxed text-foreground/70">
-                        {item}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+            <div className="mt-10 grid items-center gap-6 sm:grid-cols-[1fr_auto_1fr] sm:gap-4">
+              <div className="text-center">
+                <h4 className="text-sm font-bold text-muted">
+                  Avant — 5 outils déconnectés
+                </h4>
+                <ToolNetworkDiagram variant="before" />
+                <p className="text-sm text-foreground/70">
+                  Ressaisie manuelle, suivi dispersé, aucune vue
+                  d&apos;ensemble.
+                </p>
               </div>
 
-              <motion.div
-                initial={{ scaleY: 0 }}
-                whileInView={{ scaleY: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-                className="hidden w-px origin-top self-stretch bg-border sm:block"
-              />
-              <div className="flex items-center justify-center sm:hidden">
-                <ArrowRight className="h-5 w-5 rotate-90 text-primary" />
-              </div>
+              <ArrowRight className="mx-auto h-5 w-5 rotate-90 text-primary sm:rotate-0" />
 
-              <div>
-                <h4 className="text-sm font-bold text-primary">Après</h4>
-                <ul className="mt-3 space-y-3">
-                  {APRES.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary-dark" />
-                      <span className="text-sm leading-relaxed text-foreground/80">
-                        {item}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+              <div className="text-center">
+                <h4 className="text-sm font-bold text-primary">
+                  Après — 1 système connecté
+                </h4>
+                <ToolNetworkDiagram variant="after" />
+                <p className="text-sm text-foreground/80">
+                  Chaque info saisie une seule fois, une seule source de
+                  vérité pour toute l&apos;équipe.
+                </p>
               </div>
             </div>
           </motion.div>

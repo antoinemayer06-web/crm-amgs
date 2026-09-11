@@ -1,15 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  FileSpreadsheet,
-  Globe,
-  LayoutDashboard,
-  Receipt,
-  RefreshCw,
-  Sparkles,
-  Users,
-} from "lucide-react";
+import ExampleMockup from "@/components/ExampleMockup";
 import Note from "@/components/Note";
 import ParallaxAccent from "@/components/ParallaxAccent";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
@@ -18,45 +10,39 @@ import { fadeInUp, staggerContainer } from "@/lib/animations";
 // des EXEMPLES de ce qui est possible, pas comme une liste figée de
 // "services" à cocher. Le message central reste : nous construisons le
 // système adapté au process, quelle que soit la brique technique nécessaire.
+// L'ordre correspond à l'index passé à <ExampleMockup> pour son mini-mockup.
 const EXAMPLES = [
   {
-    icon: RefreshCw,
     title: "Connexion d'outils entre eux",
     description:
       "CRM, gestion de projet, stockage... vos outils échangent l'information automatiquement, sans ressaisie.",
   },
   {
-    icon: Globe,
     title: "Sites ou formulaires reliés à une base de données",
     description:
       "Collecte et traitement automatique des informations dès qu'un formulaire est rempli.",
   },
   {
-    icon: LayoutDashboard,
     title: "Dashboards de pilotage automatiques",
     description:
       "Tableaux de bord type Power BI, alimentés et mis à jour sans compilation manuelle.",
   },
   {
-    icon: FileSpreadsheet,
     title: "Automatisations Microsoft 365",
     description:
       "Excel avancé, Power Automate, Forms — vos fichiers et process Microsoft travaillent pour vous.",
   },
   {
-    icon: Receipt,
     title: "Automatisation administrative & financière",
     description:
       "Devis, factures et relances générés et envoyés sans ressaisie.",
   },
   {
-    icon: Users,
     title: "Suivi de charge d'équipe",
     description:
       "Plans de charge automatiques : qui est disponible, qui est débordé, en temps réel.",
   },
   {
-    icon: Sparkles,
     title: "Intégration de l'IA pour les entreprises",
     description:
       "Nous proposons l'intégration de solutions IA adaptées à vos besoins — extraction de documents, catégorisation automatique, et autres cas d'usage concrets.",
@@ -92,7 +78,6 @@ export default function PillarsOverview() {
           className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           {EXAMPLES.map((example, index) => {
-            const Icon = example.icon;
             // Le 7e exemple, seul sur la dernière ligne en grille 3
             // colonnes, est recentré plutôt que collé à gauche.
             const isLastAlone = index === EXAMPLES.length - 1;
@@ -100,19 +85,21 @@ export default function PillarsOverview() {
               <motion.div
                 key={example.title}
                 variants={fadeInUp}
-                className={`flex h-full flex-col rounded-2xl border border-border bg-background p-7 ${
+                className={`flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background ${
                   isLastAlone ? "sm:col-span-2 lg:col-span-1 lg:col-start-2" : ""
                 }`}
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary-dark">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <h3 className="mt-4 font-heading text-base font-bold text-foreground">
-                  {example.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {example.description}
-                </p>
+                <div className="border-b border-border bg-primary/[0.03] py-5">
+                  <ExampleMockup index={index} />
+                </div>
+                <div className="flex flex-1 flex-col p-7">
+                  <h3 className="font-heading text-base font-bold text-foreground">
+                    {example.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    {example.description}
+                  </p>
+                </div>
               </motion.div>
             );
           })}

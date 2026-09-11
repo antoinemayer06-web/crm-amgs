@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import PillarsOverview from "@/components/PillarsOverview";
 import Problem from "@/components/Problem";
 import Proof from "@/components/Proof";
+import Testimonial from "@/components/Testimonial";
 
 export const metadata: Metadata = {
   title: "Automatisation PME à La Réunion (974)",
@@ -24,7 +25,7 @@ export default function Home() {
 
       <Proof />
 
-      {/* Témoignages — retours clients (cabinets, bureaux d'études, agences) */}
+      <Testimonial />
 
       {/* FAQ — questions fréquentes des dirigeants de petites structures */}
 
