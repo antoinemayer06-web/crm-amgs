@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Receipt,
   RefreshCw,
+  Sparkles,
   Users,
 } from "lucide-react";
 import Note from "@/components/Note";
@@ -54,6 +55,12 @@ const EXAMPLES = [
     description:
       "Plans de charge automatiques : qui est disponible, qui est débordé, en temps réel.",
   },
+  {
+    icon: Sparkles,
+    title: "Intégration de l'IA pour les entreprises",
+    description:
+      "Nous proposons l'intégration de solutions IA adaptées à vos besoins — extraction de documents, catégorisation automatique, et autres cas d'usage concrets.",
+  },
 ];
 
 export default function PillarsOverview() {
@@ -84,13 +91,18 @@ export default function PillarsOverview() {
           viewport={{ once: true, amount: 0.2 }}
           className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {EXAMPLES.map((example) => {
+          {EXAMPLES.map((example, index) => {
             const Icon = example.icon;
+            // Le 7e exemple, seul sur la dernière ligne en grille 3
+            // colonnes, est recentré plutôt que collé à gauche.
+            const isLastAlone = index === EXAMPLES.length - 1;
             return (
               <motion.div
                 key={example.title}
                 variants={fadeInUp}
-                className="flex h-full flex-col rounded-2xl border border-border bg-background p-7"
+                className={`flex h-full flex-col rounded-2xl border border-border bg-background p-7 ${
+                  isLastAlone ? "sm:col-span-2 lg:col-span-1 lg:col-start-2" : ""
+                }`}
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary-dark">
                   <Icon className="h-5 w-5" />
