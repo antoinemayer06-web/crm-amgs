@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
 import PageIntro from "@/components/PageIntro";
 import { CASE_STUDY } from "@/lib/content";
+import { personSchema } from "@/lib/schema";
 
 // Mot-clé principal : "consultant automatisation La Réunion"
 
@@ -15,6 +17,7 @@ export const metadata: Metadata = {
 export default function AProposPage() {
   return (
     <main>
+      <JsonLd data={personSchema()} />
       <PageIntro
         title="Antoine Mayer, consultant en automatisation à La Réunion"
         subtitle="AM Growth Solutions accompagne les PME réunionnaises qui jonglent entre plusieurs outils déconnectés."

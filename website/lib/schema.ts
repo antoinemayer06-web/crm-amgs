@@ -27,8 +27,28 @@ export function localBusinessSchema() {
   };
 }
 
+// Schema.org Person — sur la page à propos, pour renforcer l'association
+// entre le nom du fondateur et ce site aux yeux de Google (utile pour les
+// recherches sur son nom propre, en plus du "founder" imbriqué dans
+// LocalBusiness ci-dessus).
+export function personSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: BUSINESS.founder,
+    jobTitle: "Fondateur",
+    worksFor: {
+      "@type": "Organization",
+      name: BUSINESS.name,
+      url: BUSINESS.url,
+    },
+    url: `${SITE_URL}/a-propos`,
+    sameAs: BUSINESS.sameAs,
+  };
+}
+
 // Schema.org Service — à inclure sur chaque page pilier (gestion de projet,
-// administratif & financier).
+// administratif & financière).
 export function serviceSchema({
   name,
   description,
