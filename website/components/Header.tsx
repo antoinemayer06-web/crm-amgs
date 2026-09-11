@@ -39,14 +39,11 @@ export default function Header() {
           "non scrollé") : seules leur couleur/opacité changent au scroll.
           Ça évite un saut brutal de largeur de bordure / rayon d'angle qui
           produisait un flash de rectangle blanc pendant la transition. */}
-      {/* Sur mobile, la pastille épouse la largeur de son contenu (w-fit)
-          au lieu de s'étirer sur tout l'espace disponible — logo, nom et
-          bouton burger forment un seul groupe compact centré, avec une
-          vraie marge de chaque côté par construction (pas besoin d'ajuster
-          une marge au pixel près). À partir de md, elle redevient une
-          barre complète avec nav + boutons répartis (justify-between). */}
+      {/* Pastille large : logo/nom à gauche, burger poussé à droite
+          (justify-between), avec une marge fixe par rapport aux bords de
+          l'écran (mx-6) plutôt qu'une largeur calée sur le contenu. */}
       <div
-        className={`mx-auto flex w-fit items-center gap-6 rounded-full border backdrop-blur-md transition-all duration-300 sm:gap-8 md:w-full md:justify-between ${
+        className={`mx-6 flex items-center justify-between gap-4 rounded-full border backdrop-blur-md transition-all duration-300 sm:mx-auto ${
           scrolled
             ? "mt-3 max-w-5xl border-white/10 bg-[#0d0d0d]/95 px-5 py-2.5 shadow-lg shadow-black/30 sm:px-6 sm:py-3"
             : "max-w-6xl border-transparent bg-transparent px-5 py-3.5 shadow-none sm:px-6 sm:py-4 lg:px-8"
