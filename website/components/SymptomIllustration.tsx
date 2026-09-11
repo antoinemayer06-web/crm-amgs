@@ -3,20 +3,27 @@
 import { motion } from "framer-motion";
 import { AlertCircle, FileText, RefreshCw, User } from "lucide-react";
 
-// Trois petites illustrations animées, une par symptôme — pour donner à
-// cette section une lecture immédiate et un peu de vie, plutôt que 3
-// cartes de texte identiques. Construites en SVG/icônes (cohérent avec le
-// reste du site : NetworkBackground, FlowDiagram...), pas des photos.
+// Trois petites illustrations animées, une par symptôme — construites en
+// SVG/icônes (cohérent avec le reste du site : NetworkBackground,
+// FlowDiagram...), pas des photos. `size` (en px, référence 96) permet de
+// les réutiliser aussi bien en petit badge que comme grande illustration
+// dans le carrousel — tout est calculé proportionnellement.
 
-const WRAPPER =
-  "relative mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-primary/[0.07]";
+interface IllustrationProps {
+  size: number;
+}
 
-// 1. Temps perdu sur des tâches répétitives — icône qui tourne en boucle,
-// avec des "échos" fantômes qui apparaissent/disparaissent autour d'elle
-// pour suggérer la répétition.
-function RepetitiveTasks() {
+const BASE = 96;
+
+function RepetitiveTasks({ size }: IllustrationProps) {
+  const scale = size / BASE;
+  const iconSize = 32 * scale;
+  const ghostSize = 40 * scale;
   return (
-    <div className={WRAPPER}>
+    <div
+      className="relative mx-auto flex items-center justify-center rounded-full bg-primary/[0.07]"
+      style={{ width: size, height: size }}
+    >
       {[0, 1, 2].map((i) => (
         <motion.span
           key={i}
@@ -29,7 +36,7 @@ function RepetitiveTasks() {
             ease: "easeOut",
           }}
         >
-          <RefreshCw className="h-10 w-10" />
+          <RefreshCw style={{ width: ghostSize, height: ghostSize }} />
         </motion.span>
       ))}
       <motion.span
@@ -37,16 +44,16 @@ function RepetitiveTasks() {
         animate={{ rotate: 360 }}
         transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
       >
-        <RefreshCw className="h-8 w-8" />
+        <RefreshCw style={{ width: iconSize, height: iconSize }} />
       </motion.span>
     </div>
   );
 }
 
-// 2. Manque de visibilité — des petits documents éparpillés qui flottent
-// doucement, chacun à son rythme, pour évoquer une information dispersée ;
-// un point d'alerte central clignote lentement.
-function ScatteredInfo() {
+function ScatteredInfo({ size }: IllustrationProps) {
+  const scale = size / BASE;
+  const fileSize = 24 * scale;
+  const alertSize = 28 * scale;
   const files = [
     { x: -20, y: -14, rotate: -12, delay: 0 },
     { x: 18, y: -18, rotate: 10, delay: 0.3 },
@@ -54,48 +61,58 @@ function ScatteredInfo() {
     { x: 20, y: 14, rotate: -8, delay: 0.9 },
   ];
   return (
-    <div className={WRAPPER}>
-      {files.map((f, i) => (
-        <motion.span
-          key={i}
-          className="absolute text-primary/30"
-          style={{ x: f.x, y: f.y, rotate: f.rotate }}
-          animate={{ y: [f.y, f.y - 5, f.y] }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            delay: f.delay,
-            ease: "easeInOut",
-          }}
-        >
-          <FileText className="h-6 w-6" />
-        </motion.span>
-      ))}
+    <div
+      className="relative mx-auto flex items-center justify-center rounded-full bg-primary/[0.07]"
+      style={{ width: size, height: size }}
+    >
+      {files.map((f, i) => {
+        const x = f.x * scale;
+        const y = f.y * scale;
+        return (
+          <motion.span
+            key={i}
+            className="absolute text-primary/30"
+            style={{ x, y, rotate: f.rotate }}
+            animate={{ y: [y, y - 5 * scale, y] }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: f.delay,
+              ease: "easeInOut",
+            }}
+          >
+            <FileText style={{ width: fileSize, height: fileSize }} />
+          </motion.span>
+        );
+      })}
       <motion.span
         className="relative text-primary-dark"
         animate={{ opacity: [1, 0.35, 1] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
       >
-        <AlertCircle className="h-7 w-7" />
+        <AlertCircle style={{ width: alertSize, height: alertSize }} />
       </motion.span>
     </div>
   );
 }
 
-// 3. Process qui reposent sur une seule personne — un point central relié
-// à 3 autres, dont les liens s'estompent puis reviennent en boucle : le
-// système "tient" tant que la personne au centre est là.
-function SinglePointOfFailure() {
+function SinglePointOfFailure({ size }: IllustrationProps) {
+  const scale = size / BASE;
+  const userSize = 36 * scale;
   const nodes = [
     { x: 0, y: -30 },
     { x: 28, y: 16 },
     { x: -28, y: 16 },
   ];
   return (
-    <div className={WRAPPER}>
+    <div
+      className="relative mx-auto flex items-center justify-center rounded-full bg-primary/[0.07]"
+      style={{ width: size, height: size }}
+    >
       <svg
         viewBox="-40 -40 80 80"
-        className="absolute h-24 w-24"
+        className="absolute"
+        style={{ width: size, height: size }}
         aria-hidden="true"
       >
         {nodes.map((n, i) => (
@@ -127,11 +144,17 @@ function SinglePointOfFailure() {
         ))}
       </svg>
       <motion.span
-        className="relative flex h-9 w-9 items-center justify-center rounded-full bg-primary-dark text-white"
-        animate={{ boxShadow: ["0 0 0 0 rgba(43,32,100,0.35)", "0 0 0 8px rgba(43,32,100,0)"] }}
+        className="relative flex items-center justify-center rounded-full bg-primary-dark text-white"
+        style={{ width: userSize, height: userSize }}
+        animate={{
+          boxShadow: [
+            "0 0 0 0 rgba(43,32,100,0.35)",
+            "0 0 0 8px rgba(43,32,100,0)",
+          ],
+        }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
       >
-        <User className="h-4 w-4" />
+        <User style={{ width: userSize * 0.45, height: userSize * 0.45 }} />
       </motion.span>
     </div>
   );
@@ -139,7 +162,13 @@ function SinglePointOfFailure() {
 
 const ILLUSTRATIONS = [RepetitiveTasks, ScatteredInfo, SinglePointOfFailure];
 
-export default function SymptomIllustration({ index }: { index: number }) {
+export default function SymptomIllustration({
+  index,
+  size = 96,
+}: {
+  index: number;
+  size?: number;
+}) {
   const Illustration = ILLUSTRATIONS[index] ?? ILLUSTRATIONS[0];
-  return <Illustration />;
+  return <Illustration size={size} />;
 }
