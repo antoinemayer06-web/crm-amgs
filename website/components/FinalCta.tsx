@@ -15,7 +15,7 @@ export default function FinalCta() {
         className="mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8"
       >
         <h2 className="font-heading text-3xl font-black text-white sm:text-4xl">
-          Prêt à arrêter la double saisie ?
+          Prêt à reprendre la main sur votre temps ?
         </h2>
         <p className="mt-4 text-lg text-white/70">
           Un appel de 20-30 minutes suffit pour identifier ce qui peut être

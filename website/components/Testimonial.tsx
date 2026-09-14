@@ -1,19 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Quote, User } from "lucide-react";
+import { Quote } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
-// Emplacement prêt pour un témoignage client réel (citation + photo + nom
-// + fonction) — le contenu ci-dessous est un placeholder explicite, pas
-// un faux témoignage : à remplacer dès qu'un vrai retour client est
-// disponible. Tant qu'aucune photo n'est fournie, un avatar neutre est
-// affiché plutôt qu'une fausse photo.
+// BROUILLON — texte fourni par le client, à faire valider mot pour mot
+// par LGP Constructions avant mise en ligne définitive. Tant qu'aucune
+// photo n'est fournie, pas d'avatar/silhouette : juste la citation, le
+// nom et le secteur.
 const TESTIMONIAL = {
   quote:
-    "Ajoutez ici la citation de votre client — quelques phrases sur ce qui a changé concrètement pour son équipe.",
-  name: "Nom du client",
-  role: "Fonction — entreprise",
+    "On ne se posait plus de questions sur qui avait avancé quoi. Depuis, tout est centralisé, et l'équipe gagne un temps monstre sur le suivi de chantier. Très professionnel du début à la fin.",
+  name: "LGP Constructions",
+  role: "Entreprise de construction",
   photo: null as string | null,
 };
 
@@ -33,16 +32,11 @@ export default function Testimonial() {
             {TESTIMONIAL.quote}
           </p>
 
-          <div className="mt-8 flex flex-col items-center gap-3">
-            <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary-dark">
-              <User className="h-6 w-6" />
-            </span>
-            <div>
-              <p className="font-heading text-sm font-bold text-foreground">
-                {TESTIMONIAL.name}
-              </p>
-              <p className="text-sm text-muted">{TESTIMONIAL.role}</p>
-            </div>
+          <div className="mt-8">
+            <p className="font-heading text-sm font-bold text-foreground">
+              {TESTIMONIAL.name}
+            </p>
+            <p className="text-sm text-muted">{TESTIMONIAL.role}</p>
           </div>
         </motion.div>
       </div>

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import FinalCta from "@/components/FinalCta";
+import Founder from "@/components/Founder";
 import Hero from "@/components/Hero";
-import PillarsOverview from "@/components/PillarsOverview";
-import Problem from "@/components/Problem";
-import Proof from "@/components/Proof";
+import Remedy from "@/components/Remedy";
+import Solutions from "@/components/Solutions";
+import Symptoms from "@/components/Symptoms";
 import Testimonial from "@/components/Testimonial";
 
 export const metadata: Metadata = {
@@ -19,15 +20,15 @@ export default function Home() {
       <Hero />
       {/* Hero + bandeau outils — voir components/Hero.tsx */}
 
-      <Problem />
+      <Symptoms />
 
-      <PillarsOverview />
+      <Remedy />
 
-      <Proof />
+      <Solutions />
 
       <Testimonial />
 
-      {/* FAQ — questions fréquentes des dirigeants de petites structures */}
+      <Founder />
 
       <FinalCta />
     </main>
