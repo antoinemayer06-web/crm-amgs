@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import ParallaxAccent from "@/components/ParallaxAccent";
 import SymptomIllustration from "@/components/SymptomIllustration";
@@ -65,12 +64,19 @@ export default function Problem() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Le symptôme est toujours le même
+            On vous{" "}
+            <span className="relative inline-block whitespace-nowrap">
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-[-0.14em] bottom-[-0.04em] top-[0.14em] -z-10 -rotate-1 bg-primary-light/55 mix-blend-multiply"
+                style={{
+                  clipPath:
+                    "polygon(0.5% 22%, 10% 6%, 28% 14%, 48% 3%, 68% 12%, 88% 2%, 99.5% 16%, 98% 78%, 85% 94%, 64% 85%, 42% 97%, 20% 88%, 2% 98%)",
+                }}
+              />
+              libère
+            </span>
           </h2>
-          <p className="mt-4 text-lg text-muted">
-            Trois signes qui reviennent dans presque toutes les PME, quelle
-            que soit leur organisation ou leur secteur.
-          </p>
         </motion.div>
 
         <motion.div
@@ -80,36 +86,13 @@ export default function Problem() {
           viewport={{ once: true, amount: 0.2 }}
           className="relative mt-14"
         >
-          {/* Flèches — desktop uniquement, le swipe tactile suffit sur mobile */}
-          <button
-            type="button"
-            onClick={() => goTo(active - 1)}
-            disabled={active === 0}
-            aria-label="Symptôme précédent"
-            className="absolute left-0 top-1/2 z-10 hidden -translate-x-4 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-surface p-2.5 text-foreground shadow-sm transition-opacity hover:border-primary hover:text-primary disabled:pointer-events-none disabled:opacity-0 sm:flex"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => goTo(active + 1)}
-            disabled={active === PROBLEMS.length - 1}
-            aria-label="Symptôme suivant"
-            className="absolute right-0 top-1/2 z-10 hidden translate-x-4 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-surface p-2.5 text-foreground shadow-sm transition-opacity hover:border-primary hover:text-primary disabled:pointer-events-none disabled:opacity-0 sm:flex"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-
           <div
             ref={trackRef}
             className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {PROBLEMS.map((problem, index) => (
-              <div
-                key={problem.title}
-                className="w-full shrink-0 snap-center px-2 sm:px-10"
-              >
-                <div className="mx-auto flex max-w-md flex-col items-center rounded-2xl border border-border bg-surface p-8 text-center shadow-sm sm:p-10">
+              <div key={problem.title} className="w-full shrink-0 snap-center">
+                <div className="flex w-full flex-col items-center rounded-2xl border border-border bg-surface p-8 text-center shadow-sm sm:p-12">
                   <SymptomIllustration index={index} size={140} />
                   <h3 className="mt-6 font-heading text-xl font-bold text-foreground">
                     {problem.title}
