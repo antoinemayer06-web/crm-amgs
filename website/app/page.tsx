@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BookingCalendar from "@/components/BookingCalendar";
 import FinalCta from "@/components/FinalCta";
 import Founder from "@/components/Founder";
 import Hero from "@/components/Hero";
@@ -24,6 +25,8 @@ export default function Home() {
       <Solutions />
 
       <Testimonial />
+
+      <BookingCalendar />
 
       <Founder />
 
