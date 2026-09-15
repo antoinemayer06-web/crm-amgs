@@ -40,9 +40,14 @@ const config: Config = {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        blink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
       },
       animation: {
         marquee: "marquee 28s linear infinite",
+        blink: "blink 0.9s step-end infinite",
       },
     },
   },
