@@ -4,7 +4,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import ExampleMockup from "@/components/ExampleMockup";
+import Highlight from "@/components/Highlight";
 import ParallaxAccent from "@/components/ParallaxAccent";
+import TypewriterText from "@/components/TypewriterText";
 import { fadeInUp } from "@/lib/animations";
 
 // Exemples concrets de systèmes construits — présentés comme des EXEMPLES
@@ -63,12 +65,12 @@ export default function Solutions() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Notre remède
+            <Highlight color="34, 197, 94">Notre remède</Highlight>
           </h2>
-          <p className="mt-4 text-lg text-muted">
-            Des process clairs et des systèmes sur mesure, pensés pour votre
-            fonctionnement réel.
-          </p>
+          <TypewriterText
+            text="Des process clairs et des systèmes sur mesure, pensés pour votre fonctionnement réel."
+            className="mt-5 font-heading text-2xl font-bold leading-snug text-foreground sm:text-3xl"
+          />
         </motion.div>
 
         <motion.div
