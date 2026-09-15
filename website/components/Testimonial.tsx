@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
@@ -18,8 +19,19 @@ const TESTIMONIAL = {
 
 export default function Testimonial() {
   return (
-    <section className="bg-background py-20 sm:py-28">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden py-20 sm:py-28">
+      <div className="absolute inset-0" aria-hidden="true">
+        <Image
+          src="/images/testimonial-bg.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="scale-110 object-cover blur-sm"
+        />
+        <div className="absolute inset-0 bg-background/80" />
+      </div>
+
+      <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={fadeInUp}
           initial="hidden"
