@@ -29,15 +29,19 @@ export default function TypewriterText({
     return () => clearTimeout(timeout);
   }, [isInView, count, text, charDelay]);
 
+  const done = count >= text.length;
+
   return (
     <p ref={ref} className={className}>
       <span className="sr-only">{text}</span>
       <span aria-hidden="true">
         {text.slice(0, count)}
-        <span
-          className="ml-0.5 inline-block w-[3px] animate-blink bg-current align-middle"
-          style={{ height: "0.85em" }}
-        />
+        {!done && (
+          <span
+            className="ml-0.5 inline-block w-[3px] animate-blink bg-current align-middle"
+            style={{ height: "0.85em" }}
+          />
+        )}
       </span>
     </p>
   );
