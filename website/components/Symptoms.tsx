@@ -14,22 +14,25 @@ import { fadeInUp, staggerContainer } from "@/lib/animations";
 const SYMPTOMS = [
   {
     slot: "symptome-1-repetitif",
+    src: "/videos/symptome-1-repetitif.mp4",
     title: "Le temps perdu, tous les jours",
     text: "La même info recopiée à la main, encore et encore. Ça ne s'arrête jamais, et personne ne le remarque avant qu'il soit trop tard.",
   },
   {
     slot: "symptome-2-visibilite",
+    src: undefined as string | undefined,
     title: "Vos données, éparpillées partout",
     text: "L'info existe, mais dans dix endroits différents. Impossible de savoir où en sont vraiment vos dossiers d'un coup d'œil.",
   },
   {
     slot: "symptome-3-charge-mentale",
+    src: undefined as string | undefined,
     title: "Tout repose sur une seule personne",
     text: "Un collaborateur absent, et c'est tout le service qui tourne au ralenti. La mémoire d'une personne n'est pas un système.",
   },
 ];
 
-function SymptomVideo({ slot }: { slot: string }) {
+function SymptomVideo({ slot, src }: { slot: string; src?: string }) {
   return (
     <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-primary/10 to-primary-dark/5">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
@@ -40,13 +43,17 @@ function SymptomVideo({ slot }: { slot: string }) {
         muted
         loop
         playsInline
-      />
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-primary-dark/35">
-        <Film className="h-7 w-7" />
-        <span className="text-[10px] font-semibold uppercase tracking-wider">
-          {slot}
-        </span>
-      </div>
+      >
+        {src ? <source src={src} type="video/mp4" /> : null}
+      </video>
+      {!src ? (
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-primary-dark/35">
+          <Film className="h-7 w-7" />
+          <span className="text-[10px] font-semibold uppercase tracking-wider">
+            {slot}
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -85,7 +92,7 @@ export default function Symptoms() {
               variants={fadeInUp}
               className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm"
             >
-              <SymptomVideo slot={symptom.slot} />
+              <SymptomVideo slot={symptom.slot} src={symptom.src} />
               <div className="flex flex-1 flex-col p-7 text-center">
                 <h3 className="font-heading text-lg font-bold text-foreground">
                   {symptom.title}
