@@ -11,9 +11,9 @@ import { fadeInUp } from "@/lib/animations";
 // nom et le secteur.
 const TESTIMONIAL = {
   quote:
-    "On ne se posait plus de questions sur qui avait avancé quoi. Depuis, tout est centralisé, et l'équipe gagne un temps monstre sur le suivi de chantier. Très professionnel du début à la fin.",
+    "Antoine a mis en place un système complet qui a transformé notre processus commercial : un CRM connecté à tous nos outils, avec une vraie gestion des prospects et des clients. Il nous a aussi conçu un plan de charge simple pour répartir le travail de nos équipes en un coup d'œil. Professionnel du début à la fin — y compris après la livraison, faite plus vite que prévu. Je recommande sans hésiter.",
   name: "LGP Constructions",
-  role: "Entreprise de construction",
+  role: "Logiciel de construction",
   photo: null as string | null,
 };
 
@@ -26,7 +26,7 @@ export default function Testimonial() {
           alt=""
           fill
           sizes="100vw"
-          className="scale-110 object-cover blur-sm"
+          className="scale-110 object-cover blur-[2px]"
         />
         <div className="absolute inset-0 bg-background/80" />
       </div>
