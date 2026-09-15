@@ -37,7 +37,7 @@ function SymptomVideo({ slot, src }: { slot: string; src?: string }) {
     <div className="relative aspect-[5/4] w-full overflow-hidden bg-gradient-to-br from-primary/10 to-primary-dark/5">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
-        className="symptom-video absolute inset-0 h-full w-full object-cover object-top"
+        className="symptom-video absolute inset-0 h-full w-full object-cover"
         data-slot={slot}
         autoPlay
         muted
