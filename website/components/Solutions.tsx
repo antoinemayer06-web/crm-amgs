@@ -7,8 +7,20 @@ import { ArrowRight, ImageIcon } from "lucide-react";
 import { motion, type PanInfo } from "framer-motion";
 import Highlight from "@/components/Highlight";
 import ParallaxAccent from "@/components/ParallaxAccent";
-import TypewriterText from "@/components/TypewriterText";
 import { fadeInUp } from "@/lib/animations";
+
+// Halo néon vert animé (pulsation douce) derrière le texte sous "Notre
+// remède" — remplace l'ancienne animation "machine à écrire".
+const NEON_GLOW = {
+  animate: {
+    textShadow: [
+      "0 0 6px rgba(34,197,94,0.35), 0 0 16px rgba(34,197,94,0.22), 0 0 32px rgba(34,197,94,0.12)",
+      "0 0 12px rgba(34,197,94,0.6), 0 0 28px rgba(34,197,94,0.4), 0 0 52px rgba(34,197,94,0.22)",
+      "0 0 6px rgba(34,197,94,0.35), 0 0 16px rgba(34,197,94,0.22), 0 0 32px rgba(34,197,94,0.12)",
+    ],
+  },
+  transition: { duration: 2.6, repeat: Infinity, ease: "easeInOut" },
+};
 
 // Exemples concrets de systèmes construits — présentés comme des EXEMPLES
 // de ce qui est possible, pas comme une liste figée de "services" à cocher.
@@ -28,7 +40,7 @@ const EXAMPLES = [
   },
   {
     slot: "solution-2-site-formulaire",
-    image: undefined as string | undefined,
+    image: "/images/solutions/solution-2-site-formulaire.jpg" as string | undefined,
     title: "Sites ou formulaires reliés à une base de données",
     description:
       "Collecte et traitement automatique des informations dès qu'un formulaire est rempli.",
@@ -121,10 +133,14 @@ export default function Solutions() {
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
             <Highlight color="34, 197, 94">Notre remède</Highlight>
           </h2>
-          <TypewriterText
-            text="Des process clairs et des systèmes sur mesure, pensés pour votre fonctionnement réel."
+          <motion.p
+            animate={NEON_GLOW.animate}
+            transition={NEON_GLOW.transition}
             className="mt-5 font-heading text-2xl font-bold leading-snug text-foreground sm:text-3xl"
-          />
+          >
+            Des process clairs et des systèmes sur mesure, pensés pour votre
+            fonctionnement réel.
+          </motion.p>
         </motion.div>
 
         <motion.div
