@@ -2,6 +2,7 @@
 
 import { Film } from "lucide-react";
 import { motion } from "framer-motion";
+import Highlight from "@/components/Highlight";
 import ParallaxAccent from "@/components/ParallaxAccent";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
@@ -15,19 +16,31 @@ const SYMPTOMS = [
   {
     slot: "symptome-1-repetitif",
     src: "/videos/symptome-1-repetitif.mp4",
-    title: "Le temps perdu, tous les jours",
+    title: (
+      <>
+        Le <Highlight>temps perdu</Highlight>, tous les jours
+      </>
+    ),
     text: "La même info recopiée à la main, encore et encore. Ça ne s'arrête jamais, et personne ne le remarque avant qu'il soit trop tard.",
   },
   {
     slot: "symptome-2-visibilite",
     src: undefined as string | undefined,
-    title: "Vos données, éparpillées partout",
+    title: (
+      <>
+        <Highlight>Vos données, éparpillées</Highlight> partout
+      </>
+    ),
     text: "L'info existe, mais dans dix endroits différents. Impossible de savoir où en sont vraiment vos dossiers d'un coup d'œil.",
   },
   {
     slot: "symptome-3-charge-mentale",
     src: undefined as string | undefined,
-    title: "Tout repose sur une seule personne",
+    title: (
+      <>
+        Tout repose sur <Highlight>une seule personne</Highlight>
+      </>
+    ),
     text: "Un collaborateur absent, et c'est tout le service qui tourne au ralenti. La mémoire d'une personne n'est pas un système.",
   },
 ];
@@ -75,7 +88,7 @@ export default function Symptoms() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Vos symptômes
+            Vos <Highlight>symptômes</Highlight>
           </h2>
         </motion.div>
 

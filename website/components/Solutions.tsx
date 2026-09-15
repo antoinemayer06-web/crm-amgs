@@ -63,11 +63,11 @@ export default function Solutions() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Nos solutions
+            Notre remède
           </h2>
           <p className="mt-4 text-lg text-muted">
-            Chaque système est différent. Voici un aperçu de ce qu&apos;on
-            peut construire pour vous.
+            Des process clairs et des systèmes sur mesure, pensés pour votre
+            fonctionnement réel.
           </p>
         </motion.div>
 

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import FinalCta from "@/components/FinalCta";
 import Founder from "@/components/Founder";
 import Hero from "@/components/Hero";
-import Remedy from "@/components/Remedy";
 import Solutions from "@/components/Solutions";
 import Symptoms from "@/components/Symptoms";
 import Testimonial from "@/components/Testimonial";
@@ -21,8 +20,6 @@ export default function Home() {
       {/* Hero + bandeau outils — voir components/Hero.tsx */}
 
       <Symptoms />
-
-      <Remedy />
 
       <Solutions />
 
