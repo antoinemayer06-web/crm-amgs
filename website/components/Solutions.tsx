@@ -21,7 +21,7 @@ import { fadeInUp } from "@/lib/animations";
 const EXAMPLES = [
   {
     slot: "solution-1-connexion-outils",
-    image: undefined as string | undefined,
+    image: "/images/solutions/solution-1-connexion-outils.jpg" as string | undefined,
     title: "Connexion d'outils entre eux",
     description:
       "CRM, gestion de projet, stockage... vos outils échangent l'information automatiquement, sans ressaisie.",
