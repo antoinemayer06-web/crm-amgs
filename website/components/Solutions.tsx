@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ImageIcon } from "lucide-react";
@@ -74,11 +74,26 @@ const COUNT = EXAMPLES.length;
 const STACK_DEPTH = 3;
 const SWIPE_OFFSET_THRESHOLD = 80;
 const SWIPE_VELOCITY_THRESHOLD = 500;
+const AUTO_ADVANCE_DELAY = 4000;
+const CARD_SPRING = { type: "spring", stiffness: 260, damping: 30, mass: 0.9 } as const;
 
 export default function Solutions() {
   const [active, setActive] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+
+  // Défilement automatique — se met en pause pendant un swipe ou un survol
+  // (desktop), et se relance à chaque changement de carte (auto ou manuel).
+  useEffect(() => {
+    if (isDragging || isHovering) return;
+    const timer = setTimeout(() => {
+      setActive((i) => (i + 1) % COUNT);
+    }, AUTO_ADVANCE_DELAY);
+    return () => clearTimeout(timer);
+  }, [active, isDragging, isHovering]);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
+    setIsDragging(false);
     if (
       info.offset.x < -SWIPE_OFFSET_THRESHOLD ||
       info.velocity.x < -SWIPE_VELOCITY_THRESHOLD
@@ -118,6 +133,8 @@ export default function Solutions() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
           className="relative mx-auto mt-14 h-[420px] max-w-2xl sm:h-[440px]"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
           {EXAMPLES.map((example, index) => {
             // Position de la carte par rapport à la carte active : 0 =
@@ -134,13 +151,14 @@ export default function Solutions() {
                 drag={isTop ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.6}
+                onDragStart={isTop ? () => setIsDragging(true) : undefined}
                 onDragEnd={isTop ? handleDragEnd : undefined}
                 animate={{
                   y: inStack ? offset * 16 : 16 * STACK_DEPTH,
                   scale: inStack ? 1 - offset * 0.05 : 1 - STACK_DEPTH * 0.05,
                   opacity: inStack ? 1 : 0,
                 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                transition={CARD_SPRING}
                 style={{ zIndex: COUNT - offset }}
                 className={`absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-lg ${
                   isTop
