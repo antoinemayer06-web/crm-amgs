@@ -1,8 +1,12 @@
 // Surlignage façon "coup de feutre" fait main — un dégradé horizontal
 // (transparent -> couleur -> couleur -> transparent) posé sous le texte,
-// légèrement incliné pour ne pas paraître mécanique. `box-decoration-break:
-// clone` garantit que le surlignage reste correct même si le texte passe
-// à la ligne (utile dans les titres de carte, plus étroits).
+// légèrement incliné et avec une légère variation d'opacité au milieu
+// pour ne pas paraître mécanique. Le padding + la marge négative
+// assortie font déborder le trait au-delà du texte (gauche/droite/haut/
+// bas) sans pousser le texte environnant, comme un vrai feutre qui
+// dépasse un peu. `box-decoration-break: clone` clone ce débordement
+// sur chaque ligne si le texte passe à la ligne (titres de carte
+// étroits).
 export default function Highlight({
   children,
   color = "239, 68, 68", // rouge vif (red-500)
@@ -16,10 +20,12 @@ export default function Highlight({
     <span
       className="relative inline"
       style={{
-        backgroundImage: `linear-gradient(104deg, rgba(${color}, 0) 0%, rgba(${color}, ${opacity}) 1.5%, rgba(${color}, ${opacity}) 98.5%, rgba(${color}, 0) 100%)`,
+        padding: "0.1em 0.22em",
+        margin: "0 -0.22em",
+        backgroundImage: `linear-gradient(105deg, rgba(${color}, 0) 0%, rgba(${color}, ${opacity}) 4%, rgba(${color}, ${opacity * 0.85}) 44%, rgba(${color}, ${opacity}) 58%, rgba(${color}, ${opacity}) 96%, rgba(${color}, 0) 100%)`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: "100% 92%",
-        backgroundPosition: "0% 55%",
+        backgroundSize: "100% 100%",
+        backgroundPosition: "0% 0%",
         WebkitBoxDecorationBreak: "clone",
         boxDecorationBreak: "clone",
       }}
