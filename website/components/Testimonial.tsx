@@ -13,7 +13,7 @@ const TESTIMONIAL = {
   quote:
     "Antoine a mis en place un système complet qui a transformé notre processus commercial : un CRM connecté à tous nos outils, avec une vraie gestion des prospects et des clients. Il nous a aussi conçu un plan de charge simple pour répartir le travail de nos équipes en un coup d'œil. Professionnel du début à la fin — y compris après la livraison, faite plus vite que prévu. Je recommande sans hésiter.",
   name: "LGP Constructions",
-  role: "Logiciel de construction",
+  role: "Logiciel BTP",
   photo: null as string | null,
 };
 
