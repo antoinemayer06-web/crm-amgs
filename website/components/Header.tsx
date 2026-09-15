@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { WhatsAppIcon } from "@/components/icons";
 import { buttonHover } from "@/lib/animations";
-import { WHATSAPP_URL } from "@/lib/links";
+import { LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
 import { NAV_ITEMS } from "@/lib/nav";
 
 export default function Header() {
@@ -49,10 +49,12 @@ export default function Header() {
             : "max-w-6xl border-transparent bg-transparent px-5 py-3.5 shadow-none sm:px-6 sm:py-4 lg:px-8"
         }`}
       >
-        <Link
-          href="/"
+        <a
+          href={LINKEDIN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center gap-2"
-          aria-label="AM Growth Solutions — accueil"
+          aria-label="AM Growth Solutions sur LinkedIn"
         >
           <Image
             src="/brand/logo.png"
@@ -71,7 +73,7 @@ export default function Header() {
           >
             AM Growth Solutions
           </span>
-        </Link>
+        </a>
 
         <nav
           className={`hidden items-center md:flex ${
