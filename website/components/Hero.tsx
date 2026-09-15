@@ -152,21 +152,25 @@ export default function Hero() {
         </motion.div>
       </section>
 
-      {/* Bandeau outils — défilement horizontal infini (marquee), délibérément
-          discret : simple signal de crédibilité en arrière-plan, jamais un
-          second message qui entre en concurrence avec le hero. */}
+      {/* Bandeau outils — défilement horizontal infini (marquee), mis en
+          avant sous forme de chips plutôt qu'une simple liste de texte
+          fondu, pour bien signaler la compatibilité avec les outils déjà
+          en place chez le client. */}
       <motion.div
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="bg-background py-5 sm:py-6"
+        className="border-y border-border bg-surface py-8 sm:py-10"
       >
+        <p className="mb-5 text-center text-xs font-semibold uppercase tracking-widest text-muted">
+          Compatible avec les outils que vous utilisez déjà
+        </p>
         <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-          <div className="flex w-max animate-marquee items-center gap-x-10 [animation-play-state:running] hover:[animation-play-state:paused]">
+          <div className="flex w-max animate-marquee items-center gap-x-4 [animation-play-state:running] hover:[animation-play-state:paused]">
             {[...TOOLS, ...TOOLS].map((tool, index) => (
               <span
                 key={`${tool}-${index}`}
-                className="whitespace-nowrap text-sm font-medium text-muted/50 transition-colors hover:text-muted"
+                className="whitespace-nowrap rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground/80 shadow-sm transition-colors hover:border-primary hover:text-primary-dark"
               >
                 {tool}
               </span>
