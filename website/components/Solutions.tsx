@@ -131,7 +131,7 @@ export default function Solutions() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className="relative mx-auto mt-14 h-[420px] max-w-2xl sm:h-[440px]"
+          className="relative mx-auto mt-14 h-[420px] max-w-2xl sm:h-[620px]"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
@@ -165,14 +165,14 @@ export default function Solutions() {
                     : "pointer-events-none"
                 }`}
               >
-                <div className="relative h-48 w-full shrink-0 overflow-hidden bg-gradient-to-br from-primary/10 to-primary-dark/5 sm:h-56">
+                <div className="relative aspect-[3/2] w-full shrink-0 overflow-hidden bg-gradient-to-br from-primary/10 to-primary-dark/5">
                   {example.image ? (
                     <Image
                       src={example.image}
                       alt={example.title}
                       fill
                       draggable={false}
-                      className="object-contain p-4"
+                      className="object-cover"
                     />
                   ) : (
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-primary-dark/35">
