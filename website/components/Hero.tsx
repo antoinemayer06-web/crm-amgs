@@ -166,11 +166,11 @@ export default function Hero() {
           Compatible avec les outils que vous utilisez déjà
         </p>
         <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-          <div className="flex w-max animate-marquee items-center gap-x-4 [animation-play-state:running] hover:[animation-play-state:paused]">
+          <div className="flex w-max animate-marquee items-center gap-x-4">
             {[...TOOLS, ...TOOLS].map((tool, index) => (
               <span
                 key={`${tool}-${index}`}
-                className="whitespace-nowrap rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground/80 shadow-sm transition-colors hover:border-primary hover:text-primary-dark"
+                className="whitespace-nowrap rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground/80 shadow-sm"
               >
                 {tool}
               </span>
