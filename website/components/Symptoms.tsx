@@ -21,7 +21,7 @@ const SYMPTOMS = [
   },
   {
     slot: "symptome-2-visibilite",
-    src: undefined as string | undefined,
+    src: "/videos/symptome-2-visibilite.mp4",
     title: "Vos données, éparpillées partout",
     text: "L'info existe, mais dans dix endroits différents. Impossible de savoir où en sont vraiment vos dossiers d'un coup d'œil.",
   },
