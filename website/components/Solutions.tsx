@@ -9,19 +9,6 @@ import Highlight from "@/components/Highlight";
 import ParallaxAccent from "@/components/ParallaxAccent";
 import { fadeInUp } from "@/lib/animations";
 
-// Halo néon vert animé (pulsation douce) derrière le texte sous "Notre
-// remède" — remplace l'ancienne animation "machine à écrire".
-const NEON_GLOW = {
-  animate: {
-    textShadow: [
-      "0 0 6px rgba(34,197,94,0.35), 0 0 16px rgba(34,197,94,0.22), 0 0 32px rgba(34,197,94,0.12)",
-      "0 0 12px rgba(34,197,94,0.6), 0 0 28px rgba(34,197,94,0.4), 0 0 52px rgba(34,197,94,0.22)",
-      "0 0 6px rgba(34,197,94,0.35), 0 0 16px rgba(34,197,94,0.22), 0 0 32px rgba(34,197,94,0.12)",
-    ],
-  },
-  transition: { duration: 2.6, repeat: Infinity, ease: "easeInOut" },
-};
-
 // Exemples concrets de systèmes construits — présentés comme des EXEMPLES
 // de ce qui est possible, pas comme une liste figée de "services" à cocher.
 // Pile de cartes empilées (façon Tinder/Wallet) qu'on swipe pour parcourir,
@@ -47,7 +34,7 @@ const EXAMPLES = [
   },
   {
     slot: "solution-3-dashboards",
-    image: undefined as string | undefined,
+    image: "/images/solutions/solution-3-dashboards.jpg" as string | undefined,
     title: "Dashboards de pilotage automatiques",
     description:
       "Tableaux de bord type Power BI, alimentés et mis à jour sans compilation manuelle.",
@@ -133,14 +120,10 @@ export default function Solutions() {
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
             <Highlight color="34, 197, 94">Notre remède</Highlight>
           </h2>
-          <motion.p
-            animate={NEON_GLOW.animate}
-            transition={NEON_GLOW.transition}
-            className="mt-5 font-heading text-2xl font-bold leading-snug text-foreground sm:text-3xl"
-          >
+          <p className="mt-5 font-heading text-2xl font-bold italic leading-snug text-foreground sm:text-3xl">
             Des process clairs et des systèmes sur mesure, pensés pour votre
             fonctionnement réel.
-          </motion.p>
+          </p>
         </motion.div>
 
         <motion.div
@@ -189,7 +172,7 @@ export default function Solutions() {
                       alt={example.title}
                       fill
                       draggable={false}
-                      className="object-cover"
+                      className="object-contain p-4"
                     />
                   ) : (
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-primary-dark/35">
