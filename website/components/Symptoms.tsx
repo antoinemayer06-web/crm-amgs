@@ -27,7 +27,7 @@ const SYMPTOMS = [
   },
   {
     slot: "symptome-3-charge-mentale",
-    src: undefined as string | undefined,
+    src: "/videos/symptome-3-charge-mentale.mp4",
     title: "Tout repose sur une seule personne",
     text: "Un collaborateur absent, et c'est tout le service qui tourne au ralenti. La mémoire d'une personne n'est pas un système.",
   },
