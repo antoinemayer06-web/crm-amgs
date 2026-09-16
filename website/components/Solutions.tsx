@@ -62,10 +62,10 @@ const EXAMPLES = [
   },
   {
     slot: "solution-7-ia",
-    image: undefined as string | undefined,
-    title: "Intégration de l'IA pour les entreprises",
+    image: "/images/solutions/solution-7-ia.jpg" as string | undefined,
+    title: "Agents & assistants IA",
     description:
-      "Nous proposons l'intégration de solutions IA adaptées à vos besoins — extraction de documents, catégorisation automatique, et autres cas d'usage concrets.",
+      "Veille de marché automatique, extraction de documents, catégorisation, réponses automatisées — des agents IA sur mesure, conçus pour des cas d'usage concrets, pas un gadget.",
   },
 ];
 
