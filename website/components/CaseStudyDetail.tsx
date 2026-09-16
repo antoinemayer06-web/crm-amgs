@@ -6,7 +6,7 @@ import { CheckCircle2, ClipboardList, Database, RefreshCw } from "lucide-react";
 import DashboardMockup from "@/components/DashboardMockup";
 import FlowDiagram from "@/components/FlowDiagram";
 import { buttonHover, fadeInUp } from "@/lib/animations";
-import { CASE_STUDY, PILLARS } from "@/lib/content";
+import { CASE_STUDY } from "@/lib/content";
 
 const FLOW_STEPS = [
   { icon: Database, label: "CRM", sublabel: "Données déjà saisies" },
@@ -70,10 +70,10 @@ export default function CaseStudyDetail() {
             approche que sur l&apos;ensemble des missions AM Growth
             Solutions — voir{" "}
             <Link
-              href={PILLARS[0].href}
+              href="/services"
               className="font-semibold text-primary underline underline-offset-2"
             >
-              l&apos;automatisation de la gestion de projet
+              nos services d&apos;automatisation
             </Link>
             .
           </p>

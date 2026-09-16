@@ -3,8 +3,7 @@ import { SITE_URL } from "@/lib/site";
 
 const ROUTES: { path: string; priority: number }[] = [
   { path: "/", priority: 1 },
-  { path: "/automatisation-gestion-projet", priority: 0.9 },
-  { path: "/automatisation-administrative-financiere", priority: 0.9 },
+  { path: "/services", priority: 0.9 },
   { path: "/etude-de-cas", priority: 0.9 },
   { path: "/comment-ca-marche", priority: 0.7 },
   { path: "/a-propos", priority: 0.6 },

@@ -1,5 +1,3 @@
-import { PILLARS } from "@/lib/content";
-
 // Navigation partagée entre le Header et le Footer. Dans un fichier séparé
 // (sans "use client") pour rester importable depuis des composants serveur
 // comme Footer.tsx.
@@ -14,11 +12,7 @@ export interface NavItem extends NavLink {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  {
-    label: "Services",
-    href: PILLARS[0].href,
-    children: PILLARS.map((p) => ({ label: p.navLabel, href: p.href })),
-  },
+  { label: "Services", href: "/services" },
   { label: "Étude de cas", href: "/etude-de-cas" },
   { label: "Comment ça marche", href: "/comment-ca-marche" },
   { label: "Blog", href: "/blog" },

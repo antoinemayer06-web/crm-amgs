@@ -1,39 +1,6 @@
-// Contenu structuré partagé entre l'accueil, les pages piliers, l'étude de
-// cas et les tarifs — une seule source de vérité pour ces faits/chiffres,
-// répétés sur plusieurs pages (maillage interne, cohérence des chiffres).
-
-export const PILLARS = [
-  {
-    slug: "automatisation-gestion-projet",
-    href: "/automatisation-gestion-projet",
-    keyword: "automatisation gestion de projet",
-    navLabel: "Automatisation gestion de projet",
-    title: "Automatisation de la gestion de projet",
-    shortDescription:
-      "Création automatique de dossiers et tâches, synchronisation CRM ↔ outil de gestion, plans de charge en temps réel.",
-    bullets: [
-      "Création automatique de dossiers, tâches et notifications dès qu'un nouveau projet est ouvert dans le CRM",
-      "Synchronisation entre le CRM et l'outil de gestion de tâches (ex. Axonaut ↔ ClickUp, HubSpot ↔ Monday)",
-      "Plans de charge automatiques : visibilité en temps réel sur la charge de travail de chaque membre de l'équipe",
-      "Workflows Power Automate ou formulaires Microsoft Forms qui déclenchent la création d'un dossier ou d'une tâche sans action manuelle",
-    ],
-  },
-  {
-    slug: "automatisation-administrative-financiere",
-    href: "/automatisation-administrative-financiere",
-    keyword: "optimisation processus administratifs PME",
-    navLabel: "Automatisation administrative & financière",
-    title: "Automatisation administrative & financière",
-    shortDescription:
-      "Devis et factures générés depuis le CRM, relances automatiques, reporting envoyé au dirigeant sans qu'il ait à le demander.",
-    bullets: [
-      "Génération automatique de devis/factures depuis le CRM sans ressaisie",
-      "Relances automatiques de factures impayées",
-      "Synchronisation CRM ↔ outil de comptabilité",
-      "Reporting automatique : tableaux de bord Power BI ou fichiers Excel avancés, générés et envoyés sans compilation manuelle",
-    ],
-  },
-] as const;
+// Contenu structuré partagé entre l'accueil, l'étude de cas et les
+// tarifs — une seule source de vérité pour ces faits/chiffres, répétés
+// sur plusieurs pages (maillage interne, cohérence des chiffres).
 
 export const CASE_STUDY = {
   sector: "bureau d'études",

@@ -20,7 +20,7 @@ export default function Contact() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Prêt à arrêter la double saisie ?
+            Vous êtes décidé à gagner du temps ?
           </h2>
           <p className="mt-4 text-lg text-muted">
             Un appel de 20-30 minutes suffit pour identifier ce qui peut être
