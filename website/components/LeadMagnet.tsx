@@ -8,7 +8,7 @@ import { CHECKLIST } from "@/lib/checklist";
 
 type Status = "idle" | "submitting" | "revealed";
 
-export default function LeadMagnet() {
+export default function LeadMagnet({ className = "" }: { className?: string }) {
   const [status, setStatus] = useState<Status>("idle");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -35,7 +35,9 @@ export default function LeadMagnet() {
   }
 
   return (
-    <div className="rounded-2xl border border-border bg-background p-8">
+    <div
+      className={`flex flex-col justify-center rounded-2xl border border-border bg-background p-8 ${className}`}
+    >
       <p className="text-xs font-semibold uppercase tracking-widest text-primary-dark">
         Ressource gratuite
       </p>
