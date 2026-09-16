@@ -66,8 +66,28 @@ export default function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 text-xs text-muted sm:flex-row">
           <p>© 2026 AM Growth Solutions — Antoine Mayer</p>
-          <Link href="/mentions-legales" className="hover:text-primary">
-            Mentions légales
+          <div className="flex items-center gap-4">
+            <Link href="/mentions-legales" className="hover:text-primary">
+              Mentions légales
+            </Link>
+            <Link
+              href="/politique-de-confidentialite"
+              className="hover:text-primary"
+            >
+              Politique de confidentialité
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/"
+            className="group inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-gradient-to-r from-primary/10 via-primary-light/10 to-primary/10 px-4 py-1.5 text-[11px] font-semibold tracking-wide text-primary-dark shadow-sm shadow-primary/10 transition-all hover:border-primary/50 hover:shadow-md hover:shadow-primary/15"
+          >
+            <span aria-hidden="true" className="text-primary">
+              ✦
+            </span>
+            Site réalisé par AM Growth Solutions
           </Link>
         </div>
       </div>
