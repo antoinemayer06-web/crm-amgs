@@ -55,7 +55,7 @@ const EXAMPLES = [
   },
   {
     slot: "solution-6-charge-equipe",
-    image: undefined as string | undefined,
+    image: "/images/solutions/solution-6-charge-equipe.jpg" as string | undefined,
     title: "Suivi de charge d'équipe",
     description:
       "Plans de charge automatiques : qui est disponible, qui est débordé, en temps réel.",
