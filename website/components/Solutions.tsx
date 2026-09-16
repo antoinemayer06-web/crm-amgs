@@ -27,7 +27,7 @@ const EXAMPLES = [
   },
   {
     slot: "solution-2-site-formulaire",
-    image: "/images/solutions/solution-2-site-formulaire.jpg" as string | undefined,
+    image: "/images/solutions/solution-2-site-formulaire-v2.jpg" as string | undefined,
     title: "Sites ou formulaires reliés à une base de données",
     description:
       "Collecte et traitement automatique des informations dès qu'un formulaire est rempli.",
