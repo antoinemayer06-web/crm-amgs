@@ -35,7 +35,10 @@ export default function Contact() {
           viewport={{ once: true, amount: 0.2 }}
           className="mt-12 grid items-stretch gap-8 lg:grid-cols-2"
         >
-          <motion.div variants={fadeInUp} className="rounded-2xl bg-ink p-8">
+          <motion.div
+            variants={fadeInUp}
+            className="rounded-2xl bg-ink p-5 sm:p-8"
+          >
             <h3 className="font-heading text-lg font-bold text-white">
               La voie la plus rapide
             </h3>
@@ -45,9 +48,8 @@ export default function Contact() {
             </p>
             <div className="mt-6 overflow-hidden rounded-xl border border-white/10">
               <div
-                className="calendly-inline-widget"
+                className="calendly-inline-widget h-[720px] w-full min-w-[280px] sm:h-[650px]"
                 data-url={`${CALENDLY_URL}?hide_gdpr_banner=1&background_color=17122b&text_color=ffffff&primary_color=6f5bc9`}
-                style={{ minWidth: "280px", height: "650px" }}
               />
             </div>
           </motion.div>
