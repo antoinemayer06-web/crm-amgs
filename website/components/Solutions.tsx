@@ -41,7 +41,7 @@ const EXAMPLES = [
   },
   {
     slot: "solution-4-microsoft-365",
-    image: undefined as string | undefined,
+    image: "/images/solutions/solution-4-microsoft-365.jpg" as string | undefined,
     title: "Automatisations Microsoft 365",
     description:
       "Excel avancé, Power Automate, Forms — vos fichiers et process Microsoft travaillent pour vous.",
