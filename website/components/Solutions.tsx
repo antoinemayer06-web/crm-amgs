@@ -48,7 +48,7 @@ const EXAMPLES = [
   },
   {
     slot: "solution-5-administratif-financier",
-    image: undefined as string | undefined,
+    image: "/images/solutions/solution-5-administratif-financier.jpg" as string | undefined,
     title: "Automatisation administrative & financière",
     description:
       "Devis, factures et relances générés et envoyés sans ressaisie.",
