@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ImageIcon } from "lucide-react";
@@ -81,6 +81,16 @@ export default function Solutions() {
   const [isDragging, setIsDragging] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
+  // Garde en mémoire l'index actif du rendu précédent, pour savoir quelle
+  // carte vient de quitter le dessus de la pile — c'est elle qui reçoit
+  // l'animation de sortie vers la gauche, que le changement vienne du
+  // défilement automatique, d'un swipe ou d'un clic sur un point.
+  const prevActiveRef = useRef(0);
+  useEffect(() => {
+    prevActiveRef.current = active;
+  }, [active]);
+  const justLeftIndex = prevActiveRef.current;
+
   // Défilement automatique — se met en pause pendant un swipe ou un survol
   // (desktop), et se relance à chaque changement de carte (auto ou manuel).
   useEffect(() => {
@@ -143,6 +153,12 @@ export default function Solutions() {
             const offset = (index - active + COUNT) % COUNT;
             const isTop = offset === 0;
             const inStack = offset < STACK_DEPTH;
+            // La carte qui vient tout juste de quitter le dessus de la
+            // pile part visiblement vers la gauche (avec une légère
+            // rotation) avant de retomber à sa place, empilée derrière —
+            // rejoue systématiquement, même quand le changement de carte
+            // est déclenché par le défilement automatique.
+            const justLeft = index === justLeftIndex && index !== active;
 
             return (
               <motion.div
@@ -153,11 +169,17 @@ export default function Solutions() {
                 onDragStart={isTop ? () => setIsDragging(true) : undefined}
                 onDragEnd={isTop ? handleDragEnd : undefined}
                 animate={{
+                  x: justLeft ? [0, -160, 0] : 0,
+                  rotate: justLeft ? [0, -12, 0] : 0,
                   y: inStack ? offset * 16 : 16 * STACK_DEPTH,
                   scale: inStack ? 1 - offset * 0.05 : 1 - STACK_DEPTH * 0.05,
                   opacity: inStack ? 1 : 0,
                 }}
-                transition={CARD_SPRING}
+                transition={{
+                  ...CARD_SPRING,
+                  x: { duration: 0.6, ease: [0.32, 0.72, 0, 1] },
+                  rotate: { duration: 0.6, ease: [0.32, 0.72, 0, 1] },
+                }}
                 style={{ zIndex: COUNT - offset }}
                 className={`absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-lg ${
                   isTop
