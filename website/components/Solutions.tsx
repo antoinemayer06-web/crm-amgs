@@ -34,7 +34,7 @@ const EXAMPLES = [
   },
   {
     slot: "solution-3-dashboards",
-    image: "/images/solutions/solution-3-dashboards.jpg" as string | undefined,
+    image: "/images/solutions/solution-3-dashboards-v2.jpg" as string | undefined,
     title: "Dashboards de pilotage automatiques",
     description:
       "Tableaux de bord type Power BI, alimentés et mis à jour sans compilation manuelle.",
