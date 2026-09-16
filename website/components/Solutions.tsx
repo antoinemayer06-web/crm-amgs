@@ -73,8 +73,8 @@ const COUNT = EXAMPLES.length;
 const STACK_DEPTH = 3;
 const SWIPE_OFFSET_THRESHOLD = 80;
 const SWIPE_VELOCITY_THRESHOLD = 500;
-const AUTO_ADVANCE_DELAY = 4000;
-const CARD_SPRING = { type: "spring", stiffness: 260, damping: 30, mass: 0.9 } as const;
+const AUTO_ADVANCE_DELAY = 6500;
+const CARD_SPRING = { type: "spring", stiffness: 140, damping: 26, mass: 1 } as const;
 
 export default function Solutions() {
   const [active, setActive] = useState(0);
@@ -177,8 +177,8 @@ export default function Solutions() {
                 }}
                 transition={{
                   ...CARD_SPRING,
-                  x: { duration: 0.6, ease: [0.32, 0.72, 0, 1] },
-                  rotate: { duration: 0.6, ease: [0.32, 0.72, 0, 1] },
+                  x: { duration: 1, ease: [0.32, 0.72, 0, 1] },
+                  rotate: { duration: 1, ease: [0.32, 0.72, 0, 1] },
                 }}
                 style={{ zIndex: COUNT - offset }}
                 className={`absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-lg ${
