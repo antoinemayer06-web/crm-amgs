@@ -50,10 +50,7 @@ export default function LeadMagnet({ className = "" }: { className?: string }) {
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Laissez votre email pour la recevoir immédiatement.
           </p>
-          <form
-            onSubmit={handleSubmit}
-            className="mt-5 flex flex-col gap-3 sm:flex-row"
-          >
+          <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
             <input
               type="text"
               name="company"
@@ -67,13 +64,13 @@ export default function LeadMagnet({ className = "" }: { className?: string }) {
               name="email"
               required
               placeholder="vous@entreprise.com"
-              className="flex-1 rounded-full border border-border bg-surface px-5 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary"
+              className="w-full rounded-full border border-border bg-surface px-5 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary"
             />
             <motion.button
               type="submit"
               disabled={status === "submitting"}
               whileHover={status === "submitting" ? undefined : buttonHover}
-              className="shrink-0 rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-60"
+              className="w-full rounded-full bg-ink px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-60"
             >
               Recevoir la checklist
             </motion.button>
