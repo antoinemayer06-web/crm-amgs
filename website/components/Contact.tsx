@@ -13,27 +13,11 @@ export default function Contact() {
     <section id="contact" className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-          className="mx-auto max-w-2xl text-center"
-        >
-          <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">
-            Vous êtes décidé à gagner du temps ?
-          </h2>
-          <p className="mt-4 text-lg text-muted">
-            Un appel de 20-30 minutes suffit pour identifier ce qui peut être
-            automatisé chez vous.
-          </p>
-        </motion.div>
-
-        <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="mt-12 grid items-stretch gap-8 lg:grid-cols-2"
+          className="grid items-stretch gap-8 lg:grid-cols-2"
         >
           <motion.div
             variants={fadeInUp}

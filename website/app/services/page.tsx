@@ -88,6 +88,25 @@ export default function ServicesPage() {
 
       <section className="bg-surface py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex flex-col items-center gap-4 rounded-2xl bg-ink p-8 text-center sm:flex-row sm:justify-between sm:text-left">
+            <div>
+              <p className="font-heading text-xl font-black text-white">
+                Projet sur mesure
+              </p>
+              <p className="mt-1 text-sm text-white/70">
+                De l&apos;automatisation à la création de site internet, CRM
+                et infrastructure complète, nous nous adaptons à votre
+                situation réelle.
+              </p>
+            </div>
+            <Link
+              href="/contact"
+              className="inline-block shrink-0 rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:scale-[1.03] hover:bg-white/90 active:scale-[0.98]"
+            >
+              Prendre rendez-vous
+            </Link>
+          </div>
+
           <div className="space-y-10">
             {SERVICES.map((service, index) => (
               <article
@@ -121,24 +140,6 @@ export default function ServicesPage() {
                 </div>
               </article>
             ))}
-          </div>
-
-          <div className="mt-14 flex flex-col items-center gap-4 rounded-2xl bg-ink p-8 text-center sm:flex-row sm:justify-between sm:text-left">
-            <div>
-              <p className="font-heading text-xl font-black text-white">
-                Un fonctionnement similaire au vôtre ?
-              </p>
-              <p className="mt-1 text-sm text-white/70">
-                Chaque système est chiffré sur mesure après un premier
-                échange.
-              </p>
-            </div>
-            <Link
-              href="/contact"
-              className="inline-block shrink-0 rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:scale-[1.03] hover:bg-white/90 active:scale-[0.98]"
-            >
-              Prendre rendez-vous
-            </Link>
           </div>
         </div>
       </section>
