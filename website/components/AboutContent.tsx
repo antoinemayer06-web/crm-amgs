@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { LinkedInIcon } from "@/components/icons";
 import { buttonHover, fadeInUp } from "@/lib/animations";
@@ -90,6 +91,18 @@ export default function AboutContent() {
             Antoine Mayer
           </motion.a>
         </motion.div>
+
+        <p className="mt-6 text-center text-sm text-muted">
+          En savoir plus sur ma façon de travailler :{" "}
+          <Link
+            href="/blog/automatisation-974-guide-complet-pme-reunion"
+            className="underline underline-offset-2 hover:text-primary-dark"
+          >
+            le guide complet de l&apos;automatisation pour les PME
+            réunionnaises
+          </Link>
+          .
+        </p>
       </div>
     </section>
   );

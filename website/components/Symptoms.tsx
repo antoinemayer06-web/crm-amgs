@@ -16,30 +16,48 @@ const SYMPTOMS = [
   {
     slot: "symptome-1-repetitif",
     src: "/videos/symptome-1-repetitif.mp4",
+    poster: "/videos/symptome-1-repetitif-poster.webp",
     title: "Le temps perdu, tous les jours",
     text: "La même info recopiée à la main, encore et encore. Ça ne s'arrête jamais, et personne ne le remarque avant qu'il soit trop tard.",
   },
   {
     slot: "symptome-2-visibilite",
     src: "/videos/symptome-2-visibilite.mp4",
+    poster: "/videos/symptome-2-visibilite-poster.webp",
     title: "Vos données, éparpillées partout",
     text: "L'info existe, mais dans dix endroits différents. Impossible de savoir où en sont vraiment vos dossiers d'un coup d'œil.",
   },
   {
     slot: "symptome-3-charge-mentale",
     src: "/videos/symptome-3-charge-mentale.mp4",
+    poster: "/videos/symptome-3-charge-mentale-poster.webp",
     title: "Tout repose sur une seule personne",
     text: "Un collaborateur absent, et c'est tout le service qui tourne au ralenti. La mémoire d'une personne n'est pas un système.",
   },
 ];
 
-function SymptomVideo({ slot, src }: { slot: string; src?: string }) {
+// Aucune de ces 3 vidéos n'est visible au chargement (section sous le
+// Hero) : poster (frame extraite de chaque vidéo) affiché immédiatement
+// pour ne pas pénaliser le LCP, et preload="none" pour ne déclencher le
+// téléchargement qu'au moment où le navigateur juge la vidéo nécessaire
+// (proche du viewport), pas dès le chargement de la page.
+function SymptomVideo({
+  slot,
+  src,
+  poster,
+}: {
+  slot: string;
+  src?: string;
+  poster?: string;
+}) {
   return (
     <div className="relative aspect-[5/4] w-full overflow-hidden bg-gradient-to-br from-primary/10 to-primary-dark/5">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
         className="symptom-video absolute inset-0 h-full w-full object-cover"
         data-slot={slot}
+        poster={poster}
+        preload="none"
         autoPlay
         muted
         loop
@@ -93,7 +111,11 @@ export default function Symptoms() {
               variants={fadeInUp}
               className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm"
             >
-              <SymptomVideo slot={symptom.slot} src={symptom.src} />
+              <SymptomVideo
+                slot={symptom.slot}
+                src={symptom.src}
+                poster={symptom.poster}
+              />
               <div className="flex flex-1 flex-col p-7 text-center">
                 <h3 className="font-heading text-lg font-bold text-foreground">
                   {symptom.title}

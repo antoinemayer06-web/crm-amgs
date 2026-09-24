@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
+import Note from "@/components/Note";
 import PageIntro from "@/components/PageIntro";
 import PricingFactors from "@/components/PricingFactors";
 import Process from "@/components/Process";
@@ -34,6 +35,18 @@ export default function CommentCaMarchePage() {
           </p>
 
           <PricingFactors />
+
+          <Note>
+            Pas encore sûr de par où commencer ? Notre{" "}
+            <Link
+              href="/blog/automatisation-974-guide-complet-pme-reunion"
+              className="underline underline-offset-2 hover:text-primary-dark"
+            >
+              guide complet de l&apos;automatisation pour les PME
+              réunionnaises
+            </Link>{" "}
+            détaille la méthode, étape par étape.
+          </Note>
 
           <div className="mt-12 rounded-2xl bg-ink p-8 text-center">
             <MessageCircle className="mx-auto h-8 w-8 text-white/70" />

@@ -2,14 +2,15 @@ import { SITE_URL } from "@/lib/site";
 import { CONTACT_EMAIL, LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
 
 // Informations NAP (Nom / Adresse / Téléphone) — cohérence requise avec un
-// futur profil Google Business. Pas d'adresse postale précise fournie pour
-// l'instant (activité freelance sans local commercial) : on reste au niveau
-// région, à affiner si une adresse publique est décidée plus tard.
+// futur profil Google Business.
 export const BUSINESS = {
   name: "AM Growth Solutions",
   founder: "Antoine Mayer",
   telephone: "+262693327398",
   email: CONTACT_EMAIL,
+  streetAddress: "24 rue Mazagran",
+  postalCode: "97400",
+  addressLocality: "Saint-Denis",
   addressRegion: "La Réunion",
   addressCountry: "RE",
   areaServed: "La Réunion",

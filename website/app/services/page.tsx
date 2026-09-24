@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import JsonLd from "@/components/JsonLd";
+import Note from "@/components/Note";
 import PageIntro from "@/components/PageIntro";
 import { SERVICE_TYPES } from "@/lib/content";
 import { serviceSchema } from "@/lib/schema";
@@ -81,6 +82,16 @@ export default function ServicesPage() {
           path: "/services",
         })}
       />
+      {SERVICES.map((service) => (
+        <JsonLd
+          key={service.slot}
+          data={serviceSchema({
+            name: service.title,
+            description: service.description,
+            path: `/services#${service.slot}`,
+          })}
+        />
+      ))}
 
       <PageIntro
         title="Nos services d'automatisation"
@@ -112,7 +123,8 @@ export default function ServicesPage() {
             {SERVICES.map((service, index) => (
               <article
                 key={service.slot}
-                className="overflow-hidden rounded-2xl border border-border bg-background"
+                id={service.slot}
+                className="scroll-mt-24 overflow-hidden rounded-2xl border border-border bg-background"
               >
                 <div className="relative aspect-[3/1] w-full">
                   <Image
@@ -142,6 +154,19 @@ export default function ServicesPage() {
               </article>
             ))}
           </div>
+
+          <Note>
+            Une vue d&apos;ensemble de tout ça, avec la méthode pour
+            démarrer : notre{" "}
+            <Link
+              href="/blog/automatisation-974-guide-complet-pme-reunion"
+              className="underline underline-offset-2 hover:text-primary-dark"
+            >
+              guide complet de l&apos;automatisation pour les PME
+              réunionnaises
+            </Link>
+            .
+          </Note>
         </div>
       </section>
     </main>

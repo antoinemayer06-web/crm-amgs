@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import FinalCta from "@/components/FinalCta";
 import Founder from "@/components/Founder";
 import Hero from "@/components/Hero";
+import Note from "@/components/Note";
 import Solutions from "@/components/Solutions";
 import Symptoms from "@/components/Symptoms";
 import Testimonial from "@/components/Testimonial";
@@ -20,6 +22,19 @@ export default function Home() {
       {/* Hero + bandeau outils — voir components/Hero.tsx */}
 
       <Symptoms />
+
+      <section className="bg-background px-4 pb-4 sm:px-6 lg:px-8">
+        <Note>
+          Envie d&apos;aller plus loin ? Notre{" "}
+          <Link
+            href="/blog/automatisation-974-guide-complet-pme-reunion"
+            className="underline underline-offset-2 hover:text-primary-dark"
+          >
+            guide complet de l&apos;automatisation pour les PME réunionnaises
+          </Link>{" "}
+          détaille les grands types de solutions et la méthode pour démarrer.
+        </Note>
+      </section>
 
       <Solutions />
 

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { ARTICLES } from "@/lib/blog";
 import { SITE_URL } from "@/lib/site";
 
 const ROUTES: { path: string; priority: number }[] = [
@@ -15,10 +16,19 @@ const ROUTES: { path: string; priority: number }[] = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-  return ROUTES.map(({ path, priority }) => ({
+  const pages = ROUTES.map(({ path, priority }) => ({
     url: `${SITE_URL}${path}`,
     lastModified,
-    changeFrequency: "monthly",
+    changeFrequency: "monthly" as const,
     priority,
   }));
+
+  const articles = ARTICLES.map((article) => ({
+    url: `${SITE_URL}/blog/${article.slug}`,
+    lastModified: new Date(article.date),
+    changeFrequency: "monthly" as const,
+    priority: article.pillar ? 0.8 : 0.5,
+  }));
+
+  return [...pages, ...articles];
 }
