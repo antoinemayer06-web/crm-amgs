@@ -142,7 +142,7 @@ export default function Hero() {
           <motion.div variants={fadeInUp} className="mt-10">
             <motion.div whileHover={{ scale: 1.03 }}>
               <Link
-                href="/etude-de-cas"
+                href="/nos-derniers-projets"
                 className="inline-block rounded-full bg-white px-8 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
               >
                 Nos réalisations

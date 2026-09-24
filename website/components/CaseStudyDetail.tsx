@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { CheckCircle2, ClipboardList, Database, RefreshCw } from "lucide-react";
 import DashboardMockup from "@/components/DashboardMockup";
 import FlowDiagram from "@/components/FlowDiagram";
-import { buttonHover, fadeInUp } from "@/lib/animations";
+import { fadeInUp } from "@/lib/animations";
 import { CASE_STUDY } from "@/lib/content";
 
 const FLOW_STEPS = [
@@ -48,6 +48,14 @@ export default function CaseStudyDetail() {
             choix des outils, mais l&apos;absence de lien entre eux : {" "}
             {CASE_STUDY.problem}
           </p>
+          <p className="mt-4 text-base leading-relaxed text-muted">
+            Le point de départ était concret : chaque nouveau dossier signé
+            imposait de tout recréer à la main dans l&apos;outil de gestion
+            — dossier, tâches, échéances — un rituel répété plusieurs fois
+            par semaine, sans réelle valeur ajoutée. C&apos;est cette tâche
+            précise, plus que le principe général de « gagner du temps »,
+            qui a servi de point d&apos;entrée à la mission.
+          </p>
         </motion.div>
 
         <motion.div
@@ -76,6 +84,15 @@ export default function CaseStudyDetail() {
               nos services d&apos;automatisation
             </Link>
             .
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-muted">
+            La mission a démarré par le connecteur le plus douloureux au
+            quotidien — CRM vers gestion de tâches — avant d&apos;étendre
+            le même principe au reste des outils une fois ce premier socle
+            validé et testé sur des dossiers réels. Le plan de charge
+            automatique est arrivé en dernier, une fois que les tâches
+            elles-mêmes étaient déjà créées et affectées sans intervention
+            manuelle.
           </p>
 
           <div className="mt-8">
@@ -141,37 +158,15 @@ export default function CaseStudyDetail() {
             information d&apos;un outil à l&apos;autre, et le dirigeant sait
             en un coup d&apos;œil qui, dans l&apos;équipe, a de la marge ou
             est déjà surchargé — sans avoir à demander un point d&apos;étape.
+            Ce qui prenait auparavant une bonne partie d&apos;une matinée à
+            chaque nouveau dossier se fait désormais tout seul, en arrière-
+            plan, pendant que l&apos;équipe se concentre sur le travail qui
+            compte réellement.
           </p>
 
           <div className="mt-8">
             <DashboardMockup />
           </div>
-        </motion.div>
-
-        <motion.div
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          className="mt-14 flex flex-col items-center gap-4 rounded-2xl bg-ink p-8 text-center sm:flex-row sm:justify-between sm:text-left"
-        >
-          <div>
-            <p className="font-heading text-xl font-black text-white">
-              Un fonctionnement similaire au vôtre ?
-            </p>
-            <p className="mt-1 text-sm text-white/60">
-              Un appel de 20-30 minutes suffit pour identifier ce qui peut
-              être automatisé chez vous.
-            </p>
-          </div>
-          <motion.div whileHover={buttonHover}>
-            <Link
-              href="/contact"
-              className="inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/90"
-            >
-              Prendre rendez-vous
-            </Link>
-          </motion.div>
         </motion.div>
       </div>
     </section>

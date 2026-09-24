@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import JsonLd from "@/components/JsonLd";
 import PageIntro from "@/components/PageIntro";
+import { SERVICE_TYPES } from "@/lib/content";
 import { serviceSchema } from "@/lib/schema";
 
 // Page de synthèse unique pour les 7 types de solutions déjà présentés sur
@@ -14,49 +15,49 @@ const SERVICES = [
   {
     slot: "solution-1-connexion-outils",
     image: "/images/solutions/solution-1-connexion-outils.jpg",
-    title: "Connexion d'outils entre eux",
+    title: SERVICE_TYPES[0],
     description:
       "Votre CRM, votre outil de gestion de projet, votre stockage cloud — chacun fait bien son travail, mais ils ne se parlent pas entre eux. Nous les connectons pour que l'information circule automatiquement d'un outil à l'autre, sans ressaisie manuelle et sans changer vos habitudes.",
   },
   {
     slot: "solution-2-site-formulaire",
     image: "/images/solutions/solution-2-site-formulaire-v3.jpg",
-    title: "Sites ou formulaires reliés à une base de données",
+    title: SERVICE_TYPES[1],
     description:
       "Un formulaire rempli par un client ou un collaborateur peut déclencher automatiquement la création d'une fiche dans votre CRM ou votre base de données — sans que personne n'ait à recopier l'information à la main. Utile pour la collecte de leads, les demandes internes, ou le suivi de dossiers.",
   },
   {
     slot: "solution-3-dashboards",
     image: "/images/solutions/solution-3-dashboards-v2.jpg",
-    title: "Dashboards de pilotage automatiques",
+    title: SERVICE_TYPES[2],
     description:
       "Un tableau de bord type Power BI qui se met à jour tout seul, à partir des données déjà présentes dans vos outils. Fini les rapports compilés à la main chaque semaine — l'information est à jour en permanence, visible d'un coup d'œil.",
   },
   {
     slot: "solution-4-microsoft-365",
     image: "/images/solutions/solution-4-microsoft-365.jpg",
-    title: "Automatisations Microsoft 365",
+    title: SERVICE_TYPES[3],
     description:
       "Excel avancé, Power Automate, Microsoft Forms — la suite Microsoft que vous utilisez déjà peut faire beaucoup plus que ce que vous en exploitez aujourd'hui. Nous construisons des flux automatiques entre vos fichiers et vos outils pour éliminer les tâches répétitives internes.",
   },
   {
     slot: "solution-5-administratif-financier",
     image: "/images/solutions/solution-5-administratif-financier.jpg",
-    title: "Automatisation administrative & financière",
+    title: SERVICE_TYPES[4],
     description:
       "Devis, factures, relances de paiement : autant de tâches répétitives qui peuvent être générées et envoyées automatiquement dès qu'une condition est remplie, sans ressaisie entre votre CRM et votre outil de facturation.",
   },
   {
     slot: "solution-6-charge-equipe",
     image: "/images/solutions/solution-6-charge-equipe.jpg",
-    title: "Suivi de charge d'équipe",
+    title: SERVICE_TYPES[5],
     description:
       "Un plan de charge automatique qui montre en temps réel qui est disponible et qui est débordé, construit directement à partir des tâches déjà assignées dans vos outils — sans tableur à mettre à jour à la main.",
   },
   {
     slot: "solution-7-ia",
     image: "/images/solutions/solution-7-ia.jpg",
-    title: "Agents & assistants IA",
+    title: SERVICE_TYPES[6],
     description:
       "Veille de marché automatique, extraction de documents, catégorisation, réponses automatisées — des agents IA conçus sur mesure pour des cas d'usage concrets de votre activité, pas un gadget ajouté après coup.",
   },

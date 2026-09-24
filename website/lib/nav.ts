@@ -13,7 +13,7 @@ export interface NavItem extends NavLink {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Services", href: "/services" },
-  { label: "Étude de cas", href: "/etude-de-cas" },
+  { label: "Nos derniers projets", href: "/nos-derniers-projets" },
   { label: "Comment ça marche", href: "/comment-ca-marche" },
   { label: "Blog", href: "/blog" },
   { label: "À propos", href: "/a-propos" },

@@ -237,7 +237,7 @@ export default function Solutions() {
 
         <div className="mt-8 text-center">
           <Link
-            href="/etude-de-cas"
+            href="/nos-derniers-projets"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-dark transition hover:gap-2.5"
           >
             Voir nos derniers projets

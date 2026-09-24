@@ -55,7 +55,7 @@ export default function AProposPage() {
                 href={CASE_STUDY.href}
                 className="font-semibold text-primary underline underline-offset-2"
               >
-                l&apos;étude de cas complète
+nos derniers projets
               </Link>
               .
             </p>

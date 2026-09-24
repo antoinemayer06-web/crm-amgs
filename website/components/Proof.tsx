@@ -90,7 +90,7 @@ export default function Proof() {
           >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <span className="text-xs font-semibold uppercase tracking-widest text-primary-dark">
-                Étude de cas
+                Projet 1
               </span>
               <span className="font-heading text-lg font-bold text-foreground">
                 {CASE_STUDY.sector} réunionnais
