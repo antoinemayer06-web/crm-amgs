@@ -24,7 +24,7 @@ export default function ProjectsClosing() {
               Et pour votre situation ?
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted">
-              Ces deux projets illustrent le principe. Chaque demande est
+              Ces projets illustrent le principe. Chaque demande est
               différente — voici ce qu&apos;il est possible de construire :
             </p>
           </motion.div>
@@ -79,34 +79,24 @@ export default function ProjectsClosing() {
           >
             <div>
               <p className="font-heading text-xl font-black text-white">
-                Et le vôtre ?
+                Discutons-en
               </p>
               <p className="mt-1 text-sm text-white/60">
-                Un appel de 20 minutes suffit pour savoir ce qui, chez vous,
-                peut tourner tout seul.
+                Envie de savoir ce qui, chez vous, peut tourner tout seul ?
+                Et si vous voulez voir d&apos;autres projets que ceux
+                présentés ici, contactez-nous — on vous en montre
+                volontiers plus.
               </p>
             </div>
             <motion.div whileHover={buttonHover}>
               <Link
                 href="/contact"
-                className="inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/90"
+                className="inline-block shrink-0 rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/90"
               >
                 Prendre rendez-vous
               </Link>
             </motion.div>
           </motion.div>
-
-          <motion.p
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            className="mt-6 text-center text-xs text-muted"
-          >
-            Les bénéfices affichés sont des estimations basées sur les
-            informations transmises par les clients concernés, à titre
-            indicatif.
-          </motion.p>
         </div>
       </section>
     </>

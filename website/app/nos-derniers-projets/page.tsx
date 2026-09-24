@@ -10,7 +10,7 @@ import { CASE_STUDY } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Nos derniers projets — automatisation PME à La Réunion",
   description:
-    "Deux projets récents, anonymisés : suppression de la double saisie entre 5 outils pour un bureau d'études, et refonte de site connectée au CRM. Résultats et méthode détaillés.",
+    "Quatre projets récents, anonymisés : suppression de la double saisie, plan de charge automatique, refonte de site connectée au CRM, chatbot de support IA. Résultats et méthode détaillés.",
   alternates: { canonical: CASE_STUDY.href },
 };
 
@@ -19,7 +19,7 @@ export default function NosDerniersProjetsPage() {
     <main>
       <PageIntro
         title="Nos derniers projets"
-        subtitle="Deux projets récents à La Réunion (974), anonymisés. Cliquez sur une carte pour voir le contexte, la méthode et les résultats."
+        subtitle="Un aperçu de nos missions les plus récentes — chaque client a ses propres outils et son propre fonctionnement."
       />
 
       <ProjectCards />

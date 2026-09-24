@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Clock, Zap } from "lucide-react";
+import { ChevronDown, Zap } from "lucide-react";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 interface Project {
@@ -13,12 +13,6 @@ interface Project {
   startingPoint: string;
   whatWasDone: string;
   result: string;
-  extraNote?: string;
-  benefit: {
-    headline: string;
-    detail?: string;
-    footnote: string;
-  };
 }
 
 const PROJECTS: Project[] = [
@@ -26,43 +20,52 @@ const PROJECTS: Project[] = [
     sector: "Bureau d'études",
     title: "La fin de la double saisie",
     teaser:
-      "5 outils connectés, une équipe qui voit enfin sa charge de travail en un coup d'œil.",
+      "5 outils connectés, un projet qui se déploie tout seul dès sa création.",
     resultBadge: "Livré en 1 semaine et demie",
     startingPoint:
-      "Cinq outils, aucun lien entre eux. Chaque nouveau projet signifiait recréer à la main les mêmes informations, plusieurs fois, dans plusieurs logiciels.",
+      "Chaque nouveau projet devait être recréé à la main dans plusieurs outils — dossier de stockage, tâches, notification d'équipe, suivi mail — la même information saisie plusieurs fois.",
     whatWasDone:
-      "Connexion complète des outils existants — dès qu'un projet est validé, dossier, tâches et notifications se créent tout seuls, avec la bonne personne déjà assignée.",
+      "Connexion complète des outils existants autour du CRM utilisé comme référentiel unique. Dès qu'un projet est marqué prêt, son dossier de stockage, ses tâches, sa notification d'équipe et son suivi mail se créent automatiquement, avec les documents de suivi déjà en place.",
     result:
-      "Zéro ressaisie. L'équipe voit désormais sa charge de travail en temps réel, sans tableur à mettre à jour.",
-    extraNote:
-      "Une seconde mission a suivi peu après sur ce même client : automatisation complète d'un nouveau processus, livrée en 4 jours.",
-    benefit: {
-      headline:
-        "~3 à 15h de saisie manuelle évitées par an sur la création de dossier",
-      detail:
-        "En complément : élimination des erreurs de rattachement de tâches, et une alerte automatique si un projet est sous-facturé par rapport aux heures réellement travaillées — un bénéfice plus difficile à chiffrer mais souvent plus significatif que le temps lui-même.",
-      footnote:
-        "*Estimation basée sur 1 à 5 nouveaux projets par mois et 10 à 15 minutes de saisie manuelle par création (avant automatisation), répétée dans plusieurs outils.",
-    },
+      "Le dirigeant garde ses habitudes de saisie dans son outil habituel — tout le reste se met en place sans aucune action supplémentaire.",
   },
   {
-    sector: "Site vitrine",
+    sector: "Bureau d'études",
+    title: "Un plan de charge qui se construit tout seul",
+    teaser:
+      "Fini le tableur mis à jour à la main — la charge de l'équipe visible en temps réel.",
+    resultBadge: "Livré en 4 jours",
+    startingPoint:
+      "L'outil de suivi de tâches utilisé jusque-là était jugé trop complexe par l'équipe, et il n'existait aucune remontée fiable du temps réellement passé sur chaque dossier.",
+    whatWasDone:
+      "Le CRM reste la seule source de vérité pour les projets et les tâches. Chaque tâche assignée apparaît automatiquement dans l'agenda personnel du collaborateur concerné ; son organisation du temps remonte ensuite automatiquement dans un tableau de pilotage centralisé, avec une vue de charge par collaborateur, semaine par semaine.",
+    result:
+      "Une visibilité en temps réel sur qui est disponible et qui est débordé, et pour la première fois, un vrai suivi du temps passé par tâche — sans que personne n'ait à le saisir manuellement.",
+  },
+  {
+    sector: "Agence IoT",
     title: "Un site qui convertit, un CRM qui se remplit tout seul",
     teaser:
       "Offre clarifiée, tunnel de contact simplifié, zéro ressaisie derrière.",
     resultBadge: "Reproduit pour plusieurs clients",
     startingPoint:
-      "Un site avec une offre peu claire et un parcours de contact qui perdait des prospects en route.",
+      "Une agence spécialisée en IoT avait un site avec une offre peu claire et un parcours de contact qui perdait des prospects en route.",
     whatWasDone:
       "Refonte du site avec une offre clarifiée, puis connexion du formulaire de contact au CRM via Power Automate — chaque nouvelle demande atterrit automatiquement au bon endroit, avec un suivi précis de son origine.",
     result:
       "Un site qui convertit mieux, et un suivi commercial qui ne demande plus aucune saisie manuelle. Cette approche a été reproduite pour plusieurs clients.",
-    benefit: {
-      headline:
-        "~30h de saisie manuelle évitées par an, soit environ 700 à 1 200€ de temps libéré",
-      footnote:
-        "*Estimation basée sur environ 30 prospects traités par mois et 5 minutes de saisie manuelle par prospect avant l'automatisation (temps de copie des informations du formulaire vers le CRM), valorisées à un taux horaire chargé de 25 à 40€.",
-    },
+  },
+  {
+    sector: "Agence IoT",
+    title: "Un chatbot qui répond, même en dehors des heures de bureau",
+    teaser: "Support client automatisé, directement intégré au site.",
+    resultBadge: "Disponible 24h/24",
+    startingPoint:
+      "L'équipe recevait un flux constant de questions répétitives (tarifs, délais, fonctionnement) qui monopolisait du temps de réponse manuel, y compris en dehors des heures d'ouverture.",
+    whatWasDone:
+      "Un agent conversationnel IA a été intégré directement au site, capable de répondre aux questions courantes et de qualifier les demandes avant transfert vers l'équipe quand une vraie expertise est nécessaire.",
+    result:
+      "Une présence disponible en continu qui filtre les demandes simples, pour que l'équipe se concentre sur les échanges qui en valent vraiment la peine.",
   },
 ];
 
@@ -158,36 +161,6 @@ export default function ProjectCards() {
                           </h4>
                           <p className="mt-1.5 text-sm leading-relaxed text-foreground/80">
                             {project.result}
-                          </p>
-                        </div>
-
-                        {project.extraNote && (
-                          <div className="rounded-lg border-l-4 border-primary/30 bg-primary/5 p-3.5 text-sm leading-relaxed text-foreground/80">
-                            {project.extraNote}
-                          </div>
-                        )}
-
-                        <div className="rounded-xl border border-primary/20 bg-primary/[0.05] p-5">
-                          <div className="flex items-start gap-2.5">
-                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary-dark">
-                              <Clock className="h-4 w-4" />
-                            </span>
-                            <div>
-                              <p className="text-xs font-bold uppercase tracking-wide text-primary-dark">
-                                Bénéfice estimé
-                              </p>
-                              <p className="mt-1 text-sm font-semibold text-foreground">
-                                {project.benefit.headline}
-                              </p>
-                            </div>
-                          </div>
-                          {project.benefit.detail && (
-                            <p className="mt-3 text-sm leading-relaxed text-foreground/80">
-                              {project.benefit.detail}
-                            </p>
-                          )}
-                          <p className="mt-3 text-xs leading-relaxed text-muted">
-                            {project.benefit.footnote}
                           </p>
                         </div>
                       </div>
