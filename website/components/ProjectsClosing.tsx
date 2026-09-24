@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Calendar, CheckCircle2 } from "lucide-react";
 import { buttonHover, fadeInUp, staggerContainer } from "@/lib/animations";
 import { SERVICE_TYPES } from "@/lib/content";
 
@@ -91,9 +91,10 @@ export default function ProjectsClosing() {
             <motion.div whileHover={buttonHover}>
               <Link
                 href="/contact"
-                className="inline-block shrink-0 rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/90"
+                aria-label="Prendre rendez-vous"
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-blue-600 shadow-sm transition-colors hover:bg-white/90"
               >
-                Prendre rendez-vous
+                <Calendar className="h-6 w-6" />
               </Link>
             </motion.div>
           </motion.div>

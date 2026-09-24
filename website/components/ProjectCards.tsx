@@ -43,11 +43,11 @@ const PROJECTS: Project[] = [
       "Une visibilité en temps réel sur qui est disponible et qui est débordé, et pour la première fois, un vrai suivi du temps passé par tâche — sans que personne n'ait à le saisir manuellement.",
   },
   {
-    sector: "Agence IoT",
+    sector: "Agence marketing",
     title: "Un site qui convertit, un CRM qui se remplit tout seul",
     teaser:
       "Offre clarifiée, tunnel de contact simplifié, zéro ressaisie derrière.",
-    resultBadge: "Reproduit pour plusieurs clients",
+    resultBadge: "Livré en 5 jours",
     startingPoint:
       "Une agence spécialisée en IoT avait un site avec une offre peu claire et un parcours de contact qui perdait des prospects en route.",
     whatWasDone:
@@ -56,10 +56,10 @@ const PROJECTS: Project[] = [
       "Un site qui convertit mieux, et un suivi commercial qui ne demande plus aucune saisie manuelle. Cette approche a été reproduite pour plusieurs clients.",
   },
   {
-    sector: "Agence IoT",
+    sector: "Agence marketing",
     title: "Un chatbot qui répond, même en dehors des heures de bureau",
     teaser: "Support client automatisé, directement intégré au site.",
-    resultBadge: "Disponible 24h/24",
+    resultBadge: "Livré en 2 jours",
     startingPoint:
       "L'équipe recevait un flux constant de questions répétitives (tarifs, délais, fonctionnement) qui monopolisait du temps de réponse manuel, y compris en dehors des heures d'ouverture.",
     whatWasDone:
