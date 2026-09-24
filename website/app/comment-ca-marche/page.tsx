@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ClipboardCheck, Layers, MessageCircle, Wrench } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import PageIntro from "@/components/PageIntro";
+import PricingFactors from "@/components/PricingFactors";
 import Process from "@/components/Process";
+import ProcessOverview from "@/components/ProcessOverview";
 
 export const metadata: Metadata = {
   title: "Comment ça marche — méthode et tarifs sur mesure",
@@ -11,27 +13,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/comment-ca-marche" },
 };
 
-const FACTORS = [
-  {
-    icon: Layers,
-    title: "Le nombre d'outils à connecter",
-    description:
-      "Relier deux outils entre eux n'a pas la même portée qu'orchestrer un système à cinq outils.",
-  },
-  {
-    icon: Wrench,
-    title: "La complexité des règles métier",
-    description:
-      "Une synchronisation simple n'a rien à voir avec des automatisations en cascade, conditionnelles, propres à votre fonctionnement.",
-  },
-  {
-    icon: ClipboardCheck,
-    title: "Le suivi dans le temps",
-    description:
-      "Certaines missions s'arrêtent à la mise en service, d'autres incluent un ajustement régulier du système au fil de son usage réel.",
-  },
-];
-
 export default function CommentCaMarchePage() {
   return (
     <main>
@@ -39,6 +20,7 @@ export default function CommentCaMarchePage() {
         title="Comment ça marche : une méthode simple, sur mesure"
         subtitle="Quatre étapes, du premier échange à la mise en service — sans forfait générique ni délai universel."
       />
+      <ProcessOverview />
       <Process />
 
       <section className="bg-surface py-16 sm:py-20">
@@ -53,29 +35,7 @@ export default function CommentCaMarchePage() {
             trois choses concrètes :
           </p>
 
-          <div className="mt-8 space-y-4">
-            {FACTORS.map((factor) => {
-              const Icon = factor.icon;
-              return (
-                <div
-                  key={factor.title}
-                  className="flex items-start gap-4 rounded-2xl border border-border bg-background p-6"
-                >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-dark">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <h3 className="font-heading text-base font-bold text-foreground">
-                      {factor.title}
-                    </h3>
-                    <p className="mt-1 text-sm leading-relaxed text-muted">
-                      {factor.description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <PricingFactors />
 
           <div className="mt-12 rounded-2xl bg-ink p-8 text-center">
             <MessageCircle className="mx-auto h-8 w-8 text-white/70" />
