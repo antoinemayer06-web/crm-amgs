@@ -17,10 +17,7 @@ export default function AProposPage() {
   return (
     <main>
       <JsonLd data={personSchema()} />
-      <PageIntro
-        title="On m'appelle pour un problème. On me garde pour un système."
-        subtitle="La plupart des PME que j'accompagne ne cherchent pas un outil de plus. Elles cherchent à arrêter de perdre du temps sur ce qui devrait tourner tout seul."
-      />
+      <PageIntro title="On m'appelle pour un problème. On me garde pour un système." />
       <AboutContent />
     </main>
   );
