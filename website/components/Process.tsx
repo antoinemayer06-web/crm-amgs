@@ -25,7 +25,7 @@ const STEPS: {
   {
     title: "Diagnostic & devis",
     description:
-      "Analyse de votre fonctionnement réel et proposition d'un système sur mesure, avec un délai de livraison annoncé clairement (pas de forfait générique).",
+      "Analyse de votre fonctionnement réel et proposition d'un système sur mesure, avec un délai de livraison annoncé clairement.",
     icon: FileSearch,
   },
   {
@@ -266,14 +266,15 @@ function StepColumn({
   reveal: MotionValue<number>;
 }) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex h-full flex-col items-center">
       <StepMarker index={index} reveal={reveal} />
-      <div className="mt-6 w-full overflow-hidden rounded-2xl border border-border bg-surface p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg">
+      <div className="mt-6 w-full flex-1 overflow-hidden rounded-2xl border border-border bg-surface p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg">
         <StepCard
           title={title}
           description={description}
           icon={icon}
           centered
+          className="h-full justify-center"
         />
       </div>
     </div>
