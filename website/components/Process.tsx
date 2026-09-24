@@ -11,10 +11,7 @@ import { FileSearch, MessageCircle, Rocket, Settings2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
-// Exporté pour être réutilisé tel quel par ProcessOverview.tsx (bande
-// récapitulative en haut de page) — une seule source de vérité pour les
-// titres/icônes des 4 étapes.
-export const STEPS: {
+const STEPS: {
   title: string;
   description: string;
   icon: LucideIcon;
@@ -168,7 +165,6 @@ export default function Process() {
                   )}
                 </div>
                 <StepCard
-                  index={index}
                   title={step.title}
                   description={step.description}
                   icon={step.icon}
@@ -209,11 +205,10 @@ function StepMarker({
   );
 }
 
-// Contenu texte d'une étape (icône + titre + description), avec un grand
-// numéro en filigrane derrière — animé en fade-in + léger glissement
-// latéral au moment où l'élément entre dans le viewport (whileInView,
-// indépendant par carte), pas toutes les cartes en même temps au
-// chargement de la page.
+// Contenu texte d'une étape (icône + titre + description) — animé en
+// fade-in + léger glissement latéral au moment où l'élément entre dans le
+// viewport (whileInView, indépendant par carte), pas toutes les cartes en
+// même temps au chargement de la page.
 const slideInCard = {
   hidden: { opacity: 0, x: 18 },
   visible: {
@@ -224,14 +219,12 @@ const slideInCard = {
 };
 
 function StepCard({
-  index,
   title,
   description,
   icon: Icon,
   centered = false,
   className = "",
 }: {
-  index: number;
   title: string;
   description: string;
   icon: LucideIcon;
@@ -244,29 +237,17 @@ function StepCard({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.5 }}
-      className={`relative ${className}`}
+      className={`flex flex-col gap-1 ${
+        centered ? "items-center text-center" : "items-start text-left"
+      } ${className}`}
     >
-      <span
-        aria-hidden="true"
-        className={`pointer-events-none absolute top-0 select-none font-heading text-8xl font-black text-primary/[0.14] ${
-          centered ? "left-1/2 -translate-x-1/2" : "right-0"
-        }`}
-      >
-        {index + 1}
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-dark">
+        <Icon className="h-5 w-5" />
       </span>
-      <div
-        className={`relative flex flex-col gap-1 ${
-          centered ? "items-center text-center" : "items-start text-left"
-        }`}
-      >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-dark">
-          <Icon className="h-5 w-5" />
-        </span>
-        <h3 className="mt-3 font-heading text-lg font-bold text-foreground">
-          {title}
-        </h3>
-        <p className="text-sm leading-relaxed text-muted">{description}</p>
-      </div>
+      <h3 className="mt-3 font-heading text-lg font-bold text-foreground">
+        {title}
+      </h3>
+      <p className="text-sm leading-relaxed text-muted">{description}</p>
     </motion.div>
   );
 }
@@ -289,7 +270,6 @@ function StepColumn({
       <StepMarker index={index} reveal={reveal} />
       <div className="mt-6 w-full overflow-hidden rounded-2xl border border-border bg-surface p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg">
         <StepCard
-          index={index}
           title={title}
           description={description}
           icon={icon}

@@ -21,7 +21,7 @@ const PROJECTS: Project[] = [
     title: "La fin de la double saisie",
     teaser:
       "5 outils connectés, un projet qui se déploie tout seul dès sa création.",
-    resultBadge: "Livré en 1 semaine et demie",
+    resultBadge: "Livré en 1 semaine",
     startingPoint:
       "Chaque nouveau projet devait être recréé à la main dans plusieurs outils — dossier de stockage, tâches, notification d'équipe, suivi mail — la même information saisie plusieurs fois.",
     whatWasDone:
@@ -56,7 +56,7 @@ const PROJECTS: Project[] = [
       "Un site qui convertit mieux, et un suivi commercial qui ne demande plus aucune saisie manuelle. Cette approche a été reproduite pour plusieurs clients.",
   },
   {
-    sector: "Agence marketing",
+    sector: "Agence IoT",
     title: "Un chatbot qui répond, même en dehors des heures de bureau",
     teaser: "Support client automatisé, directement intégré au site.",
     resultBadge: "Livré en 2 jours",
@@ -90,17 +90,19 @@ export default function ProjectCards() {
                 layout
                 variants={fadeInUp}
                 transition={{ layout: { duration: 0.35, ease: "easeInOut" } }}
-                className={`overflow-hidden rounded-2xl border bg-background shadow-sm transition-colors ${
+                className={`flex flex-col overflow-hidden rounded-2xl border bg-background shadow-sm transition-colors ${
                   isOpen
                     ? "border-primary/30 sm:col-span-2"
-                    : "border-border"
+                    : "h-full border-border"
                 }`}
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
-                  className="flex w-full flex-col items-start gap-3 p-6 text-left sm:p-7"
+                  className={`flex w-full flex-col items-start gap-3 p-6 text-left sm:p-7 ${
+                    isOpen ? "" : "h-full"
+                  }`}
                 >
                   <div className="flex w-full items-start justify-between gap-3">
                     <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-dark">
@@ -122,7 +124,7 @@ export default function ProjectCards() {
                     {project.teaser}
                   </p>
 
-                  <span className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-bold text-white">
+                  <span className="mt-auto inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-bold text-white">
                     <Zap className="h-4 w-4" />
                     {project.resultBadge}
                   </span>

@@ -4,7 +4,6 @@ import { MessageCircle } from "lucide-react";
 import PageIntro from "@/components/PageIntro";
 import PricingFactors from "@/components/PricingFactors";
 import Process from "@/components/Process";
-import ProcessOverview from "@/components/ProcessOverview";
 
 export const metadata: Metadata = {
   title: "Comment ça marche — méthode et tarifs sur mesure",
@@ -20,7 +19,6 @@ export default function CommentCaMarchePage() {
         title="Comment ça marche : une méthode simple, sur mesure"
         subtitle="Quatre étapes, du premier échange à la mise en service — sans forfait générique ni délai universel."
       />
-      <ProcessOverview />
       <Process />
 
       <section className="bg-surface py-16 sm:py-20">

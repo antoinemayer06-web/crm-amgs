@@ -92,7 +92,7 @@ export default function ProjectsClosing() {
               <Link
                 href="/contact"
                 aria-label="Prendre rendez-vous"
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-blue-600 shadow-sm transition-colors hover:bg-white/90"
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-primary-dark shadow-sm transition-colors hover:bg-white/90"
               >
                 <Calendar className="h-6 w-6" />
               </Link>
