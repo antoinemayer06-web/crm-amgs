@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import CaseStudyDetail from "@/components/CaseStudyDetail";
 import PageIntro from "@/components/PageIntro";
-import Proof from "@/components/Proof";
+import ProjectCards from "@/components/ProjectCards";
 import ProjectsClosing from "@/components/ProjectsClosing";
-import ProjectTwo from "@/components/ProjectTwo";
 import { CASE_STUDY } from "@/lib/content";
 
 // Anciennement /etude-de-cas — renommée pour refléter qu'elle présente
@@ -21,12 +19,10 @@ export default function NosDerniersProjetsPage() {
     <main>
       <PageIntro
         title="Nos derniers projets"
-        subtitle="Deux projets récents à La Réunion (974), anonymisés, présentés avec leur contexte, la méthode utilisée et les résultats obtenus."
+        subtitle="Deux projets récents à La Réunion (974), anonymisés. Cliquez sur une carte pour voir le contexte, la méthode et les résultats."
       />
 
-      <Proof />
-      <CaseStudyDetail />
-      <ProjectTwo />
+      <ProjectCards />
       <ProjectsClosing />
     </main>
   );

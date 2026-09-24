@@ -24,9 +24,8 @@ export default function ProjectsClosing() {
               Et pour votre situation ?
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted">
-              Ces deux projets illustrent le principe, mais chaque demande
-              est différente. Voici les types de systèmes que nous pouvons
-              construire pour vous :
+              Ces deux projets illustrent le principe. Chaque demande est
+              différente — voici ce qu&apos;il est possible de construire :
             </p>
           </motion.div>
 
@@ -80,11 +79,11 @@ export default function ProjectsClosing() {
           >
             <div>
               <p className="font-heading text-xl font-black text-white">
-                Un fonctionnement similaire au vôtre ?
+                Et le vôtre ?
               </p>
               <p className="mt-1 text-sm text-white/60">
-                Chaque système est chiffré sur mesure après un premier
-                échange.
+                Un appel de 20 minutes suffit pour savoir ce qui, chez vous,
+                peut tourner tout seul.
               </p>
             </div>
             <motion.div whileHover={buttonHover}>
@@ -96,6 +95,18 @@ export default function ProjectsClosing() {
               </Link>
             </motion.div>
           </motion.div>
+
+          <motion.p
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            className="mt-6 text-center text-xs text-muted"
+          >
+            Les bénéfices affichés sont des estimations basées sur les
+            informations transmises par les clients concernés, à titre
+            indicatif.
+          </motion.p>
         </div>
       </section>
     </>
