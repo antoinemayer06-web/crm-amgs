@@ -17,7 +17,7 @@ export default function AProposPage() {
   return (
     <main>
       <JsonLd data={personSchema()} />
-      <PageIntro title="On m'appelle pour un problème. On me garde pour un système." />
+      <PageIntro title="Mettre les dernières technologies au service des PME." />
       <AboutContent />
     </main>
   );
