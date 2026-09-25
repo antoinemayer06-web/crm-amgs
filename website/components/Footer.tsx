@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
 import { CONTACT_EMAIL, LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
 import { FOOTER_LINKS } from "@/lib/nav";
+import { trackEvent } from "@/lib/track";
 
 export default function Footer() {
   return (
@@ -36,6 +39,7 @@ export default function Footer() {
             </nav>
             <a
               href={`mailto:${CONTACT_EMAIL}`}
+              onClick={() => trackEvent("clic_email")}
               className="text-sm text-muted transition-colors hover:text-primary"
             >
               {CONTACT_EMAIL}
@@ -48,6 +52,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
+              onClick={() => trackEvent("clic_linkedin")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-primary hover:text-primary"
             >
               <LinkedInIcon className="h-4 w-4" />
@@ -57,6 +62,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
+              onClick={() => trackEvent("clic_whatsapp")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
             >
               <WhatsAppIcon className="h-4 w-4" />

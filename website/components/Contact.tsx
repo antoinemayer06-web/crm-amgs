@@ -7,6 +7,7 @@ import DiagnosticCta from "@/components/DiagnosticCta";
 import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
 import { buttonHover, fadeInUp, staggerContainer } from "@/lib/animations";
 import { CALENDLY_URL, CONTACT_EMAIL, LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
+import { trackEvent } from "@/lib/track";
 
 export default function Contact() {
   return (
@@ -40,6 +41,7 @@ export default function Contact() {
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent("clic_calendly")}
               className="mt-3 block text-center text-xs text-white/50 underline underline-offset-2 transition-colors hover:text-white/80"
             >
               Le calendrier ne s&apos;affiche pas ? Ouvrir la prise de
@@ -61,6 +63,7 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={buttonHover}
+                  onClick={() => trackEvent("clic_whatsapp")}
                   className="flex items-center justify-center gap-2.5 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-accent/25 transition-colors hover:bg-accent-dark"
                 >
                   <WhatsAppIcon className="h-5 w-5" />
@@ -71,6 +74,7 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={buttonHover}
+                  onClick={() => trackEvent("clic_linkedin")}
                   className="flex items-center justify-center gap-2.5 rounded-full bg-[#0A66C2] px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#0A66C2]/25 transition-colors hover:bg-[#0A66C2]/90"
                 >
                   <LinkedInIcon className="h-5 w-5" />
@@ -79,6 +83,7 @@ export default function Contact() {
                 <motion.a
                   href={`mailto:${CONTACT_EMAIL}`}
                   whileHover={buttonHover}
+                  onClick={() => trackEvent("clic_email")}
                   className="flex items-center justify-center gap-2.5 rounded-full border border-border px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary-dark"
                 >
                   <Mail className="h-5 w-5" />

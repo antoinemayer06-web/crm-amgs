@@ -8,6 +8,7 @@ import { WhatsAppIcon } from "@/components/icons";
 import { buttonHover } from "@/lib/animations";
 import { WHATSAPP_URL } from "@/lib/links";
 import { NAV_ITEMS } from "@/lib/nav";
+import { trackEvent } from "@/lib/track";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -134,6 +135,7 @@ export default function Header() {
             rel="noopener noreferrer"
             whileHover={buttonHover}
             aria-label="Discuter sur WhatsApp"
+            onClick={() => trackEvent("clic_whatsapp")}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-accent shadow-sm transition-colors hover:bg-accent hover:text-white"
           >
             <WhatsAppIcon className="h-5 w-5" />
@@ -195,7 +197,10 @@ export default function Header() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => setMobileOpen(false)}
+                onClick={() => {
+                  setMobileOpen(false);
+                  trackEvent("clic_whatsapp");
+                }}
                 className="mt-2 flex items-center justify-center gap-2 rounded-full border-2 border-accent px-5 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-white"
               >
                 <WhatsAppIcon className="h-4 w-4" />

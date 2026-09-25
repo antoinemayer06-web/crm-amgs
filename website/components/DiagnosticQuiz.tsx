@@ -6,9 +6,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Calendar, Check, Loader2 } from "lucide-react";
 import { buttonHover, fadeInUp } from "@/lib/animations";
 import { CALENDLY_URL } from "@/lib/links";
+import { trackEvent } from "@/lib/track";
 import {
   ADMIN_BURDEN_REACTIONS,
   computeLevel,
+  computeScore,
   LEVELS,
   painPointsReaction,
   QUIZ_QUESTIONS,
@@ -93,6 +95,7 @@ export default function DiagnosticQuiz() {
           honeypot: data.get("company"),
           levelLabel: levelConfig?.label,
           answers: readableAnswers(answers),
+          score: computeScore(answers),
         }),
       });
       const json = await res.json();
@@ -302,6 +305,7 @@ export default function DiagnosticQuiz() {
                         target="_blank"
                         rel="noopener noreferrer"
                         whileHover={buttonHover}
+                        onClick={() => trackEvent("clic_calendly")}
                         className="inline-flex items-center gap-2.5 rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
                       >
                         <Calendar className="h-4 w-4" />

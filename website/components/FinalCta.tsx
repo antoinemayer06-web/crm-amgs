@@ -4,6 +4,7 @@ import Script from "next/script";
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/animations";
 import { CALENDLY_URL } from "@/lib/links";
+import { trackEvent } from "@/lib/track";
 
 // Widget Calendly natif directement dans le CTA final, en thème sombre
 // pour rester raccord avec le fond violet foncé de la section — plus de
@@ -46,6 +47,7 @@ export default function FinalCta() {
           href={CALENDLY_URL}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackEvent("clic_calendly")}
           className="mt-3 block text-center text-xs text-white/50 underline underline-offset-2 transition-colors hover:text-white/80"
         >
           Le calendrier ne s&apos;affiche pas ? Ouvrir la prise de rendez-vous

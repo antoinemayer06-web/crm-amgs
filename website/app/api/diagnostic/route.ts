@@ -6,6 +6,13 @@ import { sendEmail } from "@/lib/email";
 // formulaire de contact (app/api/contact). Un seul e-mail est envoyé, à
 // CONTACT_TO_EMAIL — rien n'est renvoyé automatiquement au visiteur, le
 // suivi se fait à la main par Antoine à partir de cet e-mail.
+//
+// En plus de cet e-mail (canal principal, garanti), la soumission est
+// relayée en best-effort vers le CRM (Edge Function leads-quiz) pour
+// apparaître dans la section "Site internet" — un échec de ce relais
+// (CRM_LEADS_QUIZ_URL/CRM_SITE_API_KEY absentes, panne réseau) ne doit
+// jamais faire échouer la réponse au visiteur : l'e-mail ci-dessus reste
+// le canal de fiabilité maximale.
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -15,6 +22,30 @@ interface DiagnosticBody {
   honeypot?: string;
   levelLabel?: string;
   answers?: { question: string; answer: string }[];
+  score?: number;
+}
+
+async function forwardToCrm(body: DiagnosticBody, email: string, name: string) {
+  const url = process.env.CRM_LEADS_QUIZ_URL;
+  const apiKey = process.env.CRM_SITE_API_KEY;
+  if (!url || !apiKey) return;
+
+  const reponses = Object.fromEntries(
+    (body.answers ?? []).map((a) => [a.question, a.answer]),
+  );
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-api-key": apiKey },
+      body: JSON.stringify({ nom: name, email, reponses, score: body.score ?? null }),
+    });
+    if (!res.ok) {
+      console.error("[diagnostic] relais CRM échoué:", res.status, await res.text());
+    }
+  } catch (err) {
+    console.error("[diagnostic] erreur relais CRM:", err);
+  }
 }
 
 export async function POST(request: Request) {
@@ -53,6 +84,10 @@ export async function POST(request: Request) {
       { status: 502 }
     );
   }
+
+  // Best-effort, ne bloque jamais la réponse au visiteur ni l'e-mail
+  // ci-dessous (voir le commentaire d'en-tête de fichier).
+  forwardToCrm(body, email, name);
 
   try {
     await sendEmail({

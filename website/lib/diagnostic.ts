@@ -276,18 +276,27 @@ export const RESULT_CONTENT: Record<
   },
 };
 
-export function computeLevel(answers: Answers): Level {
-  const score =
+function rawScore(answers: Answers): number {
+  return (
     (TOOLS_SCORE[answers.tools ?? ""] ?? 0) +
     (TIME_LOST_SCORE[answers["time-lost"] ?? ""] ?? 0) +
     (SELF_FIX_SCORE[answers["self-fix"] ?? ""] ?? 0) +
     (ADMIN_BURDEN_SCORE[answers["admin-burden"] ?? ""] ?? 0) +
-    Math.min(answers["pain-points"]?.length ?? 0, 3);
+    Math.min(answers["pain-points"]?.length ?? 0, 3)
+  );
+}
 
-  const ratio = score / MAX_SCORE;
+export function computeLevel(answers: Answers): Level {
+  const ratio = rawScore(answers) / MAX_SCORE;
   if (ratio < 0.4) return "low";
   if (ratio < 0.75) return "moderate";
   return "high";
+}
+
+// Score 0-100 transmis au CRM (demandes_site.score) — même calcul que
+// computeLevel, exprimé en pourcentage plutôt qu'en palier.
+export function computeScore(answers: Answers): number {
+  return Math.round((rawScore(answers) / MAX_SCORE) * 100);
 }
 
 // Réponses lisibles (label de la question + label(s) choisi(s)) pour

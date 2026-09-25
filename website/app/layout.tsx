@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import JsonLd from "@/components/JsonLd";
+import PageViewTracker from "@/components/PageViewTracker";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { localBusinessSchema } from "@/lib/schema";
 import { SITE_URL } from "@/lib/site";
@@ -53,6 +54,7 @@ export default function RootLayout({
     <html lang="fr" className={inter.variable}>
       <body>
         <JsonLd data={localBusinessSchema()} />
+        <PageViewTracker />
         <Header />
         {children}
         <Footer />

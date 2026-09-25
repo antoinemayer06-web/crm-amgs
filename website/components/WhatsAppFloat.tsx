@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { WhatsAppIcon } from "@/components/icons";
 import { WHATSAPP_URL } from "@/lib/links";
+import { trackEvent } from "@/lib/track";
 
 // Bulle WhatsApp flottante, présente sur toutes les pages (montée depuis
 // app/layout.tsx). Apparaît avec un léger délai, puis pulse doucement en
@@ -47,6 +48,7 @@ export default function WhatsAppFloat() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Discuter sur WhatsApp"
+        onClick={() => trackEvent("clic_whatsapp")}
         animate={{ scale: [1, 1.05, 1] }}
         transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white shadow-lg shadow-accent/30"
