@@ -469,6 +469,7 @@ export const ARTICLES: Article[] = [
       "La suite Microsoft 365 que vous payez déjà chaque mois peut faire beaucoup plus que ce que la plupart des équipes en exploitent réellement.",
     date: "2026-08-06",
     icon: "layout-grid",
+    image: "/blog/microsoft-365-cover.webp",
     intro: [
       "La majorité des PME possèdent déjà un abonnement Microsoft 365 — Excel, Outlook, Teams — sans forcément savoir que cette suite embarque aussi des outils d'automatisation capables de remplacer plusieurs tâches manuelles répétitives.",
     ],
