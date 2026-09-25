@@ -369,6 +369,7 @@ export const ARTICLES: Article[] = [
       "Un dashboard de pilotage automatique n'est pas réservé aux grandes entreprises avec une équipe data. Voici par où commencer, simplement.",
     date: "2026-08-20",
     icon: "bar-chart-3",
+    image: "/blog/dashboards-cover.webp",
     intro: [
       "L'idée d'un « dashboard » évoque souvent un projet data complexe, réservé aux grandes structures. Pour une PME, un dashboard de pilotage utile est en réalité beaucoup plus simple : quelques indicateurs clés, à jour en permanence, visibles d'un coup d'œil.",
     ],
