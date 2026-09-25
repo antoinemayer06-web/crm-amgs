@@ -263,6 +263,7 @@ export const ARTICLES: Article[] = [
       "Le tableau Excel de suivi de charge a bien servi — jusqu'à un certain seuil. Voici les limites qui apparaissent, et ce qu'un système automatique change.",
     date: "2026-09-03",
     icon: "table",
+    image: "/blog/plan-de-charge-cover.webp",
     intro: [
       "Le plan de charge sous Excel ou Google Sheets est souvent la première solution mise en place par une PME en croissance — et c'est une bonne solution, au départ. Le problème apparaît plus tard, quand le tableau devient trop lourd à maintenir pour rester fiable.",
     ],
