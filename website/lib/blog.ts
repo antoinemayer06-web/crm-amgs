@@ -519,6 +519,7 @@ export const ARTICLES: Article[] = [
       "L'IA en entreprise n'a de valeur que sur un cas d'usage précis. Voici des exemples concrets, testables, plutôt qu'une promesse générique.",
     date: "2026-07-30",
     icon: "bot",
+    image: "/blog/agent-ia-cover.webp",
     intro: [
       "« Ajouter de l'IA » sans objectif précis produit rarement un résultat utile. Un agent IA n'a de valeur que lorsqu'il est conçu pour un cas d'usage concret, avec des données réelles de l'entreprise — pas comme un gadget plaqué sur un produit existant.",
     ],
