@@ -419,6 +419,7 @@ export const ARTICLES: Article[] = [
       "Automatiser ne signifie pas remplacer vos outils actuels. Voici une méthode simple, en trois étapes, pour partir de ce qui existe déjà.",
     date: "2026-08-13",
     icon: "puzzle",
+    image: "/blog/automatiser-sans-changer-outil-cover.webp",
     intro: [
       "Le réflexe le plus répandu face à un problème d'organisation est de chercher un nouvel outil « tout-en-un » qui résoudrait tout. Dans la pratique, c'est rarement la bonne première étape — et c'est souvent la plus coûteuse.",
     ],
