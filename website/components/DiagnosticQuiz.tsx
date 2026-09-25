@@ -7,12 +7,14 @@ import { ArrowRight, Calendar, Check, Loader2 } from "lucide-react";
 import { buttonHover, fadeInUp } from "@/lib/animations";
 import { CALENDLY_URL } from "@/lib/links";
 import {
+  ADMIN_BURDEN_REACTIONS,
   computeLevel,
   LEVELS,
   painPointsReaction,
   QUIZ_QUESTIONS,
   readableAnswers,
   RESULT_CONTENT,
+  SELF_FIX_REACTIONS,
   TIME_LOST_DISCLAIMER,
   TIME_LOST_REACTIONS,
   TIMELINE_REACTIONS,
@@ -32,6 +34,10 @@ function reactionFor(question: (typeof QUIZ_QUESTIONS)[number], answers: Answers
       return TOOLS_REACTIONS[answers.tools ?? ""] ?? null;
     case "time-lost":
       return TIME_LOST_REACTIONS[answers["time-lost"] ?? ""] ?? null;
+    case "self-fix":
+      return SELF_FIX_REACTIONS[answers["self-fix"] ?? ""] ?? null;
+    case "admin-burden":
+      return ADMIN_BURDEN_REACTIONS[answers["admin-burden"] ?? ""] ?? null;
     case "pain-points":
       return painPointsReaction(answers["pain-points"]?.length ?? 0);
     case "timeline":
@@ -165,11 +171,13 @@ export default function DiagnosticQuiz() {
                 >
                   <motion.button
                     type="button"
-                    whileHover={buttonHover}
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setPhase("question")}
-                    className="rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+                    className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-primary via-primary-dark to-ink px-10 py-4 text-base font-bold text-white shadow-lg shadow-primary/30 transition-shadow hover:shadow-xl hover:shadow-primary/40"
                   >
-                    Commencer
+                    Vous êtes prêt ?
+                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                   </motion.button>
                 </motion.div>
               )}
