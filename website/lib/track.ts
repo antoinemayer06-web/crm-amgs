@@ -37,16 +37,22 @@ export function trackEvent(type: SiteEventType, page?: string) {
       page: page ?? window.location.pathname,
       session_id: getSessionId(),
     });
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon("/api/track", new Blob([body], { type: "application/json" }));
-    } else {
-      fetch("/api/track", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body,
-        keepalive: true,
-      }).catch(() => {});
-    }
+    // keepalive garantit l'envoi même si la page se décharge juste après
+    // (équivalent fiable à sendBeacon), tout en permettant de lire la
+    // réponse pour diagnostiquer un échec de relais côté CRM.
+    fetch("/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      keepalive: true,
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (!json.ok) {
+          console.error(`[track] "${type}" non relayé au CRM:`, json.error);
+        }
+      })
+      .catch(() => {});
   } catch {
     // Ne jamais bloquer/casser l'expérience visiteur pour du tracking.
   }

@@ -18,17 +18,26 @@ export async function POST(request: Request) {
   const apiKey = process.env.CRM_SITE_API_KEY;
   if (!url || !apiKey) {
     console.error("[track] CRM_SITE_EVENEMENT_URL ou CRM_SITE_API_KEY manquante");
-    return NextResponse.json({ ok: false }, { status: 200 });
+    return NextResponse.json({ ok: false, error: "missing_config" }, { status: 200 });
   }
 
   try {
-    await fetch(url, {
+    const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey },
       body: JSON.stringify(body),
     });
+    if (!res.ok) {
+      const text = await res.text();
+      console.error(`[track] CRM a répondu ${res.status}: ${text}`);
+      return NextResponse.json(
+        { ok: false, error: `crm_rejected_${res.status}` },
+        { status: 200 }
+      );
+    }
   } catch (err) {
-    console.error("[track] échec relais vers le CRM:", err);
+    console.error("[track] échec relais vers le CRM (réseau/DNS):", err);
+    return NextResponse.json({ ok: false, error: "network_error" }, { status: 200 });
   }
 
   return NextResponse.json({ ok: true });
