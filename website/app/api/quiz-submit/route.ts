@@ -44,7 +44,7 @@ export async function POST(request: Request) {
   const apiKey = process.env.CRM_SITE_API_KEY;
   if (!url || !apiKey) {
     console.error("[quiz-submit] CRM_LEADS_QUIZ_URL et/ou CRM_SITE_API_KEY manquantes");
-    return NextResponse.json({ ok: false, error: "send_failed" }, { status: 502 });
+    return NextResponse.json({ ok: false, error: "missing_config" }, { status: 502 });
   }
 
   // L'Edge Function leads-quiz attend `reponses` comme un objet JSON
@@ -72,12 +72,16 @@ export async function POST(request: Request) {
 
     if (!res.ok) {
       const text = await res.text();
-      throw new Error(`CRM a répondu ${res.status}: ${text}`);
+      console.error(`[quiz-submit] CRM a répondu ${res.status}: ${text}`);
+      return NextResponse.json(
+        { ok: false, error: `crm_rejected_${res.status}` },
+        { status: 502 }
+      );
     }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[quiz-submit] relais CRM échoué:", err);
-    return NextResponse.json({ ok: false, error: "send_failed" }, { status: 502 });
+    console.error("[quiz-submit] relais CRM échoué (réseau/DNS):", err);
+    return NextResponse.json({ ok: false, error: "network_error" }, { status: 502 });
   }
 }
