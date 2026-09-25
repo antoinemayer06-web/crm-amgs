@@ -313,6 +313,7 @@ export const ARTICLES: Article[] = [
       "Le temps perdu par une PME est rarement spectaculaire — il est diffus, quotidien, et donc facile à ne jamais remarquer. Cinq signes à surveiller.",
     date: "2026-08-27",
     icon: "search",
+    image: "/blog/5-signes-cover.webp",
     intro: [
       "Le temps perdu par une PME est rarement spectaculaire — pas de panne ni d'incident visible. Il est diffus, réparti sur des dizaines de petites tâches quotidiennes, et c'est précisément ce qui le rend facile à ne jamais remarquer. Voici cinq signes révélateurs.",
     ],
