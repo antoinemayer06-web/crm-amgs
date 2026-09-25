@@ -3,7 +3,7 @@
 import Script from "next/script";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
-import LeadMagnet from "@/components/LeadMagnet";
+import DiagnosticCta from "@/components/DiagnosticCta";
 import { LinkedInIcon, WhatsAppIcon } from "@/components/icons";
 import { buttonHover, fadeInUp, staggerContainer } from "@/lib/animations";
 import { CALENDLY_URL, CONTACT_EMAIL, LINKEDIN_URL, WHATSAPP_URL } from "@/lib/links";
@@ -78,7 +78,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <LeadMagnet className="flex-1" />
+            <DiagnosticCta className="flex-1" />
           </motion.div>
         </motion.div>
       </div>

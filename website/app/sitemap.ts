@@ -10,6 +10,7 @@ const ROUTES: { path: string; priority: number }[] = [
   { path: "/a-propos", priority: 0.6 },
   { path: "/blog", priority: 0.6 },
   { path: "/contact", priority: 0.8 },
+  { path: "/diagnostic", priority: 0.7 },
   { path: "/mentions-legales", priority: 0.2 },
   { path: "/politique-de-confidentialite", priority: 0.2 },
 ];
