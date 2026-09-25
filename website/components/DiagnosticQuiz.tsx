@@ -24,7 +24,7 @@ import {
   type Answers,
 } from "@/lib/diagnostic";
 
-type Phase = "start" | "question" | "result" | "submitted";
+type Phase = "question" | "result" | "submitted";
 type FormStatus = "idle" | "submitting" | "error";
 
 const inputClasses =
@@ -50,7 +50,7 @@ function reactionFor(question: (typeof QUIZ_QUESTIONS)[number], answers: Answers
 }
 
 export default function DiagnosticQuiz() {
-  const [phase, setPhase] = useState<Phase>("start");
+  const [phase, setPhase] = useState<Phase>("question");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [showLeadForm, setShowLeadForm] = useState(false);
@@ -170,28 +170,6 @@ export default function DiagnosticQuiz() {
 
           <div className="p-8 sm:p-10">
             <AnimatePresence mode="wait">
-              {phase === "start" && (
-                <motion.div
-                  key="start"
-                  variants={fadeInUp}
-                  initial="hidden"
-                  animate="visible"
-                  exit={{ opacity: 0 }}
-                  className="flex flex-col items-center text-center"
-                >
-                  <motion.button
-                    type="button"
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setPhase("question")}
-                    className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-primary via-primary-dark to-ink px-10 py-4 text-base font-bold text-white shadow-lg shadow-primary/30 transition-shadow hover:shadow-xl hover:shadow-primary/40"
-                  >
-                    Vous êtes prêt ?
-                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                  </motion.button>
-                </motion.div>
-              )}
-
               {phase === "question" && currentQuestion && (
                 <motion.div
                   key={currentQuestion.id}
@@ -199,6 +177,7 @@ export default function DiagnosticQuiz() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -24 }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="flex min-h-[36rem] flex-col sm:min-h-[34rem]"
                 >
                   <p className="text-xs font-semibold uppercase tracking-widest text-primary-dark">
                     Question {questionIndex + 1} / {totalQuestions}
@@ -275,7 +254,7 @@ export default function DiagnosticQuiz() {
                     disabled={!hasAnswer}
                     whileHover={hasAnswer ? buttonHover : undefined}
                     onClick={goNext}
-                    className="mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink"
+                    className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink"
                   >
                     {isLastQuestion ? "Voir mon résultat" : "Suivant"}
                     <ArrowRight className="h-4 w-4" />
@@ -333,7 +312,8 @@ export default function DiagnosticQuiz() {
                 >
                   <h3 className="font-heading text-xl font-bold text-foreground">Merci !</h3>
                   <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted">
-                    Vos coordonnées ont été transmises à Antoine, qui vous recontacte rapidement.
+                    Vos coordonnées ont été transmises à notre équipe, qui vous recontacte
+                    rapidement.
                   </p>
                   <p className="mt-1 max-w-sm text-sm leading-relaxed text-muted">
                     Si vous préférez ne pas attendre, vous pouvez aussi réserver un appel

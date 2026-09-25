@@ -3,7 +3,7 @@ import { join } from "path";
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "AM Growth Solutions — On connecte vos outils. Vous arrêtez la double saisie.";
+  "AM Growth Solutions — Automatisations pour les PME à La Réunion.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -38,7 +38,7 @@ export default function Image() {
         <div
           style={{
             display: "flex",
-            fontSize: 56,
+            fontSize: 60,
             fontWeight: 800,
             color: "#ffffff",
             textAlign: "center",
@@ -46,18 +46,33 @@ export default function Image() {
             maxWidth: 900,
           }}
         >
-          On connecte vos outils. Vous arrêtez la double saisie.
+          Automatisations pour les PME
         </div>
         <div
           style={{
             display: "flex",
-            marginTop: 32,
-            fontSize: 28,
+            marginTop: 28,
+            fontSize: 30,
             fontWeight: 600,
             color: "#c9c3ec",
+            textAlign: "center",
+            maxWidth: 760,
           }}
         >
-          AM Growth Solutions
+          On automatise vos process internes pour que vous ne perdiez plus de
+          temps sur des tâches répétitives.
+        </div>
+        <div
+          style={{
+            display: "flex",
+            marginTop: 36,
+            fontSize: 24,
+            fontWeight: 700,
+            color: "#ffffff",
+            letterSpacing: 1,
+          }}
+        >
+          AM GROWTH SOLUTIONS
         </div>
       </div>
     ),
