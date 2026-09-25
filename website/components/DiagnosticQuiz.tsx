@@ -86,15 +86,15 @@ export default function DiagnosticQuiz() {
     const data = new FormData(event.currentTarget);
 
     try {
-      const res = await fetch("/api/diagnostic", {
+      const res = await fetch("/api/quiz-submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: data.get("name"),
+          nom: data.get("name"),
           email: data.get("email"),
+          telephone: data.get("phone"),
           honeypot: data.get("company"),
-          levelLabel: levelConfig?.label,
-          answers: readableAnswers(answers),
+          reponses: readableAnswers(answers),
           score: computeScore(answers),
         }),
       });
@@ -122,6 +122,12 @@ export default function DiagnosticQuiz() {
         name="email"
         required
         placeholder="vous@entreprise.com"
+        className={inputClasses}
+      />
+      <input
+        type="tel"
+        name="phone"
+        placeholder="Téléphone (optionnel)"
         className={inputClasses}
       />
       <motion.button
