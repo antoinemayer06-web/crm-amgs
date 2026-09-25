@@ -87,7 +87,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <DiagnosticCta className="flex-1" />
+            <DiagnosticCta />
           </motion.div>
         </motion.div>
       </div>

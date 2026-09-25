@@ -1,22 +1,43 @@
 // Configuration du quiz "diagnostic d'automatisation" (/diagnostic) : les
-// 6 questions, le calcul du score et le contenu du résultat. Séparé du
-// composant pour que la logique de scoring reste testable/lisible
-// indépendamment du JSX.
+// 6 questions, les réactions contextuelles, le calcul du score et le
+// contenu de l'écran de résultat. Séparé du composant pour que la logique
+// reste lisible indépendamment du JSX.
 
 export interface QuizOption {
   value: string;
   label: string;
 }
 
-export interface QuizQuestion {
-  id: "company-size" | "tools" | "time-lost" | "pain-point" | "budget" | "timeline";
+interface BaseQuestion {
   question: string;
   options: QuizOption[];
+}
+
+export interface SingleQuestion extends BaseQuestion {
+  id: "company-size" | "tools" | "time-lost" | "budget" | "timeline";
+  type: "single";
+}
+
+export interface MultiQuestion extends BaseQuestion {
+  id: "pain-points";
+  type: "multi";
+}
+
+export type QuizQuestion = SingleQuestion | MultiQuestion;
+
+export interface Answers {
+  "company-size"?: string;
+  tools?: string;
+  "time-lost"?: string;
+  "pain-points"?: string[];
+  budget?: string;
+  timeline?: string;
 }
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: "company-size",
+    type: "single",
     question: "Combien de personnes travaillent dans votre entreprise ?",
     options: [
       { value: "1-5", label: "1 à 5" },
@@ -27,10 +48,11 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: "tools",
+    type: "single",
     question: "Comment gérez-vous vos projets et vos clients aujourd'hui ?",
     options: [
       { value: "excel-papier", label: "Excel ou papier" },
-      { value: "un-outil", label: "Un seul outil (CRM ou gestion de projet)" },
+      { value: "un-outil", label: "Un seul outil" },
       {
         value: "outils-deconnectes",
         label: "Plusieurs outils, mais ils ne se parlent pas entre eux",
@@ -40,8 +62,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: "time-lost",
+    type: "single",
     question:
-      "Combien de temps par semaine estimez-vous perdre sur des tâches répétitives (ressaisie, relances, suivi manuel) ?",
+      "Combien de temps par semaine perdez-vous sur des tâches répétitives ?",
     options: [
       { value: "moins-2h", label: "Moins de 2h" },
       { value: "2-5h", label: "2 à 5h" },
@@ -50,8 +73,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
   },
   {
-    id: "pain-point",
-    question: "Qu'est-ce qui vous fait le plus perdre du temps aujourd'hui ?",
+    id: "pain-points",
+    type: "multi",
+    question: "Qu'est-ce qui vous fait perdre du temps ? Cochez tout ce qui s'applique.",
     options: [
       { value: "ressaisie", label: "Ressaisir la même info dans plusieurs outils" },
       { value: "charge-equipe", label: "Suivre la charge de travail de l'équipe" },
@@ -61,6 +85,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: "budget",
+    type: "single",
     question: "Avez-vous déjà une idée de budget pour résoudre ça ?",
     options: [
       { value: "pas-reflechi", label: "Pas encore réfléchi" },
@@ -71,6 +96,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: "timeline",
+    type: "single",
     question: "Sous quel délai aimeriez-vous agir ?",
     options: [
       { value: "urgent", label: "Urgent, dans le mois" },
@@ -80,12 +106,46 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
 ];
 
-export type Answers = Partial<Record<QuizQuestion["id"], string>>;
+// Réactions contextuelles affichées sous les options, une fois une
+// réponse choisie — jamais pour les questions 1 et 5 (aucune n'y a de
+// contenu défini ci-dessous).
+export const TOOLS_REACTIONS: Record<string, string> = {
+  "outils-deconnectes": "Le point commun de 9 PME sur 10 qu'on rencontre.",
+};
+
+export const TIME_LOST_REACTIONS: Record<string, string> = {
+  "moins-2h":
+    "Sur une année, ça représente tout de même environ 10 jours de travail.",
+  "2-5h": "Sur une année, ça représente environ 10 à 30 jours de travail.",
+  "5-10h":
+    "Sur une année, ça représente environ 30 à 60 jours de travail. Plus d'un mois entier.",
+  "plus-10h":
+    "Sur une année, ça représente plus de 60 jours de travail — près de trois mois entiers.",
+};
+
+export const TIME_LOST_DISCLAIMER =
+  "Estimation basée sur 46 semaines travaillées par an — pas un chiffre garanti.";
+
+export const TIMELINE_REACTIONS: Record<string, string> = {
+  urgent:
+    "Bonne nouvelle : c'est exactement le type de mission qu'on traite en priorité.",
+};
+
+export function painPointsReaction(count: number): string | null {
+  if (count >= 2) {
+    return "Ce n'est pas un détail isolé. C'est un problème structurel — et ça se résout d'un coup, pas case par case.";
+  }
+  if (count === 1) {
+    return "Un point précis à corriger. Ça se règle vite.";
+  }
+  return null;
+}
 
 // Score calculé à partir des réponses 2 (tools), 3 (time-lost) et 4
-// (pain-point) — celles qui reflètent réellement l'ampleur du problème.
-// Les 3 autres (taille, budget, délai) qualifient le lead pour le suivi
-// commercial mais ne changent pas le niveau affiché.
+// (pain-points, où plus de cases cochées fait monter le score) — celles
+// qui reflètent réellement l'ampleur du problème. Les 3 autres (taille,
+// budget, délai) qualifient le lead pour le suivi commercial mais ne
+// changent pas le niveau affiché.
 const TOOLS_SCORE: Record<string, number> = {
   "excel-papier": 2,
   "un-outil": 1,
@@ -100,21 +160,11 @@ const TIME_LOST_SCORE: Record<string, number> = {
   "plus-10h": 3,
 };
 
-const PAIN_POINT_SCORE: Record<string, number> = {
-  ressaisie: 3,
-  "charge-equipe": 2,
-  facturation: 3,
-  rapports: 2,
-};
-
 const MAX_SCORE = 3 + 3 + 3;
 
 export type Level = "low" | "moderate" | "high";
 
-export const LEVELS: Record<
-  Level,
-  { label: string; badgeClasses: string }
-> = {
+export const LEVELS: Record<Level, { label: string; badgeClasses: string }> = {
   low: {
     label: "Potentiel limité pour l'instant",
     badgeClasses: "border-border bg-surface text-muted",
@@ -129,35 +179,29 @@ export const LEVELS: Record<
   },
 };
 
-// Réponse à la question 4 -> phrase personnalisée + lien vers la section
-// /services correspondante (ancres posées sur app/services/page.tsx).
-export const PAIN_POINT_DETAIL: Record<
-  string,
-  { phrase: string; serviceLabel: string; serviceHref: string }
+// Contenu "closing" de l'écran de résultat, calibré par niveau — cta
+// "calendly" pousse vers la prise de rendez-vous directe, "form" affiche
+// à la place un petit formulaire nom/email (pas de pression au closing
+// pour un potentiel jugé faible pour l'instant).
+export const RESULT_CONTENT: Record<
+  Level,
+  { title: string; text: string; cta: "calendly" | "form" }
 > = {
-  ressaisie: {
-    phrase:
-      "La connexion de vos outils entre eux serait probablement votre priorité n°1.",
-    serviceLabel: "Connexion d'outils entre eux",
-    serviceHref: "/services#solution-1-connexion-outils",
+  low: {
+    title: "Pour l'instant, ce n'est probablement pas votre priorité n°1.",
+    text: "Et c'est très bien ainsi. Gardez cette page sous le coude — le jour où ça change, on sera là.",
+    cta: "form",
   },
-  "charge-equipe": {
-    phrase:
-      "Un plan de charge automatique serait probablement votre priorité n°1.",
-    serviceLabel: "Suivi de charge d'équipe",
-    serviceHref: "/services#solution-6-charge-equipe",
+  moderate: {
+    title: "Il y a clairement matière à automatiser chez vous.",
+    text: "Peut-être pas tout, mais certains points identifiés ici valent le coup d'être creusés. Un appel rapide suffit pour savoir lesquels.",
+    cta: "calendly",
   },
-  facturation: {
-    phrase:
-      "L'automatisation de votre facturation et de vos relances serait probablement votre priorité n°1.",
-    serviceLabel: "Automatisation administrative & financière",
-    serviceHref: "/services#solution-5-administratif-financier",
-  },
-  rapports: {
-    phrase:
-      "Un dashboard de pilotage automatique serait probablement votre priorité n°1.",
-    serviceLabel: "Dashboards de pilotage automatiques",
-    serviceHref: "/services#solution-3-dashboards",
+  high: {
+    title:
+      "Vous perdez du temps et de l'argent, chaque semaine, sur des choses qui peuvent tourner toutes seules.",
+    text: "Ce que vous venez de décrire, on le résout en quelques jours, pas en plusieurs mois d'essais. La prochaine étape logique : un appel de 20 minutes pour voir exactement par où commencer.",
+    cta: "calendly",
   },
 };
 
@@ -165,7 +209,7 @@ export function computeLevel(answers: Answers): Level {
   const score =
     (TOOLS_SCORE[answers.tools ?? ""] ?? 0) +
     (TIME_LOST_SCORE[answers["time-lost"] ?? ""] ?? 0) +
-    (PAIN_POINT_SCORE[answers["pain-point"] ?? ""] ?? 0);
+    Math.min(answers["pain-points"]?.length ?? 0, 3);
 
   const ratio = score / MAX_SCORE;
   if (ratio < 0.4) return "low";
@@ -173,12 +217,20 @@ export function computeLevel(answers: Answers): Level {
   return "high";
 }
 
-// Réponses lisibles (label de la question + label choisi) pour l'e-mail
-// envoyé côté admin — évite de faire porter cette traduction à l'API.
+// Réponses lisibles (label de la question + label(s) choisi(s)) pour
+// l'e-mail envoyé côté admin — les cases cochées en Q4 sont jointes en une
+// seule ligne.
 export function readableAnswers(
   answers: Answers
 ): { question: string; answer: string }[] {
   return QUIZ_QUESTIONS.map((q) => {
+    if (q.type === "multi") {
+      const values = answers["pain-points"] ?? [];
+      const labels = values.map(
+        (v) => q.options.find((o) => o.value === v)?.label ?? v
+      );
+      return { question: q.question, answer: labels.length ? labels.join(", ") : "—" };
+    }
     const value = answers[q.id];
     const option = q.options.find((o) => o.value === value);
     return { question: q.question, answer: option?.label ?? "—" };

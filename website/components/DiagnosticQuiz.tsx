@@ -3,14 +3,20 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Calendar, Check, Loader2 } from "lucide-react";
 import { buttonHover, fadeInUp } from "@/lib/animations";
+import { CALENDLY_URL } from "@/lib/links";
 import {
   computeLevel,
   LEVELS,
-  PAIN_POINT_DETAIL,
+  painPointsReaction,
   QUIZ_QUESTIONS,
   readableAnswers,
+  RESULT_CONTENT,
+  TIME_LOST_DISCLAIMER,
+  TIME_LOST_REACTIONS,
+  TIMELINE_REACTIONS,
+  TOOLS_REACTIONS,
   type Answers,
 } from "@/lib/diagnostic";
 
@@ -20,23 +26,42 @@ type FormStatus = "idle" | "submitting" | "error";
 const inputClasses =
   "w-full rounded-full border border-border bg-surface px-5 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary";
 
+function reactionFor(question: (typeof QUIZ_QUESTIONS)[number], answers: Answers): string | null {
+  switch (question.id) {
+    case "tools":
+      return TOOLS_REACTIONS[answers.tools ?? ""] ?? null;
+    case "time-lost":
+      return TIME_LOST_REACTIONS[answers["time-lost"] ?? ""] ?? null;
+    case "pain-points":
+      return painPointsReaction(answers["pain-points"]?.length ?? 0);
+    case "timeline":
+      return TIMELINE_REACTIONS[answers.timeline ?? ""] ?? null;
+    default:
+      return null;
+  }
+}
+
 export default function DiagnosticQuiz() {
   const [phase, setPhase] = useState<Phase>("start");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
+  const [showEmailForm, setShowEmailForm] = useState(false);
   const [formStatus, setFormStatus] = useState<FormStatus>("idle");
 
   const totalQuestions = QUIZ_QUESTIONS.length;
   const currentQuestion = QUIZ_QUESTIONS[questionIndex];
-  const currentAnswer = currentQuestion ? answers[currentQuestion.id] : undefined;
   const isLastQuestion = questionIndex === totalQuestions - 1;
 
-  const level =
-    phase === "result" || phase === "submitted" ? computeLevel(answers) : null;
+  const hasAnswer =
+    currentQuestion?.type === "multi"
+      ? (answers["pain-points"]?.length ?? 0) > 0
+      : Boolean(currentQuestion && answers[currentQuestion.id]);
+
+  const reaction = currentQuestion && hasAnswer ? reactionFor(currentQuestion, answers) : null;
+
+  const level = phase === "result" || phase === "submitted" ? computeLevel(answers) : null;
   const levelConfig = level ? LEVELS[level] : null;
-  const painPoint = answers["pain-point"]
-    ? PAIN_POINT_DETAIL[answers["pain-point"]]
-    : undefined;
+  const resultContent = level ? RESULT_CONTENT[level] : null;
 
   function goNext() {
     if (isLastQuestion) {
@@ -59,12 +84,10 @@ export default function DiagnosticQuiz() {
         body: JSON.stringify({
           name: data.get("name"),
           email: data.get("email"),
-          phone: data.get("phone"),
           honeypot: data.get("company"),
           levelLabel: levelConfig?.label,
-          personalizedPhrase: painPoint?.phrase,
-          serviceLabel: painPoint?.serviceLabel,
-          serviceHref: painPoint?.serviceHref,
+          resultTitle: resultContent?.title,
+          resultText: resultContent?.text,
           answers: readableAnswers(answers),
         }),
       });
@@ -75,6 +98,45 @@ export default function DiagnosticQuiz() {
       setFormStatus("error");
     }
   }
+
+  const emailForm = (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+        aria-hidden="true"
+      />
+      <input type="text" name="name" required placeholder="Votre nom" className={inputClasses} />
+      <input
+        type="email"
+        name="email"
+        required
+        placeholder="vous@entreprise.com"
+        className={inputClasses}
+      />
+      <motion.button
+        type="submit"
+        disabled={formStatus === "submitting"}
+        whileHover={formStatus === "submitting" ? undefined : buttonHover}
+        className="flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-60"
+      >
+        {formStatus === "submitting" && <Loader2 className="h-4 w-4 animate-spin" />}
+        {level === "low" ? "Garder mes coordonnées pour plus tard" : "Recevoir le récapitulatif"}
+      </motion.button>
+      {formStatus === "error" && (
+        <p className="text-center text-sm text-red-600">
+          Une erreur est survenue. Réessayez, ou{" "}
+          <Link href="/contact" className="underline">
+            contactez-nous directement
+          </Link>
+          .
+        </p>
+      )}
+    </form>
+  );
 
   return (
     <section className="bg-surface py-16 sm:py-20">
@@ -103,14 +165,11 @@ export default function DiagnosticQuiz() {
                   exit={{ opacity: 0 }}
                   className="flex flex-col items-center text-center"
                 >
-                  <p className="text-sm text-muted">
-                    6 questions rapides, réponses en un clic.
-                  </p>
                   <motion.button
                     type="button"
                     whileHover={buttonHover}
                     onClick={() => setPhase("question")}
-                    className="mt-6 rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+                    className="rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
                   >
                     Commencer
                   </motion.button>
@@ -134,33 +193,71 @@ export default function DiagnosticQuiz() {
 
                   <div className="mt-6 flex flex-col gap-3">
                     {currentQuestion.options.map((option) => {
-                      const selected = currentAnswer === option.value;
+                      const selected =
+                        currentQuestion.type === "multi"
+                          ? (answers["pain-points"] ?? []).includes(option.value)
+                          : answers[currentQuestion.id] === option.value;
+
                       return (
                         <button
                           key={option.value}
                           type="button"
-                          onClick={() =>
-                            setAnswers((prev) => ({
-                              ...prev,
-                              [currentQuestion.id]: option.value,
-                            }))
-                          }
-                          className={`w-full rounded-xl border px-5 py-3.5 text-left text-sm font-medium transition-colors ${
+                          onClick={() => {
+                            if (currentQuestion.type === "multi") {
+                              setAnswers((prev) => {
+                                const current = prev["pain-points"] ?? [];
+                                const next = current.includes(option.value)
+                                  ? current.filter((v) => v !== option.value)
+                                  : [...current, option.value];
+                                return { ...prev, "pain-points": next };
+                              });
+                            } else {
+                              setAnswers((prev) => ({
+                                ...prev,
+                                [currentQuestion.id]: option.value,
+                              }));
+                            }
+                          }}
+                          className={`flex w-full items-center gap-3 rounded-xl border px-5 py-3.5 text-left text-sm font-medium transition-colors ${
                             selected
                               ? "border-primary bg-primary/10 text-primary-dark"
                               : "border-border bg-surface text-foreground/80 hover:border-primary/40 hover:bg-primary/5"
                           }`}
                         >
+                          {currentQuestion.type === "multi" && (
+                            <span
+                              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
+                                selected
+                                  ? "border-primary bg-primary text-white"
+                                  : "border-border bg-background"
+                              }`}
+                            >
+                              {selected && <Check className="h-3 w-3" strokeWidth={3} />}
+                            </span>
+                          )}
                           {option.label}
                         </button>
                       );
                     })}
                   </div>
 
+                  {reaction && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 border-l-2 border-primary/40 pl-3"
+                    >
+                      <p className="text-sm text-muted">{reaction}</p>
+                      {currentQuestion.id === "time-lost" && (
+                        <p className="mt-1 text-xs text-muted/70">{TIME_LOST_DISCLAIMER}</p>
+                      )}
+                    </motion.div>
+                  )}
+
                   <motion.button
                     type="button"
-                    disabled={!currentAnswer}
-                    whileHover={currentAnswer ? buttonHover : undefined}
+                    disabled={!hasAnswer}
+                    whileHover={hasAnswer ? buttonHover : undefined}
                     onClick={goNext}
                     className="mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink"
                   >
@@ -170,96 +267,58 @@ export default function DiagnosticQuiz() {
                 </motion.div>
               )}
 
-              {phase === "result" && level && levelConfig && (
+              {phase === "result" && level && levelConfig && resultContent && (
                 <motion.div
                   key="result"
                   variants={fadeInUp}
                   initial="hidden"
                   animate="visible"
                   exit={{ opacity: 0 }}
+                  className="text-center"
                 >
-                  <div className="text-center">
-                    <span
-                      className={`inline-flex rounded-full border px-4 py-1.5 text-sm font-bold ${levelConfig.badgeClasses}`}
-                    >
-                      {levelConfig.label}
-                    </span>
-                    {painPoint && (
-                      <>
-                        <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-muted">
-                          {painPoint.phrase}
-                        </p>
-                        <Link
-                          href={painPoint.serviceHref}
-                          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-dark transition hover:gap-2.5"
-                        >
-                          Voir : {painPoint.serviceLabel}
-                          <ArrowRight className="h-4 w-4" />
-                        </Link>
-                      </>
-                    )}
-                  </div>
-
-                  <form
-                    onSubmit={handleSubmit}
-                    className="mt-10 border-t border-border pt-8"
+                  <span
+                    className={`inline-flex rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wide ${levelConfig.badgeClasses}`}
                   >
-                    <h3 className="text-center font-heading text-lg font-bold text-foreground">
-                      Recevez votre diagnostic détaillé par email
-                    </h3>
-                    <input
-                      type="text"
-                      name="company"
-                      tabIndex={-1}
-                      autoComplete="off"
-                      className="absolute left-[-9999px] h-0 w-0 opacity-0"
-                      aria-hidden="true"
-                    />
-                    <div className="mt-4 flex flex-col gap-3">
-                      <input
-                        type="text"
-                        name="name"
-                        required
-                        placeholder="Votre nom"
-                        className={inputClasses}
-                      />
-                      <input
-                        type="email"
-                        name="email"
-                        required
-                        placeholder="vous@entreprise.com"
-                        className={inputClasses}
-                      />
-                      <input
-                        type="tel"
-                        name="phone"
-                        placeholder="Téléphone (optionnel)"
-                        className={inputClasses}
-                      />
-                      <motion.button
-                        type="submit"
-                        disabled={formStatus === "submitting"}
-                        whileHover={
-                          formStatus === "submitting" ? undefined : buttonHover
-                        }
-                        className="mt-1 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-60"
+                    {levelConfig.label}
+                  </span>
+
+                  <h2 className="mx-auto mt-5 max-w-md font-heading text-2xl font-black text-foreground sm:text-3xl">
+                    {resultContent.title}
+                  </h2>
+                  <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted">
+                    {resultContent.text}
+                  </p>
+
+                  {resultContent.cta === "calendly" ? (
+                    <div className="mt-8 flex flex-col items-center gap-4">
+                      <motion.a
+                        href={CALENDLY_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={buttonHover}
+                        className="inline-flex items-center gap-2.5 rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
                       >
-                        {formStatus === "submitting" && (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        )}
-                        Recevoir mon diagnostic
-                      </motion.button>
-                      {formStatus === "error" && (
-                        <p className="text-center text-sm text-red-600">
-                          Une erreur est survenue. Réessayez, ou{" "}
-                          <Link href="/contact" className="underline">
-                            contactez-nous directement
-                          </Link>
-                          .
-                        </p>
+                        <Calendar className="h-4 w-4" />
+                        Réserver mon appel
+                      </motion.a>
+
+                      {!showEmailForm ? (
+                        <button
+                          type="button"
+                          onClick={() => setShowEmailForm(true)}
+                          className="text-xs text-muted underline underline-offset-2 transition-colors hover:text-primary-dark"
+                        >
+                          Recevoir aussi le détail par email
+                        </button>
+                      ) : (
+                        <div className="w-full max-w-xs border-t border-border pt-5">
+                          {emailForm}
+                        </div>
                       )}
                     </div>
-                  </form>
+                  ) : (
+                    <div className="mx-auto mt-8 max-w-xs">{emailForm}</div>
+                  )}
                 </motion.div>
               )}
 
@@ -271,12 +330,10 @@ export default function DiagnosticQuiz() {
                   animate="visible"
                   className="flex flex-col items-center text-center"
                 >
-                  <h3 className="font-heading text-xl font-bold text-foreground">
-                    Merci !
-                  </h3>
+                  <h3 className="font-heading text-xl font-bold text-foreground">Merci !</h3>
                   <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted">
-                    Vous allez recevoir votre diagnostic détaillé par email.
-                    On peut aussi en discuter directement.
+                    Vous allez recevoir votre diagnostic détaillé par email. On peut aussi en
+                    discuter directement.
                   </p>
                   <Link
                     href="/contact"

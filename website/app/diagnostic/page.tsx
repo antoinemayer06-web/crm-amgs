@@ -13,8 +13,8 @@ export default function DiagnosticPage() {
   return (
     <main>
       <PageIntro
-        title="Votre potentiel d'automatisation, en 2 minutes"
-        subtitle="6 questions rapides. Un diagnostic personnalisé à la fin."
+        title="Ce n'est pas un test. C'est un miroir."
+        subtitle="6 questions. Des réponses honnêtes. Vous allez probablement reconnaître votre quotidien."
       />
       <DiagnosticQuiz />
     </main>

@@ -11,12 +11,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 interface DiagnosticBody {
   name?: string;
   email?: string;
-  phone?: string;
   honeypot?: string;
   levelLabel?: string;
-  personalizedPhrase?: string;
-  serviceLabel?: string;
-  serviceHref?: string;
+  resultTitle?: string;
+  resultText?: string;
   answers?: { question: string; answer: string }[];
 }
 
@@ -69,14 +67,11 @@ export async function POST(request: Request) {
       text: [
         `Nom : ${name}`,
         `Email : ${email}`,
-        body.phone ? `Téléphone : ${body.phone}` : null,
         `Niveau obtenu : ${body.levelLabel}`,
         "",
         "Réponses au quiz :",
         ...body.answers.map((a) => `- ${a.question} : ${a.answer}`),
-      ]
-        .filter(Boolean)
-        .join("\n"),
+      ].join("\n"),
     });
   } catch (err) {
     console.error("[diagnostic] notification admin échouée:", err);
@@ -93,11 +88,8 @@ export async function POST(request: Request) {
       text: [
         `Bonjour ${name},`,
         "",
-        `Votre résultat : ${body.levelLabel}`,
-        body.personalizedPhrase ?? null,
-        body.serviceHref
-          ? `Pour en savoir plus : ${SITE_URL}${body.serviceHref}`
-          : null,
+        body.resultTitle ?? `Votre résultat : ${body.levelLabel}`,
+        body.resultText ?? null,
         "",
         `Prendre rendez-vous : ${SITE_URL}/contact`,
         "",
