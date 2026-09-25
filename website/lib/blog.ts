@@ -213,6 +213,7 @@ export const ARTICLES: Article[] = [
       "Un CRM d'un côté, des outils métiers de l'autre, et personne qui a la vue d'ensemble. Le coût de cette situation est plus élevé qu'il n'y paraît.",
     date: "2026-09-10",
     icon: "link-2",
+    image: "/blog/crm-cout-cache-cover.webp",
     intro: [
       "Presque toutes les PME ont un CRM — Axonaut, HubSpot, Salesforce ou un autre, peu importe lequel. Le problème n'est presque jamais le choix du CRM en lui-même, mais le fait qu'il reste isolé des autres outils métiers de l'entreprise : facturation, gestion de projet, suivi de production.",
     ],
