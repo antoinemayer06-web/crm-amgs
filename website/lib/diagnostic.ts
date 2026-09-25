@@ -250,24 +250,23 @@ export const LEVELS: Record<Level, { label: string; badgeClasses: string }> = {
   },
 };
 
-// Contenu "closing" de l'écran de résultat, calibré par niveau — le texte
-// varie selon le score, mais le CTA qui suit est le même pour tout le
-// monde : un seul bouton vers le formulaire nom/email/téléphone qui envoie
-// la demande au CRM (voir DiagnosticQuiz.tsx). Calendly n'apparaît qu'après
-// l'envoi, sur l'écran de remerciement.
-export const RESULT_CONTENT: Record<Level, { title: string; text: string }> = {
+// Titre "closing" de l'écran de résultat, calibré par niveau — le CTA qui
+// suit est le même pour tout le monde : un seul bouton vers le formulaire
+// nom/email/téléphone qui envoie la demande au CRM (voir
+// DiagnosticQuiz.tsx). Calendly n'apparaît qu'après l'envoi, sur l'écran
+// de remerciement. Le paragraphe sous le titre n'est pas un texte
+// générique par palier : voir buildDiagnosticSummary, construit à partir
+// des réponses réelles.
+export const RESULT_CONTENT: Record<Level, { title: string }> = {
   low: {
     title: "Pour l'instant, ce n'est probablement pas votre priorité n°1.",
-    text: "Et c'est très bien ainsi. Gardez cette page sous le coude — le jour où ça change, on sera là.",
   },
   moderate: {
     title: "Il y a clairement matière à automatiser chez vous.",
-    text: "Peut-être pas tout, mais certains points identifiés ici valent le coup d'être creusés. Un appel rapide suffit pour savoir lesquels.",
   },
   high: {
     title:
       "Vous perdez du temps et de l'argent, chaque semaine, sur des choses qui peuvent tourner toutes seules.",
-    text: "Ce que vous venez de décrire, on le résout en quelques jours, pas en plusieurs mois d'essais. La prochaine étape logique : un appel de 20 minutes pour voir exactement par où commencer.",
   },
 };
 
@@ -312,4 +311,56 @@ export function readableAnswers(
     const option = q.options.find((o) => o.value === value);
     return { question: q.question, answer: option?.label ?? "—" };
   });
+}
+
+function optionLabel(questionId: QuizQuestion["id"], value?: string): string | undefined {
+  const question = QUIZ_QUESTIONS.find((q) => q.id === questionId);
+  return question?.options.find((o) => o.value === value)?.label;
+}
+
+// Phrase de diagnostic construite à partir des réponses réelles (pas un
+// texte générique par palier) — affichée sur l'écran de résultat pour que
+// le visiteur reconnaisse concrètement sa propre situation.
+export function buildDiagnosticSummary(answers: Answers): string {
+  const timeLabel = optionLabel("time-lost", answers["time-lost"]);
+  const toolsLabel = optionLabel("tools", answers.tools);
+  const painLabels = (answers["pain-points"] ?? [])
+    .map((value) => optionLabel("pain-points", value))
+    .filter((label): label is string => Boolean(label));
+
+  let opening = "";
+  if (timeLabel) {
+    opening = `Vous perdez ${timeLabel.toLowerCase()} par semaine sur des tâches répétitives`;
+    if (toolsLabel) {
+      opening +=
+        answers.tools === "systeme-connecte"
+          ? ", malgré un système déjà bien connecté"
+          : `, avec une gestion encore basée sur ${toolsLabel.toLowerCase()}`;
+    }
+    opening += ".";
+  } else if (toolsLabel) {
+    opening = `Votre gestion actuelle repose sur : ${toolsLabel.toLowerCase()}.`;
+  }
+
+  let painSentence = "";
+  if (painLabels.length === 1) {
+    painSentence = ` Le point le plus concret : ${painLabels[0].toLowerCase()}.`;
+  } else if (painLabels.length > 1) {
+    const list = `${painLabels
+      .slice(0, -1)
+      .map((l) => l.toLowerCase())
+      .join(", ")} et ${painLabels[painLabels.length - 1].toLowerCase()}`;
+    painSentence = ` Plusieurs points concrets ressortent : ${list}.`;
+  }
+
+  let burdenSentence = "";
+  if (
+    answers["admin-burden"] === "poids-mental" ||
+    answers["admin-burden"] === "empeche-concentration"
+  ) {
+    burdenSentence = " Ce n'est plus un détail — c'est un vrai frein au quotidien.";
+  }
+
+  const summary = `${opening}${painSentence}${burdenSentence}`.trim();
+  return summary || "Merci pour vos réponses — voici ce qu'on en retient.";
 }

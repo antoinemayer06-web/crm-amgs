@@ -9,6 +9,7 @@ import { CALENDLY_URL } from "@/lib/links";
 import { trackEvent } from "@/lib/track";
 import {
   ADMIN_BURDEN_REACTIONS,
+  buildDiagnosticSummary,
   computeLevel,
   computeScore,
   LEVELS,
@@ -70,6 +71,8 @@ export default function DiagnosticQuiz() {
   const level = phase === "result" || phase === "submitted" ? computeLevel(answers) : null;
   const levelConfig = level ? LEVELS[level] : null;
   const resultContent = level ? RESULT_CONTENT[level] : null;
+  const diagnosticSummary =
+    phase === "result" || phase === "submitted" ? buildDiagnosticSummary(answers) : null;
 
   function goNext() {
     if (isLastQuestion) {
@@ -280,9 +283,14 @@ export default function DiagnosticQuiz() {
                   <h2 className="mx-auto mt-5 max-w-md font-heading text-2xl font-black text-foreground sm:text-3xl">
                     {resultContent.title}
                   </h2>
-                  <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted">
-                    {resultContent.text}
-                  </p>
+                  <div className="mx-auto mt-5 max-w-md rounded-xl border border-border bg-surface px-5 py-4 text-left">
+                    <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-dark">
+                      Votre diagnostic
+                    </p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-foreground/80">
+                      {diagnosticSummary}
+                    </p>
+                  </div>
 
                   <div className="mx-auto mt-8 max-w-xs">
                     {!showLeadForm ? (
