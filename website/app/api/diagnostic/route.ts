@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
-import { SITE_URL } from "@/lib/site";
 
-// Nécessite RESEND_API_KEY et CONTACT_TO_EMAIL (+ optionnellement
-// CONTACT_FROM_EMAIL) en variables d'environnement — voir .env.example.
-// Les mêmes variables que le formulaire de contact (app/api/contact).
+// Nécessite RESEND_API_KEY et CONTACT_TO_EMAIL en variables
+// d'environnement — voir .env.example. Les mêmes variables que le
+// formulaire de contact (app/api/contact). Un seul e-mail est envoyé, à
+// CONTACT_TO_EMAIL — rien n'est renvoyé automatiquement au visiteur, le
+// suivi se fait à la main par Antoine à partir de cet e-mail.
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -13,8 +14,6 @@ interface DiagnosticBody {
   email?: string;
   honeypot?: string;
   levelLabel?: string;
-  resultTitle?: string;
-  resultText?: string;
   answers?: { question: string; answer: string }[];
 }
 
@@ -55,11 +54,6 @@ export async function POST(request: Request) {
     );
   }
 
-  // L'e-mail admin est la partie critique (c'est le lead) : un échec est
-  // remonté à l'utilisateur. L'e-mail visiteur est envoyé en best-effort
-  // juste après — le lead est déjà capté côté admin, un souci de
-  // délivrabilité sur l'adresse du visiteur ne doit pas faire échouer la
-  // confirmation qu'il voit à l'écran.
   try {
     await sendEmail({
       to: toEmail,
@@ -73,6 +67,7 @@ export async function POST(request: Request) {
         ...body.answers.map((a) => `- ${a.question} : ${a.answer}`),
       ].join("\n"),
     });
+    return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[diagnostic] notification admin échouée:", err);
     return NextResponse.json(
@@ -80,27 +75,4 @@ export async function POST(request: Request) {
       { status: 502 }
     );
   }
-
-  try {
-    await sendEmail({
-      to: email,
-      subject: "Votre diagnostic d'automatisation — AM Growth Solutions",
-      text: [
-        `Bonjour ${name},`,
-        "",
-        body.resultTitle ?? `Votre résultat : ${body.levelLabel}`,
-        body.resultText ?? null,
-        "",
-        `Prendre rendez-vous : ${SITE_URL}/contact`,
-        "",
-        "— Antoine Mayer, AM Growth Solutions",
-      ]
-        .filter(Boolean)
-        .join("\n"),
-    });
-  } catch (err) {
-    console.error("[diagnostic] envoi visiteur échoué:", err);
-  }
-
-  return NextResponse.json({ ok: true });
 }

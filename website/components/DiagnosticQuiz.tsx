@@ -86,8 +86,6 @@ export default function DiagnosticQuiz() {
           email: data.get("email"),
           honeypot: data.get("company"),
           levelLabel: levelConfig?.label,
-          resultTitle: resultContent?.title,
-          resultText: resultContent?.text,
           answers: readableAnswers(answers),
         }),
       });
@@ -124,7 +122,7 @@ export default function DiagnosticQuiz() {
         className="flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-60"
       >
         {formStatus === "submitting" && <Loader2 className="h-4 w-4 animate-spin" />}
-        {level === "low" ? "Garder mes coordonnées pour plus tard" : "Recevoir le récapitulatif"}
+        {level === "low" ? "Garder mes coordonnées pour plus tard" : "Envoyer mes coordonnées"}
       </motion.button>
       {formStatus === "error" && (
         <p className="text-center text-sm text-red-600">
@@ -308,7 +306,7 @@ export default function DiagnosticQuiz() {
                           onClick={() => setShowEmailForm(true)}
                           className="text-xs text-muted underline underline-offset-2 transition-colors hover:text-primary-dark"
                         >
-                          Recevoir aussi le détail par email
+                          Laisser mes coordonnées pour être recontacté
                         </button>
                       ) : (
                         <div className="w-full max-w-xs border-t border-border pt-5">
@@ -332,8 +330,8 @@ export default function DiagnosticQuiz() {
                 >
                   <h3 className="font-heading text-xl font-bold text-foreground">Merci !</h3>
                   <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted">
-                    Vous allez recevoir votre diagnostic détaillé par email. On peut aussi en
-                    discuter directement.
+                    Vos coordonnées ont été transmises à Antoine, qui vous recontacte rapidement.
+                    On peut aussi en discuter directement.
                   </p>
                   <Link
                     href="/contact"
