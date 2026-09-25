@@ -31,6 +31,9 @@ export interface Article {
   excerpt: string;
   date: string;
   icon: "map-pin" | "refresh-cw" | "link-2" | "table" | "search" | "bar-chart-3" | "puzzle" | "layout-grid" | "bot";
+  // Illustration dédiée (optionnelle) — tant qu'un article n'en a pas, sa
+  // couverture retombe sur l'icône + dégradé (voir ArticleCover.tsx).
+  image?: string;
   pillar?: boolean;
   intro: string[];
   sections: ArticleSection[];
@@ -61,6 +64,7 @@ export const ARTICLES: Article[] = [
       "Définition simple, spécificités du tissu économique local, grands types d'automatisation possibles et méthode pour démarrer : le guide de référence sur l'automatisation des PME à La Réunion.",
     date: "2026-09-24",
     icon: "map-pin",
+    image: "/blog/automatisation-974-cover.webp",
     pillar: true,
     intro: [
       "« Automatisation » est un mot qui fait souvent peur avant même qu'on en comprenne le sens : on imagine un projet informatique lourd, coûteux, réservé aux grandes entreprises avec une équipe technique dédiée. Dans la réalité d'une PME réunionnaise, c'est presque toujours l'inverse : l'automatisation la plus utile est la plus simple — supprimer une tâche répétitive qui, elle, coûte déjà du temps et de l'argent chaque semaine, silencieusement.",

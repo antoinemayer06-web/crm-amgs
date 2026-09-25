@@ -29,6 +29,7 @@ export function generateMetadata({
       description: article.metaDescription,
       type: "article",
       publishedTime: article.date,
+      images: article.image ? [article.image] : undefined,
     },
   };
 }
@@ -57,6 +58,7 @@ export default function BlogArticlePage({
           description: article.metaDescription,
           slug: article.slug,
           datePublished: article.date,
+          image: article.image,
         })}
       />
       {article.faq ? <JsonLd data={faqPageSchema(article.faq)} /> : null}
