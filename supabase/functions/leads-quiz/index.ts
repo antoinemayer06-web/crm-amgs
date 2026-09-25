@@ -5,9 +5,11 @@
 // mêmes réponses dans les 5 minutes = une seule entrée), et un journal
 // d'audit (journal_demandes_site) de CHAQUE tentative reçue — réussie ou
 // échouée — pour pouvoir vérifier après coup qu'aucune réponse n'a été
-// perdue. Crée aussi une notification CRM et envoie un email à l'adresse
-// admin via Resend (best-effort : un échec d'email ne fait jamais échouer
-// l'enregistrement de la demande elle-même).
+// perdue. Crée aussi une notification CRM, envoie un email à l'adresse
+// admin via Resend, ET une notification push immédiate (Web Push) — une
+// nouvelle demande est urgente, elle ne doit pas attendre la fonction
+// planifiée quotidienne (best-effort dans les deux cas : un échec
+// d'email/push ne fait jamais échouer l'enregistrement de la demande).
 //
 // Authentifiée par clé d'API statique (header x-api-key), comme
 // site-evenement — appelée depuis le site externe, sans session Supabase.
@@ -16,6 +18,7 @@
 // copier-coller depuis le Dashboard Supabase (Edge Functions).
 
 import { createClient } from 'npm:@supabase/supabase-js@2.45.4'
+import webpush from 'npm:web-push@3.6.7'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
@@ -25,9 +28,14 @@ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
 const RESEND_FROM = Deno.env.get('RESEND_FROM') ?? 'AM Growth Solutions <onboarding@resend.dev>'
 const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL')
 // URL publique du CRM (ex: https://mon-crm.vercel.app), utilisée pour
-// construire le lien direct vers la demande dans l'email admin. Si absente,
-// l'email part quand même mais sans lien direct.
+// construire le lien direct vers la demande dans l'email admin et dans la
+// notification push. Si absente, les deux partent quand même sans lien.
 const CRM_URL = Deno.env.get('CRM_URL')
+// Mêmes clés VAPID que daily-notifications/calendar-alerts — déjà
+// configurées si le Web Push fonctionne ailleurs dans le CRM.
+const VAPID_PUBLIC_KEY = Deno.env.get('VAPID_PUBLIC_KEY')
+const VAPID_PRIVATE_KEY = Deno.env.get('VAPID_PRIVATE_KEY')
+const VAPID_SUBJECT = Deno.env.get('VAPID_SUBJECT') ?? 'mailto:contact.amagency.fr@gmail.com'
 
 const DEDUP_WINDOW_MS = 5 * 60 * 1000
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -128,6 +136,50 @@ async function envoyerEmailAdmin(demande) {
     }
   } catch (err) {
     console.error('Erreur envoi email Resend:', err)
+  }
+}
+
+// Notification push immédiate (contrairement aux autres alertes, générées
+// une fois par jour par daily-notifications) : une nouvelle demande arrive
+// en direct, elle doit sonner tout de suite sur l'appareil de l'owner.
+async function envoyerPushDemande(supabase, demande) {
+  if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
+    console.warn('VAPID_PUBLIC_KEY/VAPID_PRIVATE_KEY manquantes : push non envoyé')
+    return
+  }
+  webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY)
+
+  const { data: subscriptions, error } = await supabase
+    .from('push_subscriptions')
+    .select('id, endpoint, p256dh, auth')
+    .eq('owner_id', OWNER_ID)
+  if (error) {
+    console.error('Erreur lecture push_subscriptions:', error)
+    return
+  }
+
+  const url = CRM_URL
+    ? `${CRM_URL.replace(/\/$/, '')}/site-internet?tab=demandes&open=${demande.id}`
+    : `/site-internet?tab=demandes&open=${demande.id}`
+  const payload = JSON.stringify({
+    titre: 'Nouvelle demande site 🎯',
+    message: `${demande.nom || demande.email}${demande.score !== null ? ` — score ${demande.score}` : ''}`,
+    url,
+  })
+
+  for (const sub of subscriptions ?? []) {
+    try {
+      await webpush.sendNotification(
+        { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
+        payload,
+      )
+    } catch (err) {
+      if (err?.statusCode === 404 || err?.statusCode === 410) {
+        await supabase.from('push_subscriptions').delete().eq('id', sub.id)
+      } else {
+        console.error('Erreur envoi push:', err)
+      }
+    }
   }
 }
 
@@ -239,7 +291,7 @@ Deno.serve(async (req) => {
   })
   if (notifError) console.error('Erreur création notification:', notifError)
 
-  await envoyerEmailAdmin(demande)
+  await Promise.all([envoyerEmailAdmin(demande), envoyerPushDemande(supabase, demande)])
 
   return json({ success: true, id: demande.id }, 201)
 })
