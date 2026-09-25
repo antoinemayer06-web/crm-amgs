@@ -163,6 +163,7 @@ export const ARTICLES: Article[] = [
       "La double saisie n'est pas une fatalité liée à vos outils actuels. Voici comment la supprimer sans changer de CRM ni de logiciel de gestion.",
     date: "2026-09-17",
     icon: "refresh-cw",
+    image: "/blog/double-saisie-cover.webp",
     intro: [
       "Une commande créée dans le CRM, puis recopiée dans l'outil de facturation. Un client mis à jour d'un côté, oublié de l'autre. La double saisie ne fait presque jamais de bruit — c'est justement ce qui la rend si difficile à repérer, alors qu'elle grignote un temps considérable, semaine après semaine.",
     ],
