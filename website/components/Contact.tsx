@@ -36,6 +36,15 @@ export default function Contact() {
                 data-url={`${CALENDLY_URL}?hide_gdpr_banner=1&background_color=17122b&text_color=ffffff&primary_color=6f5bc9`}
               />
             </div>
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 block text-center text-xs text-white/50 underline underline-offset-2 transition-colors hover:text-white/80"
+            >
+              Le calendrier ne s&apos;affiche pas ? Ouvrir la prise de
+              rendez-vous
+            </a>
           </motion.div>
 
           <motion.div variants={fadeInUp} className="flex h-full flex-col gap-6">
