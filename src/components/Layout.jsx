@@ -13,6 +13,7 @@ import {
   IconCompanies,
   IconDashboard,
   IconFinance,
+  IconGlobe,
   IconKnowledge,
   IconMarketing,
   IconMenu,
@@ -35,6 +36,7 @@ const navItems = [
   { to: '/projects', label: 'Projets', Icon: IconProjects },
   { to: '/marketing', label: 'Marketing', Icon: IconMarketing },
   { to: '/calendar', label: 'Calendrier', Icon: IconCalendar },
+  { to: '/site-internet', label: 'Site internet', Icon: IconGlobe, badgeType: 'nouvelle_demande_site' },
   { to: '/knowledge', label: 'Base de connaissance', Icon: IconKnowledge },
   { to: '/assistant', label: 'Assistant IA', Icon: IconAssistant },
   { to: '/vision', label: 'Vision', Icon: IconVision },
@@ -43,30 +45,42 @@ const navItems = [
 
 const COLLAPSE_KEY = 'sidebar-collapsed'
 
-function SidebarContent({ collapsed, user, signOut, onNavigate }) {
+function SidebarContent({ collapsed, user, signOut, onNavigate, badgeCounts }) {
   return (
     <>
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            title={collapsed ? item.label : undefined}
-            onClick={onNavigate}
-            className={({ isActive }) =>
-              `flex items-center gap-2.5 rounded-md border-l-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150 md:py-2 ${
-                collapsed ? 'justify-center px-0' : ''
-              } ${
-                isActive
-                  ? 'border-chrome-light bg-surface-hover text-ink'
-                  : 'border-transparent text-ink-secondary hover:bg-surface-hover hover:text-ink'
-              }`
-            }
-          >
-            <item.Icon className="h-[18px] w-[18px] shrink-0" />
-            {!collapsed && <span className="truncate">{item.label}</span>}
-          </NavLink>
-        ))}
+        {navItems.map((item) => {
+          const badgeCount = item.badgeType ? badgeCounts?.[item.badgeType] ?? 0 : 0
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              title={collapsed ? item.label : undefined}
+              onClick={onNavigate}
+              className={({ isActive }) =>
+                `relative flex items-center gap-2.5 rounded-md border-l-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150 md:py-2 ${
+                  collapsed ? 'justify-center px-0' : ''
+                } ${
+                  isActive
+                    ? 'border-chrome-light bg-surface-hover text-ink'
+                    : 'border-transparent text-ink-secondary hover:bg-surface-hover hover:text-ink'
+                }`
+              }
+            >
+              <item.Icon className="h-[18px] w-[18px] shrink-0" />
+              {!collapsed && <span className="truncate">{item.label}</span>}
+              {badgeCount > 0 && (
+                <span
+                  className={`flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-medium leading-none text-white ${
+                    collapsed ? 'absolute right-1 top-1' : 'ml-auto'
+                  }`}
+                >
+                  {badgeCount > 9 ? '9+' : badgeCount}
+                </span>
+              )}
+            </NavLink>
+          )
+        })}
       </nav>
 
       <div className={`border-t border-chrome-dark px-4 py-4 ${collapsed ? 'px-2' : ''}`}>
@@ -100,6 +114,7 @@ export default function Layout() {
   const [notificationsOpen, setNotificationsOpen] = useState(false)
   const { data: notifications = [] } = useNotifications()
   const unreadCount = notifications.filter((n) => !n.lue).length
+  const badgeCounts = { nouvelle_demande_site: notifications.filter((n) => n.type === 'nouvelle_demande_site' && !n.lue).length }
   const previousUnreadIdsRef = useRef(null)
 
   // Son joué uniquement pour une notification réellement nouvelle
@@ -227,7 +242,7 @@ export default function Layout() {
             >
               {collapsed ? '›' : '‹'}
             </button>
-            <SidebarContent collapsed={collapsed} user={user} signOut={signOut} />
+            <SidebarContent collapsed={collapsed} user={user} signOut={signOut} badgeCounts={badgeCounts} />
           </aside>
 
           {/* Menu mobile : tiroir plein écran, ferme au tap en dehors ou à Échap */}
@@ -261,6 +276,7 @@ export default function Layout() {
                   user={user}
                   signOut={signOut}
                   onNavigate={() => setMobileNavOpen(false)}
+                  badgeCounts={badgeCounts}
                 />
               </aside>
             </div>

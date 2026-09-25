@@ -19,6 +19,7 @@ import {
   IconCalendarClock,
   IconCheck,
   IconDocument,
+  IconGlobe,
   IconInvoiceClock,
   IconMarketing,
   IconSettings,
@@ -33,6 +34,7 @@ const TYPE_META = {
   projet_demarre_ou_termine_bientot: { Icon: IconCalendarClock, label: 'Projet démarre/se termine' },
   prospect_bloque_devis: { Icon: IconDocument, label: 'Devis à transmettre' },
   evenement_calendrier: { Icon: IconCalendar, label: 'Rappel événement calendrier' },
+  nouvelle_demande_site: { Icon: IconGlobe, label: 'Nouvelle demande site' },
 }
 
 function NotificationRow({ notification, onMarkRead, onNavigate }) {

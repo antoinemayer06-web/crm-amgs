@@ -11,6 +11,7 @@ export const COMPANY_SOURCES = [
   'bouche_à_oreille',
   'campagne_publicitaire',
   'appel',
+  'site_web',
 ]
 
 export const STATUT_PROSPECT_OPTIONS = [

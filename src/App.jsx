@@ -14,6 +14,7 @@ import MarketingPage from './pages/MarketingPage'
 import PipelinePage from './pages/PipelinePage'
 import ProjectsPage from './pages/ProjectsPage'
 import SettingsPage from './pages/SettingsPage'
+import SiteInternetPage from './pages/SiteInternetPage'
 import VisionPage from './pages/VisionPage'
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="marketing" element={<MarketingPage />} />
         <Route path="calendar" element={<CalendarPage />} />
+        <Route path="site-internet" element={<SiteInternetPage />} />
         <Route path="knowledge" element={<KnowledgeBasePage />} />
         <Route path="knowledge/:id" element={<KnowledgeDetailPage />} />
         <Route path="assistant" element={<AiAssistantPage />} />

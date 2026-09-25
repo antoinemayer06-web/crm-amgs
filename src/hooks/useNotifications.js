@@ -9,6 +9,7 @@ const DEFAULT_TYPES_ACTIFS = {
   projet_demarre_ou_termine_bientot: true,
   prospect_bloque_devis: true,
   evenement_calendrier: true,
+  nouvelle_demande_site: true,
 }
 
 // Mêmes règles de redirection que la fonction planifiée (voir
@@ -20,6 +21,7 @@ export function notificationTargetUrl(notification) {
   if (entiteType === 'company') return `/companies/${entiteId}`
   if (entiteType === 'marketing_action') return '/marketing'
   if (entiteType === 'calendar_event') return `/calendar?open=${entiteId}`
+  if (entiteType === 'demande_site') return `/site-internet?tab=demandes&open=${entiteId}`
   return null
 }
 
