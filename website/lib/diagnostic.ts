@@ -250,29 +250,24 @@ export const LEVELS: Record<Level, { label: string; badgeClasses: string }> = {
   },
 };
 
-// Contenu "closing" de l'écran de résultat, calibré par niveau — cta
-// "calendly" pousse vers la prise de rendez-vous directe, "form" affiche
-// à la place un petit formulaire nom/email (pas de pression au closing
-// pour un potentiel jugé faible pour l'instant).
-export const RESULT_CONTENT: Record<
-  Level,
-  { title: string; text: string; cta: "calendly" | "form" }
-> = {
+// Contenu "closing" de l'écran de résultat, calibré par niveau — le texte
+// varie selon le score, mais le CTA qui suit est le même pour tout le
+// monde : un seul bouton vers le formulaire nom/email/téléphone qui envoie
+// la demande au CRM (voir DiagnosticQuiz.tsx). Calendly n'apparaît qu'après
+// l'envoi, sur l'écran de remerciement.
+export const RESULT_CONTENT: Record<Level, { title: string; text: string }> = {
   low: {
     title: "Pour l'instant, ce n'est probablement pas votre priorité n°1.",
     text: "Et c'est très bien ainsi. Gardez cette page sous le coude — le jour où ça change, on sera là.",
-    cta: "form",
   },
   moderate: {
     title: "Il y a clairement matière à automatiser chez vous.",
     text: "Peut-être pas tout, mais certains points identifiés ici valent le coup d'être creusés. Un appel rapide suffit pour savoir lesquels.",
-    cta: "calendly",
   },
   high: {
     title:
       "Vous perdez du temps et de l'argent, chaque semaine, sur des choses qui peuvent tourner toutes seules.",
     text: "Ce que vous venez de décrire, on le résout en quelques jours, pas en plusieurs mois d'essais. La prochaine étape logique : un appel de 20 minutes pour voir exactement par où commencer.",
-    cta: "calendly",
   },
 };
 

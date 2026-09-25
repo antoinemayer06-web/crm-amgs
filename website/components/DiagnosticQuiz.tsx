@@ -53,7 +53,7 @@ export default function DiagnosticQuiz() {
   const [phase, setPhase] = useState<Phase>("start");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
-  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [showLeadForm, setShowLeadForm] = useState(false);
   const [formStatus, setFormStatus] = useState<FormStatus>("idle");
 
   const totalQuestions = QUIZ_QUESTIONS.length;
@@ -137,7 +137,7 @@ export default function DiagnosticQuiz() {
         className="flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-60"
       >
         {formStatus === "submitting" && <Loader2 className="h-4 w-4 animate-spin" />}
-        {level === "low" ? "Garder mes coordonnées pour plus tard" : "Envoyer mes coordonnées"}
+        Envoyer à notre équipe
       </motion.button>
       {formStatus === "error" && (
         <p className="text-center text-sm text-red-600">
@@ -304,37 +304,21 @@ export default function DiagnosticQuiz() {
                     {resultContent.text}
                   </p>
 
-                  {resultContent.cta === "calendly" ? (
-                    <div className="mt-8 flex flex-col items-center gap-4">
-                      <motion.a
-                        href={CALENDLY_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                  <div className="mx-auto mt-8 max-w-xs">
+                    {!showLeadForm ? (
+                      <motion.button
+                        type="button"
                         whileHover={buttonHover}
-                        onClick={() => trackEvent("clic_calendly")}
-                        className="inline-flex items-center gap-2.5 rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+                        onClick={() => setShowLeadForm(true)}
+                        className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
                       >
-                        <Calendar className="h-4 w-4" />
-                        Réserver mon appel
-                      </motion.a>
-
-                      {!showEmailForm ? (
-                        <button
-                          type="button"
-                          onClick={() => setShowEmailForm(true)}
-                          className="text-xs text-muted underline underline-offset-2 transition-colors hover:text-primary-dark"
-                        >
-                          Laisser mes coordonnées pour être recontacté
-                        </button>
-                      ) : (
-                        <div className="w-full max-w-xs border-t border-border pt-5">
-                          {emailForm}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="mx-auto mt-8 max-w-xs">{emailForm}</div>
-                  )}
+                        Envoyer à notre équipe
+                        <ArrowRight className="h-4 w-4" />
+                      </motion.button>
+                    ) : (
+                      emailForm
+                    )}
+                  </div>
                 </motion.div>
               )}
 
@@ -349,14 +333,22 @@ export default function DiagnosticQuiz() {
                   <h3 className="font-heading text-xl font-bold text-foreground">Merci !</h3>
                   <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted">
                     Vos coordonnées ont été transmises à Antoine, qui vous recontacte rapidement.
-                    On peut aussi en discuter directement.
                   </p>
-                  <Link
-                    href="/contact"
-                    className="mt-6 inline-block rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:scale-[1.03] hover:bg-primary-dark active:scale-[0.98]"
+                  <p className="mt-1 max-w-sm text-sm leading-relaxed text-muted">
+                    Si vous préférez ne pas attendre, vous pouvez aussi réserver un appel
+                    directement :
+                  </p>
+                  <motion.a
+                    href={CALENDLY_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={buttonHover}
+                    onClick={() => trackEvent("clic_calendly")}
+                    className="mt-6 inline-flex items-center gap-2.5 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
                   >
-                    Prendre rendez-vous
-                  </Link>
+                    <Calendar className="h-4 w-4" />
+                    Réserver mon appel
+                  </motion.a>
                 </motion.div>
               )}
             </AnimatePresence>
