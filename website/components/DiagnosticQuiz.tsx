@@ -101,7 +101,8 @@ export default function DiagnosticQuiz() {
       const json = await res.json();
       if (!json.ok) throw new Error(json.error ?? "send_failed");
       setPhase("submitted");
-    } catch {
+    } catch (err) {
+      console.error("[diagnostic] envoi au CRM échoué:", err instanceof Error ? err.message : err);
       setFormStatus("error");
     }
   }
