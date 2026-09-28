@@ -10,9 +10,12 @@ import { trackEvent } from "@/lib/track";
 import {
   ADMIN_BURDEN_REACTIONS,
   buildDiagnosticReport,
+  BUDGET_REACTIONS,
   computeLevel,
   computeScore,
+  COMPANY_SIZE_REACTIONS,
   LEVELS,
+  PAIN_POINT_REACTIONS,
   painPointsReaction,
   QUIZ_QUESTIONS,
   readableAnswers,
@@ -33,6 +36,8 @@ const inputClasses =
 
 function reactionFor(question: (typeof QUIZ_QUESTIONS)[number], answers: Answers): string | null {
   switch (question.id) {
+    case "company-size":
+      return COMPANY_SIZE_REACTIONS[answers["company-size"] ?? ""] ?? null;
     case "tools":
       return TOOLS_REACTIONS[answers.tools ?? ""] ?? null;
     case "time-lost":
@@ -41,8 +46,8 @@ function reactionFor(question: (typeof QUIZ_QUESTIONS)[number], answers: Answers
       return SELF_FIX_REACTIONS[answers["self-fix"] ?? ""] ?? null;
     case "admin-burden":
       return ADMIN_BURDEN_REACTIONS[answers["admin-burden"] ?? ""] ?? null;
-    case "pain-points":
-      return painPointsReaction(answers["pain-points"]?.length ?? 0);
+    case "budget":
+      return BUDGET_REACTIONS[answers.budget ?? ""] ?? null;
     case "timeline":
       return TIMELINE_REACTIONS[answers.timeline ?? ""] ?? null;
     default:
@@ -50,22 +55,38 @@ function reactionFor(question: (typeof QUIZ_QUESTIONS)[number], answers: Answers
   }
 }
 
+// Q6 (pain-points) affiche une réaction par case cochée, empilées, plus
+// une synthèse selon le nombre de cases — pas une réaction unique comme
+// les autres questions, donc traité à part de reactionFor.
+function painPointReactionLines(answers: Answers): string[] {
+  const selected = answers["pain-points"] ?? [];
+  const lines = selected
+    .map((value) => PAIN_POINT_REACTIONS[value])
+    .filter((line): line is string => Boolean(line));
+  const synthesis = painPointsReaction(selected.length);
+  return synthesis ? [...lines, synthesis] : lines;
+}
+
 export default function DiagnosticQuiz() {
   const [phase, setPhase] = useState<Phase>("question");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [formStatus, setFormStatus] = useState<FormStatus>("idle");
+  const [firstName, setFirstName] = useState("");
 
   const totalQuestions = QUIZ_QUESTIONS.length;
   const currentQuestion = QUIZ_QUESTIONS[questionIndex];
   const isLastQuestion = questionIndex === totalQuestions - 1;
+  const isPainPoints = currentQuestion?.id === "pain-points";
 
   const hasAnswer =
     currentQuestion?.type === "multi"
       ? (answers["pain-points"]?.length ?? 0) > 0
       : Boolean(currentQuestion && answers[currentQuestion.id]);
 
-  const reaction = currentQuestion && hasAnswer ? reactionFor(currentQuestion, answers) : null;
+  const reaction =
+    currentQuestion && hasAnswer && !isPainPoints ? reactionFor(currentQuestion, answers) : null;
+  const painReactionLines = currentQuestion && isPainPoints ? painPointReactionLines(answers) : [];
 
   const level = phase === "submitted" ? computeLevel(answers) : null;
   const levelConfig = level ? LEVELS[level] : null;
@@ -85,6 +106,7 @@ export default function DiagnosticQuiz() {
     setFormStatus("submitting");
 
     const data = new FormData(event.currentTarget);
+    const name = String(data.get("name") ?? "").trim();
 
     try {
       const res = await fetch("/api/quiz-submit", {
@@ -101,6 +123,7 @@ export default function DiagnosticQuiz() {
       });
       const json = await res.json();
       if (!json.ok) throw new Error(json.error ?? "send_failed");
+      setFirstName(name.split(/\s+/)[0] ?? "");
       setPhase("submitted");
     } catch (err) {
       console.error("[diagnostic] envoi au CRM échoué:", err instanceof Error ? err.message : err);
@@ -237,17 +260,33 @@ export default function DiagnosticQuiz() {
                     })}
                   </div>
 
-                  {reaction && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-4 border-l-2 border-primary/40 pl-3"
-                    >
-                      <p className="text-sm text-muted">{reaction}</p>
-                      {currentQuestion.id === "time-lost" && (
-                        <p className="mt-1 text-xs text-muted/70">{TIME_LOST_DISCLAIMER}</p>
-                      )}
-                    </motion.div>
+                  {isPainPoints ? (
+                    painReactionLines.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-4 space-y-1.5 border-l-2 border-primary/40 pl-3"
+                      >
+                        {painReactionLines.map((line, i) => (
+                          <p key={i} className="text-sm text-muted">
+                            {line}
+                          </p>
+                        ))}
+                      </motion.div>
+                    )
+                  ) : (
+                    reaction && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-4 border-l-2 border-primary/40 pl-3"
+                      >
+                        <p className="text-sm text-muted">{reaction}</p>
+                        {currentQuestion.id === "time-lost" && (
+                          <p className="mt-1 text-xs text-muted/70">{TIME_LOST_DISCLAIMER}</p>
+                        )}
+                      </motion.div>
+                    )
                   )}
 
                   <motion.button
@@ -291,31 +330,67 @@ export default function DiagnosticQuiz() {
                   animate="visible"
                   className="text-center"
                 >
+                  <h2 className="font-heading text-lg font-bold text-foreground sm:text-xl">
+                    Votre diagnostic{firstName ? `, ${firstName}` : ""}
+                  </h2>
+
                   <span
-                    className={`inline-flex rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wide ${levelConfig.badgeClasses}`}
+                    className={`mt-4 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wide ${levelConfig.badgeClasses}`}
                   >
                     {levelConfig.label}
                   </span>
 
-                  <h2 className="mx-auto mt-5 max-w-md font-heading text-2xl font-black text-foreground sm:text-3xl">
+                  <h3 className="mx-auto mt-5 max-w-md font-heading text-2xl font-black text-foreground sm:text-3xl">
                     {resultContent.title}
-                  </h2>
+                  </h3>
 
-                  <div className="mx-auto mt-5 max-w-md rounded-xl border border-border bg-surface px-5 py-4 text-left">
-                    <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-dark">
-                      Votre diagnostic détaillé
-                    </p>
-                    <ul className="mt-2 space-y-2.5 text-sm leading-relaxed text-foreground/80">
-                      {diagnosticReport.points.map((point, i) => (
-                        <li key={i} className="flex gap-2">
-                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="mt-3 border-t border-border pt-3 text-sm font-medium leading-relaxed text-foreground">
-                      {diagnosticReport.closing}
-                    </p>
+                  <div className="mx-auto mt-6 max-w-md space-y-4 text-left">
+                    {diagnosticReport.blocks.map((block, i) => (
+                      <div
+                        key={i}
+                        className="rounded-xl border border-border bg-surface px-5 py-4"
+                      >
+                        <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-dark">
+                          {block.title}
+                        </p>
+
+                        {block.paragraphs.length > 0 && (
+                          <div className="mt-2 space-y-2 text-sm leading-relaxed text-foreground/80">
+                            {block.paragraphs.map((paragraph, j) => (
+                              <p key={j}>{paragraph}</p>
+                            ))}
+                          </div>
+                        )}
+
+                        {block.footnote && (
+                          <p className="mt-2 text-xs text-muted/70">{block.footnote}</p>
+                        )}
+
+                        {block.cards && (
+                          <div className="mt-3 space-y-3">
+                            {block.cards.map((card) => (
+                              <div key={card.title} className="rounded-lg bg-background p-3.5">
+                                <p className="text-sm font-semibold text-foreground">
+                                  {card.title}
+                                </p>
+                                <p className="mt-1.5 text-xs leading-relaxed text-muted">
+                                  <span className="font-semibold text-foreground/70">
+                                    Constat —{" "}
+                                  </span>
+                                  {card.constat}
+                                </p>
+                                <p className="mt-1 text-xs leading-relaxed text-muted">
+                                  <span className="font-semibold text-foreground/70">
+                                    Ce qu&apos;on met en place —{" "}
+                                  </span>
+                                  {card.solution}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
 
                   <p className="mx-auto mt-6 max-w-sm text-sm leading-relaxed text-muted">
