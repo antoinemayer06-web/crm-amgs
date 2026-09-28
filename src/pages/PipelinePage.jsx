@@ -59,7 +59,7 @@ export default function PipelinePage() {
               type="button"
               onClick={() => setView(v.key)}
               className={`rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
-                view === v.key ? 'chrome-droplet text-[#1a1b1d]' : 'text-ink-secondary hover:text-ink'
+                view === v.key ? 'chrome-droplet text-ink' : 'text-ink-secondary hover:text-ink'
               }`}
             >
               {v.label}

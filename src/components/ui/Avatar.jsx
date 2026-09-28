@@ -5,7 +5,7 @@ export default function Avatar({ name, size = 'sm' }) {
 
   return (
     <span
-      className={`chrome-droplet chrome-droplet-circle inline-flex shrink-0 items-center justify-center font-semibold text-[#1a1b1d] ${sizeClass}`}
+      className={`chrome-droplet chrome-droplet-circle inline-flex shrink-0 items-center justify-center font-semibold text-ink ${sizeClass}`}
       title={name}
     >
       {getInitials(name)}

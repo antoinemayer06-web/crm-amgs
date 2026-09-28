@@ -107,25 +107,34 @@ h3 {
   animation: pulse-chrome 1.8s ease-in-out infinite;
 }
 
-/* Métal liquide bombé : point de lumière excentré en haut-gauche,
-   assombrissement progressif vers les bords, ombre interne claire en
-   haut + sombre en bas pour simuler le bombé, ombre portée pour
-   détacher du fond. À utiliser avec parcimonie (logo, boutons
-   principaux, avatars, indicateurs de statut importants). */
+/* Métal brossé sombre : base gunmetal proche du fond de l'app, traversée
+   d'un fin filet de lumière en diagonale (reflet sur une surface
+   brossée) plutôt qu'un dégradé clair→sombre en boule glacée — reste
+   sombre et intégré au thème plutôt qu'une bulle blanc/gris qui
+   détonne. À utiliser avec parcimonie (boutons principaux, avatars,
+   indicateurs de statut importants). */
 .chrome-droplet {
-  background-image: radial-gradient(circle at 30% 25%, #e8eaec 0%, #b8bbc0 25%, #6a6d72 55%, #2a2c30 100%);
-  background-size: 160% 160%;
-  background-position: 30% 25%;
+  background-image: linear-gradient(
+    120deg,
+    var(--bg-primary) 0%,
+    var(--chrome-dark) 32%,
+    var(--chrome-mid) 48%,
+    var(--chrome-light) 52%,
+    var(--chrome-mid) 56%,
+    var(--chrome-dark) 74%,
+    var(--bg-primary) 100%
+  );
+  background-size: 220% 220%;
+  background-position: 20% 30%;
   box-shadow:
-    inset 0 2px 4px rgba(255, 255, 255, 0.4),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.5),
-    0 4px 12px rgba(0, 0, 0, 0.6),
-    0 1px 2px rgba(255, 255, 255, 0.1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+    0 3px 10px rgba(0, 0, 0, 0.45);
   transition: background-position 220ms ease, box-shadow 220ms ease, transform 220ms ease;
 }
 
 .chrome-droplet:hover {
-  background-position: 42% 12%;
+  background-position: 35% 45%;
 }
 
 .chrome-droplet-circle {
@@ -138,18 +147,27 @@ h3 {
   }
 
   .btn-primary {
-    @apply rounded-md px-3 py-2 text-sm font-semibold text-[#141416] transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 max-md:min-h-[44px];
-    background-image: radial-gradient(circle at 30% 25%, #eef0f1 0%, #c7cacf 30%, #8e9196 70%, #5a5d61 100%);
-    background-size: 160% 160%;
-    background-position: 30% 25%;
+    @apply rounded-md px-3 py-2 text-sm font-semibold text-ink transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 max-md:min-h-[44px];
+    background-image: linear-gradient(
+      120deg,
+      var(--bg-primary) 0%,
+      var(--chrome-dark) 32%,
+      var(--chrome-mid) 48%,
+      var(--chrome-light) 52%,
+      var(--chrome-mid) 56%,
+      var(--chrome-dark) 74%,
+      var(--bg-primary) 100%
+    );
+    background-size: 220% 220%;
+    background-position: 20% 30%;
     box-shadow:
-      inset 0 1px 2px rgba(255, 255, 255, 0.55),
-      inset 0 -2px 4px rgba(0, 0, 0, 0.3),
-      0 2px 8px rgba(0, 0, 0, 0.5);
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+      0 3px 10px rgba(0, 0, 0, 0.45);
   }
 
   .btn-primary:hover:not(:disabled) {
-    background-position: 42% 12%;
+    background-position: 35% 45%;
   }
 
   .btn-secondary {
