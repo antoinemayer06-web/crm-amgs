@@ -9,6 +9,7 @@ import {
 } from '../hooks/useCompanySettings'
 import { useAuth } from '../lib/AuthContext'
 import { useSoundSettings } from '../hooks/useSoundSettings'
+import { isTiltListening, needsTiltPermission, requestTiltPermission } from '../hooks/useDeviceTilt'
 import Toggle from '../components/ui/Toggle'
 
 const emptyValues = {
@@ -57,6 +58,12 @@ export default function SettingsPage() {
   const [values, setValues] = useState(emptyValues)
   const [openingId, setOpeningId] = useState(null)
   const [uploadError, setUploadError] = useState(null)
+  const [tiltStatus, setTiltStatus] = useState(() => (isTiltListening() ? 'granted' : 'idle'))
+
+  async function handleActivateTilt() {
+    const state = await requestTiltPermission()
+    setTiltStatus(state)
+  }
 
   useEffect(() => {
     if (settings) {
@@ -196,6 +203,31 @@ export default function SettingsPage() {
           />
         </div>
       </div>
+
+      {needsTiltPermission() && (
+        <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
+          <h3 className="mb-1 text-sm font-semibold text-ink">Effets visuels</h3>
+          <p className="mb-3 text-xs text-ink-tertiary">
+            Le reflet des boutons peut suivre l'inclinaison du téléphone — iOS exige une
+            autorisation explicite (popup système) pour lire le gyroscope.
+          </p>
+          {tiltStatus === 'granted' ? (
+            <p className="text-sm text-ink-secondary">Activé.</p>
+          ) : (
+            <div className="space-y-2">
+              <button type="button" onClick={handleActivateTilt} className="btn-secondary text-sm">
+                Activer le reflet dynamique
+              </button>
+              {tiltStatus === 'denied' && (
+                <p className="text-xs text-red-400">
+                  Refusé — réactivable dans Réglages de l'appareil → Safari (ou l'app installée) →
+                  Mouvement et orientation.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="rounded-xl border border-chrome-dark bg-surface p-4 shadow-sm">
         <h3 className="mb-3 text-sm font-semibold text-ink">Informations</h3>
