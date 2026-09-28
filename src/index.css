@@ -142,40 +142,8 @@ h3 {
     @apply w-full rounded-md border border-chrome-dark bg-surface px-3 py-2 text-sm text-ink placeholder-ink-tertiary transition-colors duration-200 focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid max-md:min-h-[44px];
   }
 
-  /* Verre liquide : fond translucide flouté, reflet piloté par
-     --tilt-x/--tilt-y (useDeviceTilt). */
   .btn-primary {
-    @apply relative isolate overflow-hidden rounded-full px-4 py-2 text-sm font-semibold text-ink transition-transform duration-150 disabled:cursor-not-allowed disabled:opacity-50 max-md:min-h-[44px];
-    background: rgba(20, 20, 22, 0.45);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border: 1px solid rgba(216, 219, 222, 0.16);
-    box-shadow:
-      inset 0 1px 0 rgba(216, 219, 222, 0.14),
-      inset 0 -6px 10px rgba(0, 0, 0, 0.35),
-      0 8px 20px rgba(0, 0, 0, 0.4);
-  }
-
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      140px 90px at var(--tilt-x, 28%) var(--tilt-y, 15%),
-      rgba(216, 219, 222, 0.28),
-      transparent 65%
-    );
-    transition: background-position 150ms ease;
-    pointer-events: none;
-  }
-
-  .btn-primary:hover:not(:disabled) {
-    background: rgba(28, 28, 31, 0.55);
-    transform: translateY(-1px);
-  }
-
-  .btn-primary:active:not(:disabled) {
-    transform: translateY(0) scale(0.97);
+    @apply rounded-md bg-white px-3 py-2 text-sm font-semibold text-[#141416] transition-colors duration-200 hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 max-md:min-h-[44px];
   }
 
   .btn-secondary {
@@ -199,7 +167,7 @@ h3 {
     background: linear-gradient(90deg, transparent, rgba(216, 219, 222, 0.35), transparent);
   }
 
-  /* Liquid glass : fond translucide flouté + reflet --tilt-x/--tilt-y.
+  /* Liquid glass : fond translucide flouté + reflet fixe et discret.
      Cards de contenu et tableaux, pas les champs de saisie. */
   .card-glass {
     @apply relative border transition-all duration-200;
@@ -215,12 +183,7 @@ h3 {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(
-      220px 140px at var(--tilt-x, 28%) var(--tilt-y, 15%),
-      rgba(216, 219, 222, 0.14),
-      transparent 70%
-    );
-    transition: background-position 150ms ease;
+    background: radial-gradient(220px 140px at 28% 15%, rgba(216, 219, 222, 0.06), transparent 70%);
     pointer-events: none;
   }
 
@@ -257,25 +220,6 @@ h3 {
       inset 0 1px 0 rgba(255, 255, 255, 0.4),
       0 8px 24px rgba(0, 0, 0, 0.35);
     transition: box-shadow 220ms ease, border-color 220ms ease;
-  }
-
-  /* Même reflet que .card-glass, pour glass-panel (Modal/SidePanel). */
-  .glass-tilt {
-    position: relative;
-  }
-
-  .glass-tilt::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(
-      220px 140px at var(--tilt-x, 28%) var(--tilt-y, 15%),
-      rgba(216, 219, 222, 0.16),
-      transparent 70%
-    );
-    transition: background-position 150ms ease;
-    pointer-events: none;
   }
 
   /* Skeleton screens : préfigure la forme du contenu à venir plutôt
