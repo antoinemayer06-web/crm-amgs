@@ -43,8 +43,6 @@ export function wasTiltGrantedBefore() {
   }
 }
 
-// Doit être appelée depuis le onClick direct d'un bouton : sur iOS,
-// Safari ignore silencieusement la demande de permission sinon.
 export async function requestTiltPermission() {
   if (!needsTiltPermission()) {
     startListening()
@@ -63,13 +61,34 @@ export async function requestTiltPermission() {
   }
 }
 
-// Toujours démarrer l'écoute au chargement : si iOS a déjà accordé la
-// permission lors d'une session précédente sur cette origine, les
-// événements arrivent directement sans repasser par
-// requestTiltPermission() — inutile de forcer une nouvelle activation
-// à chaque ouverture de l'app.
+// Sur les PWA installées iOS, chaque lancement depuis l'écran d'accueil
+// démarre un contexte neuf : l'autorisation gyroscope accordée la fois
+// précédente n'est pas retenue, il faut la redemander à chaque fois — et
+// seul un vrai geste utilisateur peut déclencher la popup système.
+//
+// Plutôt que d'attendre un bouton précis (qu'on doit aller chercher
+// dans Paramètres), on retente sur CHAQUE tap dans l'app tant que
+// l'autorisation n'est pas encore accordée. Sans `once` : si une
+// première tentative échoue silencieusement (WebKit peut être capricieux
+// sur ce point), les taps suivants réessaient — jamais bloquant pour
+// l'action que l'utilisateur voulait faire.
 export function useDeviceTilt() {
   useEffect(() => {
-    startListening()
+    if (!needsTiltPermission()) {
+      startListening()
+      return
+    }
+    if (listening) return
+
+    function handleFirstInteraction() {
+      if (listening) {
+        document.removeEventListener('pointerdown', handleFirstInteraction, true)
+        return
+      }
+      requestTiltPermission()
+    }
+
+    document.addEventListener('pointerdown', handleFirstInteraction, true)
+    return () => document.removeEventListener('pointerdown', handleFirstInteraction, true)
   }, [])
 }
