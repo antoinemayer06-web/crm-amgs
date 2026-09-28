@@ -33,7 +33,7 @@ export default function SiteInternetPage() {
     <div className="space-y-6">
       <h2 className="text-xl font-semibold tracking-tight text-ink">Site internet</h2>
 
-      <div className="border-b border-chrome-dark">
+      <div className="overflow-x-auto border-b border-chrome-dark">
         <nav className="flex w-max min-w-full gap-1">
           {TABS.map((tab) => (
             <button

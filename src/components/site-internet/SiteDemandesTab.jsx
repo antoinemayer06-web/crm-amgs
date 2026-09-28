@@ -152,22 +152,22 @@ function LeadDetailPanel({ lead, onClose }) {
             </div>
           </div>
         ) : (
-          <dl className="space-y-2 text-sm">
-            <div className="flex justify-between gap-2">
-              <dt className="text-ink-tertiary">Nom</dt>
-              <dd className="text-ink">{lead.nom || '—'}</dd>
+          <dl className="grid grid-cols-2 gap-4">
+            <div>
+              <dt className="text-xs font-medium text-ink-secondary">Nom</dt>
+              <dd className="mt-1 break-words text-sm text-ink">{lead.nom || '—'}</dd>
             </div>
-            <div className="flex justify-between gap-2">
-              <dt className="text-ink-tertiary">Email</dt>
-              <dd className="text-ink">{lead.email}</dd>
+            <div>
+              <dt className="text-xs font-medium text-ink-secondary">Email</dt>
+              <dd className="mt-1 break-all text-sm text-ink">{lead.email}</dd>
             </div>
-            <div className="flex justify-between gap-2">
-              <dt className="text-ink-tertiary">Téléphone</dt>
-              <dd className="text-ink">{lead.telephone || '—'}</dd>
+            <div>
+              <dt className="text-xs font-medium text-ink-secondary">Téléphone</dt>
+              <dd className="mt-1 break-words text-sm text-ink">{lead.telephone || '—'}</dd>
             </div>
-            <div className="flex justify-between gap-2">
-              <dt className="text-ink-tertiary">Soumis le</dt>
-              <dd className="text-ink">{formatDate(lead.date_soumission)}</dd>
+            <div>
+              <dt className="text-xs font-medium text-ink-secondary">Soumis le</dt>
+              <dd className="mt-1 break-words text-sm text-ink">{formatDate(lead.date_soumission)}</dd>
             </div>
           </dl>
         )}
@@ -236,38 +236,68 @@ export default function SiteDemandesTab({ openLeadId }) {
         </p>
       ) : (
         <div className="overflow-hidden rounded-lg border border-chrome-dark">
-          <table className="w-full text-sm">
-            <thead className="bg-surface-hover text-left text-xs text-ink-tertiary">
-              <tr>
-                <th className="px-3 py-2">
-                  <button type="button" onClick={() => setSortAsc((prev) => !prev)} className="hover:text-ink-secondary">
-                    Date {sortAsc ? '↑' : '↓'}
-                  </button>
-                </th>
-                <th className="px-3 py-2">Nom</th>
-                <th className="px-3 py-2">Email</th>
-                <th className="px-3 py-2">Score</th>
-                <th className="px-3 py-2">Statut</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-chrome-dark">
-              {sorted.map((lead) => (
-                <tr
-                  key={lead.id}
-                  onClick={() => setSelectedId(lead.id)}
-                  className="cursor-pointer hover:bg-surface-hover"
-                >
-                  <td className="whitespace-nowrap px-3 py-2 text-ink-secondary">{formatDate(lead.date_soumission)}</td>
-                  <td className="px-3 py-2 text-ink">{lead.nom || '—'}</td>
-                  <td className="px-3 py-2 text-ink-secondary">{lead.email}</td>
-                  <td className="px-3 py-2">
-                    <Badge tone={scoreTone(lead.score)}>{lead.score ?? 'N/A'}</Badge>
-                  </td>
-                  <td className="px-3 py-2 text-ink-secondary">{lead.statut}</td>
+          {/* Tableau complet à partir de md: — en dessous, les colonnes ne
+              tiennent pas (date+heure, email, badges) sans se chevaucher :
+              on bascule sur une liste de cartes empilées, même convention
+              que ProspectsList/ClientsList. */}
+          <div className="hidden overflow-x-auto md:block">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-surface-hover text-left text-xs text-ink-tertiary">
+                <tr>
+                  <th className="px-3 py-2">
+                    <button type="button" onClick={() => setSortAsc((prev) => !prev)} className="hover:text-ink-secondary">
+                      Date {sortAsc ? '↑' : '↓'}
+                    </button>
+                  </th>
+                  <th className="px-3 py-2">Nom</th>
+                  <th className="px-3 py-2">Email</th>
+                  <th className="px-3 py-2">Score</th>
+                  <th className="px-3 py-2">Statut</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-chrome-dark">
+                {sorted.map((lead) => (
+                  <tr
+                    key={lead.id}
+                    onClick={() => setSelectedId(lead.id)}
+                    className="cursor-pointer hover:bg-surface-hover"
+                  >
+                    <td className="whitespace-nowrap px-3 py-2 text-ink-secondary">{formatDate(lead.date_soumission)}</td>
+                    <td className="max-w-[200px] truncate px-3 py-2 text-ink">{lead.nom || '—'}</td>
+                    <td className="max-w-[220px] truncate px-3 py-2 text-ink-secondary">{lead.email}</td>
+                    <td className="px-3 py-2">
+                      <Badge tone={scoreTone(lead.score)}>{lead.score ?? 'N/A'}</Badge>
+                    </td>
+                    <td className="px-3 py-2 text-ink-secondary">{lead.statut}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <ul className="divide-y divide-chrome-dark md:hidden">
+            {sorted.map((lead) => (
+              <li
+                key={lead.id}
+                onClick={() => setSelectedId(lead.id)}
+                className="cursor-pointer p-4 hover:bg-surface-hover"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium text-ink">{lead.nom || lead.email}</p>
+                    <p className="truncate text-sm text-ink-secondary">{lead.email}</p>
+                  </div>
+                  <Badge tone={scoreTone(lead.score)}>{lead.score ?? 'N/A'}</Badge>
+                </div>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <span className="text-xs text-ink-tertiary">{formatDate(lead.date_soumission)}</span>
+                  <span className="rounded-full bg-chrome-dark/50 px-2 py-0.5 text-xs text-ink-secondary">
+                    {lead.statut}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
