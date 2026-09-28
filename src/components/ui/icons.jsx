@@ -253,3 +253,25 @@ export function IconGlobe({ className }) {
     </Svg>
   )
 }
+
+// Marque Claude (Anthropic) : astérisque à rayons arrondis, pleine — pas
+// un pictogramme ligne comme les autres (voir Svg plus haut), une forme
+// pleine dans la couleur de marque, utilisée uniquement pour identifier
+// l'assistant IA (bouton flottant).
+export function IconClaude({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="#D97757" className={className} aria-hidden="true">
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
+        <rect
+          key={angle}
+          x="10.9"
+          y="1.8"
+          width="2.2"
+          height="8.4"
+          rx="1.1"
+          transform={`rotate(${angle} 12 12)`}
+        />
+      ))}
+    </svg>
+  )
+}
