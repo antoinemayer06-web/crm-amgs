@@ -4,7 +4,6 @@ import FinalCta from "@/components/FinalCta";
 import Founder from "@/components/Founder";
 import Hero from "@/components/Hero";
 import Note from "@/components/Note";
-import QuizPromo from "@/components/QuizPromo";
 import Solutions from "@/components/Solutions";
 import Symptoms from "@/components/Symptoms";
 import Testimonial from "@/components/Testimonial";
@@ -24,11 +23,9 @@ export default function Home() {
 
       <Symptoms />
 
-      <QuizPromo />
-
       <Solutions />
 
-      <section className="bg-background px-4 pb-4 sm:px-6 lg:px-8">
+      <section className="bg-surface px-4 pb-4 sm:px-6 lg:px-8">
         <Note>
           Ressource gratuite ! Notre{" "}
           <Link

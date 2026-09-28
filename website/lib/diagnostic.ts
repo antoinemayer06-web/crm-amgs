@@ -318,49 +318,67 @@ function optionLabel(questionId: QuizQuestion["id"], value?: string): string | u
   return question?.options.find((o) => o.value === value)?.label;
 }
 
-// Phrase de diagnostic construite à partir des réponses réelles (pas un
-// texte générique par palier) — affichée sur l'écran de résultat pour que
-// le visiteur reconnaisse concrètement sa propre situation.
-export function buildDiagnosticSummary(answers: Answers): string {
+export interface DiagnosticReport {
+  points: string[];
+  closing: string;
+}
+
+// Diagnostic détaillé construit à partir des réponses réelles — pas un
+// texte générique par palier. Réutilise les réactions déjà rédigées pour
+// chaque réponse (TOOLS_REACTIONS, TIME_LOST_REACTIONS, SELF_FIX_REACTIONS,
+// ADMIN_BURDEN_REACTIONS, TIMELINE_REACTIONS) pour composer plusieurs
+// points concrets, affichés après l'envoi du formulaire de contact sur
+// l'écran de résultat.
+export function buildDiagnosticReport(answers: Answers, level: Level): DiagnosticReport {
   const timeLabel = optionLabel("time-lost", answers["time-lost"]);
   const toolsLabel = optionLabel("tools", answers.tools);
   const painLabels = (answers["pain-points"] ?? [])
     .map((value) => optionLabel("pain-points", value))
     .filter((label): label is string => Boolean(label));
 
-  let opening = "";
+  const points: string[] = [];
+
   if (timeLabel) {
-    opening = `Vous perdez ${timeLabel.toLowerCase()} par semaine sur des tâches répétitives`;
-    if (toolsLabel) {
-      opening +=
-        answers.tools === "systeme-connecte"
-          ? ", malgré un système déjà bien connecté"
-          : `, avec une gestion encore basée sur ${toolsLabel.toLowerCase()}`;
-    }
-    opening += ".";
-  } else if (toolsLabel) {
-    opening = `Votre gestion actuelle repose sur : ${toolsLabel.toLowerCase()}.`;
+    const yearly = TIME_LOST_REACTIONS[answers["time-lost"] ?? ""];
+    points.push(
+      `Temps perdu : ${timeLabel.toLowerCase()} par semaine sur des tâches répétitives.${
+        yearly ? ` ${yearly}` : ""
+      }`
+    );
   }
 
-  let painSentence = "";
-  if (painLabels.length === 1) {
-    painSentence = ` Le point le plus concret : ${painLabels[0].toLowerCase()}.`;
-  } else if (painLabels.length > 1) {
-    const list = `${painLabels
-      .slice(0, -1)
-      .map((l) => l.toLowerCase())
-      .join(", ")} et ${painLabels[painLabels.length - 1].toLowerCase()}`;
-    painSentence = ` Plusieurs points concrets ressortent : ${list}.`;
+  if (toolsLabel) {
+    const reaction = TOOLS_REACTIONS[answers.tools ?? ""];
+    points.push(
+      `Gestion actuelle : ${toolsLabel.toLowerCase()}.${reaction ? ` ${reaction}` : ""}`
+    );
   }
 
-  let burdenSentence = "";
-  if (
-    answers["admin-burden"] === "poids-mental" ||
-    answers["admin-burden"] === "empeche-concentration"
-  ) {
-    burdenSentence = " Ce n'est plus un détail — c'est un vrai frein au quotidien.";
+  if (painLabels.length) {
+    const list =
+      painLabels.length > 1
+        ? `${painLabels
+            .slice(0, -1)
+            .map((l) => l.toLowerCase())
+            .join(", ")} et ${painLabels[painLabels.length - 1].toLowerCase()}`
+        : painLabels[0].toLowerCase();
+    points.push(`Points de friction identifiés : ${list}.`);
   }
 
-  const summary = `${opening}${painSentence}${burdenSentence}`.trim();
-  return summary || "Merci pour vos réponses — voici ce qu'on en retient.";
+  const selfFixReaction = SELF_FIX_REACTIONS[answers["self-fix"] ?? ""];
+  if (selfFixReaction) points.push(selfFixReaction);
+
+  const adminReaction = ADMIN_BURDEN_REACTIONS[answers["admin-burden"] ?? ""];
+  if (adminReaction) points.push(adminReaction);
+
+  const readiness = TIMELINE_REACTIONS[answers.timeline ?? ""];
+  const closing =
+    readiness ??
+    (level === "high"
+      ? "Vous avez tout intérêt à agir rapidement : chaque semaine qui passe, c'est du temps et de l'argent qui continuent de filer."
+      : level === "moderate"
+        ? "Rien d'urgent, mais un premier échange permettrait de cibler précisément où automatiser en priorité."
+        : "Gardez cette page sous le coude : le jour où ça devient prioritaire, on sera là.");
+
+  return { points, closing };
 }

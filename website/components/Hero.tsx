@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Gift } from "lucide-react";
 import NetworkBackground from "@/components/NetworkBackground";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
@@ -140,12 +141,23 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={fadeInUp} className="mt-10">
-            <motion.div whileHover={{ scale: 1.03 }}>
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              animate={{
+                boxShadow: [
+                  "0 0 0 0 rgba(111, 91, 201, 0.5)",
+                  "0 0 0 14px rgba(111, 91, 201, 0)",
+                ],
+              }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
+              className="inline-block rounded-full"
+            >
               <Link
-                href="/nos-derniers-projets"
-                className="inline-block rounded-full bg-white px-8 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
+                href="/diagnostic"
+                className="inline-flex items-center gap-2.5 rounded-full border-2 border-primary-light bg-white px-8 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
               >
-                Nos réalisations
+                <Gift className="h-5 w-5 text-primary-dark" />
+                Diagnostic gratuit
               </Link>
             </motion.div>
           </motion.div>

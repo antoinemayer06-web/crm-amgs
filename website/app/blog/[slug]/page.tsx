@@ -6,6 +6,7 @@ import ArticleCover from "@/components/ArticleCover";
 import JsonLd from "@/components/JsonLd";
 import PageIntro from "@/components/PageIntro";
 import { ARTICLES, getArticle, readingTimeMinutes } from "@/lib/blog";
+import { CALENDLY_URL } from "@/lib/links";
 import { articleSchema, faqPageSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
@@ -154,19 +155,21 @@ export default function BlogArticlePage({
           <div className="mt-8 flex flex-col items-center gap-4 rounded-2xl bg-ink p-8 text-center sm:flex-row sm:justify-between sm:text-left">
             <div>
               <p className="font-heading text-xl font-black text-white">
-                Une situation similaire chez vous ?
+                Envie d&apos;aller plus vite ?
               </p>
               <p className="mt-1 text-sm text-white/60">
                 Un premier échange suffit pour voir ce qui peut être
                 automatisé dans votre cas.
               </p>
             </div>
-            <Link
-              href="/contact"
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block shrink-0 rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:scale-[1.03] hover:bg-white/90 active:scale-[0.98]"
             >
-              Prendre rendez-vous
-            </Link>
+              Réservez un appel gratuit
+            </a>
           </div>
         </div>
       </section>
