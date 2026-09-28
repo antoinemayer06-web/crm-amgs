@@ -141,25 +141,30 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={fadeInUp} className="mt-10">
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              animate={{
-                boxShadow: [
-                  "0 0 0 0 rgba(111, 91, 201, 0.5)",
-                  "0 0 0 14px rgba(111, 91, 201, 0)",
-                ],
-              }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
-              className="inline-block rounded-full"
-            >
+            {/* Un seul trait lumineux qui tourne en continu autour du
+                bouton, plutôt qu'un halo qui pulse — le calque du dégradé
+                conique est bien plus grand que le bouton et centré, pour
+                que la rotation ne laisse jamais de trou visible une fois
+                rognée par le rounded-full/overflow-hidden du conteneur. */}
+            <div className="relative inline-block overflow-hidden rounded-full p-[2px] shadow-lg shadow-black/20">
+              <motion.span
+                aria-hidden="true"
+                className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0deg, transparent 260deg, rgba(111,91,201,0) 260deg, rgba(111,91,201,0.9) 300deg, rgba(76,58,161,1) 330deg, rgba(111,91,201,0) 360deg)",
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+              />
               <Link
                 href="/diagnostic"
-                className="inline-flex items-center gap-2.5 rounded-full border-2 border-primary-light bg-white px-8 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
+                className="relative inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-3.5 text-base font-semibold text-ink transition-colors hover:bg-white/90"
               >
                 <Gift className="h-5 w-5 text-primary-dark" />
                 Diagnostic gratuit
               </Link>
-            </motion.div>
+            </div>
           </motion.div>
         </motion.div>
       </section>

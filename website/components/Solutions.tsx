@@ -181,7 +181,7 @@ export default function Solutions() {
                   rotate: { duration: 1, ease: [0.32, 0.72, 0, 1] },
                 }}
                 style={{ zIndex: COUNT - offset }}
-                className={`absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-lg ${
+                className={`absolute inset-0 flex flex-col overflow-hidden rounded-3xl border border-border bg-surface shadow-lg ${
                   isTop
                     ? "cursor-grab touch-pan-y active:cursor-grabbing"
                     : "pointer-events-none"
