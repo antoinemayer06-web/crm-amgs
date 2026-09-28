@@ -25,7 +25,7 @@ export default function Home() {
 
       <Solutions />
 
-      <section className="bg-surface px-4 pb-4 sm:px-6 lg:px-8">
+      <section className="overflow-hidden bg-surface px-4 pb-4 sm:px-6 lg:px-8">
         <Note>
           Ressource gratuite ! Notre{" "}
           <Link
