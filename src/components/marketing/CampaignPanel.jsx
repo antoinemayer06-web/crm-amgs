@@ -104,7 +104,7 @@ export default function CampaignPanel({ campaignId, onClose, onDeleted, onAction
                 Aucune action liée à cette campagne.
               </p>
             ) : (
-              <div className="overflow-hidden rounded-lg border border-chrome-dark">
+              <div className="card-glass overflow-hidden rounded-lg">
                 {actions.map((action, index) => (
                   <button
                     key={action.id}

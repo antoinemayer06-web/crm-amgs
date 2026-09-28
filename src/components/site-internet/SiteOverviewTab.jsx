@@ -11,7 +11,7 @@ const PERIODES = [
 
 export default function SiteOverviewTab() {
   const [periode, setPeriode] = useState('semaine')
-  const { data, isLoading, isError, error } = useSiteEvents(periode)
+  const { data, isLoading, isFetching, isError, error } = useSiteEvents(periode)
 
   return (
     <div className="space-y-6">
@@ -34,7 +34,7 @@ export default function SiteOverviewTab() {
       {isError && <p className="text-sm font-medium text-red-400">Erreur : {error.message}</p>}
 
       {data && (
-        <>
+        <div className={`space-y-6 transition-opacity duration-150 ${isFetching ? 'opacity-60' : 'opacity-100'}`}>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             <KpiCard label="Visites totales" value={data.compteurs.page_view} />
             <KpiCard label="Visiteurs uniques" value={data.visiteursUniques} />
@@ -65,7 +65,7 @@ export default function SiteOverviewTab() {
               </ul>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   )

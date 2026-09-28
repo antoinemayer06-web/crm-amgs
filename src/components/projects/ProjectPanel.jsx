@@ -182,7 +182,7 @@ export default function ProjectPanel({ projectId, allSteps, onClose, onDeleted }
     // vue d'ensemble). Portail vers document.body — voir Modal.jsx pour
     // la raison (backdrop-filter d'un ancêtre casserait le centrage).
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 sm:items-center sm:p-6">
-      <div className="glass-panel flex h-full w-full flex-col shadow-2xl sm:h-[88vh] sm:max-w-5xl sm:rounded-xl">
+      <div className="glass-panel glass-tilt flex h-full w-full flex-col shadow-2xl sm:h-[88vh] sm:max-w-5xl sm:rounded-xl">
         <div
           className="flex items-center justify-between border-b border-chrome-dark px-5 py-4"
           style={{ paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 0.5rem))' }}

@@ -19,7 +19,7 @@ export default function UrgentActionsWidget({ items }) {
   }
 
   return (
-    <div className="divide-y divide-chrome-dark overflow-hidden rounded-lg border border-chrome-dark">
+    <div className="card-glass divide-y divide-chrome-dark overflow-hidden rounded-lg">
       {items.map((item) => {
         const late = isDatePassee(item.date)
         const Icon = KIND_ICON[item.kind]

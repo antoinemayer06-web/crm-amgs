@@ -235,7 +235,7 @@ export default function SiteDemandesTab({ openLeadId }) {
           Aucune demande reçue pour le moment.
         </p>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-chrome-dark">
+        <div className="card-glass overflow-hidden rounded-lg">
           {/* Tableau complet à partir de md: — en dessous, les colonnes ne
               tiennent pas (date+heure, email, badges) sans se chevaucher :
               on bascule sur une liste de cartes empilées, même convention

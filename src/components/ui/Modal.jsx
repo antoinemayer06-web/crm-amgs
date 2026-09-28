@@ -24,7 +24,7 @@ export default function Modal({ title, onClose, children, size = 'md' }) {
     // le contenu + le clavier ne tiennent plus dans l'espace visible.
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
       <div
-        className={`glass-panel my-auto max-h-[85vh] w-full overflow-y-auto rounded-lg shadow-xl ${sizes[size] ?? sizes.md}`}
+        className={`glass-panel glass-tilt my-auto max-h-[85vh] w-full overflow-y-auto rounded-lg shadow-xl ${sizes[size] ?? sizes.md}`}
       >
         <div className="flex items-center justify-between border-b border-chrome-dark px-5 py-4">
           <h2 className="text-base font-semibold text-ink">{title}</h2>

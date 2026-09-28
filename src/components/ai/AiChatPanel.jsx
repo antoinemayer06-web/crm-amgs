@@ -13,7 +13,7 @@ export default function AiChatPanel() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex justify-end">
-      <div className="glass-panel pointer-events-auto flex h-full w-full max-w-sm flex-col shadow-2xl">
+      <div className="glass-panel glass-tilt pointer-events-auto flex h-full w-full max-w-sm flex-col shadow-2xl">
         {/* padding-top en env(safe-area-inset-top) : ce panneau est plein
             écran sur mobile, donc son en-tête se retrouve sinon exactement
             sous la barre de statut iOS/horloge, avec la croix de fermeture

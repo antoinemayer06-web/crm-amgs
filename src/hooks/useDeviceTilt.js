@@ -1,16 +1,7 @@
 import { useEffect } from 'react'
 
-// Anime le reflet des boutons "verre liquide" (.btn-primary) selon
-// l'inclinaison réelle du téléphone : pilote --tilt-x/--tilt-y sur
-// :root, consommées par le radial-gradient du reflet en CSS.
-//
-// Sur iOS 13+, l'accès au gyroscope exige une permission explicite qui
-// ne peut être accordée que suite à un vrai clic sur un élément —
-// jamais automatiquement, même au premier tap dans l'app : c'est une
-// restriction plateforme (WebKit), pas quelque chose de contournable
-// côté code. requestTiltPermission() est donc exposée pour être
-// appelée directement depuis le onClick d'un vrai bouton visible (voir
-// le bouton dans Paramètres) plutôt que devinée en arrière-plan.
+// Pilote --tilt-x/--tilt-y sur :root depuis l'orientation du téléphone,
+// consommées par le reflet des surfaces "verre liquide" en CSS.
 let listening = false
 
 function applyTilt(beta, gamma) {
@@ -39,9 +30,8 @@ export function isTiltListening() {
   return listening
 }
 
-// À appeler directement depuis le onClick d'un vrai bouton — jamais
-// depuis un effet ou un listener délégué, sous peine que Safari
-// ignore silencieusement la demande sans jamais afficher la popup.
+// Doit être appelée depuis le onClick direct d'un bouton : sur iOS,
+// Safari ignore silencieusement la demande de permission sinon.
 export async function requestTiltPermission() {
   if (!needsTiltPermission()) {
     startListening()
@@ -56,9 +46,8 @@ export async function requestTiltPermission() {
   }
 }
 
-// Démarre directement l'écoute quand la plateforme n'exige aucune
-// permission (Android, desktop avec capteurs) — sur iOS, ne fait rien :
-// seul requestTiltPermission() (bouton Paramètres) peut l'activer.
+// Démarre l'écoute directement si la plateforme n'exige pas de
+// permission ; sur iOS, seul requestTiltPermission() peut l'activer.
 export function useDeviceTilt() {
   useEffect(() => {
     if (needsTiltPermission()) return

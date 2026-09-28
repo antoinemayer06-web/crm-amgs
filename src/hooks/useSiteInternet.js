@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../lib/supabaseClient'
 
 const EVENT_TYPES = ['page_view', 'clic_calendly', 'clic_email', 'clic_linkedin', 'clic_whatsapp']
@@ -58,6 +58,7 @@ export function useSiteEvents(period) {
 
   return useQuery({
     queryKey: ['site_events', period],
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('evenements_site')

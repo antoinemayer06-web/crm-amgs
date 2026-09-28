@@ -107,12 +107,8 @@ h3 {
   animation: pulse-chrome 1.8s ease-in-out infinite;
 }
 
-/* Métal brossé sombre : base gunmetal proche du fond de l'app, traversée
-   d'un fin filet de lumière en diagonale (reflet sur une surface
-   brossée) plutôt qu'un dégradé clair→sombre en boule glacée — reste
-   sombre et intégré au thème plutôt qu'une bulle blanc/gris qui
-   détonne. À utiliser avec parcimonie (boutons principaux, avatars,
-   indicateurs de statut importants). */
+/* Métal brossé sombre : gunmetal traversé d'un filet de lumière en
+   diagonale. Avatars, indicateurs de statut. */
 .chrome-droplet {
   background-image: linear-gradient(
     120deg,
@@ -146,13 +142,8 @@ h3 {
     @apply w-full rounded-md border border-chrome-dark bg-surface px-3 py-2 text-sm text-ink placeholder-ink-tertiary transition-colors duration-200 focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid max-md:min-h-[44px];
   }
 
-  /* "Bulle" de verre liquide (inspirée du Liquid Glass d'iOS 26) : fond
-     très translucide + flou du contenu derrière, contour lumineux dont
-     le reflet (::before, radial-gradient) se déplace avec l'inclinaison
-     réelle du téléphone — voir useDeviceTilt, qui pilote les variables
-     --tilt-x/--tilt-y sur :root. Se dégrade proprement en reflet fixe
-     sur desktop ou si la permission gyroscope (obligatoire sur iOS)
-     n'est jamais accordée : le bouton reste identique, juste statique. */
+  /* Verre liquide : fond translucide flouté, reflet piloté par
+     --tilt-x/--tilt-y (useDeviceTilt). */
   .btn-primary {
     @apply relative isolate overflow-hidden rounded-full px-4 py-2 text-sm font-semibold text-ink transition-transform duration-150 disabled:cursor-not-allowed disabled:opacity-50 max-md:min-h-[44px];
     background: rgba(20, 20, 22, 0.45);
@@ -199,7 +190,7 @@ h3 {
     position: relative;
   }
 
-  .card-chrome-lit::before {
+  .card-chrome-lit::after {
     content: '';
     position: absolute;
     inset: 0 0 auto 0;
@@ -208,18 +199,29 @@ h3 {
     background: linear-gradient(90deg, transparent, rgba(216, 219, 222, 0.35), transparent);
   }
 
-  /* Liquid glass : fond translucide + flou de ce qu'il y a derrière, à
-     la place d'un fond opaque plein. Utilisé sur les cards de contenu
-     (KPIs, cartes projet/entreprise, cartes de section) — pas sur les
-     éléments structurels (filtres, onglets, tableaux) ni sur les champs
-     de saisie, qui restent lisibles en plein. */
+  /* Liquid glass : fond translucide flouté + reflet --tilt-x/--tilt-y.
+     Cards de contenu et tableaux, pas les champs de saisie. */
   .card-glass {
-    @apply border transition-all duration-200;
+    @apply relative border transition-all duration-200;
     background: rgba(20, 20, 22, 0.5);
     border-color: rgba(216, 219, 222, 0.12);
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .card-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      220px 140px at var(--tilt-x, 28%) var(--tilt-y, 15%),
+      rgba(216, 219, 222, 0.14),
+      transparent 70%
+    );
+    transition: background-position 150ms ease;
+    pointer-events: none;
   }
 
   .card-glass:hover {
@@ -228,6 +230,12 @@ h3 {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.1),
       0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar-glass {
+    background: rgba(18, 18, 20, 0.72);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
   }
 
   /* Même famille, en plus opaque/flouté : panneaux latéraux, modales,
@@ -255,6 +263,25 @@ h3 {
       inset 0 1px 0 rgba(255, 255, 255, 0.4),
       0 8px 24px rgba(0, 0, 0, 0.35);
     transition: box-shadow 220ms ease, border-color 220ms ease;
+  }
+
+  /* Même reflet que .card-glass, pour glass-panel (Modal/SidePanel). */
+  .glass-tilt {
+    position: relative;
+  }
+
+  .glass-tilt::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      220px 140px at var(--tilt-x, 28%) var(--tilt-y, 15%),
+      rgba(216, 219, 222, 0.16),
+      transparent 70%
+    );
+    transition: background-position 150ms ease;
+    pointer-events: none;
   }
 
   /* Skeleton screens : préfigure la forme du contenu à venir plutôt

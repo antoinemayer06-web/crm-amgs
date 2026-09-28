@@ -168,7 +168,7 @@ export default function Layout() {
             que de le pousser — sans cette marge, le bouton menu/recherche se
             retrouve caché dessous et n'est plus cliquable. */}
         <header
-          className="shrink-0 border-b border-chrome-dark bg-surface"
+          className="sidebar-glass shrink-0 border-b border-chrome-dark"
           style={{ paddingTop: 'env(safe-area-inset-top)' }}
         >
           <div className="flex h-14 items-center justify-between gap-3 px-4 md:px-6">
@@ -231,7 +231,7 @@ export default function Layout() {
         <div className="flex min-h-0 flex-1">
           {/* Sidebar desktop : rail fixe, repliable */}
           <aside
-            className={`relative hidden shrink-0 flex-col border-r border-chrome-dark bg-surface transition-[width] duration-200 md:flex ${
+            className={`sidebar-glass glass-tilt hidden shrink-0 flex-col border-r border-chrome-dark transition-[width] duration-200 md:flex ${
               collapsed ? 'w-16' : 'w-60'
             }`}
           >
@@ -255,7 +255,7 @@ export default function Layout() {
                 onClick={() => setMobileNavOpen(false)}
                 aria-hidden="true"
               />
-              <aside className="relative flex h-full w-[82vw] max-w-72 flex-col bg-surface shadow-2xl">
+              <aside className="sidebar-glass glass-tilt flex h-full w-[82vw] max-w-72 flex-col shadow-2xl">
                 <div
                   className="flex items-center gap-3 border-b border-chrome-dark px-4 py-4"
                   style={{ paddingTop: 'calc(env(safe-area-inset-top) + 1rem)' }}
@@ -285,11 +285,7 @@ export default function Layout() {
           )}
 
           <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6">
-            {/* Même fondu que les bascules de vue internes (Kanban/Liste…) :
-                pas de saut brutal au changement de page. */}
-            <div key={location.pathname} className="animate-[fadein_180ms_ease-out]">
-              <Outlet />
-            </div>
+            <Outlet />
           </main>
         </div>
 

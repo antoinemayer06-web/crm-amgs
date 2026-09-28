@@ -105,7 +105,7 @@ export default function ClientsList() {
         livraison/facturation se gère par projet, depuis la fiche client.
       </p>
 
-      <div className="overflow-hidden rounded-lg border border-chrome-dark bg-surface">
+      <div className="card-glass overflow-hidden rounded-lg">
         {isLoading && <SkeletonRows count={6} />}
         {isError && (
           <p className="p-6 text-sm font-medium text-red-400">Erreur de chargement : {error.message}</p>

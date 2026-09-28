@@ -58,7 +58,7 @@ export default function DocumentsSection({ companyId, projectId }) {
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-chrome-dark bg-surface">
+      <div className="card-glass overflow-x-auto rounded-lg">
         {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
         {isError && <p className="p-6 text-sm font-medium text-red-400">Erreur : {error.message}</p>}
         {!isLoading && !isError && documents.length === 0 && (

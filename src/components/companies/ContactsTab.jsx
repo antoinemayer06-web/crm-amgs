@@ -35,7 +35,7 @@ export default function ContactsTab({ companyId }) {
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-chrome-dark bg-surface">
+      <div className="card-glass overflow-x-auto rounded-lg">
         {isLoading && <p className="p-6 text-sm text-ink-secondary">Chargement…</p>}
         {isError && <p className="p-6 text-sm text-red-600">Erreur : {error.message}</p>}
         {!isLoading && !isError && contacts.length === 0 && (
