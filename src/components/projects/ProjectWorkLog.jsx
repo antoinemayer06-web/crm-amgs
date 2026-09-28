@@ -116,11 +116,7 @@ export default function ProjectWorkLog({ steps }) {
             placeholder="Heures"
             className="w-24 rounded-md border border-chrome-dark px-2 py-1 text-sm focus:border-chrome-mid focus:outline-none focus:ring-1 focus:ring-chrome-mid"
           />
-          <button
-            type="submit"
-            disabled={createLog.isPending}
-            className="ml-auto rounded-md border border-chrome-dark px-3 py-1.5 text-sm text-ink-secondary hover:bg-surface-hover disabled:opacity-50"
-          >
+          <button type="submit" disabled={createLog.isPending} className="ml-auto btn-primary text-sm">
             Ajouter
           </button>
         </div>

@@ -232,12 +232,6 @@ h3 {
       0 4px 24px rgba(0, 0, 0, 0.3);
   }
 
-  .sidebar-glass {
-    background: rgba(18, 18, 20, 0.72);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
-  }
-
   /* Même famille, en plus opaque/flouté : panneaux latéraux, modales,
      palette de commande — des surfaces plus grandes où le texte doit
      rester très lisible. */

@@ -35,7 +35,7 @@ export default function ExpensesPanel({ expenses, monthKey }) {
         <button
           type="button"
           onClick={() => setCreating(true)}
-          className="rounded-md border border-chrome-dark px-2.5 py-1 text-xs font-medium text-ink-secondary hover:bg-surface-hover"
+          className="btn-primary text-xs"
         >
           + Ajouter une dépense
         </button>

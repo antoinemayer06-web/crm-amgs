@@ -9,7 +9,7 @@ import {
 } from '../hooks/useCompanySettings'
 import { useAuth } from '../lib/AuthContext'
 import { useSoundSettings } from '../hooks/useSoundSettings'
-import { isTiltListening, needsTiltPermission, requestTiltPermission } from '../hooks/useDeviceTilt'
+import { needsTiltPermission, requestTiltPermission, wasTiltGrantedBefore } from '../hooks/useDeviceTilt'
 import Toggle from '../components/ui/Toggle'
 
 const emptyValues = {
@@ -58,7 +58,7 @@ export default function SettingsPage() {
   const [values, setValues] = useState(emptyValues)
   const [openingId, setOpeningId] = useState(null)
   const [uploadError, setUploadError] = useState(null)
-  const [tiltStatus, setTiltStatus] = useState(() => (isTiltListening() ? 'granted' : 'idle'))
+  const [tiltStatus, setTiltStatus] = useState(() => (wasTiltGrantedBefore() ? 'granted' : 'idle'))
 
   async function handleActivateTilt() {
     const state = await requestTiltPermission()
