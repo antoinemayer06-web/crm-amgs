@@ -5,7 +5,8 @@ import JsonLd from "@/components/JsonLd";
 import Note from "@/components/Note";
 import PageIntro from "@/components/PageIntro";
 import { SERVICE_TYPES } from "@/lib/content";
-import { serviceSchema } from "@/lib/schema";
+import { breadcrumbSchema, serviceSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/seo";
 
 // Page de synthèse unique pour les 7 types de solutions déjà présentés sur
 // l'accueil (section "Notre remède") — remplace les deux anciennes pages
@@ -64,16 +65,22 @@ const SERVICES = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: "Nos services d'automatisation | AM Growth Solutions",
+export const metadata: Metadata = pageMetadata({
+  title: "Services d'automatisation PME à La Réunion",
   description:
     "Connexion d'outils, dashboards, automatisations Microsoft 365, agents IA sur mesure — découvrez les automatisations possibles pour votre PME à La Réunion (974).",
-  alternates: { canonical: "/services" },
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (
     <main>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Accueil", path: "/" },
+          { name: "Services", path: "/services" },
+        ])}
+      />
       <JsonLd
         data={serviceSchema({
           name: "Automatisation de processus métier pour PME",

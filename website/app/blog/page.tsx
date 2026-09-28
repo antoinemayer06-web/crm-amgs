@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ArticleCover from "@/components/ArticleCover";
+import JsonLd from "@/components/JsonLd";
 import PageIntro from "@/components/PageIntro";
 import { getSortedArticles, readingTimeMinutes } from "@/lib/blog";
+import { blogCollectionSchema, breadcrumbSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Blog — ressources automatisation PME",
+export const metadata: Metadata = pageMetadata({
+  title: "Blog automatisation PME La Réunion",
   description:
     "Articles pratiques sur l'automatisation, la connexion d'outils et l'organisation des PME à La Réunion (974) — sans jargon technique.",
-  alternates: { canonical: "/blog" },
-};
+  path: "/blog",
+});
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString("fr-FR", {
@@ -25,6 +28,13 @@ export default function BlogPage() {
 
   return (
     <main>
+      <JsonLd data={blogCollectionSchema(articles)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Accueil", path: "/" },
+          { name: "Blog", path: "/blog" },
+        ])}
+      />
       <PageIntro
         title="Le blog d'AM Growth Solutions"
         subtitle="Automatisation, organisation et outils métiers pour les PME — articles classés du plus récent au plus ancien."

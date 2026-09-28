@@ -193,6 +193,7 @@ export default function Solutions() {
                       src={example.image}
                       alt={example.title}
                       fill
+                      sizes="(min-width: 672px) 672px, 100vw"
                       draggable={false}
                       className="object-cover"
                     />

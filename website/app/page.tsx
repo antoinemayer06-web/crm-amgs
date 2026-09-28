@@ -7,12 +7,35 @@ import Note from "@/components/Note";
 import Solutions from "@/components/Solutions";
 import Symptoms from "@/components/Symptoms";
 import Testimonial from "@/components/Testimonial";
+import { RSS_FEED_PATH } from "@/lib/seo";
+
+const HOME_TITLE = "AM Growth Solutions | Automatisation PME à La Réunion (974)";
+const HOME_DESCRIPTION =
+  "AM Growth Solutions automatise vos outils, dashboards, Microsoft 365 et process administratifs pour les PME de La Réunion (974) — sur mesure, livré vite.";
 
 export const metadata: Metadata = {
-  title: "Automatisation PME à La Réunion (974)",
-  description:
-    "AM Growth Solutions automatise la gestion de projet et l'administratif des PME réunionnaises (La Réunion, 974) pour supprimer la double saisie. Résultats vérifiables, livrés en quelques jours.",
-  alternates: { canonical: "/" },
+  // Pas de `title` string ici : la home reprend le `default` du layout
+  // racine tel quel (marque en tête). Lui donner un title propre le
+  // ferait passer par le template "%s | AM Growth Solutions" du layout,
+  // qui ajouterait la marque APRÈS au lieu d'avant.
+  description: HOME_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": RSS_FEED_PATH },
+  },
+  openGraph: {
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    url: "/",
+    type: "website",
+    locale: "fr_FR",
+    siteName: "AM Growth Solutions",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+  },
 };
 
 export default function Home() {

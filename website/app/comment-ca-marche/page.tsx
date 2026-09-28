@@ -1,21 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
+import JsonLd from "@/components/JsonLd";
 import Note from "@/components/Note";
 import PageIntro from "@/components/PageIntro";
 import PricingFactors from "@/components/PricingFactors";
 import Process from "@/components/Process";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Comment ça marche — méthode et tarifs sur mesure",
+export const metadata: Metadata = pageMetadata({
+  title: "Notre méthode d'automatisation",
   description:
     "Appel de cadrage, diagnostic, build et mise en service : la méthode AM Growth Solutions pour automatiser votre PME à La Réunion (974). Devis personnalisé, jamais de tarif générique.",
-  alternates: { canonical: "/comment-ca-marche" },
-};
+  path: "/comment-ca-marche",
+});
 
 export default function CommentCaMarchePage() {
   return (
     <main>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Accueil", path: "/" },
+          { name: "Comment ça marche", path: "/comment-ca-marche" },
+        ])}
+      />
       <PageIntro
         title="Comment ça marche : une méthode simple, sur mesure"
         subtitle="Quatre étapes, du premier échange à la mise en service — sans forfait générique ni délai universel."

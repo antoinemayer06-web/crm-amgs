@@ -1,16 +1,25 @@
 import type { Metadata } from "next";
+import JsonLd from "@/components/JsonLd";
 import PageIntro from "@/components/PageIntro";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Mentions légales — AM Growth Solutions",
+export const metadata: Metadata = pageMetadata({
+  title: "Mentions légales",
   description:
     "Mentions légales du site amgrowthsolutions.fr : éditeur, hébergement et propriété intellectuelle.",
-  alternates: { canonical: "/mentions-legales" },
-};
+  path: "/mentions-legales",
+});
 
 export default function MentionsLegalesPage() {
   return (
     <main>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Accueil", path: "/" },
+          { name: "Mentions légales", path: "/mentions-legales" },
+        ])}
+      />
       <PageIntro title="Mentions légales" />
 
       <section className="bg-surface py-16 sm:py-20">

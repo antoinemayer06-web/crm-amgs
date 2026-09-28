@@ -18,6 +18,20 @@ const nextConfig = {
         destination: "/nos-derniers-projets",
         permanent: true,
       },
+      // Une seule URL canonique indexable : le domaine apex sans "www".
+      // Évite de diluer le référencement entre plusieurs hôtes équivalents.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.amgrowthsolutions.fr" }],
+        destination: "https://amgrowthsolutions.fr/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "amgrowthsolutions.vercel.app" }],
+        destination: "https://amgrowthsolutions.fr/:path*",
+        permanent: true,
+      },
     ];
   },
 };

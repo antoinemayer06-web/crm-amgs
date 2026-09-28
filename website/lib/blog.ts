@@ -27,6 +27,10 @@ export interface FaqItem {
 export interface Article {
   slug: string;
   title: string;
+  // Title SEO (balise <title>), distinct du H1 visible (`title`
+  // ci-dessus) — mot-clé principal en tête, jamais utilisé dans le rendu
+  // de la page. Replie sur `title` si absent.
+  seoTitle?: string;
   metaDescription: string;
   excerpt: string;
   date: string;
@@ -58,8 +62,9 @@ export const ARTICLES: Article[] = [
   {
     slug: "automatisation-974-guide-complet-pme-reunion",
     title: "Automatisation 974 : le guide complet pour les PME réunionnaises",
+    seoTitle: "Automatisation 974 : guide complet PME | AM Growth Solutions",
     metaDescription:
-      "Qu'est-ce que l'automatisation pour une PME, pourquoi La Réunion est particulièrement concernée, les grands types de systèmes possibles, et par où commencer. Guide complet avec FAQ.",
+      "Guide complet de l'automatisation pour les PME de La Réunion (974) : outils, méthode, exemples concrets et erreurs à éviter avant de se lancer.",
     excerpt:
       "Définition simple, spécificités du tissu économique local, grands types d'automatisation possibles et méthode pour démarrer : le guide de référence sur l'automatisation des PME à La Réunion.",
     date: "2026-09-24",
@@ -157,6 +162,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "double-saisie-entre-outils-comment-eliminer",
     title: "Double saisie entre outils : comment l'éliminer sans tout changer",
+    seoTitle: "Supprimer la double saisie entre outils | AM Growth Solutions",
     metaDescription:
       "La double saisie entre vos outils n'oblige pas à changer de logiciel. Voici pourquoi elle s'installe, ce qu'elle coûte vraiment, et comment la supprimer.",
     excerpt:
@@ -207,6 +213,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "crm-outils-metiers-cout-cache",
     title: "CRM et outils métiers qui ne se parlent pas : le vrai coût caché",
+    seoTitle: "CRM et outils métiers qui ne communiquent pas",
     metaDescription:
       "Votre CRM et vos outils métiers ne communiquent pas entre eux ? Voici ce que ça coûte réellement à une PME, et comment les connecter sans les remplacer.",
     excerpt:
@@ -257,6 +264,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "plan-de-charge-automatique-excel-limites",
     title: "Plan de charge automatique : pourquoi votre Excel ne suffit plus",
+    seoTitle: "Plan de charge automatique : les limites d'Excel",
     metaDescription:
       "Le plan de charge sous Excel fonctionne bien au départ, puis montre ses limites avec la croissance. Voici ce que change un plan de charge automatique.",
     excerpt:
@@ -307,6 +315,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "5-signes-pme-perd-du-temps",
     title: "5 signes que votre PME perd du temps sans le savoir",
+    seoTitle: "5 signes que votre PME perd du temps | AM Growth Solutions",
     metaDescription:
       "Cinq signes discrets mais révélateurs qu'une PME perd du temps chaque semaine sans s'en rendre compte, et ce qu'ils indiquent à corriger en priorité.",
     excerpt:
@@ -363,6 +372,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "dashboards-pilotage-automatiques-par-ou-commencer",
     title: "Dashboards de pilotage automatiques : par où commencer sans équipe data",
+    seoTitle: "Dashboard de pilotage automatique : par où commencer",
     metaDescription:
       "Pas besoin d'une équipe data pour avoir un dashboard de pilotage qui se met à jour tout seul. Voici par où commencer concrètement, sans jargon technique.",
     excerpt:
@@ -413,6 +423,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "automatiser-sans-changer-outil-methode",
     title: "Automatiser sans changer d'outil : la méthode",
+    seoTitle: "Automatiser sans changer d'outil : la méthode",
     metaDescription:
       "Automatiser ne veut pas dire changer d'outils. Voici la méthode en 3 étapes pour automatiser en partant de ce que votre entreprise utilise déjà.",
     excerpt:
@@ -463,6 +474,7 @@ export const ARTICLES: Article[] = [
   {
     slug: "microsoft-365-automatisations-cachees",
     title: "Microsoft 365 : tout ce que vos outils peuvent faire sans que vous le sachiez",
+    seoTitle: "Automatisation Microsoft 365 pour PME | AM Growth Solutions",
     metaDescription:
       "Excel, Power Automate, Microsoft Forms : la suite Microsoft 365 que vous utilisez déjà peut automatiser bien plus que ce que vous en exploitez aujourd'hui.",
     excerpt:
@@ -513,8 +525,9 @@ export const ARTICLES: Article[] = [
   {
     slug: "agent-ia-entreprise-cas-usage-concrets",
     title: "Agent IA en entreprise : cas d'usage concrets (pas de gadget)",
+    seoTitle: "Agent IA en entreprise : cas d'usage concrets",
     metaDescription:
-      "Des exemples concrets d'agents IA utiles en PME : extraction de documents, réponses de premier niveau, veille automatique — pas un gadget ajouté après coup.",
+      "Des exemples concrets d'agents IA utiles en PME : extraction de documents, réponses de premier niveau, veille automatique — pas un gadget ajouté.",
     excerpt:
       "L'IA en entreprise n'a de valeur que sur un cas d'usage précis. Voici des exemples concrets, testables, plutôt qu'une promesse générique.",
     date: "2026-07-30",

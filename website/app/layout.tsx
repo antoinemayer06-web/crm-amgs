@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import JsonLd from "@/components/JsonLd";
 import PageViewTracker from "@/components/PageViewTracker";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
-import { localBusinessSchema } from "@/lib/schema";
+import { siteGraphSchema } from "@/lib/schema";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -18,11 +18,16 @@ const inter = Inter({
 const DEFAULT_TITLE =
   "AM Growth Solutions | Automatisation PME à La Réunion (974)";
 const DEFAULT_DESCRIPTION =
-  "Fini la double saisie entre vos outils. AM Growth Solutions automatise la gestion de projet et l'administratif des PME réunionnaises (La Réunion, 974) — sans changer d'outils. Résultats concrets, délais courts.";
+  "AM Growth Solutions automatise vos outils, dashboards, Microsoft 365 et process administratifs pour les PME de La Réunion (974) — sur mesure, livré vite.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
+    // Le layout racine ne fournit que le "default" (repris tel quel par la
+    // home, qui ne définit plus son propre title) et le "template" utilisé
+    // par toutes les pages internes — jamais l'inverse : si la home
+    // redéfinissait un title, le template ajouterait la marque APRÈS,
+    // cassant l'ordre "marque en tête" voulu sur "/".
     default: DEFAULT_TITLE,
     template: "%s | AM Growth Solutions",
   },
@@ -43,6 +48,18 @@ export const metadata: Metadata = {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || undefined,
+    other: process.env.NEXT_PUBLIC_BING_VERIFICATION
+      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION }
+      : undefined,
+  },
+  alternates: {
+    canonical: "/",
+    types: {
+      "application/rss+xml": `${SITE_URL}/blog/feed.xml`,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -53,7 +70,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={inter.variable}>
       <body>
-        <JsonLd data={localBusinessSchema()} />
+        <JsonLd data={siteGraphSchema()} />
         <PageViewTracker />
         <Header />
         {children}

@@ -7,7 +7,12 @@ import JsonLd from "@/components/JsonLd";
 import PageIntro from "@/components/PageIntro";
 import { ARTICLES, getArticle, readingTimeMinutes } from "@/lib/blog";
 import { CALENDLY_URL } from "@/lib/links";
-import { articleSchema, faqPageSchema } from "@/lib/schema";
+import {
+  blogPostingSchema,
+  breadcrumbSchema,
+  faqPageSchema,
+} from "@/lib/schema";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return ARTICLES.map((article) => ({ slug: article.slug }));
@@ -21,18 +26,20 @@ export function generateMetadata({
   const article = getArticle(params.slug);
   if (!article) return {};
 
-  return {
-    title: article.title,
+  // seoTitle (balise <title>) est distinct du H1 visible (`title`, rendu
+  // par PageIntro plus bas) — jamais utilisé dans le rendu de la page.
+  return pageMetadata({
+    title: article.seoTitle ?? article.title,
     description: article.metaDescription,
-    alternates: { canonical: `/blog/${article.slug}` },
-    openGraph: {
-      title: article.title,
-      description: article.metaDescription,
-      type: "article",
+    path: `/blog/${article.slug}`,
+    image: article.image,
+    type: "article",
+    exactTitle: true,
+    article: {
       publishedTime: article.date,
-      images: article.image ? [article.image] : undefined,
+      section: "Automatisation",
     },
-  };
+  });
 }
 
 function formatDate(date: string) {
@@ -54,13 +61,20 @@ export default function BlogArticlePage({
   return (
     <main>
       <JsonLd
-        data={articleSchema({
-          title: article.title,
+        data={blogPostingSchema({
+          title: article.seoTitle ?? article.title,
           description: article.metaDescription,
           slug: article.slug,
           datePublished: article.date,
           image: article.image,
         })}
+      />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Accueil", path: "/" },
+          { name: "Blog", path: "/blog" },
+          { name: article.title, path: `/blog/${article.slug}` },
+        ])}
       />
       {article.faq ? <JsonLd data={faqPageSchema(article.faq)} /> : null}
 

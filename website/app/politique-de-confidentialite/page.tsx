@@ -1,16 +1,28 @@
 import type { Metadata } from "next";
+import JsonLd from "@/components/JsonLd";
 import PageIntro from "@/components/PageIntro";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Politique de confidentialité — AM Growth Solutions",
+export const metadata: Metadata = pageMetadata({
+  title: "Politique de confidentialité",
   description:
     "Quelles données sont collectées sur amgrowthsolutions.fr et comment elles sont utilisées, conformément au RGPD.",
-  alternates: { canonical: "/politique-de-confidentialite" },
-};
+  path: "/politique-de-confidentialite",
+});
 
 export default function PolitiqueConfidentialitePage() {
   return (
     <main>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Accueil", path: "/" },
+          {
+            name: "Politique de confidentialité",
+            path: "/politique-de-confidentialite",
+          },
+        ])}
+      />
       <PageIntro title="Politique de confidentialité" />
 
       <section className="bg-surface py-16 sm:py-20">
