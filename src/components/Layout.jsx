@@ -25,6 +25,7 @@ import {
 } from './ui/icons'
 import { useAuth } from '../lib/AuthContext'
 import { AiChatProvider } from '../lib/AiChatContext'
+import { useDeviceTilt } from '../hooks/useDeviceTilt'
 import { useNotifications } from '../hooks/useNotifications'
 import { playNotification, playPaletteOpen } from '../lib/sounds'
 
@@ -101,6 +102,7 @@ function SidebarContent({ collapsed, user, signOut, onNavigate, badgeCounts }) {
 export default function Layout() {
   const { user, signOut } = useAuth()
   const location = useLocation()
+  useDeviceTilt()
   const hideFloatingChat = location.pathname === '/assistant' || location.pathname === '/vision'
   const [collapsed, setCollapsed] = useState(() => {
     try {
