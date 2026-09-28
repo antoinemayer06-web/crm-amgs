@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Gift } from "lucide-react";
 import NetworkBackground from "@/components/NetworkBackground";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
@@ -140,14 +141,30 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={fadeInUp} className="mt-10">
-            <motion.div whileHover={{ scale: 1.03 }}>
+            {/* Un seul trait lumineux qui tourne en continu autour du
+                bouton, plutôt qu'un halo qui pulse — le calque du dégradé
+                conique est bien plus grand que le bouton et centré, pour
+                que la rotation ne laisse jamais de trou visible une fois
+                rognée par le rounded-full/overflow-hidden du conteneur. */}
+            <div className="relative inline-block overflow-hidden rounded-full p-[2px] shadow-lg shadow-black/20">
+              <motion.span
+                aria-hidden="true"
+                className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0deg, transparent 260deg, rgba(111,91,201,0) 260deg, rgba(111,91,201,0.9) 300deg, rgba(76,58,161,1) 330deg, rgba(111,91,201,0) 360deg)",
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+              />
               <Link
-                href="/nos-derniers-projets"
-                className="inline-block rounded-full bg-white px-8 py-3.5 text-base font-semibold text-ink shadow-lg shadow-black/20 transition-colors hover:bg-white/90"
+                href="/diagnostic"
+                className="relative inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-3.5 text-base font-semibold text-ink transition-colors hover:bg-white/90"
               >
-                Nos réalisations
+                <Gift className="h-5 w-5 text-primary-dark" />
+                Diagnostic gratuit
               </Link>
-            </motion.div>
+            </div>
           </motion.div>
         </motion.div>
       </section>

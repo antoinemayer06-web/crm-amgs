@@ -9,7 +9,7 @@ import { CALENDLY_URL } from "@/lib/links";
 import { trackEvent } from "@/lib/track";
 import {
   ADMIN_BURDEN_REACTIONS,
-  buildDiagnosticSummary,
+  buildDiagnosticReport,
   computeLevel,
   computeScore,
   LEVELS,
@@ -54,7 +54,6 @@ export default function DiagnosticQuiz() {
   const [phase, setPhase] = useState<Phase>("question");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
-  const [showLeadForm, setShowLeadForm] = useState(false);
   const [formStatus, setFormStatus] = useState<FormStatus>("idle");
 
   const totalQuestions = QUIZ_QUESTIONS.length;
@@ -68,11 +67,10 @@ export default function DiagnosticQuiz() {
 
   const reaction = currentQuestion && hasAnswer ? reactionFor(currentQuestion, answers) : null;
 
-  const level = phase === "result" || phase === "submitted" ? computeLevel(answers) : null;
+  const level = phase === "submitted" ? computeLevel(answers) : null;
   const levelConfig = level ? LEVELS[level] : null;
   const resultContent = level ? RESULT_CONTENT[level] : null;
-  const diagnosticSummary =
-    phase === "result" || phase === "submitted" ? buildDiagnosticSummary(answers) : null;
+  const diagnosticReport = level ? buildDiagnosticReport(answers, level) : null;
 
   function goNext() {
     if (isLastQuestion) {
@@ -141,7 +139,7 @@ export default function DiagnosticQuiz() {
         className="flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-60"
       >
         {formStatus === "submitting" && <Loader2 className="h-4 w-4 animate-spin" />}
-        Envoyer à notre équipe
+        Consulter mon diagnostic
       </motion.button>
       {formStatus === "error" && (
         <p className="text-center text-sm text-red-600">
@@ -259,19 +257,38 @@ export default function DiagnosticQuiz() {
                     onClick={goNext}
                     className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink"
                   >
-                    {isLastQuestion ? "Voir mon résultat" : "Suivant"}
+                    {isLastQuestion ? "Consulter mon diagnostic" : "Suivant"}
                     <ArrowRight className="h-4 w-4" />
                   </motion.button>
                 </motion.div>
               )}
 
-              {phase === "result" && level && levelConfig && resultContent && (
+              {phase === "result" && (
                 <motion.div
                   key="result"
                   variants={fadeInUp}
                   initial="hidden"
                   animate="visible"
                   exit={{ opacity: 0 }}
+                  className="text-center"
+                >
+                  <h2 className="mx-auto max-w-sm font-heading text-xl font-bold text-foreground sm:text-2xl">
+                    Votre diagnostic personnalisé est prêt.
+                  </h2>
+                  <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
+                    Laissez vos coordonnées pour le consulter tout de suite.
+                  </p>
+
+                  <div className="mx-auto mt-6 max-w-xs">{emailForm}</div>
+                </motion.div>
+              )}
+
+              {phase === "submitted" && level && levelConfig && resultContent && diagnosticReport && (
+                <motion.div
+                  key="submitted"
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
                   className="text-center"
                 >
                   <span
@@ -283,49 +300,27 @@ export default function DiagnosticQuiz() {
                   <h2 className="mx-auto mt-5 max-w-md font-heading text-2xl font-black text-foreground sm:text-3xl">
                     {resultContent.title}
                   </h2>
+
                   <div className="mx-auto mt-5 max-w-md rounded-xl border border-border bg-surface px-5 py-4 text-left">
                     <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-dark">
-                      Votre diagnostic
+                      Votre diagnostic détaillé
                     </p>
-                    <p className="mt-1.5 text-sm leading-relaxed text-foreground/80">
-                      {diagnosticSummary}
+                    <ul className="mt-2 space-y-2.5 text-sm leading-relaxed text-foreground/80">
+                      {diagnosticReport.points.map((point, i) => (
+                        <li key={i} className="flex gap-2">
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-3 border-t border-border pt-3 text-sm font-medium leading-relaxed text-foreground">
+                      {diagnosticReport.closing}
                     </p>
                   </div>
 
-                  <div className="mx-auto mt-8 max-w-xs">
-                    {!showLeadForm ? (
-                      <motion.button
-                        type="button"
-                        whileHover={buttonHover}
-                        onClick={() => setShowLeadForm(true)}
-                        className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
-                      >
-                        Envoyer à notre équipe
-                        <ArrowRight className="h-4 w-4" />
-                      </motion.button>
-                    ) : (
-                      emailForm
-                    )}
-                  </div>
-                </motion.div>
-              )}
-
-              {phase === "submitted" && (
-                <motion.div
-                  key="submitted"
-                  variants={fadeInUp}
-                  initial="hidden"
-                  animate="visible"
-                  className="flex flex-col items-center text-center"
-                >
-                  <h3 className="font-heading text-xl font-bold text-foreground">Merci !</h3>
-                  <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted">
+                  <p className="mx-auto mt-6 max-w-sm text-sm leading-relaxed text-muted">
                     Vos coordonnées ont été transmises à notre équipe, qui vous recontacte
-                    rapidement.
-                  </p>
-                  <p className="mt-1 max-w-sm text-sm leading-relaxed text-muted">
-                    Si vous préférez ne pas attendre, vous pouvez aussi réserver un appel
-                    directement :
+                    rapidement. Si vous préférez ne pas attendre :
                   </p>
                   <motion.a
                     href={CALENDLY_URL}
@@ -333,7 +328,7 @@ export default function DiagnosticQuiz() {
                     rel="noopener noreferrer"
                     whileHover={buttonHover}
                     onClick={() => trackEvent("clic_calendly")}
-                    className="mt-6 inline-flex items-center gap-2.5 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+                    className="mt-4 inline-flex items-center gap-2.5 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
                   >
                     <Calendar className="h-4 w-4" />
                     Réserver mon appel

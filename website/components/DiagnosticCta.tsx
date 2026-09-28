@@ -15,7 +15,7 @@ export default function DiagnosticCta({ className = "" }: { className?: string }
 
   return (
     <div
-      className={`flex flex-col items-center gap-4 rounded-2xl border border-border bg-background p-6 text-center sm:flex-row sm:justify-between sm:text-left ${className}`}
+      className={`flex flex-col items-center gap-4 rounded-2xl border border-border bg-background p-6 text-center ${className}`}
     >
       <div>
         <p className="text-xs font-semibold uppercase tracking-widest text-primary-dark">
