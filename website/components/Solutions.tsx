@@ -117,7 +117,7 @@ export default function Solutions() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-surface py-20 sm:py-28">
+    <section className="relative overflow-hidden bg-surface pb-12 pt-20 sm:pb-16 sm:pt-28">
       <ParallaxAccent className="right-[-10%] top-[-10%] h-80 w-80 bg-primary-dark/[0.06]" />
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
