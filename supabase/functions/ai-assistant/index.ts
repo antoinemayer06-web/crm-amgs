@@ -7,7 +7,7 @@ import { buildContextBlock } from './context.ts'
 import { buildSystemPrompt } from './systemPrompt.ts'
 
 const MODEL = 'claude-sonnet-4-6'
-const MAX_ITERATIONS = 6
+const MAX_ITERATIONS = 10
 
 const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY') })
 
@@ -21,12 +21,39 @@ const REQUEST_OPTIONS = WORKSPACE_ID
 
 const READ_TOOL_MAP = Object.fromEntries(READ_TOOLS.map((t) => [t.name, t]))
 const WRITE_TOOL_MAP = Object.fromEntries(WRITE_TOOLS.map((t) => [t.name, t]))
-const WRITE_TOOL_NAMES = new Set(WRITE_TOOLS.map((t) => t.name))
+// Seuls les tools d'écriture marqués `destructive: true` passent par le
+// circuit de validation (carte de proposition + ai_actions_log "proposée").
+// Aucun tool actuel n'est destructif (créations/mises à jour uniquement) :
+// un futur tool de suppression n'aura qu'à poser ce flag pour rejoindre
+// automatiquement ce circuit.
+const DESTRUCTIVE_WRITE_TOOL_NAMES = new Set(
+  WRITE_TOOLS.filter((t: any) => t.destructive === true).map((t) => t.name),
+)
 const API_TOOLS = [...READ_TOOLS, ...WRITE_TOOLS].map(({ name, description, input_schema }) => ({
   name,
   description,
   input_schema,
 }))
+
+const FORCE_FINAL_NOTE = `
+
+---
+Note interne (ne mentionne jamais cette note à l'utilisateur) : tu as atteint la limite d'itérations d'outils autorisée pour cette réponse. Réponds maintenant uniquement en texte, sans utiliser d'outil : résume clairement ce que tu as déjà accompli (actions réalisées, informations obtenues) et, si la demande n'est pas totalement terminée, précise ce qu'il reste à faire ou la question nécessaire pour continuer. Ne dis jamais que tu vas continuer automatiquement : donne un état des lieux complet maintenant.`
+
+async function callClaude(messages: any[], systemText: string, forceFinal = false) {
+  return await anthropic.messages.create(
+    {
+      model: MODEL,
+      max_tokens: 4096,
+      thinking: { type: 'adaptive' },
+      system: forceFinal ? `${systemText}${FORCE_FINAL_NOTE}` : systemText,
+      tools: API_TOOLS as any,
+      ...(forceFinal ? { tool_choice: { type: 'none' } } : {}),
+      messages,
+    },
+    REQUEST_OPTIONS,
+  )
+}
 
 // Un fichier joint (image ou PDF, en base64) devient un bloc de contenu
 // avant le texte du message, comme attendu par l'API Messages.
@@ -43,23 +70,14 @@ function buildUserContent(message: string, attachment?: { mediaType: string; dat
   ]
 }
 
-// Boucle agentique : exécute les tools de lecture immédiatement, s'arrête
-// dès qu'un tool d'écriture est demandé (ces actions attendent la
-// validation de l'utilisateur — voir resolveActions ci-dessous).
+// Boucle agentique : les tools de lecture ET les tools d'écriture non
+// destructifs (créations/mises à jour) s'exécutent immédiatement, sans
+// attendre de validation. Seul un tool marqué `destructive: true` (aucun
+// pour l'instant) interrompt la boucle pour proposer une carte de
+// validation — voir resolveActions ci-dessous.
 async function runTurn(supabase: any, messages: any[], systemText: string) {
   for (let i = 0; i < MAX_ITERATIONS; i++) {
-    const response = await anthropic.messages.create(
-      {
-        model: MODEL,
-        max_tokens: 4096,
-        thinking: { type: 'adaptive' },
-        system: systemText,
-        tools: API_TOOLS as any,
-        messages,
-      },
-      REQUEST_OPTIONS,
-    )
-
+    const response = await callClaude(messages, systemText)
     messages.push({ role: 'assistant', content: response.content })
 
     if (response.stop_reason !== 'tool_use') {
@@ -71,9 +89,10 @@ async function runTurn(supabase: any, messages: any[], systemText: string) {
     const pendingActions: any[] = []
 
     for (const block of toolUseBlocks) {
-      if (WRITE_TOOL_NAMES.has(block.name)) {
-        const tool = WRITE_TOOL_MAP[block.name]
-        const description = await tool.describe(supabase, block.input)
+      const writeTool = WRITE_TOOL_MAP[block.name]
+
+      if (writeTool && DESTRUCTIVE_WRITE_TOOL_NAMES.has(block.name)) {
+        const description = await writeTool.describe(supabase, block.input)
         const { data: logRow, error } = await supabase
           .from('ai_actions_log')
           .insert({
@@ -93,6 +112,36 @@ async function runTurn(supabase: any, messages: any[], systemText: string) {
           description,
           payload: block.input,
         })
+      } else if (writeTool) {
+        // Action non destructive : exécutée tout de suite, puis journalisée
+        // directement en statut "validée" (historique/audit uniquement,
+        // aucune validation utilisateur nécessaire).
+        try {
+          const result = await writeTool.execute(supabase, block.input)
+          const description = await writeTool.describe(supabase, block.input)
+          const { error: logError } = await supabase.from('ai_actions_log').insert({
+            action_type: block.name,
+            description,
+            payload: block.input,
+            tool_use_id: block.id,
+            statut: 'validée',
+            validated_at: new Date().toISOString(),
+            result,
+          })
+          if (logError) console.error('Échec journalisation ai_actions_log :', logError)
+          toolResults.push({
+            type: 'tool_result',
+            tool_use_id: block.id,
+            content: JSON.stringify({ success: true, ...result }),
+          })
+        } catch (err) {
+          toolResults.push({
+            type: 'tool_result',
+            tool_use_id: block.id,
+            content: JSON.stringify({ error: String((err as Error)?.message ?? err) }),
+            is_error: true,
+          })
+        }
       } else {
         const tool = READ_TOOL_MAP[block.name]
         let content: string
@@ -108,14 +157,19 @@ async function runTurn(supabase: any, messages: any[], systemText: string) {
 
     if (pendingActions.length > 0) {
       // On ne peut pas continuer la conversation tant que ces actions ne
-      // sont pas validées/rejetées — on garde les tool_result de lecture
-      // déjà calculés pour les renvoyer groupés au moment de la résolution.
+      // sont pas validées/rejetées — on garde les tool_result déjà calculés
+      // pour les renvoyer groupés au moment de la résolution.
       return { messages, pendingActions, pendingReadResults: toolResults }
     }
 
     messages.push({ role: 'user', content: toolResults })
   }
 
+  // Budget d'itérations épuisé alors que Claude voulait encore utiliser des
+  // outils : on force une réponse texte plutôt que de laisser la
+  // conversation se terminer en silence sans rien afficher à l'utilisateur.
+  const finalResponse = await callClaude(messages, systemText, true)
+  messages.push({ role: 'assistant', content: finalResponse.content })
   return { messages, pendingActions: [], pendingReadResults: [] }
 }
 

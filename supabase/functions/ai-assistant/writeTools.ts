@@ -1,6 +1,9 @@
-// Tools "écriture" : ne s'exécutent JAMAIS directement. `describe()` produit
-// le résumé lisible affiché dans la carte de validation, `execute()` n'est
-// appelé qu'après validation explicite de l'utilisateur (voir index.ts).
+// Tools "écriture" : créations/mises à jour, jamais de suppression. Ils
+// s'exécutent directement dès que Claude les appelle (voir index.ts) —
+// `describe()` produit uniquement le résumé lisible journalisé dans
+// ai_actions_log pour l'historique. Un futur tool de suppression devra
+// porter `destructive: true` pour passer par le circuit de validation
+// (carte de proposition) plutôt que de s'exécuter immédiatement.
 
 async function companyName(supabase: any, companyId: string) {
   const { data } = await supabase.from('companies').select('name').eq('id', companyId).single()
@@ -22,8 +25,7 @@ const PROJECT_STATUT_LABELS: Record<string, string> = {
 export const WRITE_TOOLS = [
   {
     name: 'creer_entreprise',
-    description:
-      "Propose la création d'une nouvelle entreprise (prospect ou client). Nécessite toujours une validation de l'utilisateur avant création réelle.",
+    description: "Crée une nouvelle entreprise (prospect ou client). Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -76,7 +78,7 @@ export const WRITE_TOOLS = [
   {
     name: 'mettre_a_jour_statut_prospect',
     description:
-      "Propose de changer l'étape de prospection d'une entreprise. Si le nouveau statut est devis_signé, l'entreprise est automatiquement convertie en client (règle déjà en place dans le CRM).",
+      "Change l'étape de prospection d'une entreprise. Si le nouveau statut est devis_signé, l'entreprise est automatiquement convertie en client (règle déjà en place dans le CRM). Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -122,7 +124,7 @@ export const WRITE_TOOLS = [
   },
   {
     name: 'ajouter_note',
-    description: "Propose d'ajouter une note à une entreprise.",
+    description: "Ajoute une note à une entreprise. Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -148,7 +150,7 @@ export const WRITE_TOOLS = [
   },
   {
     name: 'creer_projet',
-    description: "Propose la création d'un nouveau projet pour un client.",
+    description: "Crée un nouveau projet pour un client. Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -184,7 +186,7 @@ export const WRITE_TOOLS = [
   },
   {
     name: 'mettre_a_jour_statut_projet',
-    description: "Propose de changer le statut d'un projet.",
+    description: "Change le statut d'un projet. Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -212,7 +214,7 @@ export const WRITE_TOOLS = [
   },
   {
     name: 'creer_tache_projet',
-    description: "Propose d'ajouter une étape (tâche) à un projet.",
+    description: "Ajoute une étape (tâche) à un projet. Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -244,7 +246,7 @@ export const WRITE_TOOLS = [
   },
   {
     name: 'planifier_action_marketing',
-    description: "Propose de planifier une nouvelle action marketing.",
+    description: "Planifie une nouvelle action marketing. Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -281,7 +283,7 @@ export const WRITE_TOOLS = [
   },
   {
     name: 'creer_campagne',
-    description: "Propose la création d'une nouvelle campagne marketing.",
+    description: "Crée une nouvelle campagne marketing. Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -315,7 +317,7 @@ export const WRITE_TOOLS = [
   },
   {
     name: 'creer_tache',
-    description: "Propose la création d'une tâche transverse (pas liée à un projet précis).",
+    description: "Crée une tâche transverse (pas liée à un projet précis). Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {
@@ -349,7 +351,7 @@ export const WRITE_TOOLS = [
   },
   {
     name: 'creer_fiche_connaissance',
-    description: "Propose la création d'une fiche dans la base de connaissance.",
+    description: "Crée une fiche dans la base de connaissance. Exécuté immédiatement.",
     input_schema: {
       type: 'object',
       properties: {

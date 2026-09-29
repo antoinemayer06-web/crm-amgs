@@ -3,6 +3,30 @@ import { useAiChat } from '../../lib/AiChatContext'
 import MarkdownContent from '../knowledge/MarkdownContent'
 import ActionCard from './ActionCard'
 
+const LOADING_MESSAGES = [
+  "L'assistant réfléchit…",
+  'Toujours en train de travailler sur ta demande…',
+  'Ça prend un peu plus de temps que prévu, merci de patienter…',
+]
+
+// Le premier appel Claude peut prendre plusieurs secondes (surtout avec
+// plusieurs outils enchaînés) : faire évoluer le message de chargement
+// évite que l'attente ne donne l'impression que l'assistant est bloqué.
+function useLoadingMessage(isLoading) {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    if (!isLoading) {
+      setIndex(0)
+      return
+    }
+    const timers = [setTimeout(() => setIndex(1), 6000), setTimeout(() => setIndex(2), 16000)]
+    return () => timers.forEach(clearTimeout)
+  }, [isLoading])
+
+  return LOADING_MESSAGES[index]
+}
+
 export default function ChatThread({ emptyStateClassName = 'text-sm text-ink-tertiary' }) {
   const { displayMessages, pendingActions, isLoading, error, sendMessage, resolveActions } = useAiChat()
   const [input, setInput] = useState('')
@@ -10,6 +34,7 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-ink-ter
   const scrollRef = useRef(null)
   const fileInputRef = useRef(null)
   const fileInputId = useId()
+  const loadingMessage = useLoadingMessage(isLoading)
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
@@ -58,7 +83,7 @@ export default function ChatThread({ emptyStateClassName = 'text-sm text-ink-ter
         {pendingActions.length > 0 && (
           <ActionCard actions={pendingActions} onResolve={resolveActions} submitting={isLoading} />
         )}
-        {isLoading && <p className="text-xs text-ink-tertiary">L'assistant réfléchit…</p>}
+        {isLoading && <p className="text-xs text-ink-tertiary">{loadingMessage}</p>}
         {error && <p className="text-xs text-red-600">Erreur : {error}</p>}
       </div>
 
