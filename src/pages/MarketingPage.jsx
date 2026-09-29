@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import ActionPanel from '../components/marketing/ActionPanel'
 import ActionForm from '../components/marketing/ActionForm'
 import CalendarView from '../components/marketing/CalendarView'
@@ -25,6 +26,7 @@ function startOfMonth(date) {
 }
 
 export default function MarketingPage() {
+  const [searchParams] = useSearchParams()
   const [view, setView] = useState('calendar')
   const [currentMonth, setCurrentMonth] = useState(() => startOfMonth(new Date()))
   const [filters, setFilters] = useState(emptyFilters)
@@ -34,6 +36,13 @@ export default function MarketingPage() {
   const [quickCreateDate, setQuickCreateDate] = useState(null)
   const [creatingAction, setCreatingAction] = useState(false)
   const [creatingCampaign, setCreatingCampaign] = useState(false)
+
+  // Permet de deep-linker vers une action précise (ex: depuis le
+  // calendrier) via /marketing?open=<id>.
+  useEffect(() => {
+    const openId = searchParams.get('open')
+    if (openId) setSelectedActionId(openId)
+  }, [searchParams])
 
   const { data: allActions, isLoading: loadingCalendar, isError: errorCalendar } =
     useMarketingActions({})

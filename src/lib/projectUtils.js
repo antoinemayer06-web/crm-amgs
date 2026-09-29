@@ -1,3 +1,5 @@
+export const DAY = 1000 * 60 * 60 * 24
+
 export function getStepsForProject(allSteps, projectId) {
   return (allSteps ?? [])
     .filter((step) => step.project_id === projectId)
@@ -45,6 +47,43 @@ export function getProjectTimeSummary(steps, workLogs) {
     0,
   )
   return { tempsPrevu, tempsRealise }
+}
+
+// Plage temporelle couvrant tous les projets affichés (dates de
+// début/échéance + dates de leurs étapes), avec 7 jours de marge de
+// chaque côté et la liste des mois à afficher en repère — utilisé par
+// la vue Planning (Gantt). Extrait en fonction nommée plutôt que
+// recalculé en ligne dans le composant, pour que ce balayage de dates
+// soit à un seul endroit si une autre vue en a besoin un jour (au lieu
+// d'être recalculé indépendamment).
+export function getProjectsTimelineRange(projects, allSteps) {
+  const dates = projects
+    .flatMap((project) => [
+      project.date_debut,
+      project.date_livraison_prevue,
+      ...getStepsForProject(allSteps, project.id).flatMap((s) => [s.date_debut, s.date_fin]),
+    ])
+    .filter(Boolean)
+    .map((d) => new Date(d))
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  let start = dates.length ? new Date(Math.min(...dates)) : today
+  let end = dates.length ? new Date(Math.max(...dates)) : new Date(today.getTime() + 30 * DAY)
+
+  // Un peu de marge de chaque côté pour la lisibilité.
+  start = new Date(start.getTime() - 7 * DAY)
+  end = new Date(end.getTime() + 7 * DAY)
+
+  const months = []
+  const cursor = new Date(start.getFullYear(), start.getMonth(), 1)
+  while (cursor <= end) {
+    months.push(new Date(cursor))
+    cursor.setMonth(cursor.getMonth() + 1)
+  }
+
+  return { rangeStart: start, rangeEnd: end, months }
 }
 
 // Pastille de santé affichée sur la card Kanban :

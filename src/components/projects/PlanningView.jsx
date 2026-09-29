@@ -1,9 +1,8 @@
 import { useMemo, useState } from 'react'
 import { PROJECT_STATUT_LABELS, PROJECT_STATUT_TONES } from '../../lib/constants'
-import { getStepsForProject } from '../../lib/projectUtils'
+import { DAY, getProjectsTimelineRange, getStepsForProject } from '../../lib/projectUtils'
 import Avatar from '../ui/Avatar'
 
-const DAY = 1000 * 60 * 60 * 24
 const formatDate = (value) =>
   value ? new Date(value).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '—'
 
@@ -22,35 +21,10 @@ function groupByClient(projects) {
 export default function PlanningView({ projects, allSteps = [] }) {
   const [hovered, setHovered] = useState(null)
 
-  const { rangeStart, rangeEnd, months } = useMemo(() => {
-    const dates = projects
-      .flatMap((project) => [
-        project.date_debut,
-        project.date_livraison_prevue,
-        ...getStepsForProject(allSteps, project.id).flatMap((s) => [s.date_debut, s.date_fin]),
-      ])
-      .filter(Boolean)
-      .map((d) => new Date(d))
-
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    let start = dates.length ? new Date(Math.min(...dates)) : today
-    let end = dates.length ? new Date(Math.max(...dates)) : new Date(today.getTime() + 30 * DAY)
-
-    // Un peu de marge de chaque côté pour la lisibilité.
-    start = new Date(start.getTime() - 7 * DAY)
-    end = new Date(end.getTime() + 7 * DAY)
-
-    const monthMarkers = []
-    const cursor = new Date(start.getFullYear(), start.getMonth(), 1)
-    while (cursor <= end) {
-      monthMarkers.push(new Date(cursor))
-      cursor.setMonth(cursor.getMonth() + 1)
-    }
-
-    return { rangeStart: start, rangeEnd: end, months: monthMarkers }
-  }, [projects, allSteps])
+  const { rangeStart, rangeEnd, months } = useMemo(
+    () => getProjectsTimelineRange(projects, allSteps),
+    [projects, allSteps],
+  )
 
   const totalSpan = rangeEnd - rangeStart || 1
   const toPercent = (date) => ((date - rangeStart) / totalSpan) * 100

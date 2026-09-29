@@ -31,7 +31,9 @@ export default function CalendarItemPill({ item, onClick, showTime }) {
         event.stopPropagation()
         onClick(item)
       }}
-      className={`flex w-full items-center gap-1.5 truncate rounded px-1.5 py-0.5 text-left text-xs hover:bg-surface-hover ${tone}`}
+      className={`flex w-full items-center gap-1.5 truncate rounded px-1.5 py-0.5 text-left text-xs hover:bg-surface-hover ${tone} ${
+        item.struck ? 'opacity-40 line-through' : ''
+      }`}
       title={item.title}
     >
       <Icon className="h-3 w-3 shrink-0" />

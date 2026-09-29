@@ -65,6 +65,47 @@ export function useDeleteCalendarEvent() {
   })
 }
 
+// Fonctions de correspondance "donnée brute -> élément de calendrier",
+// extraites pour être réutilisées par toute vue qui a besoin d'afficher
+// ces mêmes données dans un calendrier (ex: la vue "Calendrier" du
+// module Marketing, filtrée sur les actions), au lieu de recalculer
+// indépendamment le même mapping.
+export function marketingActionToCalendarItem(action) {
+  return {
+    key: `marketing-${action.id}`,
+    sourceType: 'marketing',
+    title: action.titre,
+    date: action.date_prevue,
+    linkTo: `/marketing?open=${action.id}`,
+    struck: action.statut === 'annulé',
+    raw: action,
+  }
+}
+
+export function projectDeadlineToCalendarItem(project) {
+  return {
+    key: `deadline-${project.id}`,
+    sourceType: 'project_deadline',
+    title: project.nom,
+    subtitle: project.company?.name,
+    date: project.date_livraison_prevue,
+    linkTo: `/projects?open=${project.id}`,
+    raw: project,
+  }
+}
+
+export function projectStepToCalendarItem(step) {
+  return {
+    key: `step-${step.id}`,
+    sourceType: 'project_step',
+    title: step.titre,
+    subtitle: step.project?.nom,
+    date: step.date_fin || step.date_debut,
+    linkTo: step.project ? `/projects?open=${step.project.id}` : null,
+    raw: step,
+  }
+}
+
 // Agrège tout ce qui a une date dans le CRM en une liste unique
 // d'éléments de calendrier : actions marketing, échéances de projet,
 // étapes de projet datées, et événements libres. Chaque source garde
@@ -116,38 +157,15 @@ export function useCalendarData() {
   const items = []
 
   for (const action of marketingQuery.data ?? []) {
-    items.push({
-      key: `marketing-${action.id}`,
-      sourceType: 'marketing',
-      title: action.titre,
-      date: action.date_prevue,
-      linkTo: '/marketing',
-      raw: action,
-    })
+    items.push(marketingActionToCalendarItem(action))
   }
 
   for (const project of projectsQuery.data ?? []) {
-    items.push({
-      key: `deadline-${project.id}`,
-      sourceType: 'project_deadline',
-      title: project.nom,
-      subtitle: project.company?.name,
-      date: project.date_livraison_prevue,
-      linkTo: `/projects?open=${project.id}`,
-      raw: project,
-    })
+    items.push(projectDeadlineToCalendarItem(project))
   }
 
   for (const step of stepsQuery.data ?? []) {
-    items.push({
-      key: `step-${step.id}`,
-      sourceType: 'project_step',
-      title: step.titre,
-      subtitle: step.project?.nom,
-      date: step.date_fin || step.date_debut,
-      linkTo: step.project ? `/projects?open=${step.project.id}` : null,
-      raw: step,
-    })
+    items.push(projectStepToCalendarItem(step))
   }
 
   for (const event of eventsQuery.data ?? []) {
