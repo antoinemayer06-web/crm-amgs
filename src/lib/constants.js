@@ -206,6 +206,50 @@ export const DEMANDE_SITE_STATUT_TONES = {
   rejete: 'red',
 }
 
+export const TASK_STATUT_OPTIONS = ['à_faire', 'fait']
+
+export const TASK_PRIORITE_OPTIONS = ['haute', 'moyenne', 'basse']
+
+export const TASK_PRIORITE_LABELS = {
+  haute: 'Haute',
+  moyenne: 'Moyenne',
+  basse: 'Basse',
+}
+
+export const TASK_PRIORITE_TONES = {
+  haute: 'red',
+  moyenne: 'amber',
+  basse: 'neutral',
+}
+
+// Vocabulaire visuel commun à la page Tâches pour ses 3 sections
+// agrégées (tâches, étapes de projet, actions marketing) — chaque table
+// garde son propre vocabulaire de statut en base (voir l'audit : à_faire/
+// fait, à_faire/en_cours/fait, planifié/publié/annulé) ; ceci n'est
+// qu'un affichage harmonisé, pas une migration de schéma.
+export const UNIFIED_STATUT_LABELS = {
+  à_faire: 'À faire',
+  en_cours: 'En cours',
+  fait: 'Fait',
+  annulé: 'Annulé',
+}
+
+export const UNIFIED_STATUT_TONES = {
+  à_faire: 'neutral',
+  en_cours: 'blue',
+  fait: 'green',
+  annulé: 'red',
+}
+
+// tasks et project_steps utilisent déjà ce vocabulaire tel quel ; seul
+// marketing_actions a besoin d'une traduction (planifié -> à_faire,
+// publié -> fait, annulé reste annulé).
+export function marketingStatutToUnified(statut) {
+  if (statut === 'planifié') return 'à_faire'
+  if (statut === 'publié') return 'fait'
+  return statut
+}
+
 // Palette pastel pour les post-it du mur Vision.
 export const VISION_NOTE_COLORS = [
   '#fef08a',

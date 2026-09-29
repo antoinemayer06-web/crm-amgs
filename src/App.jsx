@@ -15,6 +15,7 @@ import PipelinePage from './pages/PipelinePage'
 import ProjectsPage from './pages/ProjectsPage'
 import SettingsPage from './pages/SettingsPage'
 import SiteInternetPage from './pages/SiteInternetPage'
+import TasksPage from './pages/TasksPage'
 import VisionPage from './pages/VisionPage'
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="companies" element={<CompaniesListPage />} />
         <Route path="companies/:id" element={<CompanyDetailPage />} />
         <Route path="pipeline" element={<PipelinePage />} />
+        <Route path="tasks" element={<TasksPage />} />
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="marketing" element={<MarketingPage />} />
         <Route path="calendar" element={<CalendarPage />} />

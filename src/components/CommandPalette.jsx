@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabaseClient'
 import {
   IconAssistant,
   IconCalendar,
+  IconCheck,
   IconCompanies,
   IconDashboard,
   IconFinance,
@@ -23,6 +24,7 @@ const NAV_COMMANDS = [
   { id: 'nav-finance', label: 'Finance', to: '/finance', Icon: IconFinance, group: 'Pages' },
   { id: 'nav-companies', label: 'Entreprises', to: '/companies', Icon: IconCompanies, group: 'Pages' },
   { id: 'nav-pipeline', label: 'Pipeline', to: '/pipeline', Icon: IconPipeline, group: 'Pages' },
+  { id: 'nav-tasks', label: 'Tâches', to: '/tasks', Icon: IconCheck, group: 'Pages' },
   { id: 'nav-projects', label: 'Projets', to: '/projects', Icon: IconProjects, group: 'Pages' },
   { id: 'nav-marketing', label: 'Marketing', to: '/marketing', Icon: IconMarketing, group: 'Pages' },
   { id: 'nav-calendar', label: 'Calendrier', to: '/calendar', Icon: IconCalendar, group: 'Pages' },
