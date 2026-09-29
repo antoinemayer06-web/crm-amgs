@@ -8,6 +8,13 @@ import { buildSystemPrompt } from './systemPrompt.ts'
 
 const MODEL = 'claude-sonnet-4-6'
 const MAX_ITERATIONS = 10
+// Budget de temps total, en plus du budget d'itérations : une plateforme
+// serverless tue une fonction qui dépasse sa limite d'exécution SANS
+// laisser le temps de renvoyer une réponse — dans ce cas le filet de
+// sécurité "réponse finale forcée" ne peut même pas s'exécuter, et le
+// client ne reçoit rien du tout (silence total, sans erreur). On s'arrête
+// nous-mêmes largement avant cette limite plutôt que de la risquer.
+const TIME_BUDGET_MS = 45_000
 
 const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY') })
 
@@ -48,7 +55,11 @@ async function callClaude(messages: any[], systemText: string, forceFinal = fals
       // calendrier sur plusieurs semaines) ont besoin de place pour
       // enchaîner beaucoup d'appels d'outils dans une même réponse.
       max_tokens: 8192,
-      thinking: { type: 'adaptive' },
+      // Pas de "thinking" sur l'appel final forcé : on veut une synthèse
+      // rapide de ce qui est déjà dans la conversation, pas un nouveau
+      // raisonnement approfondi qui rallongerait encore une réponse déjà
+      // en retard sur son budget de temps.
+      ...(forceFinal ? {} : { thinking: { type: 'adaptive' } }),
       system: forceFinal ? `${systemText}${FORCE_FINAL_NOTE}` : systemText,
       tools: API_TOOLS as any,
       ...(forceFinal ? { tool_choice: { type: 'none' } } : {}),
@@ -79,7 +90,9 @@ function buildUserContent(message: string, attachment?: { mediaType: string; dat
 // pour l'instant) interrompt la boucle pour proposer une carte de
 // validation — voir resolveActions ci-dessous.
 async function runTurn(supabase: any, messages: any[], systemText: string) {
+  const startedAt = Date.now()
   for (let i = 0; i < MAX_ITERATIONS; i++) {
+    if (Date.now() - startedAt > TIME_BUDGET_MS) break
     const response = await callClaude(messages, systemText)
     messages.push({ role: 'assistant', content: response.content })
 
@@ -168,9 +181,10 @@ async function runTurn(supabase: any, messages: any[], systemText: string) {
     messages.push({ role: 'user', content: toolResults })
   }
 
-  // Budget d'itérations épuisé alors que Claude voulait encore utiliser des
-  // outils : on force une réponse texte plutôt que de laisser la
-  // conversation se terminer en silence sans rien afficher à l'utilisateur.
+  // Budget d'itérations OU de temps épuisé alors que Claude voulait encore
+  // utiliser des outils : on force une réponse texte (rapide, sans
+  // "thinking") plutôt que de laisser la conversation se terminer en
+  // silence sans rien afficher à l'utilisateur.
   const finalResponse = await callClaude(messages, systemText, true)
   messages.push({ role: 'assistant', content: finalResponse.content })
   return { messages, pendingActions: [], pendingReadResults: [] }

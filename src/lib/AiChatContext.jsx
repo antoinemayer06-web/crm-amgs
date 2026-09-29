@@ -16,26 +16,49 @@ function fileToBase64(file) {
   })
 }
 
+// Filet de sécurité côté client : si la plateforme qui héberge la
+// fonction la tue avant qu'elle ait pu répondre (dépassement de son
+// propre temps d'exécution maximal), le fetch ne reçoit jamais rien et
+// resterait sinon en attente indéfiniment ("L'assistant réfléchit…" figé
+// pour toujours, sans erreur). On abandonne nous-mêmes après un délai
+// large mais fini, avec un message explicite.
+const REQUEST_TIMEOUT_MS = 60_000
+
 async function callAssistant(payload) {
   const {
     data: { session },
   } = await supabase.auth.getSession()
 
-  const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assistant`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session?.access_token}`,
-      apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-    },
-    body: JSON.stringify(payload),
-  })
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
 
-  if (!response.ok) {
-    const body = await response.json().catch(() => ({}))
-    throw new Error(body.error || `Erreur ${response.status}`)
+  try {
+    const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assistant`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session?.access_token}`,
+        apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    })
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}))
+      throw new Error(body.error || `Erreur ${response.status}`)
+    }
+    return await response.json()
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      throw new Error(
+        "La demande a pris trop de temps et a été annulée. Essaie de la découper en étapes plus petites (ex: une semaine à la fois plutôt qu'un mois entier).",
+      )
+    }
+    throw err
+  } finally {
+    clearTimeout(timeoutId)
   }
-  return response.json()
 }
 
 function extractAssistantText(message) {
