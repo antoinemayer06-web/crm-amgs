@@ -237,6 +237,30 @@ export const READ_TOOLS = [
     },
   },
   {
+    name: 'lister_evenements_calendrier',
+    description:
+      "Liste les événements du module Calendrier sur une plage de dates. Utilise ce tool avant de créer des événements pour vérifier ce qui existe déjà et éviter les doublons, ou pour répondre à une question sur le planning.",
+    input_schema: {
+      type: 'object',
+      properties: {
+        date_debut: { type: 'string', description: 'Début de la plage, format YYYY-MM-DD' },
+        date_fin: { type: 'string', description: 'Fin de la plage, format YYYY-MM-DD' },
+      },
+    },
+    async execute(supabase: any, input: any) {
+      let query = supabase
+        .from('calendar_events')
+        .select('id, titre, description, date_debut, date_fin, lieu, company:companies(id, name)')
+        .order('date_debut', { ascending: true })
+        .limit(200)
+      if (input.date_debut) query = query.gte('date_debut', input.date_debut)
+      if (input.date_fin) query = query.lte('date_debut', input.date_fin)
+      const { data, error } = await query
+      if (error) throw error
+      return data
+    },
+  },
+  {
     name: 'obtenir_stats_pipeline',
     description:
       'Statistiques du pipeline de prospection : répartition par étape, valeur totale (hors refus), taux de conversion du mois en cours.',

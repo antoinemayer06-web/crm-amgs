@@ -350,6 +350,60 @@ export const WRITE_TOOLS = [
     },
   },
   {
+    name: 'creer_evenement_calendrier',
+    description:
+      "Crée un événement dans le module Calendrier (créneau de prospection, rendez-vous, bilan…) avec une date et une heure précises. Exécuté immédiatement.",
+    input_schema: {
+      type: 'object',
+      properties: {
+        titre: { type: 'string' },
+        etiquette: {
+          type: 'string',
+          description:
+            "Étiquette courte affichée entre crochets devant le titre pour catégoriser l'événement, ex: « Marketing / Commercial ». Optionnel.",
+        },
+        description: { type: 'string' },
+        date_debut: {
+          type: 'string',
+          description:
+            "Date et heure de début, format ISO 8601 AVEC le décalage horaire explicite de La Réunion (+04:00, pas de changement d'heure), ex: 2026-10-01T09:00:00+04:00.",
+        },
+        date_fin: {
+          type: 'string',
+          description: 'Date et heure de fin, même format que date_debut. Optionnel.',
+        },
+        lieu: { type: 'string' },
+        company_id: { type: 'string', description: "UUID de l'entreprise liée. Optionnel." },
+      },
+      required: ['titre', 'date_debut'],
+    },
+    async describe(_supabase: any, input: any) {
+      const when = new Date(input.date_debut).toLocaleString('fr-FR', {
+        timeZone: 'Indian/Reunion',
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      })
+      return `Créer l'événement « ${input.titre} » le ${when}`
+    },
+    async execute(supabase: any, input: any) {
+      const titre = input.etiquette ? `[${input.etiquette}] ${input.titre}` : input.titre
+      const { data, error } = await supabase
+        .from('calendar_events')
+        .insert({
+          titre,
+          description: input.description || null,
+          date_debut: input.date_debut,
+          date_fin: input.date_fin || null,
+          lieu: input.lieu || null,
+          company_id: input.company_id || null,
+        })
+        .select('id')
+        .single()
+      if (error) throw error
+      return { table: 'calendar_events', id: data.id }
+    },
+  },
+  {
     name: 'creer_fiche_connaissance',
     description: "Crée une fiche dans la base de connaissance. Exécuté immédiatement.",
     input_schema: {

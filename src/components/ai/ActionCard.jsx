@@ -12,6 +12,7 @@ const ACTION_TYPE_LABELS = {
   creer_campagne: 'Créer une campagne',
   creer_tache: 'Créer une tâche',
   creer_fiche_connaissance: 'Créer une fiche de connaissance',
+  creer_evenement_calendrier: 'Créer un événement calendrier',
 }
 
 export default function ActionCard({ actions, onResolve, submitting }) {

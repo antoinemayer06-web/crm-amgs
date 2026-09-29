@@ -44,7 +44,10 @@ async function callClaude(messages: any[], systemText: string, forceFinal = fals
   return await anthropic.messages.create(
     {
       model: MODEL,
-      max_tokens: 4096,
+      // 8192 plutôt que 4096 : les demandes en gros lot (ex: remplir un
+      // calendrier sur plusieurs semaines) ont besoin de place pour
+      // enchaîner beaucoup d'appels d'outils dans une même réponse.
+      max_tokens: 8192,
       thinking: { type: 'adaptive' },
       system: forceFinal ? `${systemText}${FORCE_FINAL_NOTE}` : systemText,
       tools: API_TOOLS as any,

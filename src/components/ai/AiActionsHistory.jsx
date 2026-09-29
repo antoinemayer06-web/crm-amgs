@@ -14,6 +14,7 @@ function entityLink(row) {
   if (table === 'projects') return `/projects?open=${id}`
   if (table === 'knowledge_base') return `/knowledge/${id}`
   if (table === 'marketing_actions' || table === 'campaigns') return '/marketing'
+  if (table === 'calendar_events') return '/calendar'
   if (table === 'tasks') return row.payload?.company_id ? `/companies/${row.payload.company_id}` : null
   return null
 }
