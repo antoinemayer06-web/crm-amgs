@@ -190,6 +190,22 @@ export const EXPENSE_CATEGORY_TONES = {
   autre: 'neutral',
 }
 
+export const DEMANDE_SITE_STATUT_OPTIONS = ['nouveau', 'contacte', 'converti', 'rejete']
+
+export const DEMANDE_SITE_STATUT_LABELS = {
+  nouveau: 'Nouveau',
+  contacte: 'Contacté',
+  converti: 'Converti',
+  rejete: 'Rejeté',
+}
+
+export const DEMANDE_SITE_STATUT_TONES = {
+  nouveau: 'neutral',
+  contacte: 'blue',
+  converti: 'green',
+  rejete: 'red',
+}
+
 // Palette pastel pour les post-it du mur Vision.
 export const VISION_NOTE_COLORS = [
   '#fef08a',

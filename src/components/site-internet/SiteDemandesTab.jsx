@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Badge from '../ui/Badge'
 import Modal from '../ui/Modal'
 import SidePanel from '../ui/SidePanel'
 import CompanyForm from '../companies/CompanyForm'
+import { DEMANDE_SITE_STATUT_LABELS, DEMANDE_SITE_STATUT_OPTIONS, DEMANDE_SITE_STATUT_TONES } from '../../lib/constants'
 import { useCreateCompany } from '../../hooks/useCompanies'
 import { useCreateContact } from '../../hooks/useContacts'
 import { useDeleteSiteLead, useSiteLeads, useUpdateSiteLead } from '../../hooks/useSiteInternet'
-
-const STATUT_OPTIONS = ['Nouveau', 'Contacté', 'Converti', 'Rejeté']
 
 function scoreTone(score) {
   if (score === null || score === undefined) return 'neutral'
@@ -31,6 +30,7 @@ function splitName(nom) {
 function ConvertToProspectModal({ lead, onClose, onConverted }) {
   const createCompany = useCreateCompany()
   const createContact = useCreateContact()
+  const updateLead = useUpdateSiteLead()
   const [submitting, setSubmitting] = useState(false)
 
   const initialValues = {
@@ -59,6 +59,10 @@ function ConvertToProspectModal({ lead, onClose, onConverted }) {
           is_primary: true,
         })
       }
+      // Relie la demande à l'entreprise créée et marque la conversion —
+      // dans le même geste que la création, pour ne plus dépendre d'un
+      // changement de statut manuel oublié après coup.
+      await updateLead.mutateAsync({ id: lead.id, values: { company_id: company.id, statut: 'converti' } })
       onConverted(company)
     } finally {
       setSubmitting(false)
@@ -120,13 +124,22 @@ function LeadDetailPanel({ lead, onClose }) {
             onChange={(event) => updateLead.mutate({ id: lead.id, values: { statut: event.target.value } })}
             className="input-chrome w-auto text-sm"
           >
-            {STATUT_OPTIONS.map((statut) => (
+            {DEMANDE_SITE_STATUT_OPTIONS.map((statut) => (
               <option key={statut} value={statut}>
-                {statut}
+                {DEMANDE_SITE_STATUT_LABELS[statut]}
               </option>
             ))}
           </select>
         </div>
+
+        {lead.company_id && (
+          <Link
+            to={`/companies/${lead.company_id}`}
+            className="block rounded-md border border-chrome-dark px-3 py-2 text-sm text-ink-secondary hover:border-chrome-mid hover:text-ink"
+          >
+            Voir la fiche entreprise →
+          </Link>
+        )}
 
         {editing ? (
           <div className="space-y-3">
@@ -196,9 +209,11 @@ function LeadDetailPanel({ lead, onClose }) {
           <button type="button" onClick={handleDelete} className="flex-1 rounded-md border border-red-500/40 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10">
             Supprimer
           </button>
-          <button type="button" onClick={() => setConverting(true)} className="btn-primary flex-1 text-sm">
-            Convertir en prospect
-          </button>
+          {!lead.company_id && (
+            <button type="button" onClick={() => setConverting(true)} className="btn-primary flex-1 text-sm">
+              Convertir en prospect
+            </button>
+          )}
         </div>
       </div>
 
@@ -268,7 +283,11 @@ export default function SiteDemandesTab({ openLeadId }) {
                     <td className="px-3 py-2">
                       <Badge tone={scoreTone(lead.score)}>{lead.score ?? 'N/A'}</Badge>
                     </td>
-                    <td className="px-3 py-2 text-ink-secondary">{lead.statut}</td>
+                    <td className="px-3 py-2">
+                      <Badge tone={DEMANDE_SITE_STATUT_TONES[lead.statut]}>
+                        {DEMANDE_SITE_STATUT_LABELS[lead.statut] ?? lead.statut}
+                      </Badge>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -291,9 +310,9 @@ export default function SiteDemandesTab({ openLeadId }) {
                 </div>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <span className="text-xs text-ink-tertiary">{formatDate(lead.date_soumission)}</span>
-                  <span className="rounded-full bg-chrome-dark/50 px-2 py-0.5 text-xs text-ink-secondary">
-                    {lead.statut}
-                  </span>
+                  <Badge tone={DEMANDE_SITE_STATUT_TONES[lead.statut]}>
+                    {DEMANDE_SITE_STATUT_LABELS[lead.statut] ?? lead.statut}
+                  </Badge>
                 </div>
               </li>
             ))}

@@ -264,7 +264,7 @@ Deno.serve(async (req) => {
       telephone: telephone?.trim() || null,
       reponses,
       score: score ?? null,
-      statut: 'Nouveau',
+      statut: 'nouveau',
     })
     .select()
     .single()
